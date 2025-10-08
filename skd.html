@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szablon: SKD</title>
+    <link rel="icon" type="image/png" href="baf_logo_p.png">
+    <style>
+        #back-controls-container { position: fixed; top: 20px; left: 30px; z-index: 1000; width: 140px; font-family: 'Lato', Arial, sans-serif; }
+        #controls-container { position: fixed; top: 20px; right: 30px; z-index: 1000; width: 280px; font-family: 'Lato', Arial, sans-serif; }
+        
+        #copyButton, #backButton {
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+        }
+        #copyButton:active, #backButton:active { transform: scale(0.98); }
+
+        #copyButton { background-color: #17a2b8; }
+        #copyButton:hover { background-color: #138496; }
+        #copyButton.copied { background-color: #28a745; }
+
+        #backButton { background-color: #5F7A95; }
+        #backButton:hover { background-color: #4e657b; }
+
+        #separator { border-bottom: 1px solid #ccc; margin: 15px 0; }
+        #subject-menu { background-color: #f8f9fa; border-radius: 5px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        #subject-menu h3 { margin: 0 0 10px 0; font-size: 16px; color: #333; text-align: center; }
+        .subject-category { font-size: 12px; font-weight: bold; color: #6c757d; text-transform: uppercase; margin: 15px 0 8px 0; padding-bottom: 3px; border-bottom: 1px solid #dee2e6; }
+        .subject-category:first-of-type { margin-top: 5px; }
+        .subject-button { display: block; width: 100%; padding: 8px 10px; margin-bottom: 8px; font-size: 14px; color: #138496; background-color: #ffffff; border: 1px solid #17a2b8; border-radius: 4px; cursor: pointer; text-align: left; transition: background-color 0.3s ease, color 0.3s ease; }
+        .subject-button:hover { background-color: #17a2b8; color: #ffffff; }
+        .subject-button:last-child { margin-bottom: 0; }
+        .subject-button.copied { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f7f9; font-family: 'Lato', Arial, sans-serif;">
+
+    <div id="back-controls-container">
+        <button id="backButton" onclick="history.back()">Powrót</button>
+    </div>
+
+    <div id="controls-container">
+        <button id="copyButton">Kopiuj treść</button>
+        <div id="separator"></div>
+        <div id="subject-menu">
+            <h3>Wybierz i skopiuj tytuł maila:</h3>
+            <h4 class="subject-category">Wariant formalny i bezpośredni</h4>
+            <button class="subject-button" onclick="copySubject(this, '🔵 Sankcja Kredytu Darmowego – prośba o umowy do analizy')">🔵 Sankcja Kredytu Darmowego – prośba o umowy do analizy</button>
+            <button class="subject-button" onclick="copySubject(this, '🔵 Analiza umów kredytowych pod kątem SKD')">🔵 Analiza umów kredytowych pod kątem SKD</button>
+            <button class="subject-button" onclick="copySubject(this, '🔵 Biuro Analizy Finansowej: Informacje dot. Sankcji Kredytu Darmowego')">🔵 Biuro Analizy Finansowej: Informacje dot. Sankcji Kredytu Darmowego</button>
+            <h4 class="subject-category">Wariant skupiony na korzyściach</h4>
+            <button class="subject-button" onclick="copySubject(this, '🔵 Sprawdź, czy możesz odzyskać odsetki od swojego kredytu')">🔵 Sprawdź, czy możesz odzyskać odsetki od swojego kredytu</button>
+            <button class="subject-button" onclick="copySubject(this, '🔵 Darmowy kredyt? To możliwe – informacje po naszej rozmowie')">🔵 Darmowy kredyt? To możliwe – informacje po naszej rozmowie</button>
+            <button class="subject-button" onclick="copySubject(this, '🔵 Jak legalnie obniżyć koszty spłaconych i aktywnych kredytów?')">🔵 Jak legalnie obniżyć koszty spłaconych i aktywnych kredytów?</button>
+        </div>
+    </div>
+    
+    <div id="email-content-wrapper">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="background-color: #f4f7f9;">
+            <tr>
+                <td align="center">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="max-width: 800px;">
+                        <tr>
+                            <td align="center" style="background-color: #002d5a; padding: 40px 20px;">
+                                 <div style="font-family: 'Montserrat', sans-serif; text-align: center;">
+                                     <div style="font-size: 60px; font-weight: 700; color: #ffffff; position: relative; letter-spacing: -10px; line-height: 1;">
+                                         <span style="position: relative; z-index: 1;">B</span><span style="position: relative; z-index: 2;">A</span><span style="position: relative; z-index: 1;">F</span>
+                                     </div>
+                                     <div style="font-family: 'Roboto', sans-serif; font-size: 14px; color: #ffffff; letter-spacing: 1px; margin-top: 8px; text-align: center;">
+                                         BIURO ANALIZY FINANSOWEJ
+                                     </div>
+                                 </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="background-color: #ffffff; padding: 40px 50px;">
+                                <h1 style="font-family: 'Lato', Arial, sans-serif; font-size: 28px; font-weight: 400; color: #002d5a; margin: 0 0 25px 0;">Dzień dobry,</h1>
+                                <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 0 0 20px 0; line-height: 1.6;">
+                                    w nawiązaniu do naszej rozmowy na temat <strong>Sankcji Kredytu Darmowego</strong> (SKD), czyli odzyskania zapłaconych i umorzenia przyszłych odsetek z kredytów konsumenckich, proszę o przesłanie skanów Umów Kredytowych.
+                                </p>
+                                 <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 0 0 20px 0; line-height: 1.6;">
+                                    Podstawą prawną <strong>Sankcji Kredytu Darmowego</strong> jest artykuł 45 ustawy o kredycie konsumenckim - więcej o tym procesie można poczytać w Internecie oraz na stronie naszego działu prawnego: <a href="https://kancelaria-af.com/zakres-uslug/sankcja-kredytu-darmowego" style="color: #0056b3; text-decoration: none;">https://kancelaria-af.com/zakres-uslug/sankcja-kredytu-darmowego</a>
+                                </p>
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 20px; border-bottom: 1px solid #e0e0e0; padding-bottom: 5px;">
+                                    <tr>
+                                        <td>
+                                            <h2 style="font-family: 'Lato', Arial, sans-serif; font-size: 26px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin: 0 0 25px 0; font-weight: 700;">Korzyści ze współpracy z BAF</h2>
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 25px;">
+                                                <tr>
+                                                    <td width="40" valign="top" style="padding-right: 15px;">
+                                                        <img src="https://img.icons8.com/ios/50/0056b3/get-cash.png" alt="Zysk" width="28" height="28">
+                                                    </td>
+                                                    <td valign="top">
+                                                        <p style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; margin: 0; line-height: 1.6;">Wysoki stosunek zysku z procesu dla Państwa (nawet do 80% kwoty do odzyskania).</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 25px;">
+                                                <tr>
+                                                    <td width="40" valign="top" style="padding-right: 15px;">
+                                                        <img src="https://img.icons8.com/ios/50/0056b3/initiate-money-transfer.png" alt="Odzyskanie" width="28" height="28">
+                                                    </td>
+                                                    <td valign="top">
+                                                        <p style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; margin: 0; line-height: 1.6;">Odzyskanie odsetek niezgodnie naliczonych.</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 25px;">
+                                                <tr>
+                                                    <td width="40" valign="top" style="padding-right: 15px;">
+                                                        <img src="https://img.icons8.com/ios/50/0056b3/cancel.png" alt="Umorzenie" width="28" height="28">
+                                                    </td>
+                                                    <td valign="top">
+                                                        <p style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; margin: 0; line-height: 1.6;">Umorzenie wszystkich przyszłych odsetek.</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 25px;">
+                                                <tr>
+                                                    <td width="40" valign="top" style="padding-right: 15px;">
+                                                        <img src="https://img.icons8.com/ios/50/0056b3/lock--v1.png" alt="Stabilność" width="28" height="28">
+                                                    </td>
+                                                    <td valign="top">
+                                                        <p style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; margin: 0; line-height: 1.6;">Zmiany WIBOR nie dotyczą Państwa sprawy.</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 25px;">
+                                                <tr>
+                                                    <td width="40" valign="top" style="padding-right: 15px;">
+                                                        <img src="https://img.icons8.com/ios/50/0056b3/bullish.png" alt="Płynność finansowa" width="28" height="28">
+                                                    </td>
+                                                    <td valign="top">
+                                                        <p style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; margin: 0; line-height: 1.6;">Odzyskanie płynności finansowej i odblokowanie zdolności kredytowej.</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 20px;">
+                                    <tr>
+                                        <td>
+                                            <h2 style="font-family: 'Lato', Arial, sans-serif; font-size: 26px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin: 0 0 25px 0; font-weight: 700;">Dokumenty potrzebne do analizy</h2>
+                                            <div style="background: #f8faff; border-left: 4px solid #007bff; padding: 20px; border-radius: 4px; font-size: 1em;">
+                                                 <p style="padding-left: 0px; margin: 0; font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; line-height: 1.8;">
+                                                     <strong>Zdjęcia lub skany Umów Kredytowych</strong> – na tym etapie mogą być zakryte wszystkie dane wrażliwe.
+                                                 </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 20px;">
+                                    <tr>
+                                        <td>
+                                            <h2 style="font-family: 'Lato', Arial, sans-serif; font-size: 26px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin: 0 0 25px 0; font-weight: 700;">Jakie umowy analizujemy?</h2>
+                                            <div style="background: #f8faff; border-left: 4px solid #007bff; padding: 20px; border-radius: 4px; font-size: 1em;">
+                                                <ul style="padding-left: 20px; margin: 0; font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; line-height: 1.8;">
+                                                    <li style="margin-bottom: 8px;">Wszystkie <strong>kredyty konsumenckie niezabezpieczone</strong>, zarówno aktualnie spłacane, jak i te spłacone w ciągu ostatnich 12 miesięcy.</li>
+                                                    <li style="margin-bottom: 8px;">W przypadku <strong>Nest Banku i Banku Pocztowego</strong> możemy analizować także umowy spłacone dawniej.</li>
+                                                    <li style="margin-bottom: 8px;"><strong>Wykluczone z analizy są:</strong> kredyty hipoteczne, karty kredytowe i limity w rachunku bieżącym.</li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 30px 0 0 0; line-height: 1.6;">
+                                    Czekam na umowę, w razie pytań jestem do dyspozycji mailowo i pod telefonem.
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const copyBtn = document.getElementById('copyButton');
+            const emailWrapper = document.getElementById('email-content-wrapper');
+            copyBtn.addEventListener('click', () => {
+                const htmlContent = emailWrapper.innerHTML;
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const richTextInput = new ClipboardItem({ 'text/html': blob });
+                navigator.clipboard.write([richTextInput]).then(() => {
+                    copyBtn.textContent = 'Skopiowano treść';
+                    copyBtn.classList.add('copied');
+                    setTimeout(() => {
+                        copyBtn.textContent = 'Kopiuj treść';
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Błąd kopiowania: ', err);
+                    copyBtn.textContent = 'Błąd!';
+                     setTimeout(() => {
+                        copyBtn.textContent = 'Kopiuj treść';
+                    }, 2000);
+                });
+            });
+        });
+
+        function copySubject(button, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.innerHTML;
+                button.textContent = 'Skopiowano!';
+                button.classList.add('copied');
+                
+                const allButtons = document.querySelectorAll('.subject-button');
+                allButtons.forEach(btn => {
+                    if (btn !== button && btn.classList.contains('copied')) {
+                        btn.innerHTML = btn.getAttribute('data-original-text');
+                        btn.classList.remove('copied');
+                    }
+                });
+                button.setAttribute('data-original-text', originalText);
+
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Błąd kopiowania tematu: ', err);
+                button.textContent = 'Błąd!';
+                setTimeout(() => {
+                    button.innerHTML = button.getAttribute('data-original-text');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
