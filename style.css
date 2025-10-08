@@ -1,0 +1,225 @@
+/* Plik: style.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Orbitron:wght@700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background-color: #002d5a;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* --- GŁÓWNY KONTENER TREŚCI --- */
+.menu-container {
+    text-align: center;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    width: 90%;
+    max-width: 900px; /* Zwiększona szerokość dla lepszego układu */
+    margin: 40px auto;
+}
+
+.logo img {
+    max-width: 140px;
+    height: auto;
+    margin-bottom: 25px;
+}
+
+/* --- SIATKA Z PRZYCISKAMI --- */
+.button-grid {
+    display: grid;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+.grid-2-col {
+    grid-template-columns: repeat(2, 1fr);
+}
+.grid-3-col {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* --- PODSTAWOWY STYL PRZYCISKU --- */
+.menu-button {
+    background-color: transparent;
+    color: #3498db;
+    border: 2px solid #3498db;
+    padding: 20px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    line-height: 1.3;
+}
+.menu-button:hover {
+    background-color: #3498db;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+/* --- PRZYCISK POWROTU --- */
+.back-button-container {
+    text-align: right;
+    margin-top: 20px;
+}
+.back-button {
+    display: inline-block;
+    padding: 10px 25px;
+    background-color: #f4f7f9; /* Jasny niebiesko-szary */
+    color: #34495e;
+    border: 1px solid #dce4e8;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.back-button:hover {
+    background-color: #e9eff3;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.07);
+}
+
+
+/* --- BOCZNY, PRZYKLEJONY PANEL INFORMACYJNY --- */
+.info-panel {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 250px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+.info-panel .info-container {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+.info-panel .info-container:first-of-type {
+    margin-bottom: 15px;
+}
+
+.info-header {
+    font-size: 12px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 5px;
+}
+.info-date {
+    font-size: 10px;
+    color: #6c757d;
+    margin-bottom: 10px;
+}
+.rates-grid {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+.rate-item p { margin: 0; font-size: 11px; }
+.rate-item p:not(.value) { margin-bottom: 4px; }
+.rate-item .value, .info-container-single .value {
+    font-weight: 600;
+    font-size: 15px;
+    color: #002d5a;
+}
+.disclaimer-text {
+    font-size: 9px;
+    font-style: italic;
+    color: #95a5a6;
+    margin-top: 10px;
+    padding: 0 5px;
+}
+
+/* Ukrywanie panelu na małych ekranach */
+@media (max-width: 1200px) {
+    .info-panel {
+        display: none;
+    }
+}
+@media (max-width: 768px) {
+    .grid-3-col {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- STYLE TEMATYCZNE DLA KALKULATORÓW KREDYTOWYCH --- */
+.theme-button.jasny {
+    background-color: #f9f9f9;
+    color: #333;
+    border: 2px solid #ddd;
+}
+.theme-button.jasny:hover {
+    background-color: #fff;
+    color: #000;
+    border-color: #ccc;
+}
+
+.theme-button.ciemny {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    border: 2px solid #34495e;
+}
+.theme-button.ciemny:hover {
+    background-color: #34495e;
+    color: #fff;
+}
+
+.theme-button.rivendell {
+    background-color: #eef5e3;
+    color: #2d5024;
+    border: 2px solid #a2b88a;
+    font-family: 'Cinzel', serif;
+}
+.theme-button.rivendell:hover {
+    background-color: #dce7ca;
+    color: #1e3618;
+    box-shadow: 0 0 10px rgba(162, 184, 138, 0.5);
+}
+
+.theme-button.mordor {
+    background-color: #1a0000;
+    color: #e74c3c;
+    border: 2px solid #c0392b;
+    font-weight: bold;
+    text-shadow: 0 0 5px #c0392b;
+}
+.theme-button.mordor:hover {
+    background-color: #000;
+    color: #ff6b5b;
+}
+
+.theme-button.cyberpunk {
+    background-color: #1a1a1a;
+    color: #00f0ff;
+    border: 2px solid #ff00ff;
+    font-family: 'Orbitron', sans-serif;
+    box-shadow: inset 0 0 5px #ff00ff, 0 0 5px #ff00ff;
+    text-shadow: 0 0 5px #00f0ff;
+}
+.theme-button.cyberpunk:hover {
+    color: #fff;
+    box-shadow: inset 0 0 10px #ff00ff, 0 0 15px #ff00ff, inset 0 0 10px #00f0ff, 0 0 15px #00f0ff;
+}
+
+.theme-button.wiedzmin {
+    background-color: #4a413a;
+    color: #e6d8c5;
+    border: 2px solid #8c7b6c;
+    font-weight: bold;
+}
+.theme-button.wiedzmin:hover {
+    background-color: #3b342e;
+    color: #fff;
+}
