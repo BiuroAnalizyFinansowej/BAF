@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator - Liść Lembas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --lotr-gold: #ffd700;
+            --lotr-green: #166534;
+            --lotr-leaf-green: #22c55e;
+            --lotr-bg: #f0fdf4;
+            --lotr-text: #14532d;
+            --lotr-silver: #c0c0c0;
+        }
+        body {
+            font-family: 'Lato', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--lotr-bg);
+            background-image: url('https://www.transparenttextures.com/patterns/subtle-white-feathers.png');
+            color: var(--lotr-text);
+        }
+        .calculator-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        h1, h2 { font-family: 'Cinzel', serif; text-align: center; margin-bottom: 2.5rem; font-weight: 700; color: var(--lotr-green); }
+        .input-group label { font-family: 'Cinzel', serif; font-weight: 400; margin-bottom: 0.75rem; display: block; }
+        input[type="text"], input[type="number"] {
+            border: none;
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(to right, var(--lotr-silver), var(--lotr-gold)) 1;
+            background: transparent; width: 150px; padding: 0.5rem; font-size: 1.1rem; font-weight: 600;
+            color: var(--lotr-text); text-align: center; transition: all 0.3s;
+        }
+        input[type="text"]:focus, input[type="number"]:focus {
+            outline: none; background: rgba(255, 215, 0, 0.05); box-shadow: 0 5px 15px -5px rgba(255, 215, 0, 0.3);
+        }
+        /* STYLIZACJA SUWAKÓW - WSKAŹNIK W KSZTAŁCIE LIŚCIA */
+        input[type="range"] {
+            -webkit-appearance: none; appearance: none;
+            width: 100%; background: transparent; cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            background-color: rgba(22, 101, 52, 0.2);
+            height: 8px;
+            border-radius: 8px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            margin-top: -11px;
+            background-color: var(--lotr-leaf-green);
+            height: 30px;
+            width: 30px;
+            border: 1px solid var(--lotr-green);
+            /* Nowy, bardziej symetryczny kształt liścia */
+            clip-path: polygon(50% 0%, 80% 30%, 100% 50%, 80% 70%, 50% 100%, 20% 70%, 0% 50%, 20% 30%);
+        }
+        /* Reszta stylów */
+        .input-wrapper{display:flex;align-items:center;gap:1rem;} .term-display{font-weight:600;white-space:nowrap;}
+        .grouped-inputs{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.5rem;border-top:1px solid rgba(255, 215, 0, 0.4);padding-top:1.5rem;}
+        .interest-rate-summary{font-family: 'Cinzel', serif;font-weight:700;text-align:center;padding:0.75rem;border:1px solid rgba(255, 215, 0, 0.4);color:var(--lotr-green);}
+        .output-section{margin-top:2rem;padding:1.5rem;border:1px solid rgba(255, 215, 0, 0.4);border-radius:8px;}
+        .output-row{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 0;border-bottom:1px solid rgba(22, 101, 52, 0.1);} .output-row:last-child{border-bottom:none;}
+        .output-row .label{font-weight:600;} .output-row .value,.output-row .result{font-weight:700;font-size:1.2rem;}
+        .output-row .result{font-size:1.8rem;color:var(--lotr-leaf-green);font-family: 'Cinzel', serif;}
+        .output-row .client-amount{color:var(--lotr-green);}
+        table{width:100%;margin-top:2rem;border-collapse:collapse;} th,td{border:1px solid rgba(22, 101, 52, 0.2);padding:0.75rem;text-align:right;}
+        th{font-family: 'Cinzel', serif; font-size: 1.1rem; background-color:rgba(240, 253, 244, 0.8);font-weight:700;}
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+    <h1>Rachmistrz z Rivendell</h1><div class="input-group"><label for="loanAmount">Wartość pożyczki w Złocie</label><div class="input-wrapper"><input type="range" id="loanAmountSlider" min="500" max="1500000" step="500" value="300000"><input type="text" id="loanAmountInput" value="300 000"></div></div><div class="input-group"><label for="loanTerm">Liczba Księżyców</label><div class="input-wrapper"><input type="range" id="loanTermSlider" min="6" max="180" step="1" value="120"><input type="number" id="loanTermInput" min="6" max="180" step="1" value="120"><span class="term-display" id="termInYears">(10 lat i 0 miesięcy)</span></div></div><div class="grouped-inputs"><div><div class="input-group" style="margin-bottom: 1rem;"><label for="bankCommission">Danina dla Rady (%)</label><input type="number" id="bankCommission" step="0.1" value="2.0"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="bankMargin">Marża (%)</label><input type="number" id="bankMargin" step="0.1" value="2.5"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="wibor">Stopa Królestw (%)</label><input type="number" id="wibor" step="0.01" value="5.85"></div><div class="interest-rate-summary" id="nominalInterestRate">Oprocentowanie nominalne: 8.35%</div></div><div><div class="input-group" style="margin-bottom: 1rem;"><label for="brokerFeePercent">Udział Gildi (%)</label><input type="number" id="brokerFeePercent" placeholder="np. 3.0"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="brokerFeeAmount">...w Złocie</label><input type="number" id="brokerFeeAmount" placeholder="np. 9000"></div></div></div><div class="output-section"><div class="output-row"><span class="label">Kapitał pożyczki</span><span class="value" id="netLoanAmount">0,00 zł</span></div><div class="output-row"><span class="label">Całkowity dług</span><span class="value" id="grossLoanAmount">0,00 zł</span></div><div class="output-row"><span class="label">Skarb do dyspozycji</span><span class="value client-amount" id="clientAmount">0,00 zł</span></div><div class="output-row"><span class="label">Miesięczna spłata</span><span class="result" id="monthlyPayment">0,00 zł</span></div></div><h2 style="margin-top: 2.5rem;">Zapisy w Kronice</h2><div style="overflow-x:auto;"><table><thead><tr><th>Nr</th><th>Kapitał</th><th>Odsetki</th><th>Rata</th><th>Pozostało</th></tr></thead><tbody id="scheduleBody"></tbody></table></div></div>
+    <script>
+        /* Ten sam kod JS co wcześniej */
+        const loanAmountSlider = document.getElementById('loanAmountSlider');const loanAmountInput = document.getElementById('loanAmountInput');const loanTermSlider = document.getElementById('loanTermSlider');const loanTermInput = document.getElementById('loanTermInput');const termInYearsDisplay = document.getElementById('termInYears');const bankCommissionInput = document.getElementById('bankCommission');const bankMarginInput = document.getElementById('bankMargin');const wiborInput = document.getElementById('wibor');const brokerFeePercentInput = document.getElementById('brokerFeePercent');const brokerFeeAmountInput = document.getElementById('brokerFeeAmount');const nominalInterestRateDisplay = document.getElementById('nominalInterestRate');const netLoanAmountDisplay = document.getElementById('netLoanAmount');const grossLoanAmountDisplay = document.getElementById('grossLoanAmount');const monthlyPaymentDisplay = document.getElementById('monthlyPayment');const clientAmountDisplay = document.getElementById('clientAmount');const scheduleBody = document.getElementById('scheduleBody');const currencyFormatter = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' });const numberFormatter = new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });function formatInputValue(value) {return numberFormatter.format(value).replace(/\s/g, ' ');}function parseFormattedValue(value) {return parseFloat(value.replace(/\s/g, '').replace(',', '.')) || 0;}function calculate() {const loanAmount = parseFormattedValue(loanAmountInput.value);const loanTerm = parseInt(loanTermInput.value) || 0;const bankCommission = parseFloat(bankCommissionInput.value) || 0;const bankMargin = parseFloat(bankMarginInput.value) || 0;const wibor = parseFloat(wiborInput.value) || 0;const brokerFeeAmount = parseFloat(brokerFeeAmountInput.value) || 0;const years = Math.floor(loanTerm / 12);const months = loanTerm % 12;termInYearsDisplay.textContent = `(${years} lat i ${months} miesięcy)`;const nominalInterestRate = bankMargin + wibor;nominalInterestRateDisplay.textContent = `Oprocentowanie nominalne: ${nominalInterestRate.toFixed(2)}%`;const grossLoanAmount = loanAmount * (1 + bankCommission / 100);netLoanAmountDisplay.textContent = currencyFormatter.format(loanAmount);grossLoanAmountDisplay.textContent = currencyFormatter.format(grossLoanAmount);const monthlyInterestRate = (nominalInterestRate / 100) / 12;let monthlyPayment = 0;if (monthlyInterestRate > 0 && loanTerm > 0) {const factor = Math.pow(1 + monthlyInterestRate, loanTerm);monthlyPayment = grossLoanAmount * (monthlyInterestRate * factor) / (factor - 1);} else if (loanTerm > 0) {monthlyPayment = grossLoanAmount / loanTerm;}monthlyPaymentDisplay.textContent = currencyFormatter.format(monthlyPayment);const clientAmount = loanAmount - brokerFeeAmount;clientAmountDisplay.textContent = currencyFormatter.format(clientAmount);generateSchedule(grossLoanAmount, monthlyPayment, monthlyInterestRate, loanTerm);}function generateSchedule(principal, monthlyPayment, monthlyRate, term) {scheduleBody.innerHTML = '';let remainingPrincipal = principal;if (term === 0 || isNaN(monthlyPayment) || !isFinite(monthlyPayment)) return;for (let i = 1; i <= term; i++) {const interestPart = remainingPrincipal * monthlyRate;let principalPart = monthlyPayment - interestPart;if (i === term) {principalPart = remainingPrincipal;monthlyPayment = principalPart + interestPart;}remainingPrincipal -= principalPart;const row = `<tr><td>${i}</td><td>${currencyFormatter.format(principalPart)}</td><td>${currencyFormatter.format(interestPart)}</td><td>${currencyFormatter.format(monthlyPayment)}</td><td>${currencyFormatter.format(Math.abs(remainingPrincipal))}</td></tr>`;scheduleBody.innerHTML += row;}}const inputsToCalculate = [loanAmountSlider, loanTermSlider, loanTermInput, bankCommissionInput, bankMarginInput, wiborInput, brokerFeePercentInput, brokerFeeAmountInput];inputsToCalculate.forEach(input => input.addEventListener('input', calculate));loanAmountInput.addEventListener('change', calculate);loanAmountSlider.addEventListener('input', () => {loanAmountInput.value = formatInputValue(loanAmountSlider.value);});loanAmountInput.addEventListener('input', (e) => {let value = parseFormattedValue(e.target.value);if (value > 1500000) value = 1500000;if (value >= 500) {loanAmountSlider.value = value;}});loanAmountInput.addEventListener('blur', (e) => {let value = parseFormattedValue(e.target.value);if (value < 500) value = 500;e.target.value = formatInputValue(value);calculate();});loanTermSlider.addEventListener('input', () => loanTermInput.value = loanTermSlider.value);loanTermInput.addEventListener('input', () => loanTermSlider.value = loanTermInput.value);brokerFeePercentInput.addEventListener('input', () => {const loanAmount = parseFormattedValue(loanAmountInput.value);const percent = parseFloat(brokerFeePercentInput.value) || 0;const amount = (loanAmount * percent) / 100;brokerFeeAmountInput.value = amount.toFixed(2);});brokerFeeAmountInput.addEventListener('input', () => {const loanAmount = parseFormattedValue(loanAmountInput.value);const amount = parseFloat(brokerFeeAmountInput.value) || 0;if (loanAmount > 0) {const percent = (amount / loanAmount) * 100;brokerFeePercentInput.value = percent.toFixed(2);} else {brokerFeePercentInput.value = '';}});document.addEventListener('DOMContentLoaded', () => {loanAmountInput.value = formatInputValue(loanAmountSlider.value);calculate();});
+    </script>
+</body>
+</html>
