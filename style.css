@@ -6,7 +6,6 @@ body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     background-color: #002d5a;
-    /* ZMIANA: Dodano prawy padding, aby zrobić miejsce dla bocznego panelu */
     padding: 20px 260px 20px 20px; 
     box-sizing: border-box;
 }
@@ -18,9 +17,9 @@ body {
     padding: 40px;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    width: 100%; /* Zmieniono z 90% dla lepszego dopasowania w nowym layoucie */
-    /* ZMIANA: Zawężono maksymalną szerokość menu */
-    max-width: 750px; 
+    width: 100%;
+    /* ZMIANA: Zwiększono maksymalną szerokość menu */
+    max-width: 850px; 
     margin: 40px auto;
 }
 
@@ -76,7 +75,7 @@ body {
 .back-button {
     display: inline-block;
     padding: 10px 25px;
-    background-color: #f4f7f9; /* Jasny niebiesko-szary */
+    background-color: #f4f7f9;
     color: #34495e;
     border: 1px solid #dce4e8;
     border-radius: 8px;
@@ -96,11 +95,9 @@ body {
     position: fixed;
     top: 20px;
     right: 20px;
-    /* ZMIANA: Zmniejszono szerokość panelu */
     width: 220px; 
     background-color: #ffffff;
     border-radius: 12px;
-    /* ZMIANA: Zmniejszono padding */
     padding: 12px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.1);
     z-index: 1000;
@@ -127,17 +124,17 @@ body {
     margin-bottom: 10px;
 }
 .rates-grid {
-    display: grid; /* Lepsze dopasowanie w mniejszym panelu */
+    display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 5px;
     justify-content: space-around;
     text-align: center;
 }
-.rate-item p { margin: 0; font-size: 10px; } /* Zmniejszono czcionkę */
+.rate-item p { margin: 0; font-size: 10px; }
 .rate-item p:not(.value) { margin-bottom: 4px; }
 .rate-item .value, .info-container-single .value {
     font-weight: 600;
-    font-size: 14px; /* Zmniejszono czcionkę */
+    font-size: 14px;
     color: #002d5a;
 }
 .disclaimer-text {
@@ -148,18 +145,18 @@ body {
     padding: 0 5px;
 }
 
-/* ZMIANA: Zmieniono warunek ukrywania panelu i resetowania paddingu */
-@media (max-width: 1100px) {
+/* ZMIANA: Dostosowano próg, przy którym znika boczny panel */
+@media (max-width: 1150px) {
     body {
-        padding: 20px; /* Reset paddingu na mniejszych ekranach */
+        padding: 20px;
     }
     .info-panel {
-        display: none; /* Ukrywanie panelu */
+        display: none;
     }
 }
 @media (max-width: 768px) {
     .grid-3-col, .grid-2-col {
-        grid-template-columns: 1fr; /* Wszystkie przyciski w jednej kolumnie na telefonach */
+        grid-template-columns: 1fr;
     }
 }
 
