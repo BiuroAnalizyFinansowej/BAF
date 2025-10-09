@@ -3,84 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator - Styl Dark Mode</title>
+    <title>Kalkulator - Cyberpunk</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Mono&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --cyber-cyan: #08d9d6; --cyber-pink: #ff2e63; --cyber-yellow: #fef200;
+            --cyber-bg: #0a0a0a; --cyber-surface: #1a1a1a; --cyber-text: #eaeaea;
+        }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            display: flex; justify-content: center; align-items: center; min-height: 100vh;
-            background: #111827; color: #d1d5db;
+            font-family: 'Roboto Mono', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh;
+            background-color: var(--cyber-bg);
+            background-image: 
+                linear-gradient(rgba(8, 217, 214, 0.1) 1px, transparent 1px),
+                linear-gradient(to right, rgba(8, 217, 214, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px; color: var(--cyber-text);
         }
         .calculator-container {
             position: relative;
-            width: 100%; max-width: 800px;
-            background: rgba(31, 41, 55, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 2.5rem; border-radius: 20px;
+            width: 100%; max-width: 800px; background-color: rgba(26, 26, 26, 0.85);
+            backdrop-filter: blur(8px); padding: 2.5rem; border: 2px solid var(--cyber-cyan);
+            border-radius: 0; box-shadow: 0 0 25px var(--cyber-cyan), inset 0 0 15px rgba(8, 217, 214, 0.5);
         }
         .home-button, .back-button {
             position: absolute;
-            top: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(31, 41, 55, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            top: 15px;
+            width: 45px;
+            height: 45px;
+            background: transparent;
+            border: 2px solid var(--cyber-cyan);
+            box-shadow: 0 0 10px var(--cyber-cyan);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
             cursor: pointer;
             z-index: 10;
         }
-        .home-button { left: 20px; }
-        .back-button { left: 80px; }
+        .home-button { left: 15px; }
+        .back-button { left: 70px; }
         .home-button:hover, .back-button:hover {
-            background: rgba(59, 130, 246, 0.2);
+            background: rgba(8, 217, 214, 0.1);
+            border-color: var(--cyber-pink);
+            box-shadow: 0 0 15px var(--cyber-pink);
         }
-        .home-button svg { fill: #d1d5db; }
-        .back-button svg { fill: #60a5fa; }
+        .home-button svg { fill: var(--cyber-cyan); filter: drop-shadow(0 0 3px var(--cyber-cyan)); }
+        .back-button svg { fill: var(--cyber-cyan); filter: drop-shadow(0 0 3px var(--cyber-cyan)); }
+        .home-button:hover svg, .back-button:hover svg { fill: var(--cyber-pink); filter: drop-shadow(0 0 5px var(--cyber-pink)); }
         .home-button svg, .back-button svg {
             width: 24px;
             height: 24px;
+            transition: all 0.2s;
         }
         .info-panel {
             position: fixed; top: 20px; right: 20px; width: 220px;
-            background: rgba(31, 41, 55, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 12px;
-            z-index: 1000;
+            background-color: rgba(26, 26, 26, 0.85); backdrop-filter: blur(8px);
+            border: 2px solid var(--cyber-cyan);
+            box-shadow: 0 0 25px var(--cyber-cyan), inset 0 0 15px rgba(8, 217, 214, 0.5);
+            padding: 12px; z-index: 1000;
         }
-        .info-panel .info-container { padding: 10px; background-color: rgba(17, 24, 39, 0.7); border-radius: 12px; }
+        .info-panel .info-container { padding: 10px; border: 1px solid var(--cyber-cyan); }
         .info-panel .info-container:first-of-type { margin-bottom: 15px; }
-        .info-header { font-size: 12px; font-weight: 600; color: #9ca3af; margin-bottom: 5px; }
-        .info-date { font-size: 10px; color: #6b7280; margin-bottom: 10px; }
+        .info-header { font-family: 'Orbitron', sans-serif; font-size: 12px; color: var(--cyber-cyan); text-shadow: 0 0 5px var(--cyber-cyan); margin-bottom: 5px; }
+        .info-date { font-size: 10px; color: var(--cyber-text); margin-bottom: 10px; }
         .rates-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; text-align: center; }
-        .rate-item p { margin: 0; font-size: 10px; color: #9ca3af; }
-        .rate-item .value, .info-container-single .value { font-weight: 700; font-size: 14px; color: #60a5fa; }
-        .disclaimer-text { font-size: 9px; font-style: italic; color: #6b7280; margin-top: 10px; padding: 0 5px; }
+        .rate-item p { margin: 0; font-size: 10px; }
+        .rate-item .value, .info-container-single .value { font-weight: 700; font-size: 14px; color: var(--cyber-yellow); text-shadow: 0 0 5px var(--cyber-yellow); }
+        .disclaimer-text { font-size: 9px; font-style: italic; color: var(--cyber-text); margin-top: 10px; padding: 0 5px; }
 
-        h1 { text-align: center; color: #f9fafb; margin-bottom: 2rem; }
-        .input-group label { font-weight: 500; margin-bottom: 0.75rem; display: block; color: #9ca3af; }
-        input[type="text"], input[type="number"] { border: 1px solid #4b5563; outline: none; background: #1f2937; width: 150px; padding: 0.8rem; border-radius: 8px; font-size: 1rem; color: #f9fafb; text-align: center; transition: border-color 0.2s, box-shadow 0.2s; }
-        input[type="text"]:focus, input[type="number"]:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4); }
-        input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; cursor: pointer; height: 28px; }
-        input[type="range"]::-webkit-slider-runnable-track { background: #374151; height: 4px; border-radius: 4px; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; margin-top: -12px; background-color: #3b82f6; height: 28px; width: 28px; border-radius: 50%; border: 4px solid #111827; transition: transform 0.2s; }
-        input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.1); }
-        h2{text-align:center; color: #f9fafb;} .input-group{margin-bottom: 1.5rem;} .input-wrapper{display:flex;align-items:center;gap:1rem;}
-        .term-display{font-weight:600;white-space:nowrap;} .grouped-inputs{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.5rem;border-top:1px solid #374151;padding-top:1.5rem;}
-        .interest-rate-summary{font-weight:bold;text-align:center;padding:0.75rem;border-radius:8px;background:#1f2937;color:#60a5fa;}
-        .output-section{margin-top:2rem;padding:1.5rem;border-radius:12px;background:rgba(17, 24, 39, 0.7);}
-        .output-row{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 0;border-bottom:1px solid #374151;}
-        .output-row:last-child{border-bottom:none;} .output-row .label{font-weight:500;color:#9ca3af;} .output-row .value,.output-row .result{font-weight:700;font-size:1.2rem;color:#f9fafb;}
-        .output-row .result{font-size:1.8rem;color:#60a5fa;} .output-row .client-amount{color:#34d399;}
-        table{width:100%;margin-top:2rem;border-collapse:collapse;} th,td{border:1px solid #374151;padding:0.75rem;text-align:right;}
-        th{background-color:rgba(31, 41, 55, 0.8);color:#d1d5db;font-weight:600;}
+        h1, h2 { font-family: 'Orbitron', sans-serif; text-align: center; margin-bottom: 2.5rem; font-weight: 700; color: var(--cyber-cyan); text-shadow: 0 0 5px var(--cyber-cyan), 0 0 10px var(--cyber-pink); }
+        .input-group label { font-family: 'Orbitron', sans-serif; margin-bottom: 0.75rem; display: block; }
+        input[type="text"], input[type="number"] { border: 2px solid var(--cyber-cyan); background: transparent; width: 150px; padding: 0.75rem; font-size: 1rem; font-weight: 600; color: var(--cyber-yellow); text-align: center; box-shadow: 0 0 10px var(--cyber-cyan); transition: all 0.3s; }
+        input[type="text"]:focus, input[type="number"]:focus { outline: none; border-color: var(--cyber-pink); box-shadow: 0 0 15px var(--cyber-pink); }
+        input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; cursor: pointer; }
+        input[type="range"]::-webkit-slider-runnable-track { background-color: var(--cyber-surface); height: 6px; border: 1px solid var(--cyber-cyan); box-shadow: 0 0 5px var(--cyber-cyan); }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; margin-top: -12px; background-color: var(--cyber-cyan); height: 30px; width: 20px; box-shadow: 0 0 15px var(--cyber-cyan); clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%); }
+        .input-wrapper{display:flex;align-items:center;gap:1rem;} .term-display{font-weight:600;white-space:nowrap;color:var(--cyber-cyan);}
+        .grouped-inputs{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.5rem;border-top:2px solid var(--cyber-cyan);padding-top:1.5rem;}
+        .interest-rate-summary{font-family: 'Orbitron', sans-serif;text-align:center;padding:0.75rem;border:2px solid var(--cyber-cyan);color:var(--cyber-yellow);}
+        .output-section{margin-top:2rem;padding:1.5rem;border:2px solid var(--cyber-cyan);}
+        .output-row{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 0;border-bottom:1px solid var(--cyber-cyan);} .output-row:last-child{border-bottom:none;}
+        .output-row .label{font-weight:600;} .output-row .value,.output-row .result{font-weight:700;font-size:1.2rem;color:var(--cyber-yellow);}
+        .output-row .result{font-size:1.8rem;color:var(--cyber-pink); font-family: 'Orbitron', sans-serif;}
+        .output-row .client-amount{color:var(--cyber-cyan);}
+        table{width:100%;margin-top:2rem;border-collapse:collapse;} th,td{border:1px solid var(--cyber-cyan);padding:0.75rem;text-align:right;}
+        th{font-family: 'Orbitron', sans-serif; font-size: 1.1rem; background-color:var(--cyber-surface);font-weight:700;}
     </style>
 </head>
 <body>
@@ -110,14 +118,14 @@
         <a href="#" onclick="history.back(); return false;" class="back-button" title="Powrót">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
         </a>
-        <h1>Kalkulator Kredytowy</h1><div class="input-group"><label for="loanAmount">Kwota kredytu (PLN)</label><div class="input-wrapper"><input type="range" id="loanAmountSlider" min="500" max="1500000" step="500" value="300000"><input type="text" id="loanAmountInput" value="300 000"></div></div><div class="input-group"><label for="loanTerm">Okres kredytowania</label><div class="input-wrapper"><input type="range" id="loanTermSlider" min="6" max="180" step="1" value="120"><input type="number" id="loanTermInput" min="6" max="180" step="1" value="120"><span class="term-display" id="termInYears">(10 lat i 0 miesięcy)</span></div></div><div class="grouped-inputs"><div><div class="input-group" style="margin-bottom: 1rem;"><label for="bankCommission">Prowizja bankowa (%)</label><input type="number" id="bankCommission" step="0.1" value="2.0"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="bankMargin">Marża banku (%)</label><input type="number" id="bankMargin" step="0.1" value="2.5"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="wibor">WIBOR (%)</label><input type="number" id="wibor" step="0.01" value="5.85"></div><div class="interest-rate-summary" id="nominalInterestRate">Oprocentowanie nominalne: 8.35%</div></div><div><div class="input-group" style="margin-bottom: 1rem;"><label for="brokerFeePercent">Opłata brokerska (%)</label><input type="number" id="brokerFeePercent" placeholder="np. 3.0"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="brokerFeeAmount">Opłata brokerska (PLN)</label><input type="number" id="brokerFeeAmount" placeholder="np. 9000"></div></div></div><div class="output-section"><div class="output-row"><span class="label">Kwota kredytu netto (kapitał)</span><span class="value" id="netLoanAmount">0,00 zł</span></div><div class="output-row"><span class="label">Kwota kredytu brutto (kapitał + prowizja)</span><span class="value" id="grossLoanAmount">0,00 zł</span></div><div class="output-row"><span class="label">Kwota do dyspozycji klienta</span><span class="value client-amount" id="clientAmount">0,00 zł</span></div><div class="output-row"><span class="label">Miesięczna rata równa</span><span class="result" id="monthlyPayment">0,00 zł</span></div></div><h2 style="margin-top: 2.5rem;">Harmonogram spłaty</h2><div style="overflow-x:auto;"><table><thead><tr><th>Nr raty</th><th>Część kapitałowa</th><th>Część odsetkowa</th><th>Rata całkowita</th><th>Kapitał do spłaty</th></tr></thead><tbody id="scheduleBody"></tbody></table></div>
+        <h1>Terminal Kredytowy</h1><div class="input-group"><label for="loanAmount">Kwota [€$]</label><div class="input-wrapper"><input type="range" id="loanAmountSlider" min="500" max="1500000" step="500" value="300000"><input type="text" id="loanAmountInput" value="300 000"></div></div><div class="input-group"><label for="loanTerm">Cykle spłaty</label><div class="input-wrapper"><input type="range" id="loanTermSlider" min="6" max="180" step="1" value="120"><input type="number" id="loanTermInput" min="6" max="180" step="1" value="120"><span class="term-display" id="termInYears">(10 lat i 0 miesięcy)</span></div></div><div class="grouped-inputs"><div><div class="input-group" style="margin-bottom: 1rem;"><label for="bankCommission">Prowizja korpo (%)</label><input type="number" id="bankCommission" step="0.1" value="2.0"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="bankMargin">Marża (%)</label><input type="number" id="bankMargin" step="0.1" value="2.5"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="wibor">Stawka Netu (%)</label><input type="number" id="wibor" step="0.01" value="5.85"></div><div class="interest-rate-summary" id="nominalInterestRate">Oprocentowanie nominalne: 8.35%</div></div><div><div class="input-group" style="margin-bottom: 1rem;"><label for="brokerFeePercent">Działka Fixera (%)</label><input type="number" id="brokerFeePercent" placeholder="np. 3.0"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="brokerFeeAmount">...w €$</label><input type="number" id="brokerFeeAmount" placeholder="np. 9000"></div></div></div><div class="output-section"><div class="output-row"><span class="label">Kredyty Netto</span><span class="value" id="netLoanAmount">0,00 zł</span></div><div class="output-row"><span class="label">Całkowity dług</span><span class="value" id="grossLoanAmount">0,00 zł</span></div><div class="output-row"><span class="label">Kredyty na chip</span><span class="value client-amount" id="clientAmount">0,00 zł</span></div><div class="output-row"><span class="label">Miesięczny transfer</span><span class="result" id="monthlyPayment">0,00 zł</span></div></div><h2 style="margin-top: 2.5rem;">Log Transakcji</h2><div style="overflow-x:auto;"><table><thead><tr><th>CYKL</th><th>KAPITAŁ</th><th>ODSETKI</th><th>RATA</th><th>DŁUG</th></tr></thead><tbody id="scheduleBody"></tbody></table></div>
     </div>
     <script>
         const loanAmountSlider = document.getElementById('loanAmountSlider');const loanAmountInput = document.getElementById('loanAmountInput');const loanTermSlider = document.getElementById('loanTermSlider');const loanTermInput = document.getElementById('loanTermInput');const termInYearsDisplay = document.getElementById('termInYears');const bankCommissionInput = document.getElementById('bankCommission');const bankMarginInput = document.getElementById('bankMargin');const wiborInput = document.getElementById('wibor');const brokerFeePercentInput = document.getElementById('brokerFeePercent');const brokerFeeAmountInput = document.getElementById('brokerFeeAmount');const nominalInterestRateDisplay = document.getElementById('nominalInterestRate');const netLoanAmountDisplay = document.getElementById('netLoanAmount');const grossLoanAmountDisplay = document.getElementById('grossLoanAmount');const monthlyPaymentDisplay = document.getElementById('monthlyPayment');const clientAmountDisplay = document.getElementById('clientAmount');const scheduleBody = document.getElementById('scheduleBody');const currencyFormatter = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' });const numberFormatter = new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });function formatInputValue(value) {return numberFormatter.format(value).replace(/\s/g, ' ');}function parseFormattedValue(value) {return parseFloat(value.replace(/\s/g, '').replace(',', '.')) || 0;}function calculate() {const loanAmount = parseFormattedValue(loanAmountInput.value);const loanTerm = parseInt(loanTermInput.value) || 0;const bankCommission = parseFloat(bankCommissionInput.value) || 0;const bankMargin = parseFloat(bankMarginInput.value) || 0;const wibor = parseFloat(wiborInput.value) || 0;const brokerFeeAmount = parseFloat(brokerFeeAmountInput.value) || 0;const years = Math.floor(loanTerm / 12);const months = loanTerm % 12;termInYearsDisplay.textContent = `(${years} lat i ${months} miesięcy)`;const nominalInterestRate = bankMargin + wibor;nominalInterestRateDisplay.textContent = `Oprocentowanie nominalne: ${nominalInterestRate.toFixed(2)}%`;const grossLoanAmount = loanAmount * (1 + bankCommission / 100);netLoanAmountDisplay.textContent = currencyFormatter.format(loanAmount);grossLoanAmountDisplay.textContent = currencyFormatter.format(grossLoanAmount);const monthlyInterestRate = (nominalInterestRate / 100) / 12;let monthlyPayment = 0;if (monthlyInterestRate > 0 && loanTerm > 0) {const factor = Math.pow(1 + monthlyInterestRate, loanTerm);monthlyPayment = grossLoanAmount * (monthlyInterestRate * factor) / (factor - 1);} else if (loanTerm > 0) {monthlyPayment = grossLoanAmount / loanTerm;}monthlyPaymentDisplay.textContent = currencyFormatter.format(monthlyPayment);const clientAmount = loanAmount - brokerFeeAmount;clientAmountDisplay.textContent = currencyFormatter.format(clientAmount);generateSchedule(grossLoanAmount, monthlyPayment, monthlyInterestRate, loanTerm);}function generateSchedule(principal, monthlyPayment, monthlyRate, term) {scheduleBody.innerHTML = '';let remainingPrincipal = principal;if (term === 0 || isNaN(monthlyPayment) || !isFinite(monthlyPayment)) return;for (let i = 1; i <= term; i++) {const interestPart = remainingPrincipal * monthlyRate;let principalPart = monthlyPayment - interestPart;if (i === term) {principalPart = remainingPrincipal;monthlyPayment = principalPart + interestPart;}remainingPrincipal -= principalPart;const row = `<tr><td>${i}</td><td>${currencyFormatter.format(principalPart)}</td><td>${currencyFormatter.format(interestPart)}</td><td>${currencyFormatter.format(monthlyPayment)}</td><td>${currencyFormatter.format(Math.abs(remainingPrincipal))}</td></tr>`;scheduleBody.innerHTML += row;}}const inputsToCalculate = [loanAmountSlider, loanTermSlider, loanTermInput, bankCommissionInput, bankMarginInput, wiborInput, brokerFeePercentInput, brokerFeeAmountInput];inputsToCalculate.forEach(input => input.addEventListener('input', calculate));loanAmountInput.addEventListener('change', calculate);loanAmountSlider.addEventListener('input', () => {loanAmountInput.value = formatInputValue(loanAmountSlider.value);});loanAmountInput.addEventListener('input', (e) => {let value = parseFormattedValue(e.target.value);if (value > 1500000) value = 1500000;if (value >= 500) {loanAmountSlider.value = value;}});loanAmountInput.addEventListener('blur', (e) => {let value = parseFormattedValue(e.target.value);if (value < 500) value = 500;e.target.value = formatInputValue(value);calculate();});loanTermSlider.addEventListener('input', () => loanTermInput.value = loanTermSlider.value);loanTermInput.addEventListener('input', () => loanTermSlider.value = loanTermInput.value);brokerFeePercentInput.addEventListener('input', () => {const loanAmount = parseFormattedValue(loanAmountInput.value);const percent = parseFloat(brokerFeePercentInput.value) || 0;const amount = (loanAmount * percent) / 100;brokerFeeAmountInput.value = amount.toFixed(2);});brokerFeeAmountInput.addEventListener('input', () => {const loanAmount = parseFormattedValue(loanAmountInput.value);const amount = parseFloat(brokerFeeAmountInput.value) || 0;if (loanAmount > 0) {const percent = (amount / loanAmount) * 100;brokerFeePercentInput.value = percent.toFixed(2);} else {brokerFeePercentInput.value = '';}});
         document.addEventListener('DOMContentLoaded', () => {
             loanAmountInput.value = formatInputValue(loanAmountSlider.value);
             calculate();
-
+            
             const formattedDate = 'Dane na dzień: 08.10.2025';
             document.getElementById('current-date-wibor').textContent = formattedDate;
             document.getElementById('current-date-odsetki').textContent = formattedDate;
