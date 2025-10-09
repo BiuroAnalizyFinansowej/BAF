@@ -23,45 +23,49 @@
             backdrop-filter: blur(5px); padding: 2.5rem; border: 2px solid var(--sauron-ash);
             box-shadow: 0 0 30px rgba(249, 115, 22, 0.3);
         }
-        /* STYL PRZYCISKU HOME */
-        .home-button {
-            position: absolute; top: 15px; left: 15px; width: 45px; height: 45px;
-            background: var(--sauron-dark); border: 2px solid var(--sauron-ash);
-            display: flex; align-items: center; justify-content: center; transition: all 0.2s;
-            z-index: 1001;
+        .home-button, .back-button {
+            position: absolute;
+            top: 15px;
+            width: 45px;
+            height: 45px;
+            background: var(--sauron-dark);
+            border: 2px solid var(--sauron-ash);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            cursor: pointer;
+            z-index: 10;
         }
-        .home-button:hover { border-color: var(--sauron-fire); box-shadow: 0 0 10px var(--sauron-fire); }
-        .home-button svg { width: 24px; height: 24px; fill: var(--sauron-lava); transition: fill 0.2s; }
-        .home-button:hover svg { fill: var(--sauron-fire); }
-        
-        /* NOWE STYLE */
-        .back-button {
-            position: absolute; top: 15px; left: 70px; width: 45px; height: 45px;
-            background: var(--sauron-dark); border: 2px solid var(--sauron-ash);
-            display: flex; align-items: center; justify-content: center; transition: all 0.2s;
-            z-index: 1001;
+        .home-button { left: 15px; }
+        .back-button { left: 70px; }
+        .home-button:hover, .back-button:hover {
+            border-color: var(--sauron-fire);
+            box-shadow: 0 0 10px var(--sauron-fire);
         }
-        .back-button:hover { border-color: var(--sauron-fire); box-shadow: 0 0 10px var(--sauron-fire); }
-        .back-button svg { width: 24px; height: 24px; fill: var(--sauron-lava); transition: fill 0.2s; }
-        .back-button:hover svg { fill: var(--sauron-fire); }
-        
+        .home-button svg, .back-button svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--sauron-lava);
+            transition: fill 0.2s;
+        }
+        .home-button:hover svg, .back-button:hover svg {
+            fill: var(--sauron-fire);
+        }
         .info-panel {
-            position: fixed; top: 20px; right: 20px; width: 220px; 
+            position: fixed; top: 20px; right: 20px; width: 220px;
             background-color: rgba(12, 10, 9, 0.8); backdrop-filter: blur(5px);
-            border: 2px solid var(--sauron-ash); box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
-            padding: 12px; z-index: 1000;
+            border: 2px solid var(--sauron-ash);
+            padding: 12px; box-shadow: 0 0 30px rgba(249, 115, 22, 0.3); z-index: 1000;
         }
-        .info-panel .info-container {
-            padding: 10px; background-color: transparent; border: 1px solid var(--sauron-ash);
-        }
+        .info-panel .info-container { padding: 10px; background-color: var(--sauron-dark); border: 1px solid var(--sauron-ash); }
         .info-panel .info-container:first-of-type { margin-bottom: 15px; }
-        .info-header { font-family: 'Cinzel Decorative', cursive; font-size: 12px; font-weight: 700; color: var(--sauron-fire); margin-bottom: 5px; }
-        .info-date { font-size: 10px; color: #a8a29e; margin-bottom: 10px; }
+        .info-header { font-family: 'Cinzel Decorative', cursive; font-size: 12px; color: var(--sauron-fire); margin-bottom: 5px; }
+        .info-date { font-size: 10px; color: var(--sauron-text); margin-bottom: 10px; }
         .rates-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; text-align: center; }
-        .rate-item p { margin: 0; font-size: 10px; color: #a8a29e; }
-        .rate-item p:not(.value) { margin-bottom: 4px; }
-        .rate-item .value, .info-container-single .value { font-family: 'Cinzel Decorative', cursive; font-weight: 700; font-size: 14px; color: var(--sauron-lava); }
-        .disclaimer-text { font-size: 9px; font-style: italic; color: #78716c; margin-top: 10px; padding: 0 5px; }
+        .rate-item p { margin: 0; font-size: 10px; }
+        .rate-item .value, .info-container-single .value { font-weight: 700; font-size: 14px; color: var(--sauron-lava); }
+        .disclaimer-text { font-size: 9px; font-style: italic; color: var(--sauron-text); margin-top: 10px; padding: 0 5px; }
 
         h1, h2 { font-family: 'Cinzel Decorative', cursive; text-align: center; margin-bottom: 2.5rem; font-weight: 700; color: var(--sauron-fire); text-shadow: 0 0 10px var(--sauron-lava); }
         .input-group label { font-family: 'Cinzel Decorative', cursive; font-weight: 700; margin-bottom: 0.75rem; display: block; }
@@ -83,26 +87,31 @@
     </style>
 </head>
 <body>
-    <a href="#" onclick="history.back(); return false;" class="back-button" title="Powrót">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-    </a>
     <div class="info-panel">
         <div class="info-container">
-            <div class="info-header">Dekret Władcy</div><div class="info-date" id="current-date-wibor">...</div>
+            <div class="info-header">Stawki Referencyjne</div>
+            <div class="info-date" id="current-date-wibor">...</div>
             <div class="rates-grid">
                 <div class="rate-item"><p>WIBOR 1M</p><p class="value" id="wibor-1m">...</p></div>
                 <div class="rate-item"><p>WIBOR 3M</p><p class="value" id="wibor-3m">...</p></div>
                 <div class="rate-item"><p>WIBOR 6M</p><p class="value" id="wibor-6m">...</p></div>
-            </div><p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p>
+            </div>
+            <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p>
         </div>
         <div class="info-container info-container-single">
-            <div class="info-header">Odsetki za zwłokę</div><div class="info-date" id="current-date-odsetki">...</div>
-            <p class="value" id="odsetki-opoznienie">...</p><p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p>
+            <div class="info-header">Odsetki ustawowe za opóźnienie</div>
+            <div class="info-date" id="current-date-odsetki">...</div>
+            <p class="value" id="odsetki-opoznienie">...</p>
+            <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p>
         </div>
     </div>
+    
     <div class="calculator-container">
         <a href="index.html" class="home-button" title="Strona główna">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg>
+        </a>
+        <a href="#" onclick="history.back(); return false;" class="back-button" title="Powrót">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
         </a>
         <h1>Skryba z Barad-dûr</h1><div class="input-group"><label for="loanAmount">Trybut (w złocie)</label><div class="input-wrapper"><input type="range" id="loanAmountSlider" min="500" max="1500000" step="500" value="300000"><input type="text" id="loanAmountInput" value="300 000"></div></div><div class="input-group"><label for="loanTerm">Cykle Ciemności</label><div class="input-wrapper"><input type="range" id="loanTermSlider" min="6" max="180" step="1" value="120"><input type="number" id="loanTermInput" min="6" max="180" step="1" value="120"><span class="term-display" id="termInYears">(10 lat i 0 miesięcy)</span></div></div><div class="grouped-inputs"><div><div class="input-group" style="margin-bottom: 1rem;"><label for="bankCommission">Dziesięcina dla Twierdzy (%)</label><input type="number" id="bankCommission" step="0.1" value="2.0"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="bankMargin">Marża (%)</label><input type="number" id="bankMargin" step="0.1" value="2.5"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="wibor">Dekret Władcy (%)</label><input type="number" id="wibor" step="0.01" value="5.85"></div><div class="interest-rate-summary" id="nominalInterestRate">Oprocentowanie nominalne: 8.35%</div></div><div><div class="input-group" style="margin-bottom: 1rem;"><label for="brokerFeePercent">Dola Nazgûla (%)</label><input type="number" id="brokerFeePercent" placeholder="np. 3.0"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="brokerFeeAmount">...w złocie</label><input type="number" id="brokerFeeAmount" placeholder="np. 9000"></div></div></div><div class="output-section"><div class="output-row"><span class="label">Kapitał długu</span><span class="value" id="netLoanAmount">0,00 zł</span></div><div class="output-row"><span class="label">Całkowite zobowiązanie</span><span class="value" id="grossLoanAmount">0,00 zł</span></div><div class="output-row"><span class="label">Złoto do ręki</span><span class="value client-amount" id="clientAmount">0,00 zł</span></div><div class="output-row"><span class="label">Miesięczna ofiara</span><span class="result" id="monthlyPayment">0,00 zł</span></div></div><h2 style="margin-top: 2.5rem;">Spis Dłużników</h2><div style="overflow-x:auto;"><table><thead><tr><th>Nr</th><th>Kapitał</th><th>Odsetki</th><th>Rata</th><th>Pozostało</th></tr></thead><tbody id="scheduleBody"></tbody></table></div>
     </div>
@@ -111,7 +120,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             loanAmountInput.value = formatInputValue(loanAmountSlider.value);
             calculate();
-            // Kod dla panelu info
+            
             const formattedDate = 'Dane na dzień: 08.10.2025';
             document.getElementById('current-date-wibor').textContent = formattedDate;
             document.getElementById('current-date-odsetki').textContent = formattedDate;
