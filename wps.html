@@ -1,9 +1,1013 @@
 <!DOCTYPE html>
-<html lang="pl"><head><title>BAF - Wyliczenia WPS</title><link rel="stylesheet" href="style.css"></head><body>
-<div class="info-panel"></div>
-<div class="menu-container">
-    <div class="logo"><img src="baf_logo.png" alt="Logo BAF"></div>
-    <h2>Kalkulator - Wyliczenia WPS</h2>
-    <p>Ta strona jest w budowie.</p>
-    <div class="back-button-container"><a href="#" onclick="history.back(); return false;" class="back-button">POWRÓT</a></div>
-</div><script src="script.js"></script></body></html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator WPS - KAF</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* =====================================
+           KAF CALCULATOR UNIFIED DESIGN
+           Spójny design dla wszystkich kalkulatorów
+        ===================================== */
+        
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2d3748;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        /* Header with Navigation */
+        .calc-header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .calc-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .calc-logo {
+            height: 40px;
+            width: 40px;
+            border-radius: 8px;
+        }
+        
+        .calc-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+        }
+        
+        .title-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+        
+        .calc-nav {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            background: #f1f5f9;
+            color: #64748b;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .nav-btn:hover {
+            background: #1e40af;
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .nav-btn.primary {
+            background: #1e40af;
+            color: white;
+        }
+        
+        /* Main Container */
+        .calc-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Dwie równe kolumny */
+            grid-template-rows: auto auto; /* Tylko dwa rzędy */
+            gap: 1.5rem;
+            padding: 0 1rem;
+        }
+        
+        .calc-inputs {
+            grid-column: 1; /* Lewa kolumna */
+            grid-row: 1;
+        }
+
+        .calc-results {
+            grid-column: 2; /* Prawa kolumna */
+            grid-row: 1;
+        }
+
+        .calc-chart-section {
+            grid-column: 1 / -1; /* Pełna szerokość - obie kolumny */
+            grid-row: 2; /* Drugi rząd */
+        }
+        
+        @media (max-width: 1024px) {
+            .calc-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto; /* Trzy rzędy na mobile */
+            }
+            
+            .calc-inputs {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            .calc-results {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+            .calc-chart-section {
+                grid-column: 1;
+                grid-row: 3;
+            }
+        }
+        
+        /* Input Section */
+        .calc-inputs {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Individual tiles - każdy jest osobny */
+        .calc-inputs,
+        .calc-results,
+        .calc-chart-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .calc-chart {
+            margin-top: 0;
+        }
+
+        /* Chart Section */
+        .calc-chart-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .section-title {
+            font-size: 1.2rem; /* Zmniejszona czcionka */
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem; /* Zmniejszony margines */
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .section-title i {
+            color: #1e40af;
+        }
+        
+        .input-group {
+            margin-bottom: 0.75rem; /* Jeszcze mniejszy margines */
+        }
+        
+        .input-label {
+            display: block;
+            font-size: 0.85rem; /* Zmniejszona czcionka */
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.4rem; /* Zmniejszony margines */
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 0.6rem 0.8rem; /* Zmniejszony padding */
+            border: 2px solid #e2e8f0;
+            border-radius: 6px; /* Mniejszy radius */
+            font-size: 0.95rem; /* Mniejsza czcionka */
+            background: #f8fafc;
+            transition: all 0.2s ease;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #1e40af;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+        
+        .input-help {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 0.3rem;
+        }
+        
+        /* Action Buttons */
+        .calc-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .calc-btn {
+            padding: 0.6rem 1.2rem; /* Zmniejszony padding */
+            border: none;
+            border-radius: 6px; /* Mniejszy radius */
+            font-weight: 600;
+            font-size: 0.9rem; /* Mniejsza czcionka */
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .calc-btn.primary {
+            background: #1e40af;
+            color: white;
+        }
+        
+        .calc-btn.primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+        }
+        
+        .calc-btn.secondary {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+        
+        .calc-btn.secondary:hover {
+            background: #e2e8f0;
+            color: #374151;
+        }
+        
+        /* Results Section */
+        .calc-results {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem; /* Zmniejszony padding */
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            height: fit-content;
+        }
+        
+        .result-item {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .result-item.highlight {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            border-color: #1e40af;
+        }
+        
+        .result-label {
+            font-weight: 500;
+            color: inherit;
+        }
+        
+        .result-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: inherit;
+        }
+        
+        /* Chart Container */
+        .calc-chart {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+        
+        .chart-canvas {
+            width: 100% !important;
+            height: 250px !important; /* Zmniejszona wysokość z 300px do 250px */
+            max-height: 250px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .calc-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .calc-container {
+                padding: 1rem;
+                grid-template-columns: 1fr;
+            }
+            
+            .calc-inputs,
+            .calc-results {
+                padding: 1rem;
+            }
+            
+            .calc-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="calc-header">
+        <div class="calc-brand">
+            <i class="fas fa-percentage calc-logo" style="background: #1e40af; color: white; padding: 10px; font-size: 20px;"></i>
+            <div class="title-section">
+                <h1 class="calc-title">Kalkulator WPS</h1>
+            </div>
+        </div>
+        
+        <img src="baf_logo.png" alt="Logo BAF" style="height: 50px;">
+    </header>
+
+    <main class="calc-container">
+        <section class="calc-inputs">
+            <h2 class="section-title">
+                <i class="fas fa-edit"></i>
+                Dane kredytu
+            </h2>
+            
+            <form id="calculator-form">
+                <div class="input-group">
+                    <label for="kwota-kredytu" class="input-label">
+                        Kwota kredytu (tylko kapitał)
+                    </label>
+                    <input 
+                        type="number" 
+                        id="kwota-kredytu" 
+                        class="input-field" 
+                        placeholder="0"
+                        min="0"
+                        step="0.01"
+                    >
+                </div>
+                
+                <div class="input-group">
+                    <label for="prowizja" class="input-label">
+                        Prowizja w umowie (kwotowo)
+                    </label>
+                    <input 
+                        type="number" 
+                        id="prowizja" 
+                        class="input-field" 
+                        placeholder="0"
+                        min="0"
+                        step="0.01"
+                    >
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Sposób obliczania oprocentowania</label>
+                    
+                    <div style="display: flex; gap: 1rem; margin-bottom: 0.75rem;"> <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="radio" name="interest-type" value="margin" checked style="margin: 0;">
+                            <span>Marża</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="radio" name="interest-type" value="fixed" style="margin: 0;">
+                            <span>Oprocentowanie</span>
+                        </label>
+                    </div>
+                    
+                    <div id="margin-field" style="display: block;">
+                        <div>
+                            <label for="marza" style="font-weight: 500; color: #333; margin-bottom: 0.5rem; display: block;">
+                                Marża banku (%)
+                            </label>
+                            <input 
+                                type="number" 
+                                id="marza" 
+                                class="input-field" 
+                                placeholder="0"
+                                min="0"
+                                max="20"
+                                step="0.01"
+                                value="3"
+                                style="width: 100%;"
+                            >
+                        </div>
+                    </div>
+                        
+                    <div id="fixed-rate-field" style="display: none;">
+                        <div>
+                            <label for="oprocentowanie" style="font-weight: 500; color: #333; margin-bottom: 0.5rem; display: block;">
+                                Oprocentowanie na dzień podpisania (%)
+                            </label>
+                            <input 
+                                type="number" 
+                                id="oprocentowanie" 
+                                class="input-field" 
+                                placeholder="0"
+                                min="0"
+                                max="30"
+                                step="0.01"
+                                style="width: 100%;"
+                            >
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="okres-splaty" class="input-label">
+                        Okres spłaty (miesiące)
+                    </label>
+                    <input 
+                        type="number" 
+                        id="okres-splaty" 
+                        class="input-field" 
+                        placeholder="0"
+                        min="1"
+                        step="1"
+                    >
+                </div>
+                
+                <div class="input-group">
+                    <label for="data-podpisania" class="input-label">
+                        Data podpisania umowy
+                    </label>
+                    <input 
+                        type="date" 
+                        id="data-podpisania" 
+                        class="input-field"
+                    >
+                </div>
+                
+                <div class="input-group">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" id="czy-splacona">
+                        <label for="czy-splacona" class="input-label" style="margin: 0;">
+                            Czy umowa została spłacona w całości?
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="input-group" id="data-zakonczenia-wrapper" style="display: none;">
+                    <label for="data-zakonczenia" class="input-label">
+                        Data spłaty kredytu
+                    </label>
+                    <input 
+                        type="date" 
+                        id="data-zakonczenia" 
+                        class="input-field"
+                    >
+                </div>
+                
+                <div class="input-group">
+                    <label for="data-symulacji" class="input-label">
+                        Data dzisiejsza (symulacji)
+                    </label>
+                    <input 
+                        type="date" 
+                        id="data-symulacji" 
+                        class="input-field"
+                    >
+                </div>
+                
+                <div id="nadplaty-container">
+                    </div>
+                
+                <button type="button" id="dodaj-nadplate" class="calc-btn secondary" style="margin: 0.5rem 0;"> <i class="fas fa-plus"></i>
+                    Dodaj nadpłatę
+                </button>
+                
+                <div class="calc-actions">
+                    <button type="reset" class="calc-btn secondary" onclick="wyczysc()">
+                        <i class="fas fa-undo"></i>
+                        Wyczyść
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <section class="calc-results">
+            <h2 class="section-title">
+                <i class="fas fa-chart-bar"></i>
+                Wyniki WPS
+            </h2>
+            
+            <div id="results-container">
+                <div class="result-item highlight">
+                    <span class="result-label">WPS (Wartość Przedmiotu Sporu):</span>
+                    <span class="result-value" id="wps-result">0,00 zł</span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Odsetki pozostałe:</span>
+                    <span class="result-value" id="odsetki-pozostale">0,00 zł</span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Odsetki całkowite (wg umowy):</span>
+                    <span class="result-value" id="odsetki-calkowite">0,00 zł</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="calc-chart-section">
+            <div class="calc-chart">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-line"></i>
+                    Wykres spłat
+                </h2>
+                <canvas id="wps-chart" class="chart-canvas"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // WPS Calculator JavaScript with proper logic
+        let wpsChart;
+        
+        // WIBOR 3M Historical Data
+        const wibor3mHistory = {
+            '2025-07-01': 5.80, '2025-04-01': 5.80, '2025-01-01': 5.82, 
+            '2024-10-01': 5.84, '2024-07-01': 5.86, '2024-04-01': 5.87, '2024-01-01': 5.88,
+            '2023-10-01': 5.65, '2023-07-01': 6.90, '2023-04-01': 6.90, '2023-01-01': 6.99, 
+            '2022-10-01': 7.15, '2022-07-01': 7.00, '2022-04-01': 5.27, '2022-01-01': 2.55,
+            '2021-10-01': 0.69, '2021-07-01': 0.22, '2021-04-01': 0.21, '2021-01-01': 0.21, 
+            '2020-10-01': 0.22, '2020-07-01': 0.23, '2020-04-01': 0.71, '2020-01-01': 1.71,
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DOM loaded, initializing calculator');
+            initializeCalculator();
+        });
+
+        function initializeCalculator() {
+            setupCalculator();
+            setDefaultValues();
+            setupNadplatyHandlers();
+        }
+
+        function setupCalculator() {
+            const form = document.getElementById('calculator-form');
+            
+            if (!form) {
+                console.error('❌ Calculator form not found!');
+                return;
+            }
+            
+            // Form submission handler (prevent default)
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                console.log('📝 Form submitted');
+                calculateResults();
+            });
+            
+            // Form reset handler
+            form.addEventListener('reset', function() {
+                console.log('🔄 Form reset');
+                clearResults();
+            });
+            
+            // Real-time calculation on input change
+            const inputs = form.querySelectorAll('.input-field, input[type="radio"], input[type="checkbox"]');
+            console.log('🎛️ Found', inputs.length, 'input fields');
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    console.log('⌨️ Input changed:', input.id, input.value);
+                    debouncedCalculate();
+                });
+            });
+            
+            // Checkbox change handler specifically for UI changes
+            const checkbox = document.getElementById('czy-splacona');
+            if (checkbox) {
+                checkbox.addEventListener('change', function() {
+                    console.log('☑️ Checkbox changed:', this.checked);
+                    const endDateField = document.getElementById('data-zakonczenia-wrapper');
+                    const simulationDateField = document.getElementById('data-symulacji').closest('.input-group');
+                    if (this.checked) {
+                        endDateField.style.display = 'block';
+                        simulationDateField.style.display = 'none';
+                    } else {
+                        endDateField.style.display = 'none';
+                        simulationDateField.style.display = 'block';
+                    }
+                });
+            }
+            
+            // Interest type radio buttons
+            const interestTypeRadios = document.querySelectorAll('input[name="interest-type"]');
+            const marginField = document.getElementById('margin-field');
+            const fixedRateField = document.getElementById('fixed-rate-field');
+            
+            interestTypeRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'margin') {
+                        marginField.style.display = 'block';
+                        fixedRateField.style.display = 'none';
+                    } else {
+                        marginField.style.display = 'none';
+                        fixedRateField.style.display = 'block';
+                    }
+                });
+            });
+            
+            // Create debounced calculate function
+            window.debouncedCalculate = debounce(calculateResults, 500);
+            
+            console.log('✅ Calculator setup completed');
+        }
+        
+        function setupNadplatyHandlers() {
+            const dodajBtn = document.getElementById('dodaj-nadplate');
+            if (dodajBtn) {
+                dodajBtn.addEventListener('click', dodajNadplate);
+                console.log('✅ Nadplaty button handler attached');
+            }
+        }
+        
+        function dodajNadplate() {
+            const container = document.getElementById('nadplaty-container');
+            const newRow = document.createElement('div');
+            newRow.className = 'nadplata-row';
+            newRow.style.cssText = 'display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center;';
+            
+            newRow.innerHTML = `
+                <input type="number" class="input-field nadplata-kwota" placeholder="Kwota" min="0" step="0.01" style="flex: 2;">
+                <input type="date" class="input-field nadplata-data" style="flex: 2;">
+                <button type="button" class="calc-btn secondary" onclick="usunNadplate(this)" style="padding: 0.5rem; flex: 0;">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            
+            container.appendChild(newRow);
+            
+            const inputs = newRow.querySelectorAll('.input-field');
+            inputs.forEach(input => {
+                input.addEventListener('input', debounce(calculateResults, 500));
+            });
+            
+            console.log('➕ Added new nadplata row');
+        }
+        
+        function usunNadplate(button) {
+            const row = button.closest('.nadplata-row');
+            if (row) {
+                row.remove();
+                calculateResults();
+                console.log('➖ Removed nadplata row');
+            }
+        }
+        
+        function setDefaultValues() {
+            const today = new Date();
+            const twoYearsAgo = new Date(today);
+            twoYearsAgo.setFullYear(today.getFullYear() - 2);
+            
+            if (!document.getElementById('data-podpisania').value) {
+                document.getElementById('data-podpisania').value = twoYearsAgo.toISOString().split('T')[0];
+            }
+            if (!document.getElementById('data-symulacji').value) {
+                document.getElementById('data-symulacji').value = today.toISOString().split('T')[0];
+            }
+        }
+        
+        function getWiborForDate(date) {
+            let closestDate = null;
+            for (const wiborDateStr in wibor3mHistory) {
+                const wiborDate = new Date(wiborDateStr);
+                if (wiborDate <= date && (!closestDate || wiborDate > closestDate)) {
+                    closestDate = wiborDate;
+                }
+            }
+            return closestDate ? wibor3mHistory[closestDate.toISOString().split('T')[0]] : 5.80;
+        }
+        
+        function calculateResults() {
+            console.log('🔧 calculateResults called');
+            try {
+                const P_base = parseFloat(document.getElementById('kwota-kredytu').value) || 0;
+                const prowizja = parseFloat(document.getElementById('prowizja').value) || 0;
+                const interestType = document.querySelector('input[name="interest-type"]:checked').value;
+                const marza = parseFloat(document.getElementById('marza').value) || 0;
+                const staleOprocentowanie = parseFloat(document.getElementById('oprocentowanie').value) || 0;
+                const n_total = parseInt(document.getElementById('okres-splaty').value) || 0;
+                const dataPodpisaniaStr = document.getElementById('data-podpisania').value;
+                const isPaidOff = document.getElementById('czy-splacona').checked;
+                const dataZakonczeniaStr = document.getElementById('data-zakonczenia').value;
+                const dataSymulacjiStr = document.getElementById('data-symulacji').value;
+
+                if (!dataPodpisaniaStr || P_base <= 0 || n_total <= 0) {
+                    clearResults();
+                    return;
+                }
+                
+                if ((interestType === 'margin' && marza <= 0) || (interestType === 'fixed' && staleOprocentowanie <= 0)) {
+                    clearResults();
+                    return;
+                }
+                
+                if (isPaidOff && !dataZakonczeniaStr) {
+                    clearResults();
+                    return;
+                }
+                
+                let effectiveEndDateStr = isPaidOff ? dataZakonczeniaStr : dataSymulacjiStr;
+                if (!effectiveEndDateStr) return;
+                
+                const P_financed = P_base + prowizja;
+                
+                const overpayments = [];
+                document.querySelectorAll('.nadplata-row').forEach(row => {
+                    const date = row.querySelector('.nadplata-data').value;
+                    const amount = parseFloat(row.querySelector('.nadplata-kwota').value) || 0;
+                    if (date && amount > 0) {
+                        overpayments.push({ date: new Date(date), amount });
+                    }
+                });
+                overpayments.sort((a, b) => a.date - b.date);
+                
+                const dataPodpisania = new Date(dataPodpisaniaStr);
+                const effectiveEndDate = new Date(effectiveEndDateStr);
+                
+                let pozostalyKapital = P_financed;
+                let sumaRzeczywistychOdsetek = 0;
+                let currentDate = new Date(dataPodpisania);
+                let miesiaceSplacone = 0;
+                
+                let effectiveMargin;
+                if (interestType === 'margin') {
+                    effectiveMargin = marza;
+                } else {
+                    const wiborPodpisania = getWiborForDate(dataPodpisania);
+                    effectiveMargin = staleOprocentowanie - wiborPodpisania;
+                }
+                
+                const chartLabels = [dataPodpisania.toLocaleDateString('pl-PL')];
+                const chartCapitalData = [pozostalyKapital];
+                const chartInterestData = [0];
+
+                if (pozostalyKapital > 0) {
+                    while(currentDate < effectiveEndDate && miesiaceSplacone < n_total) {
+                        const currentMonthOps = overpayments.filter(op => 
+                            op.date.getFullYear() === currentDate.getFullYear() && 
+                            op.date.getMonth() === currentDate.getMonth()
+                        );
+                        currentMonthOps.forEach(op => { 
+                            pozostalyKapital -= op.amount; 
+                        });
+
+                        const wibor = getWiborForDate(currentDate);
+                        const rocznaStopa = effectiveMargin + wibor;
+                        const r_miesieczna = (rocznaStopa / 100) / 12;
+                        const odsetkiWMiesiacu = pozostalyKapital * r_miesieczna;
+                        sumaRzeczywistychOdsetek += odsetkiWMiesiacu;
+                        
+                        const n_pozostalo_w_petli = n_total - miesiaceSplacone;
+                        let rataMiesieczna = 0;
+                        if (pozostalyKapital > 0 && n_pozostalo_w_petli > 0) {
+                            if (r_miesieczna > 0) {
+                                rataMiesieczna = pozostalyKapital * (r_miesieczna * Math.pow(1 + r_miesieczna, n_pozostalo_w_petli)) / (Math.pow(1 + r_miesieczna, n_pozostalo_w_petli) - 1);
+                            } else {
+                                rataMiesieczna = pozostalyKapital / n_pozostalo_w_petli;
+                            }
+                        }
+                        const splataKapitalu = rataMiesieczna - odsetkiWMiesiacu;
+                        pozostalyKapital -= splataKapitalu;
+                        
+                        currentDate.setMonth(currentDate.getMonth() + 1);
+                        miesiaceSplacone++;
+                        
+                        chartLabels.push(currentDate.toLocaleDateString('pl-PL'));
+                        chartCapitalData.push(Math.max(0, pozostalyKapital));
+                        chartInterestData.push(odsetkiWMiesiacu);
+                    }
+                }
+                pozostalyKapital = Math.max(0, pozostalyKapital);
+                
+                let wpsWTrakcie = 0; 
+                let odsetkiPozostale = 0;
+                
+                if (isPaidOff) {
+                    const miesiaceOszczedzone = n_total - miesiaceSplacone;
+                    const zwrotProwizji = n_total > 0 ? (prowizja / n_total) * miesiaceOszczedzone : 0;
+                    wpsWTrakcie = (prowizja - zwrotProwizji) + sumaRzeczywistychOdsetek;
+                } else {
+                    wpsWTrakcie = prowizja + sumaRzeczywistychOdsetek;
+                    const n_pozostalo = n_total - miesiaceSplacone;
+                    if (pozostalyKapital > 0 && n_pozostalo > 0) {
+                        const wiborPrzyszly = getWiborForDate(effectiveEndDate);
+                        const r_przyszle_miesieczne = ((effectiveMargin + wiborPrzyszly) / 100) / 12;
+                        
+                        let tempCapital = pozostalyKapital;
+                        for (let i = 0; i < n_pozostalo; i++) {
+                            const futureInterest = tempCapital * r_przyszle_miesieczne;
+                            odsetkiPozostale += futureInterest;
+                            const n_rat_do_konca = n_pozostalo - i;
+                            const pmt_przyszle = (tempCapital > 0 && r_przyszle_miesieczne > 0) ? 
+                                tempCapital * (r_przyszle_miesieczne * Math.pow(1 + r_przyszle_miesieczne, n_rat_do_konca)) / (Math.pow(1 + r_przyszle_miesieczne, n_rat_do_konca) - 1) : 
+                                (tempCapital / n_rat_do_konca);
+                            tempCapital -= (pmt_przyszle - futureInterest);
+
+                            let futureDate = new Date(effectiveEndDate);
+                            futureDate.setMonth(futureDate.getMonth() + i + 1);
+                            chartLabels.push(futureDate.toLocaleDateString('pl-PL'));
+                            chartCapitalData.push(Math.max(0, tempCapital));
+                            chartInterestData.push(futureInterest);
+                        }
+                    }
+                }
+                
+                let odsetkiCalkowiteWgUmowy = 0;
+                if (P_financed > 0 && n_total > 0) {
+                    const wiborPodpisania = getWiborForDate(dataPodpisania);
+                    const r_umowne = ((effectiveMargin + wiborPodpisania) / 100) / 12;
+                    
+                    if (r_umowne > 0) {
+                        const pmt_umowne = P_financed * (r_umowne * Math.pow(1 + r_umowne, n_total)) / (Math.pow(1 + r_umowne, n_total) - 1);
+                        odsetkiCalkowiteWgUmowy = (pmt_umowne * n_total) - P_financed;
+                    }
+                }
+                
+                document.getElementById('wps-result').textContent = formatCurrency(wpsWTrakcie);
+                document.getElementById('odsetki-pozostale').textContent = formatCurrency(odsetkiPozostale);
+                document.getElementById('odsetki-calkowite').textContent = formatCurrency(odsetkiCalkowiteWgUmowy);
+                
+                updateChart(chartLabels, chartCapitalData, chartInterestData);
+                
+            } catch (error) {
+                console.error('❌ Calculation error:', error);
+            }
+        }
+        
+        function clearResults() {
+            document.getElementById('wps-result').textContent = '0,00 zł';
+            document.getElementById('odsetki-pozostale').textContent = '0,00 zł';
+            document.getElementById('odsetki-calkowite').textContent = '0,00 zł';
+            
+            if (window.myChart) {
+                window.myChart.destroy();
+                window.myChart = null;
+            }
+            
+            console.log('🧹 Results cleared');
+        }
+        
+        function updateChart(labels, capitalData, interestData) {
+            const canvas = document.getElementById('wps-chart');
+            if (!canvas) return;
+            
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+            
+            const ctx = canvas.getContext('2d');
+            window.myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Pozostały kapitał',
+                        data: capitalData,
+                        borderColor: 'rgb(33, 150, 243)',
+                        backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                        fill: true,
+                        tension: 0.2
+                    }, {
+                        label: 'Odsetki miesięczne',
+                        data: interestData,
+                        borderColor: 'rgb(244, 67, 54)',
+                        backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                        fill: false,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Miesiąc'
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Kapitał (zł)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Odsetki miesięczne (zł)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + formatCurrency(context.parsed.y);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('pl-PL', {
+                style: 'currency',
+                currency: 'PLN',
+                minimumFractionDigits: 2
+            }).format(amount);
+        }
+        
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function wyczysc() {
+            document.getElementById('calculator-form').reset();
+            document.getElementById('nadplaty-container').innerHTML = ''; // Clear overpayments
+            clearResults();
+        }
+        
+        console.log('✅ Kalkulator WPS loaded successfully!');
+    </script>
+</body>
+</html>
