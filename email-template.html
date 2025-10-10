@@ -107,7 +107,7 @@
             `;
             subjectContainer.innerHTML = subjects;
 
-            // --- 2. Generowanie treści maila z zachowaniem stylu "Barbie" ---
+            // --- 2. Generowanie treści maila z nowym, graficznym układem ---
             const emailWrapper = document.getElementById('email-content-wrapper');
             const emailBody = `
             <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="background-color: #f4f7f9;">
@@ -119,44 +119,47 @@
                                     <h1 style="font-family: 'Pacifico', cursive; text-align: center; font-weight: 400; color: #e5369a; font-size: 40px; text-shadow: 2px 2px #fff; margin-top: 0; margin-bottom: 25px;">
                                         Twoja Symulacja Kredytowa
                                     </h1>
-                                    <p style="font-size: 17px; color: #831843; margin: 0 0 35px 0; line-height: 1.6;">
-                                        Dzień dobry,
-                                        <br><br>
-                                        w nawiązaniu do naszej rozmowy, przesyłam podsumowanie przygotowanej symulacji kredytowej.
+                                    <p style="font-size: 17px; color: #831843; margin: 0 0 35px 0; line-height: 1.6; text-align: center;">
+                                        Dzień dobry, w nawiązaniu do naszej rozmowy, przesyłam podsumowanie przygotowanej symulacji kredytowej.
                                     </p>
-                                    <div style="padding: 1.5rem; border-radius:12px; background: rgba(255, 255, 255, 0.7);">
-                                        <div style="display:flex; justify-content:space-between; align-items:center; padding: 0.75rem 0; border-bottom:1px solid #f9a8d4;">
-                                            <span style="font-weight:500; color:#be185d;">Kwota kredytu netto:</span>
-                                            <span style="font-weight:700; font-size:1.2rem; color:#831843;">${params.get('netLoanAmount')}</span>
+                                    
+                                    <div style="background: rgba(255,255,255,0.7); border-radius: 20px; padding: 30px;">
+                                        
+                                        <div style="background-color: #e5369a; color: white; border-radius: 15px; padding: 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(229, 54, 154, 0.4);">
+                                            <div style="font-size: 16px; font-weight: 500; opacity: 0.9; margin-bottom: 5px;">Miesięczna rata równa</div>
+                                            <div style="font-size: 42px; font-weight: 700; line-height: 1.2;">${params.get('monthlyPayment')}</div>
                                         </div>
-                                        <div style="display:flex; justify-content:space-between; align-items:center; padding: 0.75rem 0; border-bottom:1px solid #f9a8d4;">
-                                            <span style="font-weight:500; color:#be185d;">Kwota do dyspozycji:</span>
-                                            <span style="font-weight:700; font-size:1.2rem; color:#059669;">${params.get('clientAmount')}</span>
-                                        </div>
-                                        <div style="display:flex; justify-content:space-between; align-items:center; padding: 0.75rem 0; border-bottom:1px solid #f9a8d4;">
-                                            <span style="font-weight:500; color:#be185d;">Okres kredytowania:</span>
-                                            <span style="font-weight:700; font-size:1.2rem; color:#831843;">${params.get('loanTerm')} miesięcy ${params.get('termInYears')}</span>
-                                        </div>
-                                        <div style="display:flex; justify-content:space-between; align-items:center; padding: 0.75rem 0; border-bottom:1px solid #f9a8d4;">
-                                            <span style="font-weight:500; color:#be185d;">RRSO:</span>
-                                            <span style="font-weight:700; font-size:1.2rem; color:#831843;">${params.get('apr')}</span>
-                                        </div>
-                                        <div style="display:flex; justify-content:space-between; align-items:center; padding: 0.75rem 0; border-bottom:1px solid #f9a8d4;">
-                                            <span style="font-weight:500; color:#be185d;">Całkowity koszt kredytu:</span>
-                                            <span style="font-weight:700; font-size:1.2rem; color:#831843;">${params.get('totalLoanCost')}</span>
-                                        </div>
-                                        <div style="display:flex; justify-content:space-between; align-items:center; padding: 1rem 0 0 0;">
-                                            <span style="font-weight:500; color:#be185d;">Miesięczna rata równa:</span>
-                                            <span style="font-weight:700; font-size:1.8rem; color:#e5369a;">${params.get('monthlyPayment')}</span>
+
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center;">
+                                            
+                                            <div style="background: #fce7f3; border-radius: 15px; padding: 20px;">
+                                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNlNTM2OWEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjAgMTJWOGExIDEgMCAwIDAtMS0xSDVhMSAxIDAgMCAwLTEgMXYxMmgxNU0yIDd2M2ExIDEgMCAwIDAgMSAxaDE4YTEgMSAwIDAgMCAxLTF2LTNhMSAxIDAgMCAwLTEtMUgxYTEgMSAwIDAgMC0xIDFaIi8+PC9zdmc+" alt="Ikona portfela" width="28" height="28" style="margin-bottom: 8px;">
+                                                <div style="font-size: 14px; color:#be185d; margin-bottom: 5px;">Kwota do dyspozycji</div>
+                                                <div style="font-size: 18px; font-weight: 700; color:#831843;">${params.get('clientAmount')}</div>
+                                            </div>
+
+                                            <div style="background: #fce7f3; border-radius: 15px; padding: 20px;">
+                                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNlNTM2OWEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cmVjdCB4PSIyIiB5PSI1IiB3aWR0aD0iMjAiIGhlaWdodD0iMTciIHJ4PSIyIi8+PGxpbmUgeDE9IjE2IiB5MT0iMyIgeDI9IjE2IiB5Mj0iNyIvPjxsaW5lIHgxPSI4IiB5MT0iMyIgeDI9IjgiIHkyPSI3Ii8+PGxpbmUgeDE9IjMiIHkxPSIxMSIgeDI9IjIxIiB5Mj0iMTEiLz48L3N2Zz4=" alt="Ikona kalendarza" width="28" height="28" style="margin-bottom: 8px;">
+                                                <div style="font-size: 14px; color:#be185d; margin-bottom: 5px;">Okres kredytowania</div>
+                                                <div style="font-size: 18px; font-weight: 700; color:#831843;">${params.get('loanTerm')} msc</div>
+                                            </div>
+                                            
+                                            <div style="background: #fce7f3; border-radius: 15px; padding: 20px;">
+                                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNlNTM2OWEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48bGluZSB4MT0iNCIgeTE9IjIwIiB4Mj0iMjAiIHkyPSI0Ii8+PGNpcmNsZSBjeD0iNi41IiBjeT0iNi41IiByPSIyLjUiLz48Y2lyY2xlIGN4PSIxNy41IiBjeT0iMTcuNSIgcj0iMi41Ii8+PC9zdmc+" alt="Ikona procentu" width="28" height="28" style="margin-bottom: 8px;">
+                                                <div style="font-size: 14px; color:#be185d; margin-bottom: 5px;">RRSO</div>
+                                                <div style="font-size: 18px; font-weight: 700; color:#831843;">${params.get('apr')}</div>
+                                            </div>
+
+                                            <div style="background: #fce7f3; border-radius: 15px; padding: 20px;">
+                                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNlNTM2OWEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTAuMyA3LjhjLS41LS43LTEuMy0xLTEuOC0xLjhoLS41YTEuNSAxLjUgMCAwIDAtMS41IDEuNWMwIC40LjIgLjguNyAxLjFMMTAuMyA3LjhaTTIzIDEwYzAgNi0yIDEwLTYgMTBDOSAxMCA0IDcgNCA3Ii8+PHBhdGggZD0iTTE3IDJsNCA0Ii8+PHBhdGggZD0iTTEyIDEyaDEuOGMuNSAwIDEuMi4zIDEuNS44TDE4IDE2bC0xLjUgMi0yLjUtMkg4bC00IDRjLTEgMS0yIDAtMi0xVjRjMC0xIDEgMSAxLTFoMTIiLz48L3N2Zz4=" alt="Ikona świnki skarbonki" width="28" height="28" style="margin-bottom: 8px;">
+                                                <div style="font-size: 14px; color:#be185d; margin-bottom: 5px;">Całkowity koszt</div>
+                                                <div style="font-size: 18px; font-weight: 700; color:#831843;">${params.get('totalLoanCost')}</div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <p style="font-size: 17px; color: #831843; margin: 30px 0 0 0; line-height: 1.6;">
-                                        Proszę pamiętać, że jest to wstępna propozycja. Jeśli są Państwo zainteresowani, chętnie omówię kolejne kroki.
-                                    </p>
-                                    <p style="font-size: 17px; color: #831843; margin: 20px 0 0 0; line-height: 1.6;">
-                                        Z pozdrowieniami,<br><br>
-                                        [Twoje Imię i Nazwisko]<br>
-                                        [Twoje Stanowisko]
+                                    
+                                    <p style="font-size: 12px; color: #be185d; text-align: center; margin: 35px 0 0 0; font-style: italic; line-height: 1.6;">
+                                        Powyższa oferta ma charakter informacyjny i nie stanowi oferty handlowej w rozumieniu art. 66 §1 Kodeksu Cywilnego.
                                     </p>
                                 </td>
                             </tr>
