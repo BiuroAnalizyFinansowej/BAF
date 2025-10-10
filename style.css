@@ -256,7 +256,6 @@ body {
     background-color: #3b342e;
     color: #fff;
 }
-/* --- NOWE STYLE --- */
 .theme-button.pinky {
     background-color: #fdf2f8;
     color: #ec4899;
@@ -282,4 +281,20 @@ body {
     background-color: #3f3f46;
     color: #facc15;
     border-color: #f59e0b;
+}
+/* --- NOWY STYL DLA PRZYCISKU BARBIE --- */
+.theme-button.barbie {
+    background: linear-gradient(45deg, #F8BDEB, #E0218A);
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(224, 33, 138, 0.4);
+}
+.theme-button.barbie:hover {
+    transform: scale(1.05) translateY(-3px);
+    box-shadow: 0 8px 15px rgba(224, 33, 138, 0.5);
+    background: linear-gradient(45deg, #f9a1e4, #d11b7d);
+    color: #ffffff;
 }
