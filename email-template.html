@@ -7,141 +7,189 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #e5369a;
-            --bg-light: #fce7f3;
-            --text-dark: #831843;
-        }
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
-        .email-container {
-            width: 100%;
-            max-width: 700px;
-            background: #fff;
-            padding: 2.5rem;
-            border-radius: 30px;
-            box-shadow: 0 10px 40px rgba(229, 54, 154, 0.2);
-            border: 2px solid #fff;
-        }
-        .email-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-        .email-header h1 {
-            font-family: 'Pacifico', cursive;
-            color: var(--primary-color);
-            margin: 0;
-            font-size: 2.2rem;
-        }
-        #emailContent {
-            border: 2px dashed #fbcfe8;
-            padding: 1.5rem;
-            border-radius: 20px;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-        #emailContent strong {
-            color: var(--primary-color);
-        }
-        ul {
-            list-style: none;
-            padding-left: 0;
-        }
-        li {
-            padding: 8px 0;
-            border-bottom: 1px solid #fce7f3;
-        }
-        li:last-child {
-            border-bottom: none;
-        }
-        .copy-button {
-            display: block;
-            width: 100%;
-            margin-top: 2rem;
-            background: var(--primary-color);
-            color: #fff;
+        body { margin: 0; padding: 40px; background-color: #f4f7f9; font-family: 'Lato', Arial, sans-serif; box-sizing: border-box; }
+        #back-controls-container { position: fixed; top: 20px; left: 30px; z-index: 1000; width: 140px; font-family: 'Lato', Arial, sans-serif; }
+        #controls-container { position: fixed; top: 20px; right: 30px; z-index: 1000; width: 280px; font-family: 'Lato', Arial, sans-serif; }
+        
+        #copyButton, #backButton {
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
             border: none;
-            padding: 1rem;
-            border-radius: 15px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            outline: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
         }
-        .copy-button:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 20px rgba(229, 54, 154, 0.4);
-        }
+        #copyButton:active, #backButton:active { transform: scale(0.98); }
+
+        #copyButton { background-color: #e5369a; }
+        #copyButton:hover { background-color: #be185d; }
+        #copyButton.copied { background-color: #28a745; }
+
+        #backButton { background-color: #5F7A95; }
+        #backButton:hover { background-color: #4e657b; }
+
+        #separator { border-bottom: 1px solid #ccc; margin: 15px 0; }
+        #subject-menu { background-color: #f8f9fa; border-radius: 5px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        #subject-menu h3 { margin: 0 0 10px 0; font-size: 16px; color: #333; text-align: center; }
+        .subject-category { font-size: 12px; font-weight: bold; color: #6c757d; text-transform: uppercase; margin: 15px 0 8px 0; padding-bottom: 3px; border-bottom: 1px solid #dee2e6; }
+        .subject-category:first-of-type { margin-top: 5px; }
+        .subject-button { display: block; width: 100%; padding: 8px 10px; margin-bottom: 8px; font-size: 14px; color: #be185d; background-color: #ffffff; border: 1px solid #e5369a; border-radius: 4px; cursor: pointer; text-align: left; transition: background-color 0.3s ease, color 0.3s ease; }
+        .subject-button:hover { background-color: #e5369a; color: #ffffff; }
+        .subject-button:last-child { margin-bottom: 0; }
+        .subject-button.copied { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
     </style>
 </head>
 <body>
 
-<div class="email-container">
-    <div class="email-header">
-        <h1>Gotowy E-mail</h1>
-        <p>Skopiuj poniższą treść i wyślij do klienta.</p>
+    <div id="back-controls-container">
+        <button id="backButton" onclick="history.back()">Powrót</button>
     </div>
-    <div id="emailContent">
+
+    <div id="controls-container">
+        <button id="copyButton">Kopiuj treść maila (grafika)</button>
+        <div id="separator"></div>
+        <div id="subject-menu">
+            <h3>Wybierz i skopiuj tytuł maila:</h3>
+            <div id="subject-buttons-container">
+                </div>
         </div>
-    <button id="copyBtn" class="copy-button">📋 Kopiuj treść maila</button>
-</div>
+    </div>
+    
+    <div id="email-content-wrapper">
+        </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const params = new URLSearchParams(window.location.search);
+    <script>
+        function copySubject(button, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.innerHTML;
+                button.textContent = 'Skopiowano!';
+                button.classList.add('copied');
+                
+                document.querySelectorAll('.subject-button').forEach(btn => {
+                    if (btn !== button && btn.classList.contains('copied')) {
+                        btn.innerHTML = btn.getAttribute('data-original-text');
+                        btn.classList.remove('copied');
+                    }
+                });
+                button.setAttribute('data-original-text', originalText);
 
-        const emailBody = `
-            <p><strong>Temat:</strong> Propozycja finansowania kredytu na kwotę ${params.get('netLoanAmount')}</p>
-            <hr style="border: 0; border-top: 1px solid #fce7f3; margin: 1rem 0;">
-            <p>Szanowni Państwo,</p>
-            <p>w nawiązaniu do przeprowadzonej symulacji, przesyłam szczegółowe podsumowanie warunków finansowania, które mogą Państwa zainteresować.</p>
-            <p><strong>Kluczowe parametry oferty:</strong></p>
-            <ul>
-                <li><strong>Kwota kredytu netto:</strong> ${params.get('netLoanAmount')}</li>
-                <li><strong>Kwota do dyspozycji (po opłatach):</strong> ${params.get('clientAmount')}</li>
-                <li><strong>Okres kredytowania:</strong> ${params.get('loanTerm')} miesięcy ${params.get('termInYears')}</li>
-                <li><strong>Oprocentowanie nominalne:</strong> ${params.get('nominalInterest')}</li>
-                <li><strong>RRSO:</strong> ${params.get('apr')}</li>
-                <li><strong>Szacunkowa miesięczna rata:</strong> <strong>${params.get('monthlyPayment')}</strong></li>
-                <li><strong>Całkowity koszt kredytu:</strong> ${params.get('totalLoanCost')}</li>
-            </ul>
-            <p>Powyższe wyliczenia stanowią wstępną, niezobowiązującą propozycję. Ostateczne warunki zależą od indywidualnej oceny zdolności kredytowej.</p>
-            <p>Proszę o informację zwrotną, czy przedstawiona propozycja jest dla Państwa interesująca. Chętnie odpowiem na wszelkie pytania i pomogę w dalszym procesie.</p>
-            <p>Z poważaniem,<br><br>
-            [Twoje Imię i Nazwisko]<br>
-            [Twoje Stanowisko]<br>
-            [Twój Numer Telefonu]</p>
-        `;
-
-        document.getElementById('emailContent').innerHTML = emailBody;
-
-        const copyBtn = document.getElementById('copyBtn');
-        copyBtn.addEventListener('click', () => {
-            const emailText = document.getElementById('emailContent').innerText;
-            navigator.clipboard.writeText(emailText).then(() => {
-                copyBtn.textContent = '✅ Skopiowano!';
-                copyBtn.style.background = '#10B981';
                 setTimeout(() => {
-                    copyBtn.textContent = '📋 Kopiuj treść maila';
-                    copyBtn.style.background = 'var(--primary-color)';
+                    button.innerHTML = originalText;
+                    button.classList.remove('copied');
                 }, 2000);
             }).catch(err => {
-                console.error('Błąd kopiowania: ', err);
-                copyBtn.textContent = 'Błąd kopiowania';
+                console.error('Błąd kopiowania tematu: ', err);
+                button.textContent = 'Błąd!';
+                setTimeout(() => {
+                    button.innerHTML = button.getAttribute('data-original-text');
+                }, 2000);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const netLoanAmount = params.get('netLoanAmount') || '[Kwota Kredytu]';
+
+            // --- 1. Generowanie przycisków z tytułami maili ---
+            const subjectContainer = document.getElementById('subject-buttons-container');
+            const subjects = `
+                <h4 class="subject-category">Wariant bezpośredni</h4>
+                <button class="subject-button" onclick="copySubject(this, '💖 Kalkulacja kredytu na kwotę ${netLoanAmount}')">💖 Kalkulacja kredytu na kwotę ${netLoanAmount}</button>
+                <button class="subject-button" onclick="copySubject(this, '💖 Podsumowanie symulacji kredytowej')">💖 Podsumowanie symulacji kredytowej</button>
+                <h4 class="subject-category">Wariant skupiony na korzyściach</h4>
+                <button class="subject-button" onclick="copySubject(this, '💖 Państwa propozycja finansowania jest gotowa!')">💖 Państwa propozycja finansowania jest gotowa!</button>
+                <button class="subject-button" onclick="copySubject(this, '💖 Jak może wyglądać Państwa kredyt? Podsumowanie')">💖 Jak może wyglądać Państwa kredyt? Podsumowanie</button>
+            `;
+            subjectContainer.innerHTML = subjects;
+
+            // --- 2. Generowanie treści maila z zachowaniem stylu "Barbie" ---
+            const emailWrapper = document.getElementById('email-content-wrapper');
+            const emailBody = `
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="background-color: #f4f7f9;">
+                <tr>
+                    <td align="center">
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="max-width: 800px; font-family: 'Poppins', sans-serif; background: linear-gradient(45deg, #fbcfe8, #fce7f3); border-radius: 30px; padding: 40px 50px; border: 2px solid #fff;">
+                            <tr>
+                                <td>
+                                    <h1 style="font-family: 'Pacifico', cursive; text-align: center; font-weight: 400; color: #e5369a; font-size: 40px; text-shadow: 2px 2px #fff; margin-top: 0; margin-bottom: 25px;">
+                                        Twoja Symulacja Kredytowa
+                                    </h1>
+                                    <p style="font-size: 17px; color: #831843; margin: 0 0 35px 0; line-height: 1.6;">
+                                        Dzień dobry,
+                                        <br><br>
+                                        w nawiązaniu do naszej rozmowy, przesyłam podsumowanie przygotowanej symulacji kredytowej.
+                                    </p>
+                                    <div style="padding: 1.5rem; border-radius:12px; background: rgba(255, 255, 255, 0.7);">
+                                        <div style="display:flex; justify-content:space-between; align-items:center; padding: 0.75rem 0; border-bottom:1px solid #f9a8d4;">
+                                            <span style="font-weight:500; color:#be185d;">Kwota kredytu netto:</span>
+                                            <span style="font-weight:700; font-size:1.2rem; color:#831843;">${params.get('netLoanAmount')}</span>
+                                        </div>
+                                        <div style="display:flex; justify-content:space-between; align-items:center; padding: 0.75rem 0; border-bottom:1px solid #f9a8d4;">
+                                            <span style="font-weight:500; color:#be185d;">Kwota do dyspozycji:</span>
+                                            <span style="font-weight:700; font-size:1.2rem; color:#059669;">${params.get('clientAmount')}</span>
+                                        </div>
+                                        <div style="display:flex; justify-content:space-between; align-items:center; padding: 0.75rem 0; border-bottom:1px solid #f9a8d4;">
+                                            <span style="font-weight:500; color:#be185d;">Okres kredytowania:</span>
+                                            <span style="font-weight:700; font-size:1.2rem; color:#831843;">${params.get('loanTerm')} miesięcy ${params.get('termInYears')}</span>
+                                        </div>
+                                        <div style="display:flex; justify-content:space-between; align-items:center; padding: 0.75rem 0; border-bottom:1px solid #f9a8d4;">
+                                            <span style="font-weight:500; color:#be185d;">RRSO:</span>
+                                            <span style="font-weight:700; font-size:1.2rem; color:#831843;">${params.get('apr')}</span>
+                                        </div>
+                                        <div style="display:flex; justify-content:space-between; align-items:center; padding: 0.75rem 0; border-bottom:1px solid #f9a8d4;">
+                                            <span style="font-weight:500; color:#be185d;">Całkowity koszt kredytu:</span>
+                                            <span style="font-weight:700; font-size:1.2rem; color:#831843;">${params.get('totalLoanCost')}</span>
+                                        </div>
+                                        <div style="display:flex; justify-content:space-between; align-items:center; padding: 1rem 0 0 0;">
+                                            <span style="font-weight:500; color:#be185d;">Miesięczna rata równa:</span>
+                                            <span style="font-weight:700; font-size:1.8rem; color:#e5369a;">${params.get('monthlyPayment')}</span>
+                                        </div>
+                                    </div>
+                                    <p style="font-size: 17px; color: #831843; margin: 30px 0 0 0; line-height: 1.6;">
+                                        Proszę pamiętać, że jest to wstępna propozycja. Jeśli są Państwo zainteresowani, chętnie omówię kolejne kroki.
+                                    </p>
+                                    <p style="font-size: 17px; color: #831843; margin: 20px 0 0 0; line-height: 1.6;">
+                                        Z pozdrowieniami,<br><br>
+                                        [Twoje Imię i Nazwisko]<br>
+                                        [Twoje Stanowisko]
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            `;
+            emailWrapper.innerHTML = emailBody;
+            
+            // --- 3. Logika głównego przycisku kopiowania (kopiuje HTML) ---
+            const copyBtn = document.getElementById('copyButton');
+            copyBtn.addEventListener('click', () => {
+                const htmlContent = emailWrapper.innerHTML;
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const richTextInput = new ClipboardItem({ 'text/html': blob });
+
+                navigator.clipboard.write([richTextInput]).then(() => {
+                    copyBtn.textContent = 'Skopiowano treść';
+                    copyBtn.classList.add('copied');
+                    setTimeout(() => {
+                        copyBtn.textContent = 'Kopiuj treść maila (grafika)';
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Błąd kopiowania: ', err);
+                    copyBtn.textContent = 'Błąd!';
+                     setTimeout(() => {
+                        copyBtn.textContent = 'Kopiuj treść maila (grafika)';
+                    }, 2000);
+                });
             });
         });
-    });
-</script>
-
+    </script>
 </body>
 </html>
