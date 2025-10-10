@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator - Styl Barbie z Poprawionym RRSO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #e5369a; /* Barbie Pink */
+            --primary-light: #f472b6;
+            --bg-light: #fce7f3; /* Light Pink BG */
+            --text-dark: #831843; /* Dark Pink Text */
+            --text-light: #be185d;
+        }
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
+            background-color: var(--bg-light); color: var(--text-dark);
+            background: linear-gradient(45deg, #fbcfe8, #fce7f3);
+        }
+        .calculator-container {
+            position: relative;
+            width: 100%; max-width: 800px; background-color: rgba(255,255,255,0.8);
+            padding: 2.5rem; border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(229, 54, 154, 0.2);
+            border: 2px solid #fff;
+            backdrop-filter: blur(10px);
+        }
+        .home-button, .back-button {
+            position: absolute; top: 20px; width: 50px; height: 50px;
+            border-radius: 50%; background: var(--primary-color);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(229, 54, 154, 0.4);
+            z-index: 1001;
+        }
+        .home-button:hover, .back-button:hover { transform: scale(1.1); box-shadow: 0 8px 20px rgba(229, 54, 154, 0.5); }
+        .home-button svg, .back-button svg { width: 28px; height: 28px; fill: #ffffff; }
+        .home-button { left: 20px; }
+        .back-button { left: 80px; background: var(--bg-light); border: 1px solid #fbcfe8; }
+        .back-button svg { fill: var(--primary-color); }
+        .info-panel {
+            position: fixed; top: 20px; right: 20px; width: 220px;
+            background-color: rgba(255,255,255,0.8); border-radius: 20px; padding: 12px;
+            box-shadow: 0 10px 40px rgba(229, 54, 154, 0.2); backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+        .info-panel .info-container {
+            padding: 10px; background-color: var(--bg-light); border-radius: 12px; border: 1px solid #fbcfe8;
+        }
+        .info-panel .info-container:first-of-type { margin-bottom: 15px; }
+        .info-header { font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 5px; }
+        .info-date { font-size: 10px; color: #db2777; margin-bottom: 10px; }
+        .rates-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; text-align: center; }
+        .rate-item p { margin: 0; font-size: 10px; color: var(--text-light); }
+        .rate-item p:not(.value) { margin-bottom: 4px; }
+        .rate-item .value, .info-container-single .value {
+            font-weight: 700; font-size: 14px; color: var(--primary-color);
+        }
+        .disclaimer-text { font-size: 9px; font-style: italic; color: #db2777; margin-top: 10px; padding: 0 5px; }
+        h1 { font-family: 'Pacifico', cursive; text-align: center; margin-bottom: 2rem; font-weight: 400; color: var(--primary-color); font-size: 2.5rem; text-shadow: 2px 2px #fff; }
+        .input-group label { font-weight: 600; margin-bottom: 0.75rem; display: block; color: var(--text-light); }
+        input[type="text"], input[type="number"] {
+            border: 2px solid #fbcfe8; outline: none; background: #ffffff; width: 150px;
+            padding: 0.8rem; border-radius: 15px; font-size: 1.1rem; font-weight: 700;
+            color: var(--text-dark); text-align: center; transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input[type="text"]:focus, input[type="number"]:focus {
+            border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(229, 54, 154, 0.2);
+        }
+        input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; cursor: pointer; height: 12px; }
+        input[type="range"]::-webkit-slider-runnable-track { background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-light) 100%); height: 12px; border-radius: 10px; }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none; margin-top: -6px; background-color: #ffffff;
+            height: 24px; width: 24px; border-radius: 50%; border: 3px solid var(--primary-color);
+            box-shadow: 0 0 10px rgba(229, 54, 154, 0.5);
+        }
+        h2{text-align:center;color:var(--text-dark);} .input-group{margin-bottom:1.5rem;} .input-wrapper{display:flex;align-items:center;gap:1rem;}
+        .term-display{font-weight:600;white-space:nowrap;color:var(--text-light);} .grouped-inputs{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.5rem;border-top:1px solid #fbcfe8;padding-top:1.5rem;}
+        .interest-rate-summary{font-weight:bold;text-align:center;padding:0.75rem;border-radius:10px;background:var(--bg-light);color:var(--primary-color);font-size:1.1rem;}
+        .output-section{margin-top:2rem;padding:1.5rem;border-radius:12px;background:var(--bg-light);}
+        .output-row{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 0;border-bottom:1px solid #f9a8d4;}
+        .output-row:last-child{border-bottom:none;}
+        .output-row .label{font-weight:500;color:var(--text-light);}
+        .output-row .value,.output-row .result{font-weight:700;font-size:1.2rem;color:var(--text-dark);}
+        .output-row .result{font-size:1.8rem;color:var(--primary-color);}
+        .output-row .client-amount{color:#059669;}
+        .apr-disclaimer {
+            font-size: 10px;
+            font-style: italic;
+            color: #db2777;
+            text-align: right;
+            margin-top: 8px;
+        }
+        table{width:100%;margin-top:2rem;border-collapse:collapse;} th,td{border:1px solid #fbcfe8;padding:0.75rem;text-align:right;}
+        th{background-color:var(--bg-light);color:var(--text-dark);font-weight:600;}
+
+        .header-with-button {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .action-button {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(229, 54, 154, 0.4);
+        }
+        .action-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(229, 54, 154, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="info-panel">
+        <div class="info-container"><div class="info-header">Stawki Referencyjne</div><div class="info-date" id="current-date-wibor">...</div><div class="rates-grid"><div class="rate-item"><p>WIBOR 1M</p><p class="value" id="wibor-1m">...</p></div><div class="rate-item"><p>WIBOR 3M</p><p class="value" id="wibor-3m">...</p></div><div class="rate-item"><p>WIBOR 6M</p><p class="value" id="wibor-6m">...</p></div></div><p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p></div>
+        <div class="info-container info-container-single"><div class="info-header">Odsetki ustawowe za opóźnienie</div><div class="info-date" id="current-date-odsetki">...</div><p class="value" id="odsetki-opoznienie">...</p><p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p></div>
+    </div>
+    <div class="calculator-container">
+        <a href="index.html" class="home-button" title="Strona główna"><svg xmlns="http://www.w.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></a>
+        <a href="#" onclick="history.back(); return false;" class="back-button" title="Powrót"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></a>
+        <h1>Kalkulator Kredytowy</h1><div class="input-group"><label for="loanAmount">Kwota kredytu (PLN)</label><div class="input-wrapper"><input type="range" id="loanAmountSlider" min="500" max="1500000" step="500" value="300000"><input type="text" id="loanAmountInput" value="300 000"></div></div><div class="input-group"><label for="loanTerm">Okres kredytowania</label><div class="input-wrapper"><input type="range" id="loanTermSlider" min="6" max="180" step="1" value="120"><input type="number" id="loanTermInput" min="6" max="180" step="1" value="120"><span class="term-display" id="termInYears">(10 lat i 0 miesięcy)</span></div></div><div class="grouped-inputs"><div><div class="input-group" style="margin-bottom: 1rem;"><label for="bankCommission">Prowizja bankowa (%)</label><input type="number" id="bankCommission" step="0.1" value="2.0"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="bankMargin">Marża banku (%)</label><input type="number" id="bankMargin" step="0.1" value="2.5"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="wibor">WIBOR (%)</label><input type="number" id="wibor" step="0.01" value="5.85"></div><div class="interest-rate-summary" id="nominalInterestRate">Oprocentowanie nominalne: 8.35%</div></div><div><div class="input-group" style="margin-bottom: 1rem;"><label for="brokerFeePercent">Opłata brokerska (%)</label><input type="number" id="brokerFeePercent" placeholder="np. 3.0"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="brokerFeeAmount">Opłata brokerska (PLN)</label><input type="number" id="brokerFeeAmount" placeholder="np. 9000"></div></div></div>
+        <div class="output-section"><div class="output-row"><span class="label">Kwota kredytu netto (kapitał)</span><span class="value" id="netLoanAmount">0,00 zł</span></div><div class="output-row"><span class="label">Kwota kredytu brutto (kapitał + prowizja)</span><span class="value" id="grossLoanAmount">0,00 zł</span></div><div class="output-row"><span class="label">Kwota do dyspozycji klienta</span><span class="value client-amount" id="clientAmount">0,00 zł</span></div><div class="output-row"><span class="label">Miesięczna rata równa</span><span class="result" id="monthlyPayment">0,00 zł</span></div><div class="output-row"><span class="label">Całkowity koszt kredytu</span><span class="value" id="totalLoanCost">0,00 zł</span></div><div class="output-row"><span class="label">RRSO</span><span class="value" id="aprValue">0,00%</span></div><p class="apr-disclaimer">(RRSO dotyczy jedynie kredytów detalicznych/konsumenckich)</p></div>
+        
+        <div class="header-with-button">
+            <h2 style="margin-top: 2.5rem; margin-bottom: 1rem;">Harmonogram spłaty</h2>
+            <button id="generateEmailBtn" class="action-button">✨ Wygeneruj E-mail</button>
+        </div>
+        
+        <div style="overflow-x:auto;"><table><thead><tr><th>Nr raty</th><th>Część kapitałowa</th><th>Część odsetkowa</th><th>Rata całkowita</th><th>Kapitał do spłaty</th></tr></thead><tbody id="scheduleBody"></tbody></table></div>
+    </div>
+    
+    <script>
+        // --- SEKCJA 1: Pobranie wszystkich elementów z HTML ---
+        const loanAmountSlider = document.getElementById('loanAmountSlider');
+        const loanAmountInput = document.getElementById('loanAmountInput');
+        const loanTermSlider = document.getElementById('loanTermSlider');
+        const loanTermInput = document.getElementById('loanTermInput');
+        const termInYearsDisplay = document.getElementById('termInYears');
+        const bankCommissionInput = document.getElementById('bankCommission');
+        const bankMarginInput = document.getElementById('bankMargin');
+        const wiborInput = document.getElementById('wibor');
+        const brokerFeePercentInput = document.getElementById('brokerFeePercent');
+        const brokerFeeAmountInput = document.getElementById('brokerFeeAmount');
+        const nominalInterestRateDisplay = document.getElementById('nominalInterestRate');
+        const netLoanAmountDisplay = document.getElementById('netLoanAmount');
+        const grossLoanAmountDisplay = document.getElementById('grossLoanAmount');
+        const monthlyPaymentDisplay = document.getElementById('monthlyPayment');
+        const clientAmountDisplay = document.getElementById('clientAmount');
+        const scheduleBody = document.getElementById('scheduleBody');
+        const totalLoanCostDisplay = document.getElementById('totalLoanCost');
+        const aprValueDisplay = document.getElementById('aprValue');
+
+        // --- SEKCJA 2: Definicje formaterów i parserów ---
+        const currencyFormatter = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' });
+        
+        function parseFormattedValue(value) {
+            const cleanValue = String(value).replace(/\s/g, '').replace(',', '.');
+            return parseFloat(cleanValue) || 0;
+        }
+
+        // --- SEKCJA 3: Funkcje obliczeniowe ---
+        function calculateAPR(netAmountReceived, monthlyPayment, term) {
+            if (netAmountReceived <= 0 || monthlyPayment <= 0 || term <= 0 || monthlyPayment * term <= netAmountReceived) {
+                return 0;
+            }
+            let minMonthlyRate = 0;
+            let maxMonthlyRate = 1;
+            let guessMonthlyRate;
+            const precision = 1e-9;
+            const presentValueOfAnnuity = (rate) => {
+                if (rate === 0) return monthlyPayment * term;
+                return monthlyPayment * (1 - Math.pow(1 + rate, -term)) / rate;
+            };
+            let i = 0;
+            const maxIterations = 100;
+            while (i < maxIterations) {
+                guessMonthlyRate = (minMonthlyRate + maxMonthlyRate) / 2;
+                if (maxMonthlyRate - minMonthlyRate < precision) break;
+                const pv = presentValueOfAnnuity(guessMonthlyRate);
+                if (pv > netAmountReceived) minMonthlyRate = guessMonthlyRate;
+                else maxMonthlyRate = guessMonthlyRate;
+                i++;
+            }
+            const finalMonthlyRate = (minMonthlyRate + maxMonthlyRate) / 2;
+            const effectiveAnnualRate = Math.pow(1 + finalMonthlyRate, 12) - 1;
+            return effectiveAnnualRate * 100;
+        }
+
+        function calculate() {
+            const loanAmount = parseFormattedValue(loanAmountInput.value);
+            const loanTerm = parseInt(loanTermInput.value) || 0;
+            const bankCommission = parseFormattedValue(bankCommissionInput.value);
+            const bankMargin = parseFormattedValue(bankMarginInput.value);
+            const wibor = parseFormattedValue(wiborInput.value);
+            const brokerFeeAmount = parseFormattedValue(brokerFeeAmountInput.value);
+            const years = Math.floor(loanTerm / 12);
+            const months = loanTerm % 12;
+            termInYearsDisplay.textContent = `(${years} lat i ${months} miesięcy)`;
+            const nominalInterestRate = bankMargin + wibor;
+            nominalInterestRateDisplay.textContent = `Oprocentowanie nominalne: ${nominalInterestRate.toFixed(2).replace('.',',')}%`;
+            const grossLoanAmount = loanAmount * (1 + bankCommission / 100);
+            const monthlyInterestRate = (nominalInterestRate / 100) / 12;
+            let monthlyPayment = 0;
+            if (monthlyInterestRate > 0 && loanTerm > 0) {
+                const factor = Math.pow(1 + monthlyInterestRate, loanTerm);
+                monthlyPayment = grossLoanAmount * (monthlyInterestRate * factor) / (factor - 1);
+            } else if (loanTerm > 0) {
+                monthlyPayment = grossLoanAmount / loanTerm;
+            }
+            const clientAmount = loanAmount - brokerFeeAmount;
+            const totalPayments = monthlyPayment * loanTerm;
+            const totalLoanCost = totalPayments - loanAmount;
+            const apr = calculateAPR(clientAmount, monthlyPayment, loanTerm);
+            netLoanAmountDisplay.textContent = currencyFormatter.format(loanAmount);
+            grossLoanAmountDisplay.textContent = currencyFormatter.format(grossLoanAmount);
+            clientAmountDisplay.textContent = currencyFormatter.format(clientAmount);
+            monthlyPaymentDisplay.textContent = currencyFormatter.format(monthlyPayment);
+            totalLoanCostDisplay.textContent = currencyFormatter.format(totalLoanCost > 0 ? totalLoanCost : 0);
+            aprValueDisplay.textContent = `${apr.toFixed(2).replace('.',',')}%`;
+            generateSchedule(grossLoanAmount, monthlyPayment, monthlyInterestRate, loanTerm);
+        }
+
+        function generateSchedule(principal, monthlyPayment, monthlyRate, term) {
+            scheduleBody.innerHTML = '';
+            let remainingPrincipal = principal;
+            if (term === 0 || isNaN(monthlyPayment) || !isFinite(monthlyPayment) || monthlyPayment <= 0) return;
+            for (let i = 1; i <= term; i++) {
+                const interestPart = remainingPrincipal * monthlyRate;
+                let principalPart = monthlyPayment - interestPart;
+                let currentPayment = monthlyPayment;
+                if (i === term) {
+                    principalPart = remainingPrincipal;
+                    currentPayment = principalPart + interestPart;
+                }
+                remainingPrincipal -= principalPart;
+                const row = `<tr><td>${i}</td><td>${currencyFormatter.format(principalPart)}</td><td>${currencyFormatter.format(interestPart)}</td><td>${currencyFormatter.format(currentPayment)}</td><td>${currencyFormatter.format(Math.max(0, remainingPrincipal))}</td></tr>`;
+                scheduleBody.innerHTML += row;
+            }
+        }
+
+        // --- SEKCJA 4: Podpięcie wszystkich eventów ---
+        const inputsToCalculate = [loanAmountSlider, loanTermSlider, loanTermInput, bankCommissionInput, bankMarginInput, wiborInput, brokerFeePercentInput, brokerFeeAmountInput];
+        inputsToCalculate.forEach(input => input.addEventListener('input', calculate));
+        loanAmountInput.addEventListener('change', calculate);
+        loanAmountSlider.addEventListener('input', () => { loanAmountInput.value = new Intl.NumberFormat('pl-PL').format(loanAmountSlider.value).replace(/\s/g, ' '); });
+        loanAmountInput.addEventListener('blur', (e) => {
+            let value = parseFormattedValue(e.target.value);
+            if (value < 500) value = 500;
+            if (value > 1500000) value = 1500000;
+            e.target.value = new Intl.NumberFormat('pl-PL').format(value).replace(/\s/g, ' ');
+            loanAmountSlider.value = value;
+            calculate();
+        });
+        loanTermSlider.addEventListener('input', () => { loanTermInput.value = loanTermSlider.value; });
+        loanTermInput.addEventListener('input', () => { loanTermSlider.value = loanTermInput.value; });
+        brokerFeePercentInput.addEventListener('input', () => {
+            const loanAmount = parseFormattedValue(loanAmountInput.value);
+            const percent = parseFormattedValue(brokerFeePercentInput.value);
+            const amount = (loanAmount * percent) / 100;
+            brokerFeeAmountInput.value = amount > 0 ? amount.toFixed(2).replace('.', ',') : '';
+        });
+        brokerFeeAmountInput.addEventListener('input', () => {
+            const loanAmount = parseFormattedValue(loanAmountInput.value);
+            const amount = parseFormattedValue(brokerFeeAmountInput.value);
+            if (loanAmount > 0) {
+                const percent = (amount / loanAmount) * 100;
+                brokerFeePercentInput.value = percent > 0 ? percent.toFixed(2).replace('.', ',') : '';
+            } else {
+                brokerFeePercentInput.value = '';
+            }
+        });
+        
+        const generateEmailBtn = document.getElementById('generateEmailBtn');
+        function generateEmail() {
+            const data = {
+                netLoanAmount: netLoanAmountDisplay.textContent,
+                loanTerm: loanTermInput.value,
+                termInYears: termInYearsDisplay.textContent,
+                monthlyPayment: monthlyPaymentDisplay.textContent,
+                totalLoanCost: totalLoanCostDisplay.textContent,
+                apr: aprValueDisplay.textContent,
+                clientAmount: clientAmountDisplay.textContent,
+                nominalInterest: nominalInterestRateDisplay.textContent.split(': ')[1]
+            };
+            const queryString = new URLSearchParams(data).toString();
+            window.open(`email-template.html?${queryString}`, '_blank');
+        }
+        generateEmailBtn.addEventListener('click', generateEmail);
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loanAmountInput.value = new Intl.NumberFormat('pl-PL').format(loanAmountSlider.value).replace(/\s/g, ' ');
+            calculate();
+            const formattedDate = 'Dane na dzień: 10.10.2025';
+            document.getElementById('current-date-wibor').textContent = formattedDate;
+            document.getElementById('current-date-odsetki').textContent = formattedDate;
+            document.getElementById('wibor-1m').textContent = '5,81%';
+            document.getElementById('wibor-3m').textContent = '5,85%';
+            document.getElementById('wibor-6m').textContent = '5,83%';
+            document.getElementById('odsetki-opoznienie').textContent = '11,50%';
+        });
+    </script>
+</body>
+</html>
