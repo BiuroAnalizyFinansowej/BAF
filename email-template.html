@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Szablon E-mail - Oferta Kredytowa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #e5369a;
+            --bg-light: #fce7f3;
+            --text-dark: #831843;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .email-container {
+            width: 100%;
+            max-width: 700px;
+            background: #fff;
+            padding: 2.5rem;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(229, 54, 154, 0.2);
+            border: 2px solid #fff;
+        }
+        .email-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .email-header h1 {
+            font-family: 'Pacifico', cursive;
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 2.2rem;
+        }
+        #emailContent {
+            border: 2px dashed #fbcfe8;
+            padding: 1.5rem;
+            border-radius: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        #emailContent strong {
+            color: var(--primary-color);
+        }
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        li {
+            padding: 8px 0;
+            border-bottom: 1px solid #fce7f3;
+        }
+        li:last-child {
+            border-bottom: none;
+        }
+        .copy-button {
+            display: block;
+            width: 100%;
+            margin-top: 2rem;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 1rem;
+            border-radius: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .copy-button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(229, 54, 154, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+<div class="email-container">
+    <div class="email-header">
+        <h1>Gotowy E-mail</h1>
+        <p>Skopiuj poniższą treść i wyślij do klienta.</p>
+    </div>
+    <div id="emailContent">
+        </div>
+    <button id="copyBtn" class="copy-button">📋 Kopiuj treść maila</button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+
+        const emailBody = `
+            <p><strong>Temat:</strong> Propozycja finansowania kredytu na kwotę ${params.get('netLoanAmount')}</p>
+            <hr style="border: 0; border-top: 1px solid #fce7f3; margin: 1rem 0;">
+            <p>Szanowni Państwo,</p>
+            <p>w nawiązaniu do przeprowadzonej symulacji, przesyłam szczegółowe podsumowanie warunków finansowania, które mogą Państwa zainteresować.</p>
+            <p><strong>Kluczowe parametry oferty:</strong></p>
+            <ul>
+                <li><strong>Kwota kredytu netto:</strong> ${params.get('netLoanAmount')}</li>
+                <li><strong>Kwota do dyspozycji (po opłatach):</strong> ${params.get('clientAmount')}</li>
+                <li><strong>Okres kredytowania:</strong> ${params.get('loanTerm')} miesięcy ${params.get('termInYears')}</li>
+                <li><strong>Oprocentowanie nominalne:</strong> ${params.get('nominalInterest')}</li>
+                <li><strong>RRSO:</strong> ${params.get('apr')}</li>
+                <li><strong>Szacunkowa miesięczna rata:</strong> <strong>${params.get('monthlyPayment')}</strong></li>
+                <li><strong>Całkowity koszt kredytu:</strong> ${params.get('totalLoanCost')}</li>
+            </ul>
+            <p>Powyższe wyliczenia stanowią wstępną, niezobowiązującą propozycję. Ostateczne warunki zależą od indywidualnej oceny zdolności kredytowej.</p>
+            <p>Proszę o informację zwrotną, czy przedstawiona propozycja jest dla Państwa interesująca. Chętnie odpowiem na wszelkie pytania i pomogę w dalszym procesie.</p>
+            <p>Z poważaniem,<br><br>
+            [Twoje Imię i Nazwisko]<br>
+            [Twoje Stanowisko]<br>
+            [Twój Numer Telefonu]</p>
+        `;
+
+        document.getElementById('emailContent').innerHTML = emailBody;
+
+        const copyBtn = document.getElementById('copyBtn');
+        copyBtn.addEventListener('click', () => {
+            const emailText = document.getElementById('emailContent').innerText;
+            navigator.clipboard.writeText(emailText).then(() => {
+                copyBtn.textContent = '✅ Skopiowano!';
+                copyBtn.style.background = '#10B981';
+                setTimeout(() => {
+                    copyBtn.textContent = '📋 Kopiuj treść maila';
+                    copyBtn.style.background = 'var(--primary-color)';
+                }, 2000);
+            }).catch(err => {
+                console.error('Błąd kopiowania: ', err);
+                copyBtn.textContent = 'Błąd kopiowania';
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
