@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator WPS - KAF</title>
     
+    <link rel="icon" type="image/png" href="baf_logo_p.png">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
@@ -369,10 +371,17 @@
 
     <main class="calc-container">
         <section class="calc-inputs">
-            <h2 class="section-title">
-                <i class="fas fa-edit"></i>
-                Dane kredytu
-            </h2>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h2 class="section-title" style="margin-bottom: 0;">
+                    <i class="fas fa-edit"></i>
+                    Dane kredytu
+                </h2>
+                <button type="button" class="calc-btn secondary" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                    Powrót
+                </button>
+            </div>
             
             <form id="calculator-form">
                 <div class="input-group">
