@@ -46,7 +46,7 @@
         .header-left-group {
             display: flex;
             align-items: center;
-            gap: 1.5rem; /* Odstęp między tytułem a przyciskiem */
+            gap: 1.5rem;
         }
 
         .header-center-group {
@@ -121,12 +121,19 @@
             font-size: 1.2rem;
             font-weight: 600;
             color: #1e293b;
-            margin-bottom: 1rem;
+            margin-bottom: 0rem;
             padding-bottom: 0.5rem;
             border-bottom: 1px solid #e2e8f0;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: -0.75rem;
+            margin-bottom: 1rem;
         }
         
         .section-title i {
@@ -165,7 +172,7 @@
             color: #1e40af;
         }
         
-        .calc-table td:nth-child(2) {
+        .calc-table td:not(:first-child) {
             text-align: right;
         }
         
@@ -190,10 +197,11 @@
         }
 
         .input-field[readonly] {
-            background: #e2e8f0;
-            color: #475569;
-            cursor: not-allowed;
-            border-color: #e2e8f0;
+            background: transparent;
+            color: #2d3748;
+            cursor: default;
+            border: none;
+            padding: 0.5rem 0;
         }
         
         .output-field {
@@ -206,13 +214,43 @@
             font-size: 1.1rem;
         }
 
+        .highlight-blue-bg {
+            background-color: #e0f2fe;
+            border-radius: 6px;
+            border: 2px solid #93c5fd;
+            padding: 0.5rem 0.8rem !important;
+            color: #1e40af;
+            font-size: 1.1rem;
+            border-bottom: 2px solid #93c5fd !important;
+        }
+
         .highlight-success {
             color: #16a34a;
             font-size: 1.1rem;
         }
         
+        .profit-column-header {
+            border-top: 2px solid #a7f3d0;
+            border-left: 2px solid #a7f3d0;
+            border-right: 2px solid #a7f3d0;
+            color: #065f46;
+            font-weight: 700;
+            background-color: #f0fdf4;
+        }
+        .profit-column-cell {
+            border-left: 2px solid #a7f3d0;
+            border-right: 2px solid #a7f3d0;
+            font-size: 1.05em;
+            font-weight: 700;
+            background-color: #f0fdf4;
+            border-bottom: none;
+        }
+        .calc-table tr:last-child .profit-column-cell {
+            border-bottom: 2px solid #a7f3d0;
+        }
+
         .calc-actions {
-            margin-top: auto; /* Pushes button to the bottom */
+            margin-top: auto;
             padding-top: 1rem;
             border-top: 1px solid #e2e8f0;
         }
@@ -237,7 +275,6 @@
             color: #374151;
         }
 
-        /* Specific table headers */
         .calc-table th {
             text-align: right;
             padding: 0.5rem;
@@ -276,11 +313,11 @@
                 <table class="calc-table">
                     <tr>
                         <td>WPS</td>
-                        <td><input type="number" id="wps" class="input-field" value="49478.40"></td>
+                        <td><input type="number" id="wps" class="input-field" value="0"></td>
                     </tr>
                     <tr>
                         <td>Odsetki przyszłe do umorzenia</td>
-                        <td><input type="number" id="odsetki_przyszle" class="input-field" value="3016.30"></td>
+                        <td><input type="number" id="odsetki_przyszle" class="input-field" value="0"></td>
                     </tr>
                     <tr>
                         <td>
@@ -288,7 +325,7 @@
                                 Aktualna stawka % odsetek ustawowych
                              </a>
                         </td>
-                        <td><input type="number" id="stawka_odsetek_ust" class="input-field" value="10.50"></td>
+                        <td><input type="number" id="stawka_odsetek_ust" class="input-field" value="10.00"></td>
                     </tr>
                     <tr>
                         <td>Nasze Success fee %</td>
@@ -315,7 +352,7 @@
                         </tr>
                         <tr>
                             <td>Pre opłaty KAF</td>
-                            <td><input type="number" id="pre_kaf_netto" class="input-field" value="10390.46"></td>
+                            <td><input type="number" id="pre_kaf_netto" class="input-field" value="0"></td>
                             <td class="output-field" id="pre_kaf_brutto"></td>
                         </tr>
                         <tr>
@@ -331,7 +368,7 @@
                         <tr>
                             <td><b>Sumaryczne Pre opłaty</b></td>
                             <td class="output-field" id="sum_pre_netto"></td>
-                            <td class="output-field highlight" id="sum_pre_brutto"></td>
+                            <td class="output-field highlight-blue-bg" id="sum_pre_brutto"></td>
                         </tr>
                          <tr>
                             <td><b>Sumaryczne Pre opłaty + II instancja</b></td>
@@ -354,6 +391,9 @@
         <div style="display: flex; flex-direction: column; gap: 1.5rem;">
              <section class="calc-section">
                 <h2 class="section-title"><i class="fas fa-percentage"></i>Success Fee</h2>
+                <p class="section-subtitle">
+                    Podane kwoty są jedynie prognozą i uwzględniają % od <b>WPS finalny z odsetkami za opóźnienie</b>.
+                </p>
                  <table class="calc-table">
                     <thead>
                         <tr>
@@ -364,7 +404,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Miłosz success fee (6% od WPS)</td>
+                            <td>Miłosz success fee (6%)</td>
                             <td class="output-field" id="sf_milosz_netto"></td>
                             <td class="output-field" id="sf_milosz_brutto"></td>
                         </tr>
@@ -426,29 +466,33 @@
                     <thead>
                         <tr>
                             <th>Liczba rat</th>
+                            <th>Stawka %</th>
                             <th>Prowizja PAYU</th>
                             <th>Kwota raty</th>
-                            <th>Nasz zysk Pre (netto)</th>
+                            <th class="profit-column-header">Nasz zysk Pre (netto)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>5</td>
+                            <td class="output-field" id="payu_stawka_5"></td>
                             <td class="output-field" id="payu_prowizja_5"></td>
                             <td class="output-field" id="payu_rata_5"></td>
-                            <td class="output-field" id="payu_zysk_5"></td>
+                            <td class="output-field profit-column-cell" id="payu_zysk_5"></td>
                         </tr>
                         <tr>
                             <td>10</td>
+                             <td class="output-field" id="payu_stawka_10"></td>
                             <td class="output-field" id="payu_prowizja_10"></td>
                             <td class="output-field" id="payu_rata_10"></td>
-                            <td class="output-field" id="payu_zysk_10"></td>
+                            <td class="output-field profit-column-cell" id="payu_zysk_10"></td>
                         </tr>
                          <tr>
                             <td>20</td>
+                             <td class="output-field" id="payu_stawka_20"></td>
                             <td class="output-field" id="payu_prowizja_20"></td>
                             <td class="output-field" id="payu_rata_20"></td>
-                            <td class="output-field" id="payu_zysk_20"></td>
+                            <td class="output-field profit-column-cell" id="payu_zysk_20"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -460,20 +504,35 @@
         document.addEventListener('DOMContentLoaded', () => {
             const inputs = document.querySelectorAll('.input-field');
             
-            // Helper functions
-            const formatCurrency = (value) => new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(value);
-            const formatPercent = (value) => new Intl.NumberFormat('pl-PL', { style: 'percent', minimumFractionDigits: 2 }).format(value);
+            const formatCurrency = (value) => {
+                if (isNaN(value)) return '';
+                return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(value);
+            }
+            const formatPercent = (value) => {
+                 if (isNaN(value)) return '';
+                return new Intl.NumberFormat('pl-PL', { style: 'percent', minimumFractionDigits: 2 }).format(value);
+            }
             const getValue = (id) => parseFloat(document.getElementById(id).value) || 0;
             const setValue = (id, value, formatFn) => {
                 const element = document.getElementById(id);
                 if (element) {
-                    element.textContent = formatFn ? formatFn(value) : value;
+                    element.textContent = formatFn ? formatFn(value) : (value || '');
                 }
+            };
+
+            const defaultValues = {
+                wps: "0",
+                odsetki_przyszle: "0",
+                stawka_odsetek_ust: "10.00",
+                nasze_sf_proc: "0",
+                pre_kaf_netto: "0",
+                oplata_sadowa_netto: "1017",
+                pre_milosz_netto: "2250",
+                ii_instancja_netto: "750"
             };
             
             function calculate() {
                 try {
-                    // Stałe
                     const VAT_RATE = 0.23;
                     const PAYU_RATES = {
                         5: 0.0449,
@@ -481,7 +540,6 @@
                         20: 0.0699,
                     };
 
-                    // === Pobieranie wartości z inputów ===
                     const wps = getValue('wps');
                     const odsetkiPrzyszle = getValue('odsetki_przyszle');
                     const stawkaOdsetekUst = getValue('stawka_odsetek_ust') / 100;
@@ -492,10 +550,9 @@
                     const oplataSadowaNetto = getValue('oplata_sadowa_netto');
                     const iiInstancjaNetto = getValue('ii_instancja_netto');
 
-                    // === Obliczenia: Opłaty początkowe ===
                     const preMiloszBrutto = preMiloszNetto * (1 + VAT_RATE);
                     const preKafBrutto = preKafNetto * (1 + VAT_RATE);
-                    const oplataSadowaBrutto = oplataSadowaNetto; // bez VAT
+                    const oplataSadowaBrutto = oplataSadowaNetto;
                     const iiInstancjaBrutto = iiInstancjaNetto * (1 + VAT_RATE);
                     
                     const sumPreNetto = preMiloszNetto + preKafNetto + oplataSadowaNetto;
@@ -504,49 +561,39 @@
                     const sumPreIiNetto = sumPreNetto + iiInstancjaNetto;
                     const sumPreIiBrutto = sumPreBrutto + iiInstancjaBrutto;
 
-                    // === Obliczenia: Podsumowanie ===
                     const odsetki1rok = wps * stawkaOdsetekUst;
                     const odsetki2lata = odsetki1rok * 2;
-                    const sumDoOdzyskania = wps + odsetkiPrzyszle + odsetki2lata;
                     const wpsFinalny = wps + odsetki2lata;
-                    const stosunekPreDoSumy = sumDoOdzyskania > 0 ? sumPreIiBrutto / sumDoOdzyskania : 0;
+                    const sumDoOdzyskania = wpsFinalny + odsetkiPrzyszle;
+                    
+                    const stosunekPreDoSumy = sumDoOdzyskania > 0 ? sumPreBrutto / sumDoOdzyskania : 0;
 
-                    // === Obliczenia: Success Fee ===
-                    const sfMiloszNetto = wps * 0.06;
+                    const sfMiloszNetto = wpsFinalny * 0.06;
                     const sfMiloszBrutto = sfMiloszNetto * (1 + VAT_RATE);
-
-                    // Jeśli KAF SF < 0, pokaż 0
-                    const sfKafNetto = Math.max(0, (sumDoOdzyskania * naszeSfProc) - sfMiloszNetto);
+                    const sfKafNetto = wpsFinalny * naszeSfProc;
                     const sfKafBrutto = sfKafNetto * (1 + VAT_RATE);
 
                     const sumSfNetto = sfMiloszNetto + sfKafNetto;
                     const sumSfBrutto = sfMiloszBrutto + sfKafBrutto;
 
-                    // === Obliczenia: Finalne podsumowanie ===
                     const zyskKlienta = sumDoOdzyskania - sumPreIiBrutto - sumSfBrutto;
                     const podzialKlient = sumDoOdzyskania > 0 ? zyskKlienta / sumDoOdzyskania : 0;
                     const podzialNasz = 1 - podzialKlient;
                     
-                    // === Obliczenia: PAYU ===
-                    const kwotaDoRozlozenia = sumPreIiBrutto;
+                    const kwotaDoRozlozenia = sumPreBrutto;
                     
-                    // Raty: 5
                     const prowizja5 = kwotaDoRozlozenia * PAYU_RATES[5];
                     const rata5 = (kwotaDoRozlozenia + prowizja5) / 5;
-                    const zysk5 = preKafNetto - (prowizja5 / (1 + VAT_RATE)); // Zysk NETTO
+                    const zysk5 = preKafNetto - (prowizja5 / (1 + VAT_RATE)); 
 
-                    // Raty: 10
                     const prowizja10 = kwotaDoRozlozenia * PAYU_RATES[10];
                     const rata10 = (kwotaDoRozlozenia + prowizja10) / 10;
-                    const zysk10 = preKafNetto - (prowizja10 / (1 + VAT_RATE)); // Zysk NETTO
+                    const zysk10 = preKafNetto - (prowizja10 / (1 + VAT_RATE));
 
-                    // Raty: 20
                     const prowizja20 = kwotaDoRozlozenia * PAYU_RATES[20];
                     const rata20 = (kwotaDoRozlozenia + prowizja20) / 20;
-                    const zysk20 = preKafNetto - (prowizja20 / (1 + VAT_RATE)); // Zysk NETTO
+                    const zysk20 = preKafNetto - prowizja20;
 
-                    // === Aktualizacja interfejsu ===
-                    // Opłaty początkowe
                     setValue('pre_milosz_brutto', preMiloszBrutto, formatCurrency);
                     setValue('pre_kaf_brutto', preKafBrutto, formatCurrency);
                     setValue('oplata_sadowa_brutto', oplataSadowaBrutto, formatCurrency);
@@ -556,7 +603,6 @@
                     setValue('sum_pre_ii_netto', sumPreIiNetto, formatCurrency);
                     setValue('sum_pre_ii_brutto', sumPreIiBrutto, formatCurrency);
                     
-                    // Podsumowanie
                     setValue('odsetki_1rok', odsetki1rok, formatCurrency);
                     setValue('odsetki_2lata', odsetki2lata, formatCurrency);
                     setValue('sum_do_odzyskania', sumDoOdzyskania, formatCurrency);
@@ -566,7 +612,6 @@
                     setValue('podzial_klient', podzialKlient, formatPercent);
                     setValue('podzial_nasz', podzialNasz, formatPercent);
 
-                    // Success Fee
                     setValue('sf_milosz_netto', sfMiloszNetto, formatCurrency);
                     setValue('sf_milosz_brutto', sfMiloszBrutto, formatCurrency);
                     setValue('sf_kaf_netto', sfKafNetto, formatCurrency);
@@ -574,13 +619,17 @@
                     setValue('sum_sf_netto', sumSfNetto, formatCurrency);
                     setValue('sum_sf_brutto', sumSfBrutto, formatCurrency);
                     
-                    // PAYU
+                    setValue('payu_stawka_5', PAYU_RATES[5], formatPercent);
                     setValue('payu_prowizja_5', prowizja5, formatCurrency);
                     setValue('payu_rata_5', rata5, formatCurrency);
                     setValue('payu_zysk_5', zysk5, formatCurrency);
+
+                    setValue('payu_stawka_10', PAYU_RATES[10], formatPercent);
                     setValue('payu_prowizja_10', prowizja10, formatCurrency);
                     setValue('payu_rata_10', rata10, formatCurrency);
                     setValue('payu_zysk_10', zysk10, formatCurrency);
+
+                    setValue('payu_stawka_20', PAYU_RATES[20], formatPercent);
                     setValue('payu_prowizja_20', prowizja20, formatCurrency);
                     setValue('payu_rata_20', rata20, formatCurrency);
                     setValue('payu_zysk_20', zysk20, formatCurrency);
@@ -591,27 +640,40 @@
             }
 
             function resetForm() {
-                // Pola edytowalne
-                document.getElementById('wps').value = "49478.40";
-                document.getElementById('odsetki_przyszle').value = "3016.30";
-                document.getElementById('stawka_odsetek_ust').value = "10.50";
+                document.getElementById('wps').value = "0";
+                document.getElementById('odsetki_przyszle').value = "0";
+                document.getElementById('pre_kaf_netto').value = "0";
+                
+                document.getElementById('stawka_odsetek_ust').value = "10.00";
                 document.getElementById('nasze_sf_proc').value = "0";
-                document.getElementById('pre_kaf_netto').value = "10390.46";
-                document.getElementById('oplata_sadowa_netto').value = "1017";
-
-                // Pola zablokowane - nie trzeba resetować, ale dla pewności
-                document.getElementById('pre_milosz_netto').value = "2250";
-                document.getElementById('ii_instancja_netto').value = "750";
-
+                
                 calculate();
             }
 
-            // Event Listeners
+            function initializeForm() {
+                for (const [id, value] of Object.entries(defaultValues)) {
+                    const element = document.getElementById(id);
+                    if(element) {
+                        element.value = value;
+                    }
+                }
+                calculate();
+            }
+            
+            const payuTableRows = document.querySelectorAll('.calc-section:last-of-type .calc-table tbody tr');
+            payuTableRows.forEach((row, index) => {
+                if (index === payuTableRows.length - 1) {
+                    const cell = row.querySelector('.profit-column-cell');
+                    if(cell) {
+                        cell.style.borderBottom = '2px solid #a7f3d0';
+                    }
+                }
+            });
+
             inputs.forEach(input => input.addEventListener('input', calculate));
             document.getElementById('reset-btn').addEventListener('click', resetForm);
 
-            // Pierwsze obliczenia przy załadowaniu strony
-            calculate();
+            initializeForm();
         });
     </script>
 </body>
