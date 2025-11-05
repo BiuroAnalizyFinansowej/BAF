@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAF - Gry</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="baf_logo_p.png">
+</head>
+<body>
+
+    <div class="menu-container">
+        <h1 style="text-align: center; margin-bottom: 30px;">Wybierz grę</h1>
+
+        <div class="button-grid grid-1-col">
+            <a href="statki.html" class="menu-button">Gra w statki</a>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="index.html" class="menu-button">Wróć do menu</a>
+        </div>
+    </div>
+
+</body>
+</html>
