@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitwa Morska (2 Graczy)</title>
+    <link rel="stylesheet" href="style-multi.css">
+</head>
+<body>
+
+    <h1>Bitwa Morska - 2 Graczy</h1>
+    
+    <div id="game-info">
+        <h2 id="turn-display">Ruch: Gracz 1</h2>
+        <p id="message-area">Wybierz cel na planszy przeciwnika.</p>
+    </div>
+
+    <div id="boards-container">
+        <div class="board-wrapper">
+            <h3 id="own-board-title">Plansza Gracza 1 (Twoje Statki)</h3>
+            <div id="own-board" class="game-board">
+                </div>
+        </div>
+        
+        <div class="board-wrapper">
+            <h3 id="opponent-board-title">Plansza Gracza 2 (Strzały)</h3>
+            <div id="opponent-board" class="game-board">
+                </div>
+        </div>
+    </div>
+
+    <button id="pass-turn-button" class="hidden">
+        Gotów do rozpoczęcia tury
+    </button>
+
+    <script src="script-multi.js"></script>
+</body>
+</html>
