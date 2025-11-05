@@ -388,7 +388,8 @@
                     <button class="calc-btn" id="generate-page-btn" style="background-color: #1e40af; color: white; margin-top: 10px;">
                         <i class="fas fa-file-export"></i> Generuj ofertę
                     </button>
-                    </div>
+                    
+                </div>
             </section>
         </div>
 
@@ -512,14 +513,27 @@
         document.addEventListener('DOMContentLoaded', () => {
             const inputs = document.querySelectorAll('.input-field');
             
+            // V --- ZAKTUALIZOWANA FUNKCJA FORMATOWANIA --- V
             const formatCurrency = (value) => {
                 if (isNaN(value)) return '';
-                return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(value);
+                // Dodano 'useGrouping: true' aby wymusić separator tysięcy
+                return new Intl.NumberFormat('pl-PL', { 
+                    style: 'currency', 
+                    currency: 'PLN', 
+                    useGrouping: true 
+                }).format(value);
             }
             const formatPercent = (value) => {
                  if (isNaN(value)) return '';
-                return new Intl.NumberFormat('pl-PL', { style: 'percent', minimumFractionDigits: 2 }).format(value);
+                 // Dodano 'useGrouping: true'
+                return new Intl.NumberFormat('pl-PL', { 
+                    style: 'percent', 
+                    minimumFractionDigits: 2, 
+                    useGrouping: true 
+                }).format(value);
             }
+            // ^ --- KONIEC AKTUALIZACJI --- ^
+            
             const getValue = (id) => parseFloat(document.getElementById(id).value) || 0;
             const setValue = (id, value, formatFn) => {
                 const element = document.getElementById(id);
@@ -685,14 +699,13 @@
             document.getElementById('reset-btn').addEventListener('click', resetForm);
 
             
-            // V --- LOGIKA GENEROWANIA PODSTRONY (POPRAWIONA) --- V
+            // V --- LOGIKA GENEROWANIA PODSTRONY --- V
             
             const generatePageBtn = document.getElementById('generate-page-btn');
             
             generatePageBtn.addEventListener('click', () => {
-                // Używamy .textContent, aby pobrać sformatowane wartości
                 const dataToStore = {
-                    wps: formatCurrency(getValue('wps')), // Pobieramy surową i formatujemy
+                    wps: formatCurrency(getValue('wps')),
                     sum_pre_brutto: document.getElementById('sum_pre_brutto').textContent,
                     ii_instancja_brutto: document.getElementById('ii_instancja_brutto').textContent,
                     sum_do_odzyskania: document.getElementById('sum_do_odzyskania').textContent,
@@ -710,12 +723,10 @@
                     payu_prowizja_20: document.getElementById('payu_prowizja_20').textContent
                 };
 
-                // Zapisujemy dane w sessionStorage (są dostępne do zamknięcia karty)
                 for (const [key, value] of Object.entries(dataToStore)) {
                     sessionStorage.setItem(`skd_data_${key}`, value);
                 }
                 
-                // Otwieramy nową stronę w nowej karcie
                 window.open('oferta_skd.html', '_blank');
             });
             
