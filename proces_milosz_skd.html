@@ -386,7 +386,7 @@
                     </button>
                     
                     <button class="calc-btn" id="generate-page-btn" style="background-color: #1e40af; color: white; margin-top: 10px;">
-                        <i class="fas fa-file-export"></i> Generuj ofertę
+                        <i class="fas fa-file-export"></i> Generuj podstronę z ofertą
                     </button>
                     </div>
             </section>
@@ -452,6 +452,10 @@
                      <tr>
                         <td><b>Zysk Klienta po rozliczeniu inwestycji</b></td>
                         <td class="output-field highlight-success" id="zysk_klienta"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Stopa zwrotu z inwestycji (ROI)</b></td>
+                        <td class="output-field highlight-success" id="roi"></td>
                     </tr>
                     <tr>
                         <td>Podział procentowy dla klienta</td>
@@ -584,6 +588,9 @@
                     const podzialKlient = sumDoOdzyskania > 0 ? zyskKlienta / sumDoOdzyskania : 0;
                     const podzialNasz = 1 - podzialKlient;
                     
+                    // NOWA KALKULACJA: ROI
+                    const roi = (sumPreBrutto > 0) ? (zyskKlienta / sumPreBrutto) : 0;
+                    
                     const kwotaDoRozlozenia = sumPreBrutto;
                     
                     const prowizja5 = kwotaDoRozlozenia * PAYU_RATES[5];
@@ -613,6 +620,7 @@
                     setValue('wps_finalny', wpsFinalny, formatCurrency);
                     setValue('stosunek_pre_do_sumy', stosunekPreDoSumy, formatPercent);
                     setValue('zysk_klienta', zyskKlienta, formatCurrency);
+                    setValue('roi', roi, formatPercent); // Ustawienie wartości ROI
                     setValue('podzial_klient', podzialKlient, formatPercent);
                     setValue('podzial_nasz', podzialNasz, formatPercent);
 
@@ -678,7 +686,7 @@
             document.getElementById('reset-btn').addEventListener('click', resetForm);
 
             
-            // V --- POCZĄTEK LOGIKI GENEROWANIA PODSTRONY --- V
+            // V --- POCZĄTEK LOGIKI GENEROWANIA PODSTRONY (ZAKTUALIZOWANE) --- V
             
             const generatePageBtn = document.getElementById('generate-page-btn');
             
@@ -690,13 +698,18 @@
                     ii_instancja_brutto: document.getElementById('ii_instancja_brutto').textContent,
                     sum_do_odzyskania: document.getElementById('sum_do_odzyskania').textContent,
                     zysk_klienta: document.getElementById('zysk_klienta').textContent,
+                    roi: document.getElementById('roi').textContent, // DODANE ROI
                     stosunek_pre_do_sumy: document.getElementById('stosunek_pre_do_sumy').textContent,
                     sum_sf_brutto: document.getElementById('sum_sf_brutto').textContent,
                     podzial_klient: document.getElementById('podzial_klient').textContent,
                     podzial_nasz: document.getElementById('podzial_nasz').textContent,
                     payu_rata_5: document.getElementById('payu_rata_5').textContent,
                     payu_rata_10: document.getElementById('payu_rata_10').textContent,
-                    payu_rata_20: document.getElementById('payu_rata_20').textContent
+                    payu_rata_20: document.getElementById('payu_rata_20').textContent,
+                    // DANE O PROWIZJI (NAPRAWIONE)
+                    payu_prowizja_5: document.getElementById('payu_prowizja_5').textContent,
+                    payu_prowizja_10: document.getElementById('payu_prowizja_10').textContent,
+                    payu_prowizja_20: document.getElementById('payu_prowizja_20').textContent
                 };
 
                 // Zapisujemy dane w sessionStorage (są dostępne do zamknięcia karty)
