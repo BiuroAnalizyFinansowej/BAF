@@ -10,10 +10,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
-        #back-controls-container { position: fixed; top: 20px; left: 30px; z-index: 1000; width: 140px; font-family: 'Lato', Arial, sans-serif; }
+        /* USUNIĘTO #back-controls-container */
         #controls-container { position: fixed; top: 20px; right: 30px; z-index: 1000; width: 280px; font-family: 'Lato', Arial, sans-serif; }
         
-        #copyButton, #backButton {
+        #copyButton {
             padding: 10px 15px;
             font-size: 16px;
             font-weight: bold;
@@ -26,14 +26,11 @@
             transition: background-color 0.3s ease, transform 0.2s ease;
             width: 100%;
         }
-        #copyButton:active, #backButton:active { transform: scale(0.98); }
+        #copyButton:active { transform: scale(0.98); }
 
         #copyButton { background-color: #17a2b8; }
         #copyButton:hover { background-color: #138496; }
         #copyButton.copied { background-color: #28a745; }
-
-        #backButton { background-color: #5F7A95; }
-        #backButton:hover { background-color: #4e657b; }
         
         /* Styl dla placeholderów ładowania */
         .data-placeholder {
@@ -46,10 +43,6 @@
     </style>
 </head>
 <body style="margin: 0; padding: 0; background-color: #f4f7f9; font-family: 'Lato', Arial, sans-serif;">
-
-    <div id="back-controls-container">
-        <button id="backButton" onclick="history.back()">Powrót do kalkulatora</button>
-    </div>
 
     <div id="controls-container">
         <button id="copyButton">Kopiuj treść oferty</button>
@@ -115,6 +108,10 @@
                                             <div style="background: #f8f9fa; padding: 20px; border-radius: 4px; font-size: 1em; margin-top: 20px;">
                                                 <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; line-height: 1.8;">
                                                     <tr style="border-bottom: 1px solid #dee2e6;">
+                                                        <td style="padding: 8px 0; font-weight: 700;">Stopa zwrotu z inwestycji (ROI)</td>
+                                                        <td style="padding: 8px 0; text-align: right; font-weight: 700; color: #155724;"><span id="data-roi" class="data-placeholder">...</span></td>
+                                                    </tr>
+                                                    <tr style="border-bottom: 1px solid #dee2e6;">
                                                         <td style="padding: 8px 0;">Stosunek pre opłat do sumy odzyskania</td>
                                                         <td style="padding: 8px 0; text-align: right; font-weight: 700;"><span id="data-stosunek_pre_do_sumy" class="data-placeholder">...</span></td>
                                                     </tr>
@@ -151,9 +148,8 @@
                                                     <tr style="background-color: #f8f9fa;">
                                                         <th style="padding: 12px 15px; text-align: left; border-bottom: 2px solid #007bff;">Liczba rat</th>
                                                         <th style="padding: 12px 15px; text-align: right; border-bottom: 2px solid #007bff;">Miesięczna rata (brutto)</th>
-                                                        
                                                         <th style="padding: 12px 15px; text-align: right; border-bottom: 2px solid #007bff;">Prowizja PAYU</th>
-                                                        </tr>
+                                                    </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr style="border-bottom: 1px solid #dee2e6;">
@@ -176,7 +172,52 @@
                                         </td>
                                     </tr>
                                 </table>
-
+                                
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 20px; margin-top: 40px;">
+                                    <tr>
+                                        <td>
+                                            <h2 style="font-family: 'Lato', Arial, sans-serif; font-size: 26px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin: 0 0 25px 0; font-weight: 700;">Proces w 4 prostych krokach</h2>
+                                            
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 20px;">
+                                                <tr>
+                                                    <td width="50" valign="top" style="padding-right: 20px; font-size: 30px; line-height: 1;">✍️</td>
+                                                    <td valign="top">
+                                                        <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 18px; color: #333; margin: 0 0 5px 0;">Krok 1: Umowa</h3>
+                                                        <p style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; margin: 0; line-height: 1.6;">Podpisanie umowy i start sprawy.</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 20px;">
+                                                <tr>
+                                                    <td width="50" valign="top" style="padding-right: 20px; font-size: 30px; line-height: 1;">⚖️</td>
+                                                    <td valign="top">
+                                                        <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 18px; color: #333; margin: 0 0 5px 0;">Krok 2: Pozew</h3>
+                                                        <p style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; margin: 0; line-height: 1.6;">Reprezentacja w sądzie.</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 20px;">
+                                                <tr>
+                                                    <td width="50" valign="top" style="padding-right: 20px; font-size: 30px; line-height: 1;">🏆</td>
+                                                    <td valign="top">
+                                                        <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 18px; color: #333; margin: 0 0 5px 0;">Krok 3: Wygrana</h3>
+                                                        <p style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; margin: 0; line-height: 1.6;">Doprowadzenie do korzystnego wyroku.</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 20px;">
+                                                <tr>
+                                                    <td width="50" valign="top" style="padding-right: 20px; font-size: 30px; line-height: 1;">💰</td>
+                                                    <td valign="top">
+                                                        <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 18px; color: #333; margin: 0 0 5px 0;">Krok 4: Pieniądze</h3>
+                                                        <p style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; margin: 0; line-height: 1.6;">Środki trafiają na konto.</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            
+                                        </td>
+                                    </tr>
+                                </table>
                                 <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 30px 0 0 0; line-height: 1.6;">
                                     Czekam na informację zwrotną. W razie pytań jestem do dyspozycji mailowo i pod telefonem.
                                 </p>
@@ -190,10 +231,10 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Lista kluczy danych do pobrania
+            // Lista kluczy danych do pobrania (ZAKTUALIZOWANA)
             const dataKeys = [
                 'wps', 'sum_pre_brutto', 'ii_instancja_brutto', 'sum_do_odzyskania',
-                'zysk_klienta', 'stosunek_pre_do_sumy', 'sum_sf_brutto', 
+                'zysk_klienta', 'roi', 'stosunek_pre_do_sumy', 'sum_sf_brutto', 
                 'podzial_klient', 'podzial_nasz', 'payu_rata_5', 
                 'payu_rata_10', 'payu_rata_20',
                 'payu_prowizja_5', 'payu_prowizja_10', 'payu_prowizja_20'
@@ -205,19 +246,26 @@
 
             // Pętla do pobierania danych i wstawiania ich do HTML
             dataKeys.forEach(key => {
+                // Pobieramy wartość z sessionStorage
                 const value = sessionStorage.getItem(`skd_data_${key}`);
+                
                 if (value) {
+                    // Znajdujemy element docelowy w HTML
                     const element = document.getElementById(`data-${key}`);
                     if (element) {
                         element.textContent = value;
                         element.classList.remove('data-placeholder');
                     }
                     
+                    // Zapisujemy wartości procentowe do narysowania wykresu
                     if (key === 'podzial_klient') {
                         clientPercentValue = parseFloat(value.replace('%', '').replace(',', '.')) || 0;
                     } else if (key === 'podzial_nasz') {
                         firmPercentValue = parseFloat(value.replace('%', '').replace(',', '.')) || 0;
                     }
+                } else {
+                     // Opcjonalnie: co zrobić, jeśli klucz nie istnieje
+                     console.warn(`Nie znaleziono danych w sessionStorage dla klucza: ${key}`);
                 }
             });
             
