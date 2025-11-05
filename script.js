@@ -1,6 +1,6 @@
 // Plik: script.js
 document.addEventListener('DOMContentLoaded', function() {
-    const formattedDate = 'Dane na dzień: 08.10.2025';
+    const formattedDate = 'Dane na dzień: 04.11.2025';
 
     // Sprawdzenie, czy elementy istnieją na stronie, zanim spróbujemy ich użyć
     const wiborDateElem = document.getElementById('current-date-wibor');
@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (wiborDateElem) wiborDateElem.textContent = formattedDate;
     if (odsetkiDateElem) odsetkiDateElem.textContent = formattedDate;
-    if (wibor1mElem) wibor1mElem.textContent = '4,84%';
-    if (wibor3mElem) wibor3mElem.textContent = '4,69%';
-    if (wibor6mElem) wibor6mElem.textContent = '4,55%';
-    if (odsetkiOpoznienieElem) odsetkiOpoznienieElem.textContent = '10,25%';
+    if (wibor1mElem) wibor1mElem.textContent = '4,50%';
+    if (wibor3mElem) wibor3mElem.textContent = '4,38%';
+    if (wibor6mElem) wibor6mElem.textContent = '4,27%';
+    if (odsetkiOpoznienieElem) odsetkiOpoznienieElem.textContent = '10%';
 });
