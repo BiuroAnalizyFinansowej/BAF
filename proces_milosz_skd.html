@@ -452,7 +452,7 @@
                     </tr>
                      <tr>
                         <td><b>Zysk Klienta po rozliczeniu inwestycji</b></td>
-                        <td class="output-field highlight-success" id="zysk_klienta"></td>
+                        <td class="output-field" id="zysk_klienta"></td>
                     </tr>
                     <tr>
                         <td><b>Stopa zwrotu z inwestycji (ROI)</b></td>
@@ -543,7 +543,7 @@
                 odsetki_przyszle: "0",
                 stawka_odsetek_ust: "10.00",
                 nasze_sf_proc: "0",
-                pre_baf_netto: "0", // ZMIENIONE Z KAF
+                pre_baf_netto: "0", 
                 oplata_sadowa_netto: "1017",
                 pre_milosz_netto: "2250",
                 ii_instancja_netto: "750"
@@ -564,17 +564,17 @@
                     const naszeSfProc = getValue('nasze_sf_proc') / 100;
                     
                     const preMiloszNetto = getValue('pre_milosz_netto');
-                    const preBafNetto = getValue('pre_baf_netto'); // ZMIENIONE Z KAF
+                    const preBafNetto = getValue('pre_baf_netto'); 
                     const oplataSadowaNetto = getValue('oplata_sadowa_netto');
                     const iiInstancjaNetto = getValue('ii_instancja_netto');
 
                     const preMiloszBrutto = preMiloszNetto * (1 + VAT_RATE);
-                    const preBafBrutto = preBafNetto * (1 + VAT_RATE); // ZMIENIONE Z KAF
+                    const preBafBrutto = preBafNetto * (1 + VAT_RATE); 
                     const oplataSadowaBrutto = oplataSadowaNetto;
                     const iiInstancjaBrutto = iiInstancjaNetto * (1 + VAT_RATE);
                     
-                    const sumPreNetto = preMiloszNetto + preBafNetto + oplataSadowaNetto; // ZMIENIONE Z KAF
-                    const sumPreBrutto = preMiloszBrutto + preBafBrutto + oplataSadowaBrutto; // ZMIENIONE Z KAF
+                    const sumPreNetto = preMiloszNetto + preBafNetto + oplataSadowaNetto; 
+                    const sumPreBrutto = preMiloszBrutto + preBafBrutto + oplataSadowaBrutto; 
                     
                     const sumPreIiNetto = sumPreNetto + iiInstancjaNetto;
                     const sumPreIiBrutto = sumPreBrutto + iiInstancjaBrutto;
@@ -586,13 +586,15 @@
                     
                     const stosunekPreDoSumy = sumDoOdzyskania > 0 ? sumPreBrutto / sumDoOdzyskania : 0;
 
-                    const sfMiloszNetto = wpsFinalny * 0.06;
+                    // V --- POPRAWKA TUTAJ --- V
+                    const sfMiloszNetto = wpsFinalny * 0.08; // Poprawiono z 0.06 na 0.08
+                    // ^ --- KONIEC POPRAWKI --- ^
                     const sfMiloszBrutto = sfMiloszNetto * (1 + VAT_RATE);
-                    const sfBafNetto = wpsFinalny * naszeSfProc; // ZMIENIONE Z KAF
-                    const sfBafBrutto = sfBafNetto * (1 + VAT_RATE); // ZMIENIONE Z KAF
+                    const sfBafNetto = wpsFinalny * naszeSfProc; 
+                    const sfBafBrutto = sfBafNetto * (1 + VAT_RATE); 
 
-                    const sumSfNetto = sfMiloszNetto + sfBafNetto; // ZMIENIONE Z KAF
-                    const sumSfBrutto = sfMiloszBrutto + sfBafBrutto; // ZMIENIONE Z KAF
+                    const sumSfNetto = sfMiloszNetto + sfBafNetto; 
+                    const sumSfBrutto = sfMiloszBrutto + sfBafBrutto; 
 
                     const zyskKlienta = sumDoOdzyskania - sumPreIiBrutto - sumSfBrutto;
                     const podzialKlient = sumDoOdzyskania > 0 ? zyskKlienta / sumDoOdzyskania : 0;
@@ -604,18 +606,18 @@
                     
                     const prowizja5 = kwotaDoRozlozenia * PAYU_RATES[5];
                     const rata5 = (kwotaDoRozlozenia + prowizja5) / 5;
-                    const zysk5 = preBafNetto - (prowizja5 / (1 + VAT_RATE)); // ZMIENIONE Z KAF
+                    const zysk5 = preBafNetto - (prowizja5 / (1 + VAT_RATE)); 
 
                     const prowizja10 = kwotaDoRozlozenia * PAYU_RATES[10];
                     const rata10 = (kwotaDoRozlozenia + prowizja10) / 10;
-                    const zysk10 = preBafNetto - (prowizja10 / (1 + VAT_RATE)); // ZMIENIONE Z KAF
+                    const zysk10 = preBafNetto - (prowizja10 / (1 + VAT_RATE)); 
 
                     const prowizja20 = kwotaDoRozlozenia * PAYU_RATES[20];
                     const rata20 = (kwotaDoRozlozenia + prowizja20) / 20;
-                    const zysk20 = preBafNetto - prowizja20; // ZMIENIONE Z KAF
+                    const zysk20 = preBafNetto - prowizja20; 
 
                     setValue('pre_milosz_brutto', preMiloszBrutto, formatCurrency);
-                    setValue('pre_baf_brutto', preBafBrutto, formatCurrency); // ZMIENIONE Z KAF
+                    setValue('pre_baf_brutto', preBafBrutto, formatCurrency); 
                     setValue('oplata_sadowa_brutto', oplataSadowaBrutto, formatCurrency);
                     setValue('ii_instancja_brutto', iiInstancjaBrutto, formatCurrency);
                     setValue('sum_pre_netto', sumPreNetto, formatCurrency);
@@ -635,8 +637,8 @@
 
                     setValue('sf_milosz_netto', sfMiloszNetto, formatCurrency);
                     setValue('sf_milosz_brutto', sfMiloszBrutto, formatCurrency);
-                    setValue('sf_baf_netto', sfBafNetto, formatCurrency); // ZMIENIONE Z KAF
-                    setValue('sf_baf_brutto', sfBafBrutto, formatCurrency); // ZMIENIONE Z KAF
+                    setValue('sf_baf_netto', sfBafNetto, formatCurrency); 
+                    setValue('sf_baf_brutto', sfBafBrutto, formatCurrency); 
                     setValue('sum_sf_netto', sumSfNetto, formatCurrency);
                     setValue('sum_sf_brutto', sumSfBrutto, formatCurrency);
                     
@@ -663,7 +665,7 @@
             function resetForm() {
                 document.getElementById('wps').value = "0";
                 document.getElementById('odsetki_przyszle').value = "0";
-                document.getElementById('pre_baf_netto').value = "0"; // ZMIENIONE Z KAF
+                document.getElementById('pre_baf_netto').value = "0"; 
                 
                 document.getElementById('stawka_odsetek_ust').value = "10.00";
                 document.getElementById('nasze_sf_proc').value = "0";
