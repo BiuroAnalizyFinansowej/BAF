@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oferta SKD - Podsumowanie</title>
+    <link rel="icon" type="image/png" href="baf_logo_p.png">
+    <style>
+        #back-controls-container { position: fixed; top: 20px; left: 30px; z-index: 1000; width: 140px; font-family: 'Lato', Arial, sans-serif; }
+        #controls-container { position: fixed; top: 20px; right: 30px; z-index: 1000; width: 280px; font-family: 'Lato', Arial, sans-serif; }
+        
+        #copyButton, #backButton {
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+        }
+        #copyButton:active, #backButton:active { transform: scale(0.98); }
+
+        #copyButton { background-color: #17a2b8; }
+        #copyButton:hover { background-color: #138496; }
+        #copyButton.copied { background-color: #28a745; }
+
+        #backButton { background-color: #5F7A95; }
+        #backButton:hover { background-color: #4e657b; }
+        
+        /* Styl dla placeholderów ładowania */
+        .data-placeholder {
+            display: inline-block;
+            background-color: #eee;
+            color: #eee;
+            border-radius: 4px;
+            min-width: 80px;
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f7f9; font-family: 'Lato', Arial, sans-serif;">
+
+    <div id="back-controls-container">
+        <button id="backButton" onclick="history.back()">Powrót do kalkulatora</button>
+    </div>
+
+    <div id="controls-container">
+        <button id="copyButton">Kopiuj treść oferty</button>
+    </div>
+    
+    <div id="email-content-wrapper">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="background-color: #f4f7f9;">
+            <tr>
+                <td align="center">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="max-width: 800px;">
+                        <tr>
+                            <td align="center" style="background-color: #002d5a; padding: 40px 20px;">
+                                 <div style="font-family: 'Montserrat', sans-serif; text-align: center;">
+                                     <div style="font-size: 60px; font-weight: 700; color: #ffffff; position: relative; letter-spacing: -10px; line-height: 1;">
+                                         <span style="position: relative; z-index: 1;">B</span><span style="position: relative; z-index: 2;">A</span><span style="position: relative; z-index: 1;">F</span>
+                                     </div>
+                                     <div style="font-family: 'Roboto', sans-serif; font-size: 14px; color: #ffffff; letter-spacing: 1px; margin-top: 8px; text-align: center;">
+                                         BIURO ANALIZY FINANSOWEJ
+                                     </div>
+                                 </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="background-color: #ffffff; padding: 40px 50px;">
+                                <h1 style="font-family: 'Lato', Arial, sans-serif; font-size: 28px; font-weight: 400; color: #002d5a; margin: 0 0 25px 0;">Dzień dobry,</h1>
+                                <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 0 0 20px 0; line-height: 1.6;">
+                                    w nawiązaniu do naszej rozmowy na temat <strong>Sankcji Kredytu Darmowego</strong> (SKD), przesyłam przygotowaną kalkulację i podsumowanie finansowe.
+                                </p>
+                                
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 20px;">
+                                    <tr>
+                                        <td>
+                                            <h2 style="font-family: 'Lato', Arial, sans-serif; font-size: 26px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin: 0 0 25px 0; font-weight: 700;">Kalkulacja finansowa</h2>
+                                            <div style="background: #f8faff; border-left: 4px solid #007bff; padding: 20px; border-radius: 4px; font-size: 1em;">
+                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; line-height: 1.9;">
+                                                    <tr style="border-bottom: 1px solid #dee2e6;">
+                                                        <td style="padding: 10px 0; font-weight: 700;">WPS (Wartość Przedmiotu Sporu)</td>
+                                                        <td style="padding: 10px 0; text-align: right; font-weight: 700; color: #333;"><span id="data-wps" class="data-placeholder">...</span></td>
+                                                    </tr>
+                                                    <tr style="border-bottom: 1px solid #dee2e6;">
+                                                        <td style="padding: 10px 0; font-weight: 700;">Sumarycznie do odzyskania (WPS + odsetki + przyszłe raty)</td>
+                                                        <td style="padding: 10px 0; text-align: right; font-weight: 700; font-size: 18px; color: #0056b3;"><span id="data-sum_do_odzyskania" class="data-placeholder">...</span></td>
+                                                    </tr>
+                                                    <tr style="border-bottom: 1px solid #dee2e6;">
+                                                        <td style="padding: 10px 0;">Sumaryczne Pre opłaty (brutto)</td>
+                                                        <td style="padding: 10px 0; text-align: right;"><span id="data-sum_pre_brutto" class="data-placeholder">...</span></td>
+                                                    </tr>
+                                                    <tr style="border-bottom: 1px solid #dee2e6;">
+                                                        <td style="padding: 10px 0;">Opłata za II instancję (brutto)</td>
+                                                        <td style="padding: 10px 0; text-align: right;"><span id="data-ii_instancja_brutto" class="data-placeholder">...</span></td>
+                                                    </tr>
+                                                    <tr style="border-bottom: 1px solid #dee2e6;">
+                                                        <td style="padding: 10px 0;">Prognozowane Success Fee (brutto)</td>
+                                                        <td style="padding: 10px 0; text-align: right;"><span id="data-sum_sf_brutto" class="data-placeholder">...</span></td>
+                                                    </tr>
+                                                    <tr style="border-bottom: 1px solid #dee2e6;">
+                                                        <td style="padding: 10px 0; font-weight: 700;">Zysk Klienta po rozliczeniu inwestycji</td>
+                                                        <td style="padding: 10px 0; text-align: right; font-weight: 700; font-size: 18px; color: #155724;"><span id="data-zysk_klienta" class="data-placeholder">...</span></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            
+                                            <div style="background: #f8f9fa; padding: 20px; border-radius: 4px; font-size: 1em; margin-top: 20px;">
+                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; line-height: 1.8;">
+                                                    <tr style="border-bottom: 1px solid #dee2e6;">
+                                                        <td style="padding: 8px 0;">Stosunek pre opłat do sumy odzyskania</td>
+                                                        <td style="padding: 8px 0; text-align: right; font-weight: 700;"><span id="data-stosunek_pre_do_sumy" class="data-placeholder">...</span></td>
+                                                    </tr>
+                                                     <tr style="border-bottom: 1px solid #dee2e6;">
+                                                        <td style="padding: 8px 0;">Podział procentowy dla Klienta</td>
+                                                        <td style="padding: 8px 0; text-align: right; font-weight: 700; color: #155724;"><span id="data-podzial_klient" class="data-placeholder">...</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding: 8px 0;">Podział procentowy dla Kancelarii</td>
+                                                        <td style="padding: 8px 0; text-align: right; font-weight: 700; color: #0056b3;"><span id="data-podzial_nasz" class="data-placeholder">...</span></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 20px;">
+                                    <tr>
+                                        <td>
+                                            <h2 style="font-family: 'Lato', Arial, sans-serif; font-size: 26px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin: 0 0 25px 0; font-weight: 700;">Opcje ratalne (PAYU)</h2>
+                                            <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 0 0 20px 0; line-height: 1.6;">
+                                                Poniższa tabela przedstawia opcje rozłożenia na raty kwoty <strong>Sumarycznych Pre opłat (<span id="data-sum_pre_brutto_2" class="data-placeholder">...</span>)</strong>.
+                                            </p>
+                                            
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; border-collapse: collapse; border: 1px solid #dee2e6;">
+                                                <thead>
+                                                    <tr style="background-color: #f8f9fa;">
+                                                        <th style="padding: 12px 15px; text-align: left; border-bottom: 2px solid #007bff;">Liczba rat</th>
+                                                        <th style="padding: 12px 15px; text-align: right; border-bottom: 2px solid #007bff;">Miesięczna rata (brutto)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr style="border-bottom: 1px solid #dee2e6;">
+                                                        <td style="padding: 12px 15px; font-weight: 700;">5 rat</td>
+                                                        <td style="padding: 12px 15px; text-align: right; font-weight: 700; color: #333;"><span id="data-payu_rata_5" class="data-placeholder">...</span></td>
+                                                    </tr>
+                                                    <tr style="border-bottom: 1px solid #dee2e6;">
+                                                        <td style="padding: 12px 15px; font-weight: 700;">10 rat</td>
+                                                        <td style="padding: 12px 15px; text-align: right; font-weight: 700; color: #333;"><span id="data-payu_rata_10" class="data-placeholder">...</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding: 12px 15px; font-weight: 700;">20 rat</td>
+                                                        <td style="padding: 12px 15px; text-align: right; font-weight: 700; color: #333;"><span id="data-payu_rata_20" class="data-placeholder">...</span></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 30px 0 0 0; line-height: 1.6;">
+                                    Czekam na informację zwrotną. W razie pytań jestem do dyspozycji mailowo i pod telefonem.
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lista kluczy danych do pobrania
+            const dataKeys = [
+                'wps', 'sum_pre_brutto', 'ii_instancja_brutto', 'sum_do_odzyskania',
+                'zysk_klienta', 'stosunek_pre_do_sumy', 'sum_sf_brutto', 
+                'podzial_klient', 'podzial_nasz', 'payu_rata_5', 
+                'payu_rata_10', 'payu_rata_20'
+            ];
+
+            // Pętla do pobierania danych i wstawiania ich do HTML
+            dataKeys.forEach(key => {
+                const value = sessionStorage.getItem(`skd_data_${key}`);
+                if (value) {
+                    const element = document.getElementById(`data-${key}`);
+                    if (element) {
+                        element.textContent = value;
+                        element.classList.remove('data-placeholder'); // Usuwamy klasę placeholder
+                    }
+                }
+            });
+            
+            // Dodatkowe wstawienie 'sum_pre_brutto' w opisie tabeli ratalnej
+            const sumPreBrutto = sessionStorage.getItem('skd_data_sum_pre_brutto');
+            if(sumPreBrutto) {
+                 const element2 = document.getElementById('data-sum_pre_brutto_2');
+                 element2.textContent = sumPreBrutto;
+                 element2.classList.remove('data-placeholder');
+            }
+
+
+            // Logika kopiowania (z pliku skd (1).html)
+            const copyBtn = document.getElementById('copyButton');
+            const emailWrapper = document.getElementById('email-content-wrapper');
+            copyBtn.addEventListener('click', () => {
+                const htmlContent = emailWrapper.innerHTML;
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const richTextInput = new ClipboardItem({ 'text/html': blob });
+                
+                navigator.clipboard.write([richTextInput]).then(() => {
+                    copyBtn.textContent = 'Skopiowano treść';
+                    copyBtn.classList.add('copied');
+                    setTimeout(() => {
+                        copyBtn.textContent = 'Kopiuj treść oferty';
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Błąd kopiowania: ', err);
+                    copyBtn.textContent = 'Błąd!';
+                     setTimeout(() => {
+                        copyBtn.textContent = 'Kopiuj treść oferty';
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
