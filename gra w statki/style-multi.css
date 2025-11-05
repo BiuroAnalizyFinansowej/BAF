@@ -1,0 +1,98 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f0f8ff;
+    min-height: 100vh;
+}
+
+#game-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#boards-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    max-width: 900px; /* Zwiększona szerokość dla dwóch plansz */
+}
+
+.board-wrapper {
+    text-align: center;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(8, 35px); /* Nieco mniejsze komórki */
+    grid-template-rows: repeat(8, 35px);
+    border: 2px solid #004d99;
+}
+
+.cell {
+    width: 35px;
+    height: 35px;
+    border: 1px solid #b3daff;
+    background-color: #e6f3ff;
+    transition: background-color 0.2s;
+}
+
+/* --- Style planszy przeciwnika (do strzelania) --- */
+#opponent-board .cell {
+    cursor: pointer;
+}
+#opponent-board .cell:hover {
+    background-color: #cce7ff;
+}
+/* Zablokuj wskaźnik na już trafionych polach */
+#opponent-board .cell.hit,
+#opponent-board .cell.miss {
+    cursor: not-allowed;
+}
+
+
+/* --- Style planszy własnej (podgląd) --- */
+#own-board .cell {
+    cursor: not-allowed; /* Nie można klikać własnej planszy */
+}
+/* Pokaż własne statki na szaro */
+#own-board .cell.ship {
+    background-color: #bdc3c7; 
+}
+
+
+/* --- Wspólne style trafień / pudeł --- */
+.cell.miss {
+    background-color: #999;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35"><circle cx="17.5" cy="17.5" r="4" fill="%23FFF" /></svg>');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.cell.hit {
+    background-color: #ff4d4d;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35"><line x1="8" y1="8" x2="27" y2="27" stroke="%23FFF" stroke-width="3"/><line x1="8" y1="27" x2="27" y2="8" stroke="%23FFF" stroke-width="3"/></svg>');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+/* Trafiony statek na własnej planszy (żeby było widać) */
+#own-board .cell.ship.hit {
+    background-color: #e74c3c; /* Ciemniejszy czerwony */
+}
+
+
+/* --- Style przełączania tury --- */
+.hidden {
+    display: none !important; /* Ważne, aby nadpisało inne style */
+}
+
+#pass-turn-button {
+    margin-top: 30px;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    cursor: pointer;
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
