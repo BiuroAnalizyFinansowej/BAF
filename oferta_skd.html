@@ -8,6 +8,7 @@
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
         #back-controls-container { position: fixed; top: 20px; left: 30px; z-index: 1000; width: 140px; font-family: 'Lato', Arial, sans-serif; }
         #controls-container { position: fixed; top: 20px; right: 30px; z-index: 1000; width: 280px; font-family: 'Lato', Arial, sans-serif; }
@@ -132,7 +133,8 @@
                                                 <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 20px; color: #004d99; font-weight: 700; text-align: center; margin-bottom: 15px;">Prognozowany podział zysku</h3>
                                                 <canvas id="profitSplitChart"></canvas>
                                             </div>
-                                            </td>
+                                            
+                                        </td>
                                     </tr>
                                 </table>
                                 
@@ -149,8 +151,9 @@
                                                     <tr style="background-color: #f8f9fa;">
                                                         <th style="padding: 12px 15px; text-align: left; border-bottom: 2px solid #007bff;">Liczba rat</th>
                                                         <th style="padding: 12px 15px; text-align: right; border-bottom: 2px solid #007bff;">Miesięczna rata (brutto)</th>
-                                                        <th style="padding: 12px 15px; text-align: right; border-bottom: 2px solid #007bff;">Koszt rat (prowizja)</th>
-                                                    </tr>
+                                                        
+                                                        <th style="padding: 12px 15px; text-align: right; border-bottom: 2px solid #007bff;">Prowizja PAYU</th>
+                                                        </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr style="border-bottom: 1px solid #dee2e6;">
@@ -210,8 +213,6 @@
                         element.classList.remove('data-placeholder');
                     }
                     
-                    // Zapisujemy wartości procentowe do narysowania wykresu
-                    // Musimy je przekonwertować z formatu "80,00%" na liczbę 80.00
                     if (key === 'podzial_klient') {
                         clientPercentValue = parseFloat(value.replace('%', '').replace(',', '.')) || 0;
                     } else if (key === 'podzial_nasz') {
@@ -229,11 +230,10 @@
             }
 
 
-            // Logika kopiowania (z pliku skd (1).html)
+            // Logika kopiowania
             const copyBtn = document.getElementById('copyButton');
             const emailWrapper = document.getElementById('email-content-wrapper');
             copyBtn.addEventListener('click', () => {
-                // ... (reszta logiki kopiowania - bez zmian) ...
                 const htmlContent = emailWrapper.innerHTML;
                 const blob = new Blob([htmlContent], { type: 'text/html' });
                 const richTextInput = new ClipboardItem({ 'text/html': blob });
@@ -255,12 +255,12 @@
             });
             
             
-            // V --- KROK 3: DODANA LOGIKA DO RYSOWANIA WYKRESU --- V
+            // Logika rysowania wykresu
             try {
                 const ctx = document.getElementById('profitSplitChart').getContext('2d');
                 if (ctx) {
                     new Chart(ctx, {
-                        type: 'doughnut', // Typ wykresu: pączkowy
+                        type: 'doughnut',
                         data: {
                             labels: [
                                 `Zysk Klienta (${clientPercentValue.toFixed(2).replace('.', ',')}%)`, 
@@ -270,8 +270,8 @@
                                 label: 'Podział zysku',
                                 data: [clientPercentValue, firmPercentValue],
                                 backgroundColor: [
-                                    '#155724', // Kolor dla klienta (zielony, jak w tabeli)
-                                    '#0056b3'  // Kolor dla kancelarii (niebieski, jak w tabeli)
+                                    '#155724',
+                                    '#0056b3'
                                 ],
                                 borderColor: '#ffffff',
                                 borderWidth: 3
@@ -282,7 +282,7 @@
                             maintainAspectRatio: true,
                             plugins: {
                                 legend: {
-                                    position: 'bottom', // Legenda na dole
+                                    position: 'bottom',
                                     labels: {
                                         font: {
                                             family: "'Lato', Arial, sans-serif",
@@ -298,7 +298,6 @@
                                                 label += ': ';
                                             }
                                             if (context.parsed !== null) {
-                                                // Używamy formatowania z przecinkiem
                                                 label += context.parsed.toFixed(2).replace('.', ',') + '%';
                                             }
                                             return label;
@@ -306,17 +305,15 @@
                                     }
                                 }
                             },
-                            cutout: '60%' // Grubość "pączka"
+                            cutout: '60%'
                         }
                     });
                 }
             } catch (e) {
                 console.error("Błąd podczas renderowania wykresu:", e);
-                // Ukryj canvas, jeśli wystąpi błąd
                 const chartCanvas = document.getElementById('profitSplitChart');
                 if(chartCanvas) chartCanvas.style.display = 'none';
             }
-            // ^ --- KONIEC LOGIKI WYKRESU --- ^
             
         });
     </script>
