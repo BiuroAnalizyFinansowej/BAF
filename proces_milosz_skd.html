@@ -384,7 +384,11 @@
                     <button class="calc-btn" id="reset-btn">
                         <i class="fas fa-undo"></i> Wyczyść
                     </button>
-                </div>
+                    
+                    <button class="calc-btn" id="generate-page-btn" style="background-color: #1e40af; color: white; margin-top: 10px;">
+                        <i class="fas fa-file-export"></i> Generuj podstronę z ofertą
+                    </button>
+                    </div>
             </section>
         </div>
 
@@ -673,6 +677,40 @@
             inputs.forEach(input => input.addEventListener('input', calculate));
             document.getElementById('reset-btn').addEventListener('click', resetForm);
 
+            
+            // V --- POCZĄTEK LOGIKI GENEROWANIA PODSTRONY --- V
+            
+            const generatePageBtn = document.getElementById('generate-page-btn');
+            
+            generatePageBtn.addEventListener('click', () => {
+                // Używamy .textContent, aby pobrać sformatowane wartości
+                const dataToStore = {
+                    wps: formatCurrency(getValue('wps')), // Pobieramy surową i formatujemy
+                    sum_pre_brutto: document.getElementById('sum_pre_brutto').textContent,
+                    ii_instancja_brutto: document.getElementById('ii_instancja_brutto').textContent,
+                    sum_do_odzyskania: document.getElementById('sum_do_odzyskania').textContent,
+                    zysk_klienta: document.getElementById('zysk_klienta').textContent,
+                    stosunek_pre_do_sumy: document.getElementById('stosunek_pre_do_sumy').textContent,
+                    sum_sf_brutto: document.getElementById('sum_sf_brutto').textContent,
+                    podzial_klient: document.getElementById('podzial_klient').textContent,
+                    podzial_nasz: document.getElementById('podzial_nasz').textContent,
+                    payu_rata_5: document.getElementById('payu_rata_5').textContent,
+                    payu_rata_10: document.getElementById('payu_rata_10').textContent,
+                    payu_rata_20: document.getElementById('payu_rata_20').textContent
+                };
+
+                // Zapisujemy dane w sessionStorage (są dostępne do zamknięcia karty)
+                for (const [key, value] of Object.entries(dataToStore)) {
+                    sessionStorage.setItem(`skd_data_${key}`, value);
+                }
+                
+                // Otwieramy nową stronę w nowej karcie
+                window.open('oferta_skd.html', '_blank');
+            });
+            
+            // ^ --- KONIEC LOGIKI GENEROWANIA PODSTRONY --- ^
+            
+            
             initializeForm();
         });
     </script>
