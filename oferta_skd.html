@@ -2,232 +2,720 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oferta SKD - Podsumowanie</title>
+    <title>Kalkulator SKD - WARIANT 1</title>
+    
     <link rel="icon" type="image/png" href="baf_logo_p.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
-        #back-controls-container { position: fixed; top: 20px; left: 30px; z-index: 1000; width: 140px; font-family: 'Lato', Arial, sans-serif; }
-        #controls-container { position: fixed; top: 20px; right: 30px; z-index: 1000; width: 280px; font-family: 'Lato', Arial, sans-serif; }
+        /* =====================================
+           KAF CALCULATOR UNIFIED DESIGN
+           Styl skopiowany z wps.html
+        ===================================== */
         
-        #copyButton, #backButton {
-            padding: 10px 15px;
-            font-size: 16px;
-            font-weight: bold;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            outline: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            width: 100%;
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        #copyButton:active, #backButton:active { transform: scale(0.98); }
-
-        #copyButton { background-color: #17a2b8; }
-        #copyButton:hover { background-color: #138496; }
-        #copyButton.copied { background-color: #28a745; }
-
-        #backButton { background-color: #5F7A95; }
-        #backButton:hover { background-color: #4e657b; }
         
-        /* Styl dla placeholderów ładowania */
-        .data-placeholder {
-            display: inline-block;
-            background-color: #eee;
-            color: #eee;
-            border-radius: 4px;
-            min-width: 80px;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2d3748;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        /* Header with Navigation */
+        .calc-header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-left-group {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .header-center-group {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .calc-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .calc-logo {
+            height: 40px;
+            width: 40px;
+            border-radius: 8px;
+        }
+        
+        .calc-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
+        }
+        
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            background: #f1f5f9;
+            color: #64748b;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .nav-btn:hover {
+            background: #1e40af;
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        /* Main Container */
+        .calc-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+            padding: 0 1rem;
+        }
+        
+        /* Section styles */
+        .calc-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: -0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title i {
+            color: #1e40af;
+        }
+
+        /* Table styles */
+        .calc-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .calc-table td {
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.9rem;
+        }
+        
+        .calc-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .calc-table td:first-child {
+            font-weight: 500;
+            color: #374151;
+            width: 50%;
+        }
+
+        .calc-table td a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px dashed #1e40af;
+        }
+
+        .calc-table td a:hover {
+            color: #1e40af;
+        }
+        
+        .calc-table td:not(:first-child) {
+            text-align: right;
+        }
+        
+        /* Input Field */
+        .input-field {
+            width: 100%;
+            padding: 0.5rem 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background: #f8fafc;
+            transition: all 0.2s ease;
+            text-align: right;
+            font-weight: 600;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #1e40af;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .input-field[readonly] {
+            background: transparent;
+            color: #2d3748;
+            cursor: default;
+            border: none;
+            padding: 0.5rem 0;
+        }
+        
+        .output-field {
+            font-weight: 700;
+            color: #1e293b;
+        }
+        
+        .highlight {
+            color: #1e40af;
+            font-size: 1.1rem;
+        }
+
+        .highlight-blue-bg {
+            background-color: #e0f2fe;
+            border-radius: 6px;
+            border: 2px solid #93c5fd;
+            padding: 0.5rem 0.8rem !important;
+            color: #1e40af;
+            font-size: 1.1rem;
+            border-bottom: 2px solid #93c5fd !important;
+        }
+
+        .highlight-success {
+            color: #16a34a;
+            font-size: 1.1rem;
+        }
+        
+        .profit-column-header {
+            border-top: 2px solid #a7f3d0;
+            border-left: 2px solid #a7f3d0;
+            border-right: 2px solid #a7f3d0;
+            color: #065f46;
+            font-weight: 700;
+            background-color: #f0fdf4;
+        }
+        .profit-column-cell {
+            border-left: 2px solid #a7f3d0;
+            border-right: 2px solid #a7f3d0;
+            font-size: 1.05em;
+            font-weight: 700;
+            background-color: #f0fdf4;
+            border-bottom: none;
+        }
+        .calc-table tr:last-child .profit-column-cell {
+            border-bottom: 2px solid #a7f3d0;
+        }
+
+        .calc-actions {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .calc-btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #f1f5f9;
+            color: #64748b;
+        }
+        
+        .calc-btn:hover {
+            background: #e2e8f0;
+            color: #374151;
+        }
+
+        .calc-table th {
+            text-align: right;
+            padding: 0.5rem;
+            font-size: 0.8rem;
+            color: #64748b;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .calc-table th:first-child {
+            text-align: left;
         }
     </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #f4f7f9; font-family: 'Lato', Arial, sans-serif;">
+<body>
+    <header class="calc-header">
+        <div class="header-left-group">
+            <div class="calc-brand">
+                <i class="fas fa-calculator calc-logo" style="background: #1e40af; color: white; padding: 10px; font-size: 20px;"></i>
+                <h1 class="calc-title">Kalkulator SKD</h1>
+            </div>
+             <a href="javascript:history.back()" class="nav-btn">
+                <i class="fas fa-arrow-left"></i> Powrót
+            </a>
+        </div>
+        <div class="header-center-group">
+            WARIANT 1
+        </div>
+        <div>
+            <img src="baf_logo.png" alt="Logo BAF" style="height: 50px;">
+        </div>
+    </header>
 
-    <div id="back-controls-container">
-        <button id="backButton" onclick="history.back()">Powrót do kalkulatora</button>
-    </div>
-
-    <div id="controls-container">
-        <button id="copyButton">Kopiuj treść oferty</button>
-    </div>
-    
-    <div id="email-content-wrapper">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="background-color: #f4f7f9;">
-            <tr>
-                <td align="center">
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="max-width: 800px;">
+    <main class="calc-container">
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <section class="calc-section">
+                <h2 class="section-title"><i class="fas fa-keyboard"></i>Dane do wprowadzenia</h2>
+                <table class="calc-table">
+                    <tr>
+                        <td>WPS</td>
+                        <td><input type="number" id="wps" class="input-field" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Odsetki przyszłe do umorzenia</td>
+                        <td><input type="number" id="odsetki_przyszle" class="input-field" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                             <a href="https://wskazniki.gofin.pl/wskaznik/70/odsetki-ustawowe" target="_blank" title="Sprawdź aktualne stawki">
+                                Aktualna stawka % odsetek ustawowych
+                             </a>
+                        </td>
+                        <td><input type="number" id="stawka_odsetek_ust" class="input-field" value="10.00"></td>
+                    </tr>
+                    <tr>
+                        <td>Nasze Success fee %</td>
+                        <td><input type="number" id="nasze_sf_proc" class="input-field" value="0"></td>
+                    </tr>
+                </table>
+            </section>
+            
+            <section class="calc-section">
+                <h2 class="section-title"><i class="fas fa-file-invoice-dollar"></i>Opłaty początkowe</h2>
+                 <table class="calc-table">
+                    <thead>
                         <tr>
-                            <td align="center" style="background-color: #002d5a; padding: 40px 20px;">
-                                 <div style="font-family: 'Montserrat', sans-serif; text-align: center;">
-                                     <div style="font-size: 60px; font-weight: 700; color: #ffffff; position: relative; letter-spacing: -10px; line-height: 1;">
-                                         <span style="position: relative; z-index: 1;">B</span><span style="position: relative; z-index: 2;">A</span><span style="position: relative; z-index: 1;">F</span>
-                                     </div>
-                                     <div style="font-family: 'Roboto', sans-serif; font-size: 14px; color: #ffffff; letter-spacing: 1px; margin-top: 8px; text-align: center;">
-                                         BIURO ANALIZY FINANSOWEJ
-                                     </div>
-                                 </div>
-                            </td>
+                            <th></th>
+                            <th>Netto</th>
+                            <th>Brutto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Pre opłaty Miłosz</td>
+                            <td><input type="number" id="pre_milosz_netto" class="input-field" value="2250" readonly></td>
+                            <td class="output-field" id="pre_milosz_brutto"></td>
                         </tr>
                         <tr>
-                            <td style="background-color: #ffffff; padding: 40px 50px;">
-                                <h1 style="font-family: 'Lato', Arial, sans-serif; font-size: 28px; font-weight: 400; color: #002d5a; margin: 0 0 25px 0;">Dzień dobry,</h1>
-                                <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 0 0 20px 0; line-height: 1.6;">
-                                    w nawiązaniu do naszej rozmowy na temat <strong>Sankcji Kredytu Darmowego</strong> (SKD), przesyłam przygotowaną kalkulację i podsumowanie finansowe.
-                                </p>
-                                
-                                <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 20px;">
-                                    <tr>
-                                        <td>
-                                            <h2 style="font-family: 'Lato', Arial, sans-serif; font-size: 26px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin: 0 0 25px 0; font-weight: 700;">Kalkulacja finansowa</h2>
-                                            <div style="background: #f8faff; border-left: 4px solid #007bff; padding: 20px; border-radius: 4px; font-size: 1em;">
-                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; line-height: 1.9;">
-                                                    <tr style="border-bottom: 1px solid #dee2e6;">
-                                                        <td style="padding: 10px 0; font-weight: 700;">WPS (Wartość Przedmiotu Sporu)</td>
-                                                        <td style="padding: 10px 0; text-align: right; font-weight: 700; color: #333;"><span id="data-wps" class="data-placeholder">...</span></td>
-                                                    </tr>
-                                                    <tr style="border-bottom: 1px solid #dee2e6;">
-                                                        <td style="padding: 10px 0; font-weight: 700;">Sumarycznie do odzyskania (WPS + odsetki + przyszłe raty)</td>
-                                                        <td style="padding: 10px 0; text-align: right; font-weight: 700; font-size: 18px; color: #0056b3;"><span id="data-sum_do_odzyskania" class="data-placeholder">...</span></td>
-                                                    </tr>
-                                                    <tr style="border-bottom: 1px solid #dee2e6;">
-                                                        <td style="padding: 10px 0;">Sumaryczne Pre opłaty (brutto)</td>
-                                                        <td style="padding: 10px 0; text-align: right;"><span id="data-sum_pre_brutto" class="data-placeholder">...</span></td>
-                                                    </tr>
-                                                    <tr style="border-bottom: 1px solid #dee2e6;">
-                                                        <td style="padding: 10px 0;">Opłata za II instancję (brutto)</td>
-                                                        <td style="padding: 10px 0; text-align: right;"><span id="data-ii_instancja_brutto" class="data-placeholder">...</span></td>
-                                                    </tr>
-                                                    <tr style="border-bottom: 1px solid #dee2e6;">
-                                                        <td style="padding: 10px 0;">Prognozowane Success Fee (brutto)</td>
-                                                        <td style="padding: 10px 0; text-align: right;"><span id="data-sum_sf_brutto" class="data-placeholder">...</span></td>
-                                                    </tr>
-                                                    <tr style="border-bottom: 1px solid #dee2e6;">
-                                                        <td style="padding: 10px 0; font-weight: 700;">Zysk Klienta po rozliczeniu inwestycji</td>
-                                                        <td style="padding: 10px 0; text-align: right; font-weight: 700; font-size: 18px; color: #155724;"><span id="data-zysk_klienta" class="data-placeholder">...</span></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                            
-                                            <div style="background: #f8f9fa; padding: 20px; border-radius: 4px; font-size: 1em; margin-top: 20px;">
-                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; line-height: 1.8;">
-                                                    <tr style="border-bottom: 1px solid #dee2e6;">
-                                                        <td style="padding: 8px 0;">Stosunek pre opłat do sumy odzyskania</td>
-                                                        <td style="padding: 8px 0; text-align: right; font-weight: 700;"><span id="data-stosunek_pre_do_sumy" class="data-placeholder">...</span></td>
-                                                    </tr>
-                                                     <tr style="border-bottom: 1px solid #dee2e6;">
-                                                        <td style="padding: 8px 0;">Podział procentowy dla Klienta</td>
-                                                        <td style="padding: 8px 0; text-align: right; font-weight: 700; color: #155724;"><span id="data-podzial_klient" class="data-placeholder">...</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding: 8px 0;">Podział procentowy dla Kancelarii</td>
-                                                        <td style="padding: 8px 0; text-align: right; font-weight: 700; color: #0056b3;"><span id="data-podzial_nasz" class="data-placeholder">...</span></td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                                
-                                <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 20px;">
-                                    <tr>
-                                        <td>
-                                            <h2 style="font-family: 'Lato', Arial, sans-serif; font-size: 26px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin: 0 0 25px 0; font-weight: 700;">Opcje ratalne (PAYU)</h2>
-                                            <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 0 0 20px 0; line-height: 1.6;">
-                                                Poniższa tabela przedstawia opcje rozłożenia na raty kwoty <strong>Sumarycznych Pre opłat (<span id="data-sum_pre_brutto_2" class="data-placeholder">...</span>)</strong>.
-                                            </p>
-                                            
-                                            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; border-collapse: collapse; border: 1px solid #dee2e6;">
-                                                <thead>
-                                                    <tr style="background-color: #f8f9fa;">
-                                                        <th style="padding: 12px 15px; text-align: left; border-bottom: 2px solid #007bff;">Liczba rat</th>
-                                                        <th style="padding: 12px 15px; text-align: right; border-bottom: 2px solid #007bff;">Miesięczna rata (brutto)</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr style="border-bottom: 1px solid #dee2e6;">
-                                                        <td style="padding: 12px 15px; font-weight: 700;">5 rat</td>
-                                                        <td style="padding: 12px 15px; text-align: right; font-weight: 700; color: #333;"><span id="data-payu_rata_5" class="data-placeholder">...</span></td>
-                                                    </tr>
-                                                    <tr style="border-bottom: 1px solid #dee2e6;">
-                                                        <td style="padding: 12px 15px; font-weight: 700;">10 rat</td>
-                                                        <td style="padding: 12px 15px; text-align: right; font-weight: 700; color: #333;"><span id="data-payu_rata_10" class="data-placeholder">...</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding: 12px 15px; font-weight: 700;">20 rat</td>
-                                                        <td style="padding: 12px 15px; text-align: right; font-weight: 700; color: #333;"><span id="data-payu_rata_20" class="data-placeholder">...</span></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                                <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 30px 0 0 0; line-height: 1.6;">
-                                    Czekam na informację zwrotną. W razie pytań jestem do dyspozycji mailowo i pod telefonem.
-                                </p>
-                            </td>
+                            <td>Pre opłaty KAF</td>
+                            <td><input type="number" id="pre_kaf_netto" class="input-field" value="0"></td>
+                            <td class="output-field" id="pre_kaf_brutto"></td>
                         </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </div>
-    
+                        <tr>
+                            <td>Opłata sądowa + pełnomocnictwo</td>
+                            <td><input type="number" id="oplata_sadowa_netto" class="input-field" value="1017"></td>
+                            <td class="output-field" id="oplata_sadowa_brutto"></td>
+                        </tr>
+                         <tr>
+                            <td>II instancja</td>
+                            <td><input type="number" id="ii_instancja_netto" class="input-field" value="750" readonly></td>
+                            <td class="output-field" id="ii_instancja_brutto"></td>
+                        </tr>
+                        <tr>
+                            <td><b>Sumaryczne Pre opłaty</b></td>
+                            <td class="output-field" id="sum_pre_netto"></td>
+                            <td class="output-field highlight-blue-bg" id="sum_pre_brutto"></td>
+                        </tr>
+                         <tr>
+                            <td><b>Sumaryczne Pre opłaty + II instancja</b></td>
+                            <td class="output-field" id="sum_pre_ii_netto"></td>
+                            <td class="output-field highlight" id="sum_pre_ii_brutto"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            
+            <section class="calc-section">
+                 <div class="calc-actions">
+                    <button class="calc-btn" id="reset-btn">
+                        <i class="fas fa-undo"></i> Wyczyść
+                    </button>
+                    
+                    <button class="calc-btn" id="generate-page-btn" style="background-color: #1e40af; color: white; margin-top: 10px;">
+                        <i class="fas fa-file-export"></i> Generuj podstronę z ofertą
+                    </button>
+                    </div>
+            </section>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+             <section class="calc-section">
+                <h2 class="section-title"><i class="fas fa-percentage"></i>Success Fee</h2>
+                <p class="section-subtitle">
+                    Podane kwoty są jedynie prognozą i uwzględniają % od <b>WPS finalny z odsetkami za opóźnienie</b>.
+                </p>
+                 <table class="calc-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Netto</th>
+                            <th>Brutto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Miłosz success fee (8%)</td>
+                            <td class="output-field" id="sf_milosz_netto"></td>
+                            <td class="output-field" id="sf_milosz_brutto"></td>
+                        </tr>
+                        <tr>
+                            <td>KAF success fee</td>
+                            <td class="output-field" id="sf_kaf_netto"></td>
+                            <td class="output-field" id="sf_kaf_brutto"></td>
+                        </tr>
+                        <tr>
+                            <td><b>Sumaryczne success fee</b></td>
+                            <td class="output-field" id="sum_sf_netto"></td>
+                            <td class="output-field highlight" id="sum_sf_brutto"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            
+            <section class="calc-section">
+                <h2 class="section-title"><i class="fas fa-chart-pie"></i>Podsumowanie</h2>
+                <table class="calc-table">
+                    <tr>
+                        <td>Odsetki ustawowe za opóźnienie (1 rok)</td>
+                        <td class="output-field" id="odsetki_1rok"></td>
+                    </tr>
+                    <tr>
+                        <td>Odsetki ustawowe za opóźnienie (2 lata)</td>
+                        <td class="output-field" id="odsetki_2lata"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Sumarycznie do odzyskania</b></td>
+                        <td class="output-field highlight" id="sum_do_odzyskania"></td>
+                    </tr>
+                    <tr>
+                        <td>WPS finalny z odsetkami za opóźnienie</td>
+                        <td class="output-field" id="wps_finalny"></td>
+                    </tr>
+                     <tr>
+                        <td>Stosunek pre opłat do sumy do odzyskania</td>
+                        <td class="output-field" id="stosunek_pre_do_sumy"></td>
+                    </tr>
+                     <tr>
+                        <td><b>Zysk Klienta po rozliczeniu inwestycji</b></td>
+                        <td class="output-field highlight-success" id="zysk_klienta"></td>
+                    </tr>
+                    <tr>
+                        <td>Podział procentowy dla klienta</td>
+                        <td class="output-field" id="podzial_klient"></td>
+                    </tr>
+                    <tr>
+                        <td>Podział procentowy dla nas</td>
+                        <td class="output-field" id="podzial_nasz"></td>
+                    </tr>
+                </table>
+            </section>
+            
+             <section class="calc-section">
+                <h2 class="section-title"><i class="fas fa-credit-card"></i>Opcje ratalne PAYU</h2>
+                <table class="calc-table">
+                    <thead>
+                        <tr>
+                            <th>Liczba rat</th>
+                            <th>Stawka %</th>
+                            <th>Prowizja PAYU</th>
+                            <th>Kwota raty</th>
+                            <th class="profit-column-header">Nasz zysk Pre (netto)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>5</td>
+                            <td class="output-field" id="payu_stawka_5"></td>
+                            <td class="output-field" id="payu_prowizja_5"></td>
+                            <td class="output-field" id="payu_rata_5"></td>
+                            <td class="output-field profit-column-cell" id="payu_zysk_5"></td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                             <td class="output-field" id="payu_stawka_10"></td>
+                            <td class="output-field" id="payu_prowizja_10"></td>
+                            <td class="output-field" id="payu_rata_10"></td>
+                            <td class="output-field profit-column-cell" id="payu_zysk_10"></td>
+                        </tr>
+                         <tr>
+                            <td>20</td>
+                             <td class="output-field" id="payu_stawka_20"></td>
+                            <td class="output-field" id="payu_prowizja_20"></td>
+                            <td class="output-field" id="payu_rata_20"></td>
+                            <td class="output-field profit-column-cell" id="payu_zysk_20"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </main>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Lista kluczy danych do pobrania
-            const dataKeys = [
-                'wps', 'sum_pre_brutto', 'ii_instancja_brutto', 'sum_do_odzyskania',
-                'zysk_klienta', 'stosunek_pre_do_sumy', 'sum_sf_brutto', 
-                'podzial_klient', 'podzial_nasz', 'payu_rata_5', 
-                'payu_rata_10', 'payu_rata_20'
-            ];
+            const inputs = document.querySelectorAll('.input-field');
+            
+            const formatCurrency = (value) => {
+                if (isNaN(value)) return '';
+                return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(value);
+            }
+            const formatPercent = (value) => {
+                 if (isNaN(value)) return '';
+                return new Intl.NumberFormat('pl-PL', { style: 'percent', minimumFractionDigits: 2 }).format(value);
+            }
+            const getValue = (id) => parseFloat(document.getElementById(id).value) || 0;
+            const setValue = (id, value, formatFn) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = formatFn ? formatFn(value) : (value || '');
+                }
+            };
 
-            // Pętla do pobierania danych i wstawiania ich do HTML
-            dataKeys.forEach(key => {
-                const value = sessionStorage.getItem(`skd_data_${key}`);
-                if (value) {
-                    const element = document.getElementById(`data-${key}`);
-                    if (element) {
-                        element.textContent = value;
-                        element.classList.remove('data-placeholder'); // Usuwamy klasę placeholder
+            const defaultValues = {
+                wps: "0",
+                odsetki_przyszle: "0",
+                stawka_odsetek_ust: "10.00",
+                nasze_sf_proc: "0",
+                pre_kaf_netto: "0",
+                oplata_sadowa_netto: "1017",
+                pre_milosz_netto: "2250",
+                ii_instancja_netto: "750"
+            };
+            
+            function calculate() {
+                try {
+                    const VAT_RATE = 0.23;
+                    const PAYU_RATES = {
+                        5: 0.0449,
+                        10: 0.0449,
+                        20: 0.0699,
+                    };
+
+                    const wps = getValue('wps');
+                    const odsetkiPrzyszle = getValue('odsetki_przyszle');
+                    const stawkaOdsetekUst = getValue('stawka_odsetek_ust') / 100;
+                    const naszeSfProc = getValue('nasze_sf_proc') / 100;
+                    
+                    const preMiloszNetto = getValue('pre_milosz_netto');
+                    const preKafNetto = getValue('pre_kaf_netto');
+                    const oplataSadowaNetto = getValue('oplata_sadowa_netto');
+                    const iiInstancjaNetto = getValue('ii_instancja_netto');
+
+                    const preMiloszBrutto = preMiloszNetto * (1 + VAT_RATE);
+                    const preKafBrutto = preKafNetto * (1 + VAT_RATE);
+                    const oplataSadowaBrutto = oplataSadowaNetto;
+                    const iiInstancjaBrutto = iiInstancjaNetto * (1 + VAT_RATE);
+                    
+                    const sumPreNetto = preMiloszNetto + preKafNetto + oplataSadowaNetto;
+                    const sumPreBrutto = preMiloszBrutto + preKafBrutto + oplataSadowaBrutto;
+                    
+                    const sumPreIiNetto = sumPreNetto + iiInstancjaNetto;
+                    const sumPreIiBrutto = sumPreBrutto + iiInstancjaBrutto;
+
+                    const odsetki1rok = wps * stawkaOdsetekUst;
+                    const odsetki2lata = odsetki1rok * 2;
+                    const wpsFinalny = wps + odsetki2lata;
+                    const sumDoOdzyskania = wpsFinalny + odsetkiPrzyszle;
+                    
+                    const stosunekPreDoSumy = sumDoOdzyskania > 0 ? sumPreBrutto / sumDoOdzyskania : 0;
+
+                    const sfMiloszNetto = wpsFinalny * 0.06;
+                    const sfMiloszBrutto = sfMiloszNetto * (1 + VAT_RATE);
+                    const sfKafNetto = wpsFinalny * naszeSfProc;
+                    const sfKafBrutto = sfKafNetto * (1 + VAT_RATE);
+
+                    const sumSfNetto = sfMiloszNetto + sfKafNetto;
+                    const sumSfBrutto = sfMiloszBrutto + sfKafBrutto;
+
+                    const zyskKlienta = sumDoOdzyskania - sumPreIiBrutto - sumSfBrutto;
+                    const podzialKlient = sumDoOdzyskania > 0 ? zyskKlienta / sumDoOdzyskania : 0;
+                    const podzialNasz = 1 - podzialKlient;
+                    
+                    const kwotaDoRozlozenia = sumPreBrutto;
+                    
+                    const prowizja5 = kwotaDoRozlozenia * PAYU_RATES[5];
+                    const rata5 = (kwotaDoRozlozenia + prowizja5) / 5;
+                    const zysk5 = preKafNetto - (prowizja5 / (1 + VAT_RATE)); 
+
+                    const prowizja10 = kwotaDoRozlozenia * PAYU_RATES[10];
+                    const rata10 = (kwotaDoRozlozenia + prowizja10) / 10;
+                    const zysk10 = preKafNetto - (prowizja10 / (1 + VAT_RATE));
+
+                    const prowizja20 = kwotaDoRozlozenia * PAYU_RATES[20];
+                    const rata20 = (kwotaDoRozlozenia + prowizja20) / 20;
+                    const zysk20 = preKafNetto - prowizja20;
+
+                    setValue('pre_milosz_brutto', preMiloszBrutto, formatCurrency);
+                    setValue('pre_kaf_brutto', preKafBrutto, formatCurrency);
+                    setValue('oplata_sadowa_brutto', oplataSadowaBrutto, formatCurrency);
+                    setValue('ii_instancja_brutto', iiInstancjaBrutto, formatCurrency);
+                    setValue('sum_pre_netto', sumPreNetto, formatCurrency);
+                    setValue('sum_pre_brutto', sumPreBrutto, formatCurrency);
+                    setValue('sum_pre_ii_netto', sumPreIiNetto, formatCurrency);
+                    setValue('sum_pre_ii_brutto', sumPreIiBrutto, formatCurrency);
+                    
+                    setValue('odsetki_1rok', odsetki1rok, formatCurrency);
+                    setValue('odsetki_2lata', odsetki2lata, formatCurrency);
+                    setValue('sum_do_odzyskania', sumDoOdzyskania, formatCurrency);
+                    setValue('wps_finalny', wpsFinalny, formatCurrency);
+                    setValue('stosunek_pre_do_sumy', stosunekPreDoSumy, formatPercent);
+                    setValue('zysk_klienta', zyskKlienta, formatCurrency);
+                    setValue('podzial_klient', podzialKlient, formatPercent);
+                    setValue('podzial_nasz', podzialNasz, formatPercent);
+
+                    setValue('sf_milosz_netto', sfMiloszNetto, formatCurrency);
+                    setValue('sf_milosz_brutto', sfMiloszBrutto, formatCurrency);
+                    setValue('sf_kaf_netto', sfKafNetto, formatCurrency);
+                    setValue('sf_kaf_brutto', sfKafBrutto, formatCurrency);
+                    setValue('sum_sf_netto', sumSfNetto, formatCurrency);
+                    setValue('sum_sf_brutto', sumSfBrutto, formatCurrency);
+                    
+                    setValue('payu_stawka_5', PAYU_RATES[5], formatPercent);
+                    setValue('payu_prowizja_5', prowizja5, formatCurrency);
+                    setValue('payu_rata_5', rata5, formatCurrency);
+                    setValue('payu_zysk_5', zysk5, formatCurrency);
+
+                    setValue('payu_stawka_10', PAYU_RATES[10], formatPercent);
+                    setValue('payu_prowizja_10', prowizja10, formatCurrency);
+                    setValue('payu_rata_10', rata10, formatCurrency);
+                    setValue('payu_zysk_10', zysk10, formatCurrency);
+
+                    setValue('payu_stawka_20', PAYU_RATES[20], formatPercent);
+                    setValue('payu_prowizja_20', prowizja20, formatCurrency);
+                    setValue('payu_rata_20', rata20, formatCurrency);
+                    setValue('payu_zysk_20', zysk20, formatCurrency);
+
+                } catch (error) {
+                    console.error("Błąd obliczeń:", error);
+                }
+            }
+
+            function resetForm() {
+                document.getElementById('wps').value = "0";
+                document.getElementById('odsetki_przyszle').value = "0";
+                document.getElementById('pre_kaf_netto').value = "0";
+                
+                document.getElementById('stawka_odsetek_ust').value = "10.00";
+                document.getElementById('nasze_sf_proc').value = "0";
+                
+                calculate();
+            }
+
+            function initializeForm() {
+                for (const [id, value] of Object.entries(defaultValues)) {
+                    const element = document.getElementById(id);
+                    if(element) {
+                        element.value = value;
+                    }
+                }
+                calculate();
+            }
+            
+            const payuTableRows = document.querySelectorAll('.calc-section:last-of-type .calc-table tbody tr');
+            payuTableRows.forEach((row, index) => {
+                if (index === payuTableRows.length - 1) {
+                    const cell = row.querySelector('.profit-column-cell');
+                    if(cell) {
+                        cell.style.borderBottom = '2px solid #a7f3d0';
                     }
                 }
             });
+
+            inputs.forEach(input => input.addEventListener('input', calculate));
+            document.getElementById('reset-btn').addEventListener('click', resetForm);
+
             
-            // Dodatkowe wstawienie 'sum_pre_brutto' w opisie tabeli ratalnej
-            const sumPreBrutto = sessionStorage.getItem('skd_data_sum_pre_brutto');
-            if(sumPreBrutto) {
-                 const element2 = document.getElementById('data-sum_pre_brutto_2');
-                 element2.textContent = sumPreBrutto;
-                 element2.classList.remove('data-placeholder');
-            }
+            // V --- POCZĄTEK LOGIKI GENEROWANIA PODSTRONY (ZAKTUALIZOWANE) --- V
+            
+            const generatePageBtn = document.getElementById('generate-page-btn');
+            
+            generatePageBtn.addEventListener('click', () => {
+                // Używamy .textContent, aby pobrać sformatowane wartości
+                const dataToStore = {
+                    wps: formatCurrency(getValue('wps')), // Pobieramy surową i formatujemy
+                    sum_pre_brutto: document.getElementById('sum_pre_brutto').textContent,
+                    ii_instancja_brutto: document.getElementById('ii_instancja_brutto').textContent,
+                    sum_do_odzyskania: document.getElementById('sum_do_odzyskania').textContent,
+                    zysk_klienta: document.getElementById('zysk_klienta').textContent,
+                    stosunek_pre_do_sumy: document.getElementById('stosunek_pre_do_sumy').textContent,
+                    sum_sf_brutto: document.getElementById('sum_sf_brutto').textContent,
+                    podzial_klient: document.getElementById('podzial_klient').textContent,
+                    podzial_nasz: document.getElementById('podzial_nasz').textContent,
+                    payu_rata_5: document.getElementById('payu_rata_5').textContent,
+                    payu_rata_10: document.getElementById('payu_rata_10').textContent,
+                    payu_rata_20: document.getElementById('payu_rata_20').textContent,
+                    // NOWE DANE O PROWIZJI
+                    payu_prowizja_5: document.getElementById('payu_prowizja_5').textContent,
+                    payu_prowizja_10: document.getElementById('payu_prowizja_10').textContent,
+                    payu_prowizja_20: document.getElementById('payu_prowizja_20').textContent
+                };
 
-
-            // Logika kopiowania (z pliku skd (1).html)
-            const copyBtn = document.getElementById('copyButton');
-            const emailWrapper = document.getElementById('email-content-wrapper');
-            copyBtn.addEventListener('click', () => {
-                const htmlContent = emailWrapper.innerHTML;
-                const blob = new Blob([htmlContent], { type: 'text/html' });
-                const richTextInput = new ClipboardItem({ 'text/html': blob });
+                // Zapisujemy dane w sessionStorage (są dostępne do zamknięcia karty)
+                for (const [key, value] of Object.entries(dataToStore)) {
+                    sessionStorage.setItem(`skd_data_${key}`, value);
+                }
                 
-                navigator.clipboard.write([richTextInput]).then(() => {
-                    copyBtn.textContent = 'Skopiowano treść';
-                    copyBtn.classList.add('copied');
-                    setTimeout(() => {
-                        copyBtn.textContent = 'Kopiuj treść oferty';
-                        copyBtn.classList.remove('copied');
-                    }, 2000);
-                }).catch(err => {
-                    console.error('Błąd kopiowania: ', err);
-                    copyBtn.textContent = 'Błąd!';
-                     setTimeout(() => {
-                        copyBtn.textContent = 'Kopiuj treść oferty';
-                    }, 2000);
-                });
+                // Otwieramy nową stronę w nowej karcie
+                window.open('oferta_skd.html', '_blank');
             });
+            
+            // ^ --- KONIEC LOGIKI GENEROWANIA PODSTRONY --- ^
+            
+            
+            initializeForm();
         });
     </script>
 </body>
