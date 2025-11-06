@@ -268,12 +268,19 @@
             gap: 0.5rem;
             background: #f1f5f9;
             color: #64748b;
+            text-decoration: none; /* Dodane dla linku <a> */
         }
         
         .calc-btn:hover {
             background: #e2e8f0;
             color: #374151;
         }
+        
+        /* Specjalne style dla linku <a> udającego przycisk */
+        a.calc-btn:hover {
+             transform: translateY(-1px);
+        }
+
 
         .calc-table th {
             text-align: right;
@@ -380,17 +387,21 @@
             </section>
             
             <section class="calc-section">
-                 <div class="calc-actions">
+                 <div class="calc-actions" style="display: flex; flex-wrap: wrap; gap: 10px;">
                     <button class="calc-btn" id="reset-btn">
                         <i class="fas fa-undo"></i> Wyczyść
                     </button>
                     
-                    <button class="calc-btn" id="generate-page-btn" style="background-color: #1e40af; color: white; margin-top: 10px;">
+                    <button class="calc-btn" id="generate-page-btn" style="background-color: #1e40af; color: white;">
                         <i class="fas fa-file-export"></i> Generuj ofertę
                     </button>
                     
+                    <a href="generator_umowy.html" class="calc-btn" style="background-color: #a7f3d0; color: #065f46;">
+                        <i class="fas fa-file-signature"></i> Przejdź do generowania umowy
+                    </a>
+                    
                 </div>
-            </section>
+                 </section>
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 1.5rem;">
