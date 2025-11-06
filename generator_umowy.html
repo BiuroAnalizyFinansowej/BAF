@@ -284,7 +284,7 @@
     </main>
 
     <script>
-        // NOWA LOGIKA DLA POKAZYWANIA POLA "INNY BANK"
+        // LOGIKA DLA POKAZYWANIA POLA "INNY BANK"
         document.getElementById('bank_select').addEventListener('change', function() {
             var innyBankRow = document.getElementById('inny_bank_row');
             var innyBankInput = document.getElementById('inny_bank');
@@ -299,7 +299,7 @@
             }
         });
     
-        // POPRAWIONA LOGIKA FETCH
+        // NOWA, POPRAWIONA LOGIKA FETCH
         document.getElementById('contractForm').addEventListener('submit', function(e) {
             e.preventDefault(); 
             
@@ -310,24 +310,58 @@
             
             loader.style.display = 'flex';
             responseContainer.style.display = 'none';
+            responseMessage.innerHTML = ''; // Wyczyść poprzednie wyniki
 
             fetch(form.action, {
                 method: 'POST',
                 body: new FormData(form)
             })
             .then(response => response.text()) // Odbieramy odpowiedź jako tekst
-            .then(html => {
+            .then(text => {
                 loader.style.display = 'none';
                 
-                // Sprawdzamy, czy odpowiedź to HTML (sukces)
-                if (html.startsWith('<html')) {
-                    // Sukces - otwieramy nową kartę ze stroną sukcesu (z przyciskami)
-                    var newWindow = window.open();
-                    newWindow.document.write(html);
-                    newWindow.document.close();
+                // Sprawdzamy, czy odpowiedź to link (zaczyna się od "http")
+                // Zakładamy, że link do Google Docs jest sukcesem
+                if (text.startsWith('https://docs.google.com/')) {
+                    // Sukces! Mamy link.
                     
-                    // Wyświetlamy też komunikat na stronie formularza
-                    responseMessage.textContent = 'Sukces! Umowa została wygenerowana i otworzyła się w nowej karcie.';
+                    // Stwórz pole <input> z linkiem
+                    var linkInput = document.createElement('input');
+                    linkInput.type = 'text';
+                    linkInput.value = text;
+                    linkInput.readOnly = true;
+                    linkInput.style = 'width: 100%; padding: 8px; margin-top: 10px; box-sizing: border-box; font-size: 0.9rem;';
+                    
+                    // Stwórz przycisk "Skopiuj"
+                    var copyButton = document.createElement('button');
+                    copyButton.textContent = 'Skopiuj link';
+                    copyButton.className = 'calc-btn'; // Używamy istniejącej klasy dla spójności
+                    copyButton.style = 'margin-top: 10px; background-color: #64748b; font-size: 0.9rem; padding: 0.6rem 1.2rem;';
+                    
+                    copyButton.onclick = function(event) {
+                        event.preventDefault(); // Zapobiegaj submitowi formularza
+                        linkInput.select();
+                        linkInput.setSelectionRange(0, 99999); // Dla urządzeń mobilnych
+                        document.execCommand('copy');
+                        copyButton.textContent = 'Skopiowano!';
+                        setTimeout(() => { copyButton.textContent = 'Skopiuj link'; }, 2000);
+                    };
+
+                    // Stwórz przycisk "Otwórz"
+                    var openButton = document.createElement('a');
+                    openButton.textContent = 'Otwórz dokument';
+                    openButton.className = 'calc-btn';
+                    openButton.href = text;
+                    openButton.target = '_blank';
+                    openButton.style = 'margin-top: 10px; margin-left: 10px; text-decoration: none; font-size: 0.9rem; padding: 0.6rem 1.2rem;';
+
+
+                    // Wyświetl komunikat i elementy
+                    responseMessage.textContent = 'Sukces! Wygenerowano umowę:';
+                    responseContainer.appendChild(linkInput);
+                    responseContainer.appendChild(copyButton);
+                    responseContainer.appendChild(openButton);
+                    
                     responseContainer.className = 'success';
                     responseContainer.style.display = 'block';
                     form.reset();
@@ -335,14 +369,13 @@
                     document.getElementById('inny_bank_row').style.display = 'none';
 
                 } else {
-                    // Jeśli odpowiedź to nie HTML, to jest to komunikat błędu ze skryptu
-                    throw new Error(html);
+                    // Jeśli odpowiedź to nie link, to jest to komunikat błędu ze skryptu
+                    throw new Error(text);
                 }
             })
             .catch(error => {
                 loader.style.display = 'none';
                 console.error('Error:', error);
-                // Tutaj teraz będą lądować prawdziwe błędy
                 responseMessage.textContent = 'Wystąpił błąd: ' + error.message;
                 responseContainer.className = 'error';
                 responseContainer.style.display = 'block';
@@ -351,8 +384,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
