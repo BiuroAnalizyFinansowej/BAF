@@ -10,11 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* =====================================
-           BAF CALCULATOR UNIFIED DESIGN
-           (Twoje style CSS - bez zmian)
-        ===================================== */
-        
+        /* Twoje style CSS - bez zmian */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -145,15 +141,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        /* Styl dla kontenera odpowiedzi */
-        #response-container {
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            background: #f8fafc;
-        }
     </style>
 </head>
 <body>
@@ -184,9 +171,10 @@
         <section class="calc-section">
             <h2 class="section-title"><i class="fas fa-keyboard"></i>Wprowadź dane do umowy</h2>
             
-            <form id="contractForm">
-                
-                <table class="calc-table">
+            <form id="contractForm" 
+                  action="https://script.google.com/macros/s/AKfycbw871kr2UP9yQwCAXXA4CP3HlE9r7lwFT5V_hhgcX2iZIb19y7alcJs7U4ooruTiAd7/exec" 
+                  method="POST"
+                  target="responseFrame"> <table class="calc-table">
                     <tbody>
                         <tr>
                             <td>Imię i nazwisko klienta:</td>
@@ -207,32 +195,6 @@
                                     <option value="" disabled selected>-- Wybierz bank --</option>
                                     <option value="PKO Bank Polski">PKO Bank Polski</option>
                                     <option value="Bank Pekao S.A.">Bank Pekao S.A.</option>
-                                    <option value="Santander Bank Polska">Santander Bank Polska</option>
-                                    <option value="ING Bank Śląski">ING Bank Śląski</option>
-                                    <option value="mBank">mBank</option>
-                                    <option value="BNP Paribas Bank Polska">BNP Paribas Bank Polska</option>
-                                    <option value="Bank Millennium">Bank Millennium</option>
-                                    <option value="Alior Bank">Alior Bank</option>
-                                    <option value="Credit Agricole Bank Polska">Credit Agricole Bank Polska</option>
-                                    <option value="VeloBank">VeloBank</option>
-                                    <option value="Bank Handlowy (Citi Handlowy)">Bank Handlowy (Citi Handlowy)</option>
-                                    <option value="Bank Pocztowy">Bank Pocztowy</option>
-                                    <option value="BOŚ Bank (Bank Ochrony Środowiska)">BOŚ Bank (Bank Ochrony Środowiska)</option>
-                                    <option value="Plus Bank">Plus Bank</option>
-                                    <option value="Nest Bank">Nest Bank</option>
-                                    <option value="Bank BPS (Bank Polskiej Spółdzielczości)">Bank BPS (Bank Polskiej Spółdzielczości)</option>
-                                    <option value="SGB-Bank S.A. (Spółdzielcza Grupa Bankowa)">SGB-Bank S.A. (Spółdzielcza Grupa Bankowa)</option>
-                                    <option value="Getin Noble Bank">Getin Noble Bank</option>
-                                    <option value="Raiffeisen Bank Polska">Raiffeisen Bank Polska</option>
-                                    <option value="Euro Bank">Euro Bank</option>
-                                    <option value="Deutsche Bank Polska">Deutsche Bank Polska</option>
-                                    <option value="Lukas Bank">Lukas Bank</option>
-                                    <option value="GE Money Bank">GE Money Bank</option>
-                                    <option value="Bank BPH">Bank BPH</option>
-                                    <option value="Fortis Bank Polska">Fortis Bank Polska</option>
-                                    <option value="Kredyt Bank">Kredyt Bank</option>
-                                    <option value="BZ WBK">BZ WBK</option>
-                                    <option value="Nordea Bank Polska">Nordea Bank Polska</option>
                                     <option value="Polbank EFG">Polbank EFG</option>
                                     <option value="Dominet Bank">Dominet Bank</option>
                                     <option value="Inny">Inny (wprowadź poniżej)</option>
@@ -268,18 +230,14 @@
                 </div>
             </form>
             
-            <div id="response-container" style="display: none;"></div>
-            
-        </section>
+            <iframe id="responseFrame" name="responseFrame" 
+                    style="width: 100%; height: 220px; border: none; display: none; margin-top: 1.5rem;"
+                    onload="frameLoaded()"></iframe>
+            </section>
     </main>
 
     <script>
-        // === POCZĄTEK ZMIAN ===
-
-        // Stała z adresem URL Twojego wdrożonego skryptu
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw871kr2UP9yQwCAXXA4CP3HlE9r7lwFT5V_hhgcX2iZIb19y7alcJs7U4ooruTiAd7/exec";
-
-        // 1. Logika dla pola "Inny bank" (bez zmian)
+        // 1. LOGIKA DLA POKAZYWANIA POLA "INNY BANK" (bez zmian)
         document.getElementById('bank_select').addEventListener('change', function() {
             var innyBankRow = document.getElementById('inny_bank_row');
             var innyBankInput = document.getElementById('inny_bank');
@@ -293,85 +251,33 @@
                 innyBankInput.value = '';
             }
         });
+    
+        // 2. LOGIKA SPINNERA I RAMKI (NOWA, PROSTSZA)
+        var form = document.getElementById('contractForm');
+        var loader = document.getElementById('loader');
+        var iFrame = document.getElementById('responseFrame');
 
-        // 2. Nowa logika wysyłania formularza przy użyciu Fetch
-        document.getElementById('contractForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // ZATRZYMUJEMY domyślne wysyłanie formularza
-            
-            var loader = document.getElementById('loader');
-            var responseContainer = document.getElementById('response-container');
-            var form = this; // 'this' odnosi się do formularza
-            var btn = form.querySelector('button[type="submit"]');
-
-            // Pokaż spinner i zablokuj przycisk
+        // Kiedy formularz jest wysyłany...
+        form.addEventListener('submit', function() {
+            // Pokaż spinner
             loader.style.display = 'flex';
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Przetwarzanie...';
-
-            // Wyczyść stare odpowiedzi
-            responseContainer.innerHTML = '';
-            responseContainer.style.display = 'none';
-
-            var formData = new FormData(form);
-
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json()) // Oczekujemy odpowiedzi JSON
-            .then(data => {
-                loader.style.display = 'none'; // Ukryj spinner
-                btn.disabled = false; // Odblokuj przycisk
-                btn.innerHTML = '<i class="fas fa-cogs"></i> GENERUJ UMOWĘ';
-                
-                if (data.status === 'success') {
-                    // Budujemy HTML z linkiem i przyciskiem
-                    var successHtml = `
-                        <h3 style="color: #16a34a;"><i class="fas fa-check-circle"></i> Sukces! Wygenerowano umowę.</h3>
-                        <p>Link do dokumentu (<strong>${data.fileName}</strong>):</p>
-                        <input type="text" id="docUrl" value="${data.url}" readonly class="input-field" style="margin-bottom: 10px;">
-                        <a href="${data.url}" target="_blank" class="calc-btn" style="background-color: #1e40af; color: white; text-decoration: none; margin-right: 10px;">
-                            <i class="fas fa-external-link-alt"></i> Otwórz dokument
-                        </a>
-                        <button onclick="copyLink()" class="calc-btn" style="background-color: #64748b;">
-                            <i class="fas fa-copy"></i> Kopiuj link
-                        </button>
-                    `;
-                    responseContainer.innerHTML = successHtml;
-                    responseContainer.style.display = 'block';
-                } else {
-                    // Pokaż błąd
-                    responseContainer.innerHTML = `<p style="color: red; font-weight: bold;">Wystąpił błąd: ${data.message}</p>`;
-                    responseContainer.style.display = 'block';
-                }
-            })
-            .catch(error => {
-                // Obsługa błędów sieciowych
-                loader.style.display = 'none';
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-cogs"></i> GENERUJ UMOWĘ';
-                responseContainer.innerHTML = `<p style="color: red; font-weight: bold;">Błąd krytyczny: ${error.message}. Sprawdź konsolę (F12).</p>`;
-                responseContainer.style.display = 'block';
-                console.error('Błąd Fetch:', error);
-            });
+            // Ukryj starą odpowiedź w ramce
+            iFrame.style.display = 'none';
+            // Czyść ramkę (na wypadek ponownego użycia)
+            iFrame.src = "about:blank";
         });
 
-        // 3. Funkcja do kopiowania linku (teraz używa nowszej, bezpieczniejszej metody)
-        function copyLink() {
-            var copyText = document.getElementById("docUrl");
-            if (copyText && copyText.value) {
-                navigator.clipboard.writeText(copyText.value)
-                    .then(() => {
-                        alert("Skopiowano link do schowka!");
-                    })
-                    .catch(err => {
-                        console.error('Błąd kopiowania: ', err);
-                        alert('Nie udało się skopiować linku. Spróbuj ręcznie.');
-                    });
+        // Ta funkcja jest wywoływana przez 'onload' w tagu <iframe>
+        function frameLoaded() {
+            // Ukryj spinner
+            loader.style.display = 'none';
+            
+            // Pokaż ramkę z wynikiem
+            // (Sprawdzamy, czy to nie jest ten pusty "about:blank")
+            if (iFrame.src.substring(0, 10) !== "about:blank") {
+                iFrame.style.display = 'block';
             }
         }
-        
-        // === KONIEC ZMIAN ===
     </script>
-</body>
+    </body>
 </html>
