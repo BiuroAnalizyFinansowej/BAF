@@ -10,7 +10,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* Twoje style CSS - bez zmian */
+        /* =====================================
+           BAF CALCULATOR UNIFIED DESIGN
+           Styl skopiowany z proces_milosz_skd.html
+        ===================================== */
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -141,6 +145,23 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        /* Rezultat */
+        #response-container {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        #response-container.success {
+            background: #f0fdf4;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+        #response-container.error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+        }
     </style>
 </head>
 <body>
@@ -171,10 +192,8 @@
         <section class="calc-section">
             <h2 class="section-title"><i class="fas fa-keyboard"></i>Wprowadź dane do umowy</h2>
             
-            <form id="contractForm" 
-                  action="https://script.google.com/macros/s/AKfycbw871kr2UP9yQwCAXXA4CP3HlE9r7lwFT5V_hhgcX2iZIb19y7alcJs7U4ooruTiAd7/exec" 
-                  method="POST"
-                  target="responseFrame"> <table class="calc-table">
+            <form id="contractForm" action="https://script.google.com/macros/s/AKfycbw871kr2UP9yQwCAXXA4CP3HlE9r7lwFT5V_hhgcX2iZIb19y7alcJs7U4ooruTiAd7/exec" method="POST">
+                <table class="calc-table">
                     <tbody>
                         <tr>
                             <td>Imię i nazwisko klienta:</td>
@@ -188,6 +207,7 @@
                             <td>Adres zamieszkania:</td>
                             <td><input type="text" id="adres" name="adres" class="input-field" required placeholder="np. ul. Wzorcowa 1/2, 00-001 Warszawa"></td>
                         </tr>
+                        
                         <tr>
                             <td>Nazwa banku:</td>
                             <td>
@@ -195,6 +215,32 @@
                                     <option value="" disabled selected>-- Wybierz bank --</option>
                                     <option value="PKO Bank Polski">PKO Bank Polski</option>
                                     <option value="Bank Pekao S.A.">Bank Pekao S.A.</option>
+                                    <option value="Santander Bank Polska">Santander Bank Polska</option>
+                                    <option value="ING Bank Śląski">ING Bank Śląski</option>
+                                    <option value="mBank">mBank</option>
+                                    <option value="BNP Paribas Bank Polska">BNP Paribas Bank Polska</option>
+                                    <option value="Bank Millennium">Bank Millennium</option>
+                                    <option value="Alior Bank">Alior Bank</option>
+                                    <option value="Credit Agricole Bank Polska">Credit Agricole Bank Polska</option>
+                                    <option value="VeloBank">VeloBank</option>
+                                    <option value="Bank Handlowy (Citi Handlowy)">Bank Handlowy (Citi Handlowy)</option>
+                                    <option value="Bank Pocztowy">Bank Pocztowy</option>
+                                    <option value="BOŚ Bank (Bank Ochrony Środowiska)">BOŚ Bank (Bank Ochrony Środowiska)</option>
+                                    <option value="Plus Bank">Plus Bank</option>
+                                    <option value="Nest Bank">Nest Bank</option>
+                                    <option value="Bank BPS (Bank Polskiej Spółdzielczości)">Bank BPS (Bank Polskiej Spółdzielczości)</option>
+                                    <option value="SGB-Bank S.A. (Spółdzielcza Grupa Bankowa)">SGB-Bank S.A. (Spółdzielcza Grupa Bankowa)</option>
+                                    <option value="Getin Noble Bank">Getin Noble Bank</option>
+                                    <option value="Raiffeisen Bank Polska">Raiffeisen Bank Polska</option>
+                                    <option value="Euro Bank">Euro Bank</option>
+                                    <option value="Deutsche Bank Polska">Deutsche Bank Polska</option>
+                                    <option value="Lukas Bank">Lukas Bank</option>
+                                    <option value="GE Money Bank">GE Money Bank</option>
+                                    <option value="Bank BPH">Bank BPH</option>
+                                    <option value="Fortis Bank Polska">Fortis Bank Polska</option>
+                                    <option value="Kredyt Bank">Kredyt Bank</option>
+                                    <option value="BZ WBK">BZ WBK</option>
+                                    <option value="Nordea Bank Polska">Nordea Bank Polska</option>
                                     <option value="Polbank EFG">Polbank EFG</option>
                                     <option value="Dominet Bank">Dominet Bank</option>
                                     <option value="Inny">Inny (wprowadź poniżej)</option>
@@ -230,14 +276,15 @@
                 </div>
             </form>
             
-            <iframe id="responseFrame" name="responseFrame" 
-                    style="width: 100%; height: 220px; border: none; display: none; margin-top: 1.5rem;"
-                    onload="frameLoaded()"></iframe>
-            </section>
+            <div id="response-container">
+                <p id="response-message"></p>
+            </div>
+            
+        </section>
     </main>
 
     <script>
-        // 1. LOGIKA DLA POKAZYWANIA POLA "INNY BANK" (bez zmian)
+        // NOWA LOGIKA DLA POKAZYWANIA POLA "INNY BANK"
         document.getElementById('bank_select').addEventListener('change', function() {
             var innyBankRow = document.getElementById('inny_bank_row');
             var innyBankInput = document.getElementById('inny_bank');
@@ -248,36 +295,64 @@
             } else {
                 innyBankRow.style.display = 'none';
                 innyBankInput.required = false;
-                innyBankInput.value = '';
+                innyBankInput.value = ''; // Wyczyść pole, gdy nie jest potrzebne
             }
         });
     
-        // 2. LOGIKA SPINNERA I RAMKI (NOWA, PROSTSZA)
-        var form = document.getElementById('contractForm');
-        var loader = document.getElementById('loader');
-        var iFrame = document.getElementById('responseFrame');
-
-        // Kiedy formularz jest wysyłany...
-        form.addEventListener('submit', function() {
-            // Pokaż spinner
-            loader.style.display = 'flex';
-            // Ukryj starą odpowiedź w ramce
-            iFrame.style.display = 'none';
-            // Czyść ramkę (na wypadek ponownego użycia)
-            iFrame.src = "about:blank";
-        });
-
-        // Ta funkcja jest wywoływana przez 'onload' w tagu <iframe>
-        function frameLoaded() {
-            // Ukryj spinner
-            loader.style.display = 'none';
+        // POPRAWIONA LOGIKA FETCH
+        document.getElementById('contractForm').addEventListener('submit', function(e) {
+            e.preventDefault(); 
             
-            // Pokaż ramkę z wynikiem
-            // (Sprawdzamy, czy to nie jest ten pusty "about:blank")
-            if (iFrame.src.substring(0, 10) !== "about:blank") {
-                iFrame.style.display = 'block';
-            }
-        }
+            var form = e.target;
+            var loader = document.getElementById('loader');
+            var responseContainer = document.getElementById('response-container');
+            var responseMessage = document.getElementById('response-message');
+            
+            loader.style.display = 'flex';
+            responseContainer.style.display = 'none';
+
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(response => response.text()) // Odbieramy odpowiedź jako tekst
+            .then(html => {
+                loader.style.display = 'none';
+                
+                // Sprawdzamy, czy odpowiedź to HTML (sukces)
+                if (html.startsWith('<html')) {
+                    // Sukces - otwieramy nową kartę ze stroną sukcesu (z przyciskami)
+                    var newWindow = window.open();
+                    newWindow.document.write(html);
+                    newWindow.document.close();
+                    
+                    // Wyświetlamy też komunikat na stronie formularza
+                    responseMessage.textContent = 'Sukces! Umowa została wygenerowana i otworzyła się w nowej karcie.';
+                    responseContainer.className = 'success';
+                    responseContainer.style.display = 'block';
+                    form.reset();
+                    // Schowaj pole "Inny bank" po resecie
+                    document.getElementById('inny_bank_row').style.display = 'none';
+
+                } else {
+                    // Jeśli odpowiedź to nie HTML, to jest to komunikat błędu ze skryptu
+                    throw new Error(html);
+                }
+            })
+            .catch(error => {
+                loader.style.display = 'none';
+                console.error('Error:', error);
+                // Tutaj teraz będą lądować prawdziwe błędy
+                responseMessage.textContent = 'Wystąpił błąd: ' + error.message;
+                responseContainer.className = 'error';
+                responseContainer.style.display = 'block';
+            });
+        });
     </script>
-    </body>
+</body>
 </html>
+
+
+
+
+
