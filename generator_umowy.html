@@ -212,6 +212,7 @@
                             <td>Nazwa banku:</td>
                             <td><input type="text" id="nazwa_banku" name="nazwa_banku" class="input-field" required placeholder="Wpisz pełną nazwę banku..."></td>
                         </tr>
+                        
                         <tr>
                             <td>Data podpisania umowy kredytowej:</td>
                             <td><input type="date" id="data_podpisania" name="data_podpisania" class="input-field" style="text-align: left;" required></td>
@@ -246,9 +247,8 @@
     </main>
 
     <script>
-        // USUNĘLIŚMY LOGIKĘ DLA POLA "INNY BANK", BO NIE JEST JUŻ POTRZEBNA
+        // Usunęliśmy logikę dla pola "Inny bank"
     
-        // NOWA, POPRAWIONA LOGIKA FETCH
         document.getElementById('contractForm').addEventListener('submit', function(e) {
             e.preventDefault(); 
             
@@ -269,64 +269,46 @@
             .then(text => {
                 loader.style.display = 'none';
                 
-                // Sprawdzamy, czy odpowiedź to link (zaczyna się od "http")
-                // Zakładamy, że link do Google Docs jest sukcesem
+                // Sprawdzamy, czy tekst ZACZYNA SIĘ od linku (tak jak powinien po wdrożeniu KROKU 1)
                 if (text.startsWith('https://docs.google.com/')) {
-                    // Sukces! Mamy link.
+                    // SUKCES! Mamy link.
                     
-                    // Stwórz pole <input> z linkiem
-                    var linkInput = document.createElement('input');
-                    linkInput.type = 'text';
-                    linkInput.value = text;
-                    linkInput.readOnly = true;
-                    linkInput.style = 'width: 100%; padding: 8px; margin-top: 10px; box-sizing: border-box; font-size: 0.9rem;';
-                    
-                    // Stwórz przycisk "Skopiuj"
-                    var copyButton = document.createElement('button');
-                    copyButton.textContent = 'Skopiuj link';
-                    copyButton.className = 'calc-btn'; // Używamy istniejącej klasy dla spójności
-                    copyButton.style = 'margin-top: 10px; background-color: #64748b; font-size: 0.9rem; padding: 0.6rem 1.2rem;';
-                    
-                    copyButton.onclick = function(event) {
-                        event.preventDefault(); // Zapobiegaj submitowi formularza
-                        linkInput.select();
-                        linkInput.setSelectionRange(0, 99999); // Dla urządzeń mobilnych
-                        document.execCommand('copy');
-                        copyButton.textContent = 'Skopiowano!';
-                        setTimeout(() => { copyButton.textContent = 'Skopiuj link'; }, 2000);
-                    };
+                    // Stwórz hiperłącze (zgodnie z Twoją prośbą)
+                    var link = document.createElement('a');
+                    link.href = text;
+                    link.target = '_blank'; // Otwórz w nowej karcie
+                    link.textContent = text; // Tekst linku to sam link
+                    link.style.fontWeight = 'bold';
+                    link.style.display = 'block';
+                    link.style.marginTop = '10px';
+                    link.style.wordBreak = 'break-all'; // Złam link, jeśli za długi
 
-                    // Stwórz przycisk "Otwórz"
-                    var openButton = document.createElement('a');
-                    openButton.textContent = 'Otwórz dokument';
-                    openButton.className = 'calc-btn';
-                    openButton.href = text;
-                    openButton.target = '_blank';
-                    openButton.style = 'margin-top: 10px; margin-left: 10px; text-decoration: none; font-size: 0.9rem; padding: 0.6rem 1.2rem;';
-
-
-                    // Wyświetl komunikat i elementy
-                    responseMessage.textContent = 'Sukces! Wygenerowano umowę:';
-                    responseContainer.appendChild(linkInput);
-                    responseContainer.appendChild(copyButton);
-                    responseContainer.appendChild(openButton);
+                    // Wyświetl komunikat i hiperłącze
+                    responseMessage.textContent = 'Sukces! Wygenerowano umowę. Kliknij w link, aby otworzyć:';
+                    responseContainer.appendChild(link);
                     
-                    responseContainer.className = 'success';
+                    responseContainer.className = 'success'; // Zielony
                     responseContainer.style.display = 'block';
                     form.reset();
-                    // Schowaj pole "Inny bank" po resecie
-                    // document.getElementById('inny_bank_row').style.display = 'none'; // Już niepotrzebne
 
                 } else {
-                    // Jeśli odpowiedź to nie link, to jest to komunikat błędu ze skryptu
+                    // JEŚLI TEKST NIE JEST LINKIEM, to jest to błąd (np. błąd walidacji, błąd skryptu lub stary kod)
                     throw new Error(text);
                 }
             })
             .catch(error => {
                 loader.style.display = 'none';
-                console.error('Error:', error);
-                responseMessage.textContent = 'Wystąpił błąd: ' + error.message;
-                responseContainer.className = 'error';
+                
+                var errorMsg = error.message;
+
+                // Sprawdzamy, czy błąd to ten "Frankenstein", który teraz widzisz
+                if (errorMsg.includes("Sukces! Wygenerowano umowę:")) {
+                    errorMsg = "KRYTYCZNY BŁĄD: Wygląda na to, że nie wdrożyłeś jeszcze nowego kodu Google Apps Script (z Kroku 1). Proszę, wdróż skrypt (Deploy -> New Deployment) i spróbuj ponownie.";
+                }
+
+                // Wyświetl sam błąd, bez dodatkowego "Wystąpił błąd:"
+                responseMessage.textContent = errorMsg;
+                responseContainer.className = 'error'; // Czerwony
                 responseContainer.style.display = 'block';
             });
         });
