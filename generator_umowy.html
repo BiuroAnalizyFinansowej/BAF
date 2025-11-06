@@ -12,6 +12,7 @@
     <style>
         /* =====================================
            BAF CALCULATOR UNIFIED DESIGN
+           (Twoje style CSS - bez zmian)
         ===================================== */
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -144,6 +145,15 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Styl dla kontenera odpowiedzi */
+        #response-container {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
     </style>
 </head>
 <body>
@@ -174,10 +184,7 @@
         <section class="calc-section">
             <h2 class="section-title"><i class="fas fa-keyboard"></i>Wprowadź dane do umowy</h2>
             
-            <form id="contractForm" 
-                  action="https://script.google.com/macros/s/AKfycbw871kr2UP9yQwCAXXA4CP3HlE9r7lwFT5V_hhgcX2iZIb19y7alcJs7U4ooruTiAd7/exec" 
-                  method="POST"
-                  target="_blank">
+            <form id="contractForm">
                 
                 <table class="calc-table">
                     <tbody>
@@ -267,7 +274,12 @@
     </main>
 
     <script>
-        // LOGIKA DLA POKAZYWANIA POLA "INNY BANK"
+        // === POCZĄTEK ZMIAN ===
+
+        // Stała z adresem URL Twojego wdrożonego skryptu
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw871kr2UP9yQwCAXXA4CP3HlE9r7lwFT5V_hhgcX2iZIb19y7alcJs7U4ooruTiAd7/exec";
+
+        // 1. Logika dla pola "Inny bank" (bez zmian)
         document.getElementById('bank_select').addEventListener('change', function() {
             var innyBankRow = document.getElementById('inny_bank_row');
             var innyBankInput = document.getElementById('inny_bank');
@@ -281,19 +293,85 @@
                 innyBankInput.value = '';
             }
         });
-    
-        // USUNĘLIŚMY CAŁY SKRYPT 'fetch'.
-        // Zamiast tego dodajemy prosty spinner.
-        document.getElementById('contractForm').addEventListener('submit', function() {
-            var loader = document.getElementById('loader');
-            loader.style.display = 'flex';
+
+        // 2. Nowa logika wysyłania formularza przy użyciu Fetch
+        document.getElementById('contractForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // ZATRZYMUJEMY domyślne wysyłanie formularza
             
-            // Ukryj spinner po 5 sekundach, na wypadek gdyby coś poszło nie tak
-            // (normalnie użytkownik będzie już w nowej karcie)
-            setTimeout(function() {
+            var loader = document.getElementById('loader');
+            var responseContainer = document.getElementById('response-container');
+            var form = this; // 'this' odnosi się do formularza
+            var btn = form.querySelector('button[type="submit"]');
+
+            // Pokaż spinner i zablokuj przycisk
+            loader.style.display = 'flex';
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Przetwarzanie...';
+
+            // Wyczyść stare odpowiedzi
+            responseContainer.innerHTML = '';
+            responseContainer.style.display = 'none';
+
+            var formData = new FormData(form);
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json()) // Oczekujemy odpowiedzi JSON
+            .then(data => {
+                loader.style.display = 'none'; // Ukryj spinner
+                btn.disabled = false; // Odblokuj przycisk
+                btn.innerHTML = '<i class="fas fa-cogs"></i> GENERUJ UMOWĘ';
+                
+                if (data.status === 'success') {
+                    // Budujemy HTML z linkiem i przyciskiem
+                    var successHtml = `
+                        <h3 style="color: #16a34a;"><i class="fas fa-check-circle"></i> Sukces! Wygenerowano umowę.</h3>
+                        <p>Link do dokumentu (<strong>${data.fileName}</strong>):</p>
+                        <input type="text" id="docUrl" value="${data.url}" readonly class="input-field" style="margin-bottom: 10px;">
+                        <a href="${data.url}" target="_blank" class="calc-btn" style="background-color: #1e40af; color: white; text-decoration: none; margin-right: 10px;">
+                            <i class="fas fa-external-link-alt"></i> Otwórz dokument
+                        </a>
+                        <button onclick="copyLink()" class="calc-btn" style="background-color: #64748b;">
+                            <i class="fas fa-copy"></i> Kopiuj link
+                        </button>
+                    `;
+                    responseContainer.innerHTML = successHtml;
+                    responseContainer.style.display = 'block';
+                } else {
+                    // Pokaż błąd
+                    responseContainer.innerHTML = `<p style="color: red; font-weight: bold;">Wystąpił błąd: ${data.message}</p>`;
+                    responseContainer.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                // Obsługa błędów sieciowych
                 loader.style.display = 'none';
-            }, 5000);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-cogs"></i> GENERUJ UMOWĘ';
+                responseContainer.innerHTML = `<p style="color: red; font-weight: bold;">Błąd krytyczny: ${error.message}. Sprawdź konsolę (F12).</p>`;
+                responseContainer.style.display = 'block';
+                console.error('Błąd Fetch:', error);
+            });
         });
+
+        // 3. Funkcja do kopiowania linku (teraz używa nowszej, bezpieczniejszej metody)
+        function copyLink() {
+            var copyText = document.getElementById("docUrl");
+            if (copyText && copyText.value) {
+                navigator.clipboard.writeText(copyText.value)
+                    .then(() => {
+                        alert("Skopiowano link do schowka!");
+                    })
+                    .catch(err => {
+                        console.error('Błąd kopiowania: ', err);
+                        alert('Nie udało się skopiować linku. Spróbuj ręcznie.');
+                    });
+            }
+        }
+        
+        // === KONIEC ZMIAN ===
     </script>
 </body>
 </html>
