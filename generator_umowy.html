@@ -339,7 +339,7 @@
             }
         });
         
-        // --- NOWA FUNKCJA DO KOPIOWANIA ---
+        // --- FUNKCJA DO KOPIOWANIA ---
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(function() {
                 alert('Skopiowano link do schowka!');
@@ -348,8 +348,7 @@
             });
         }
     
-        // --- POCZĄTEK ZMIANY ---
-        // ZAKTUALIZOWANA LOGIKA FETCH DLA WYŚWIETLANIA LINKU
+        // --- POPRAWIONA LOGIKA FETCH ---
         document.getElementById('contractForm').addEventListener('submit', function(e) {
             e.preventDefault(); 
             
@@ -396,16 +395,22 @@
                 }
             })
             .catch(error => {
-                // BŁĄD: Błąd sieci lub błąd zwrócony wyżej
+                // BŁĄD: Błąd sieci lub błąd zwrócony wyżej (np. błąd parsowania JSON)
                 loader.style.display = 'none'; // Ukryj spinner
                 console.error('Error:', error);
-                responseMessage.textContent = 'Wystąpił błąd: ' + error.message;
+                
+                // To jest komunikat, który widziałeś
+                if (error.message.includes("is not valid JSON")) {
+                     responseMessage.textContent = 'Błąd krytyczny: Skrypt Google nie został poprawnie wdrożony. Zwraca tekst zamiast "koperty" JSON. Wdróż ponownie skrypt w Google Apps Script (wybierz "Nowa wersja").';
+                } else {
+                     responseMessage.textContent = 'Wystąpił błąd: ' + error.message;
+                }
+               
                 responseLinks.innerHTML = ''; // Upewnij się, że nie ma linków
                 responseContainer.className = 'error';
                 responseContainer.style.display = 'block'; // Pokaż komunikat o błędzie
             });
         });
-        // --- KONIEC ZMIANY ---
     </script>
 </body>
 </html>
