@@ -12,7 +12,6 @@
     <style>
         /* =====================================
            BAF CALCULATOR UNIFIED DESIGN
-           Styl skopiowany z proces_milosz_skd.html
         ===================================== */
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -145,23 +144,64 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        /* Rezultat */
+
+        /* --- STYLIZACJA KONTENERA WYNIKU --- */
         #response-container {
             display: none;
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 1.5rem;
+            padding: 1rem;
             border-radius: 8px;
+            border: 1px solid transparent;
         }
         #response-container.success {
             background: #f0fdf4;
-            border: 1px solid #a7f3d0;
+            border-color: #a7f3d0;
             color: #065f46;
         }
         #response-container.error {
             background: #fef2f2;
-            border: 1px solid #fecaca;
+            border-color: #fecaca;
             color: #b91c1c;
         }
+        #response-container p {
+            margin: 0;
+            font-weight: 500;
+        }
+        #response-links {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        #response-links a, #response-links button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        #response-links a {
+            background-color: #1e40af;
+            color: white;
+        }
+        #response-links a:hover {
+            background-color: #1e293b;
+        }
+        #response-links button {
+            background-color: #f1f5f9;
+            color: #64748b;
+        }
+         #response-links button:hover {
+            background-color: #e2e8f0;
+        }
+        
     </style>
 </head>
 <body>
@@ -207,7 +247,6 @@
                             <td>Adres zamieszkania:</td>
                             <td><input type="text" id="adres" name="adres" class="input-field" required placeholder="np. ul. Wzorcowa 1/2, 00-001 Warszawa"></td>
                         </tr>
-                        
                         <tr>
                             <td>Nazwa banku:</td>
                             <td>
@@ -278,6 +317,7 @@
             
             <div id="response-container">
                 <p id="response-message"></p>
+                <div id="response-links"></div>
             </div>
             
         </section>
@@ -295,12 +335,21 @@
             } else {
                 innyBankRow.style.display = 'none';
                 innyBankInput.required = false;
-                innyBankInput.value = ''; // Wyczyść pole, gdy nie jest potrzebne
+                innyBankInput.value = '';
             }
         });
+        
+        // --- NOWA FUNKCJA DO KOPIOWANIA ---
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert('Skopiowano link do schowka!');
+            }, function(err) {
+                alert('Nie udało się skopiować linku. Błąd: ' + err);
+            });
+        }
     
         // --- POCZĄTEK ZMIANY ---
-        // ZAKTUALIZOWANA LOGIKA FETCH DLA PRZEKIEROWANIA
+        // ZAKTUALIZOWANA LOGIKA FETCH DLA WYŚWIETLANIA LINKU
         document.getElementById('contractForm').addEventListener('submit', function(e) {
             e.preventDefault(); 
             
@@ -308,9 +357,12 @@
             var loader = document.getElementById('loader');
             var responseContainer = document.getElementById('response-container');
             var responseMessage = document.getElementById('response-message');
+            var responseLinks = document.getElementById('response-links');
             
-            loader.style.display = 'flex'; // Pokaż spinner
-            responseContainer.style.display = 'none'; // Ukryj stare komunikaty
+            loader.style.display = 'flex'; 
+            responseContainer.style.display = 'none'; 
+            responseMessage.textContent = ''; // Wyczyść
+            responseLinks.innerHTML = ''; // Wyczyść
 
             fetch(form.action, {
                 method: 'POST',
@@ -318,11 +370,26 @@
             })
             .then(response => response.json()) // Oczekujemy odpowiedzi JSON
             .then(data => {
-                // Sprawdzamy status w odpowiedzi JSON
+                loader.style.display = 'none'; // Ukryj spinner
+                
                 if (data.status === 'success' && data.url) {
-                    // SUKCES: Przekieruj obecną kartę do nowego dokumentu
-                    // Nie musimy chować spinnera, strona i tak się przeładuje
-                    window.location.href = data.url;
+                    // SUKCES: Pokaż link i przycisk kopiowania
+                    responseMessage.textContent = 'Sukces! Wygenerowano umowę.';
+                    responseLinks.innerHTML = `
+                        <a href="${data.url}" target="_blank">
+                            <i class="fas fa-external-link-alt"></i> Otwórz dokument
+                        </a>
+                        <button onclick="copyToClipboard('${data.url}')">
+                            <i class="fas fa-copy"></i> Kopiuj link
+                        </button>
+                    `;
+                    responseContainer.className = 'success';
+                    responseContainer.style.display = 'block';
+                    
+                    form.reset(); // Wyczyść formularz
+                    // Schowaj pole "Inny bank" po resecie
+                    document.getElementById('inny_bank_row').style.display = 'none';
+
                 } else {
                     // BŁĄD: Serwer zwrócił błąd w formacie JSON
                     throw new Error(data.message || 'Nieznany błąd serwera');
@@ -333,6 +400,7 @@
                 loader.style.display = 'none'; // Ukryj spinner
                 console.error('Error:', error);
                 responseMessage.textContent = 'Wystąpił błąd: ' + error.message;
+                responseLinks.innerHTML = ''; // Upewnij się, że nie ma linków
                 responseContainer.className = 'error';
                 responseContainer.style.display = 'block'; // Pokaż komunikat o błędzie
             });
