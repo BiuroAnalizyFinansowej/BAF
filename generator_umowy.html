@@ -192,7 +192,7 @@
         <section class="calc-section">
             <h2 class="section-title"><i class="fas fa-keyboard"></i>Wprowadź dane do umowy</h2>
             
-            <form id="contractForm" action="​https://script.google.com/a/macros/kancelaria-af.com/s/AKfycbyyi10JDgW1NvCglqoyks6I0lfA80VfCkpWz5DK1gJ7_62_iotnkG-HJmBoRrojqYIH/exec" method="POST">
+            <form id="contractForm" action="https://script.google.com/macros/s/AKfycbw871kr2UP9yQwCAXXA4CP3HlE9r7lwFT5V_hhgcX2iZIb19y7alcJs7U4ooruTiAd7/exec" method="POST">
                 <table class="calc-table">
                     <tbody>
                         <tr>
@@ -284,7 +284,7 @@
     </main>
 
     <script>
-        // NOWA LOGIKA DLA POKAZYWANIA POLA "INNY BANK"
+        // LOGIKA DLA POKAZYWANIA POLA "INNY BANK"
         document.getElementById('bank_select').addEventListener('change', function() {
             var innyBankRow = document.getElementById('inny_bank_row');
             var innyBankInput = document.getElementById('inny_bank');
@@ -299,7 +299,8 @@
             }
         });
     
-        // POPRAWIONA LOGIKA FETCH
+        // --- POCZĄTEK ZMIANY ---
+        // ZAKTUALIZOWANA LOGIKA FETCH DLA PRZEKIEROWANIA
         document.getElementById('contractForm').addEventListener('submit', function(e) {
             e.preventDefault(); 
             
@@ -308,46 +309,35 @@
             var responseContainer = document.getElementById('response-container');
             var responseMessage = document.getElementById('response-message');
             
-            loader.style.display = 'flex';
-            responseContainer.style.display = 'none';
+            loader.style.display = 'flex'; // Pokaż spinner
+            responseContainer.style.display = 'none'; // Ukryj stare komunikaty
 
             fetch(form.action, {
                 method: 'POST',
                 body: new FormData(form)
             })
-            .then(response => response.text()) // Odbieramy odpowiedź jako tekst
-            .then(html => {
-                loader.style.display = 'none';
-                
-                // Sprawdzamy, czy odpowiedź to HTML (sukces)
-                if (html.startsWith('<html')) {
-                    // Sukces - otwieramy nową kartę ze stroną sukcesu (z przyciskami)
-                    var newWindow = window.open();
-                    newWindow.document.write(html);
-                    newWindow.document.close();
-                    
-                    // Wyświetlamy też komunikat na stronie formularza
-                    responseMessage.textContent = 'Sukces! Umowa została wygenerowana i otworzyła się w nowej karcie.';
-                    responseContainer.className = 'success';
-                    responseContainer.style.display = 'block';
-                    form.reset();
-                    // Schowaj pole "Inny bank" po resecie
-                    document.getElementById('inny_bank_row').style.display = 'none';
-
+            .then(response => response.json()) // Oczekujemy odpowiedzi JSON
+            .then(data => {
+                // Sprawdzamy status w odpowiedzi JSON
+                if (data.status === 'success' && data.url) {
+                    // SUKCES: Przekieruj obecną kartę do nowego dokumentu
+                    // Nie musimy chować spinnera, strona i tak się przeładuje
+                    window.location.href = data.url;
                 } else {
-                    // Jeśli odpowiedź to nie HTML, to jest to komunikat błędu ze skryptu
-                    throw new Error(html);
+                    // BŁĄD: Serwer zwrócił błąd w formacie JSON
+                    throw new Error(data.message || 'Nieznany błąd serwera');
                 }
             })
             .catch(error => {
-                loader.style.display = 'none';
+                // BŁĄD: Błąd sieci lub błąd zwrócony wyżej
+                loader.style.display = 'none'; // Ukryj spinner
                 console.error('Error:', error);
-                // Tutaj teraz będą lądować prawdziwe błędy
                 responseMessage.textContent = 'Wystąpił błąd: ' + error.message;
                 responseContainer.className = 'error';
-                responseContainer.style.display = 'block';
+                responseContainer.style.display = 'block'; // Pokaż komunikat o błędzie
             });
         });
+        // --- KONIEC ZMIANY ---
     </script>
 </body>
 </html>
