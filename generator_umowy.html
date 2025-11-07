@@ -97,7 +97,17 @@
             background: white;
             box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
         }
-        .calc-actions { margin-top: auto; padding-top: 1rem; border-top: 1px solid #e2e8f0; text-align: right; }
+        /* ZMIANA TUTAJ: Dodane 'flex-wrap' dla responsywności przycisków */
+        .calc-actions { 
+            margin-top: auto; 
+            padding-top: 1rem; 
+            border-top: 1px solid #e2e8f0; 
+            text-align: right; 
+            display: flex; 
+            justify-content: flex-end; 
+            gap: 10px;
+            flex-wrap: wrap; 
+        }
         .calc-btn {
             padding: 0.8rem 1.5rem;
             border: none;
@@ -113,6 +123,15 @@
             color: white;
         }
         .calc-btn:hover { background: #1e293b; }
+        
+        /* Styl dla nowego przycisku */
+        .calc-btn.btn-secondary {
+            background-color: #166534; /* Zielony */
+        }
+        .calc-btn.btn-secondary:hover {
+            background-color: #14532d;
+        }
+
         
         /* Spinner styles */
         #loader {
@@ -192,7 +211,9 @@
         <section class="calc-section">
             <h2 class="section-title"><i class="fas fa-keyboard"></i>Wprowadź dane do umowy</h2>
             
-            <form id="contractForm" action="https://script.google.com/macros/s/AKfycbxJaunbaByMFpJohRpvt3eM54PCnTCfatQjSCZZ47j-PwwxDvdeEhQnA7uYCRAOu4eq/exec" method="POST">
+            <form id="contractForm" action="https://script.google.com/macros/s/AKfycby4D9deEttN2gGqZCXotkbgQk4v44k-pO8ZqMzByovim4dCeFopgbNiUWzTJbXr2Vry/exec" method="POST">
+                 <input type="hidden" id="script_action_type" name="script_action_type" value="">
+                
                 <table class="calc-table">
                     <tbody>
                         <tr>
@@ -233,8 +254,11 @@
                 </table>
                 
                 <div class="calc-actions">
-                    <button type="submit" class="calc-btn">
-                        <i class="fas fa-cogs"></i> GENERUJ UMOWĘ
+                    <button type="button" id="generate-umowa-btn" class="calc-btn">
+                        <i class="fas fa-cogs"></i> GENERUJ UMOWĘ (GŁÓWNA)
+                    </button>
+                     <button type="button" id="generate-obsluga-btn" class="calc-btn btn-secondary">
+                        <i class="fas fa-gavel"></i> Generuj umowę obsługi prawnej
                     </button>
                 </div>
             </form>
@@ -247,13 +271,19 @@
     </main>
 
     <script>
-        document.getElementById('contractForm').addEventListener('submit', function(e) {
-            e.preventDefault(); 
+        // Ta funkcja jest wywoływana przez oba przyciski
+        function handleSubmit() {
+            const form = document.getElementById('contractForm');
             
-            var form = e.target;
-            var loader = document.getElementById('loader');
-            var responseContainer = document.getElementById('response-container');
-            var responseMessage = document.getElementById('response-message');
+            // Sprawdź, czy formularz jest poprawnie wypełniony
+            if (!form.checkValidity()) {
+                form.reportValidity(); // Pokaż natywne dymki walidacji
+                return;
+            }
+            
+            const loader = document.getElementById('loader');
+            const responseContainer = document.getElementById('response-container');
+            const responseMessage = document.getElementById('response-message');
             
             loader.style.display = 'flex';
             responseContainer.style.display = 'none';
@@ -261,34 +291,30 @@
 
             fetch(form.action, {
                 method: 'POST',
-                body: new FormData(form)
+                body: new FormData(form) // Przesyła wszystkie dane, w tym ukryte pole
             })
             .then(response => response.text()) // Odbieramy odpowiedź jako tekst
             .then(text => {
                 loader.style.display = 'none';
                 
-                // Sprawdzamy, czy tekst ZACZYNA SIĘ od linku
                 if (text.startsWith('https://docs.google.com/')) {
                     // SUKCES! Mamy link.
-                    
-                    // Stwórz hiperłącze
                     var link = document.createElement('a');
                     link.href = text;
-                    link.target = '_blank'; // Otwórz w nowej karcie
-                    link.textContent = text; // Tekst linku to sam link
+                    link.target = '_blank';
+                    link.textContent = text;
                     link.style.fontWeight = 'bold';
                     link.style.display = 'block';
                     link.style.marginTop = '10px';
-                    link.style.wordBreak = 'break-all'; // Złam link, jeśli za długi
+                    link.style.wordBreak = 'break-all';
 
-                    // Wyświetl komunikat i hiperłącze
                     responseMessage.textContent = 'Sukces! Wygenerowano umowę. Kliknij w link, aby otworzyć:';
                     responseContainer.appendChild(link);
                     
-                    responseContainer.className = 'success'; // Zielony
+                    responseContainer.className = 'success';
                     responseContainer.style.display = 'block';
-                    form.reset();
-
+                    // Nie resetujemy formularza, aby można było wygenerować drugi dokument
+                    // form.reset(); 
                 } else {
                     // JEŚLI TEKST NIE JEST LINKIEM, to jest to błąd
                     throw new Error(text);
@@ -296,25 +322,34 @@
             })
             .catch(error => {
                 loader.style.display = 'none';
-                
                 var errorMsg = error.message;
 
                 if (errorMsg.includes("Sukces! Wygenerowano umowę:")) {
-                    errorMsg = "KRYTYCZNY BŁĄD: Wygląda na to, że nie wdrożyłeś jeszcze nowego kodu Google Apps Script (z Kroku 1). Proszę, wdróż skrypt (Deploy -> New Deployment) i spróbuj ponownie.";
+                    errorMsg = "KRYTYCZNY BŁĄD: Wygląda na to, że nie wdrożyłeś jeszcze nowego kodu Google Apps Script. Proszę, wdróż skrypt (Deploy -> New Deployment) i spróbuj ponownie.";
                 }
 
-                // Wyświetl sam błąd, bez dodatkowego "Wystąpił błąd:"
                 responseMessage.textContent = errorMsg;
-                responseContainer.className = 'error'; // Czerwony
+                responseContainer.className = 'error';
                 responseContainer.style.display = 'block';
             });
-        });
-    </script>
-
-    <script>
+        }
+        
+        // Logika uruchamiana po załadowaniu strony
         document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
             
+            // 1. Logika dla przycisków generujących
+            document.getElementById('generate-umowa-btn').addEventListener('click', () => {
+                document.getElementById('script_action_type').value = 'umowa_glowna';
+                handleSubmit();
+            });
+
+            document.getElementById('generate-obsluga-btn').addEventListener('click', () => {
+                document.getElementById('script_action_type').value = 'umowa_obslugi';
+                handleSubmit();
+            });
+
+            // 2. Logika wypełniania pól z URL (bez zmian)
+            const urlParams = new URLSearchParams(window.location.search);
             const preOplata = urlParams.get('pre_oplata');
             const procent = urlParams.get('procent');
             
