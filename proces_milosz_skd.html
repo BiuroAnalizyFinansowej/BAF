@@ -396,9 +396,9 @@
                         <i class="fas fa-file-export"></i> Generuj ofertę
                     </button>
                     
-                    <a href="generator_umowy.html" class="calc-btn" style="background-color: #a7f3d0; color: #065f46;">
+                    <button id="go-to-generator-btn" class="calc-btn" style="background-color: #a7f3d0; color: #065f46;">
                         <i class="fas fa-file-signature"></i> Przejdź do generowania umowy
-                    </a>
+                    </button>
                     
                 </div>
                  </section>
@@ -740,6 +740,26 @@
             });
             
             // ^ --- KONIEC LOGIKI GENEROWANIA PODSTRONY --- ^
+            
+            
+            // V --- NOWA LOGIKA: PRZEKIEROWANIE DO GENERATORA Z DANYMI --- V
+            const goToGeneratorBtn = document.getElementById('go-to-generator-btn');
+            goToGeneratorBtn.addEventListener('click', () => {
+                // 1. Pobierz opłatę początkową (Miłosz + BAF, bez sądu)
+                const preMiloszNetto = getValue('pre_milosz_netto');
+                const preBafNetto = getValue('pre_baf_netto');
+                const oplataDoPrzekazania = preMiloszNetto + preBafNetto;
+                
+                // 2. Pobierz Success Fee (Miłosz 8% + Nasze SF)
+                const sfMiloszProc = 8; // Na podstawie Twojego kalkulatora
+                const sfBafProc = getValue('nasze_sf_proc');
+                const procentDoPrzekazania = sfMiloszProc + sfBafProc;
+                
+                // 3. Zbuduj URL i przekieruj
+                const url = `generator_umowy.html?pre_oplata=${oplataDoPrzekazania}&procent=${procentDoPrzekazania}`;
+                window.open(url, '_self'); // Otwórz w tej samej karcie
+            });
+            // ^ --- KONIEC NOWEJ LOGIKI --- ^
             
             
             initializeForm();
