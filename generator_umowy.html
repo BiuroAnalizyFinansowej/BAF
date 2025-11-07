@@ -284,17 +284,16 @@
                 body: new FormData(form)
             })
             .then(response => {
-                // Najpierw sprawdzamy, czy odpowiedź jest OK i czy to JSON
-                if (!response.ok) {
-                    // Jeśli serwer zwrócił błąd (np. 500), spróbuj odczytać go jako tekst
-                    return response.text().then(text => { 
-                        throw new Error('Błąd serwera: ' + (text || response.statusText));
-                    });
-                }
-                return response.json(); // Oczekujemy odpowiedzi JSON
+                // To jest ważne: próbujemy odczytać JSON niezależnie od statusu
+                return response.json(); 
             }) 
             .then(data => {
                 loader.style.display = 'none';
+
+                // NOWA LOGIKA: Sprawdzamy, czy w JSONie jest błąd
+                if (data.error) {
+                    throw new Error(data.error);
+                }
                 
                 // Sprawdzamy, czy otrzymaliśmy poprawne linki
                 if (data.urlBaf && data.urlPrawna) {
@@ -341,6 +340,7 @@
                 }
             })
             .catch(error => {
+                // Ta sekcja złapie teraz "Failed to fetch" LUB błąd z 'throw new Error(data.error)'
                 loader.style.display = 'none';
                 
                 // Wyświetl sam błąd, bez dodatkowego "Wystąpił błąd:"
