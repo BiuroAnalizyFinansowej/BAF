@@ -192,7 +192,7 @@
         <section class="calc-section">
             <h2 class="section-title"><i class="fas fa-keyboard"></i>Wprowadź dane do umowy</h2>
             
-            <form id="contractForm" action="https://script.google.com/macros/s/AKfycby_XL3zNwZ_rWpi_SDfHXLuPtB-23dVVHS71w2k5Idm9WEaGsHZe_SWOohnK3AHmb3n/exec" method="POST">
+            <form id="contractForm" action="[TU WKLEJ SWÓJ NAJNOWSZY LINK.../exec]" method="POST">
                 <table class="calc-table">
                     <tbody>
                         <tr>
@@ -247,8 +247,6 @@
     </main>
 
     <script>
-        // Usunęliśmy logikę dla pola "Inny bank"
-    
         document.getElementById('contractForm').addEventListener('submit', function(e) {
             e.preventDefault(); 
             
@@ -269,11 +267,11 @@
             .then(text => {
                 loader.style.display = 'none';
                 
-                // Sprawdzamy, czy tekst ZACZYNA SIĘ od linku (tak jak powinien po wdrożeniu KROKU 1)
+                // Sprawdzamy, czy tekst ZACZYNA SIĘ od linku
                 if (text.startsWith('https://docs.google.com/')) {
                     // SUKCES! Mamy link.
                     
-                    // Stwórz hiperłącze (zgodnie z Twoją prośbą)
+                    // Stwórz hiperłącze
                     var link = document.createElement('a');
                     link.href = text;
                     link.target = '_blank'; // Otwórz w nowej karcie
@@ -292,7 +290,7 @@
                     form.reset();
 
                 } else {
-                    // JEŚLI TEKST NIE JEST LINKIEM, to jest to błąd (np. błąd walidacji, błąd skryptu lub stary kod)
+                    // JEŚLI TEKST NIE JEST LINKIEM, to jest to błąd
                     throw new Error(text);
                 }
             })
@@ -301,7 +299,6 @@
                 
                 var errorMsg = error.message;
 
-                // Sprawdzamy, czy błąd to ten "Frankenstein", który teraz widzisz
                 if (errorMsg.includes("Sukces! Wygenerowano umowę:")) {
                     errorMsg = "KRYTYCZNY BŁĄD: Wygląda na to, że nie wdrożyłeś jeszcze nowego kodu Google Apps Script (z Kroku 1). Proszę, wdróż skrypt (Deploy -> New Deployment) i spróbuj ponownie.";
                 }
@@ -311,6 +308,23 @@
                 responseContainer.className = 'error'; // Czerwony
                 responseContainer.style.display = 'block';
             });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            const preOplata = urlParams.get('pre_oplata');
+            const procent = urlParams.get('procent');
+            
+            if (preOplata) {
+                document.getElementById('pre_oplata').value = preOplata;
+            }
+            
+            if (procent) {
+                document.getElementById('procent').value = procent;
+            }
         });
     </script>
 </body>
