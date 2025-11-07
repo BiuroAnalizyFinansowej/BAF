@@ -170,7 +170,7 @@
             background: #e6f4ea;
             border-radius: 4px;
         }
-        .success-link-container strong {
+        .success-link-container strong { /* Będziemy tego używać do etykiet BAF/Prawna */
             display: block;
             font-size: 0.9rem;
             color: #044319;
@@ -211,7 +211,7 @@
         <section class="calc-section">
             <h2 class="section-title"><i class="fas fa-keyboard"></i>Wprowadź dane do umowy</h2>
             
-            <form id="contractForm" action="https://script.google.com/macros/s/AKfycby_hxbHEjNG9jiWuMiZ2SkYN0n6wlHmGSS5vaqRWyZjZVRUyWOICk7EW18yke0NuBzG/exec" method="POST">
+            <form id="contractForm" action="https://script.google.com/macros/s/AKfycbzWGOjxLPSCbU5AEWLJxI8w_r9Q2Kx-9FCVrCkppBOl1sjmYGlMQrH97pgp6mW3y77e/exec" method="POST">
                 <table class="calc-table">
                     <tbody>
                         <tr>
@@ -283,67 +283,70 @@
                 method: 'POST',
                 body: new FormData(form)
             })
-            .then(response => {
-                // To jest ważne: próbujemy odczytać JSON niezależnie od statusu
-                return response.json(); 
-            }) 
-            .then(data => {
+            .then(response => response.text()) // Oczekujemy ZWYKŁEGO TEKSTU
+            .then(text => {
                 loader.style.display = 'none';
 
-                // NOWA LOGIKA: Sprawdzamy, czy w JSONie jest błąd
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-                
-                // Sprawdzamy, czy otrzymaliśmy poprawne linki
-                if (data.urlBaf && data.urlPrawna) {
-                    // SUKCES! Mamy oba linki.
+                // Sprawdzamy, czy tekst ZACZYNA SIĘ od linku
+                if (text.startsWith('https://docs.google.com/')) {
+                    // SUKCES! Mamy tekst z linkami.
                     
-                    responseMessage.textContent = 'Sukces! Wygenerowano dwie umowy:';
+                    // Rozdzielamy tekst na dwa linki używając średnika
+                    const links = text.split(';');
+                    const urlBaf = links[0];
+                    const urlPrawna = links[1];
 
-                    // Kontener na pierwszy link
-                    var linkContainer1 = document.createElement('div');
-                    linkContainer1.className = 'success-link-container';
-                    var label1 = document.createElement('strong');
-                    label1.textContent = 'Umowa Doradztwa BAF:';
-                    var link1 = document.createElement('a');
-                    link1.href = data.urlBaf;
-                    link1.target = '_blank';
-                    link1.textContent = data.urlBaf;
-                    linkContainer1.appendChild(label1);
-                    linkContainer1.appendChild(link1);
+                    // Sprawdzamy, czy mamy oba linki
+                    if (urlBaf && urlPrawna) {
+                        responseMessage.textContent = 'Sukces! Wygenerowano dwie umowy:';
 
-                    // Kontener na drugi link
-                    var linkContainer2 = document.createElement('div');
-                    linkContainer2.className = 'success-link-container';
-                    linkContainer2.style.marginTop = '10px';
-                    var label2 = document.createElement('strong');
-                    label2.textContent = 'Umowa Obsługi Prawnej:';
-                    var link2 = document.createElement('a');
-                    link2.href = data.urlPrawna;
-                    link2.target = '_blank';
-                    link2.textContent = data.urlPrawna;
-                    linkContainer2.appendChild(label2);
-                    linkContainer2.appendChild(link2);
-                    
-                    // Wyświetl wszystko
-                    responseContainer.appendChild(linkContainer1);
-                    responseContainer.appendChild(linkContainer2);
-                    
-                    responseContainer.className = 'success'; // Zielony
-                    responseContainer.style.display = 'block';
-                    form.reset();
+                        // Kontener na pierwszy link (BAF)
+                        var linkContainer1 = document.createElement('div');
+                        linkContainer1.className = 'success-link-container';
+                        var label1 = document.createElement('strong');
+                        label1.textContent = 'Umowa Doradztwa BAF:'; // Podpis
+                        var link1 = document.createElement('a');
+                        link1.href = urlBaf;
+                        link1.target = '_blank';
+                        link1.textContent = urlBaf;
+                        linkContainer1.appendChild(label1);
+                        linkContainer1.appendChild(link1);
+
+                        // Kontener na drugi link (Prawna)
+                        var linkContainer2 = document.createElement('div');
+                        linkContainer2.className = 'success-link-container';
+                        linkContainer2.style.marginTop = '10px';
+                        var label2 = document.createElement('strong');
+                        label2.textContent = 'Umowa Obsługi Prawnej:'; // Podpis
+                        var link2 = document.createElement('a');
+                        link2.href = urlPrawna;
+                        link2.target = '_blank';
+                        link2.textContent = urlPrawna;
+                        linkContainer2.appendChild(label2);
+                        linkContainer2.appendChild(link2);
+                        
+                        // Wyświetl wszystko
+                        responseContainer.appendChild(linkContainer1);
+                        responseContainer.appendChild(linkContainer2);
+                        
+                        responseContainer.className = 'success'; // Zielony
+                        responseContainer.style.display = 'block';
+                        form.reset();
+                    } else {
+                        // Jeśli tekst jest linkiem, ale coś poszło nie tak z podziałem
+                        throw new Error('Otrzymano niekompletną odpowiedź z serwera (brak drugiego linku).');
+                    }
 
                 } else {
-                    // Jeśli odpowiedź jest OK, ale nie ma linków (dziwny błąd)
-                    throw new Error('Otrzymano niekompletną odpowiedź z serwera.');
+                    // JEŚLI TEKST NIE JEST LINKIEM, to jest to błąd
+                    throw new Error(text);
                 }
             })
             .catch(error => {
-                // Ta sekcja złapie teraz "Failed to fetch" LUB błąd z 'throw new Error(data.error)'
+                // Ta sekcja złapie teraz "Failed to fetch" LUB błąd z 'throw new Error(text)'
                 loader.style.display = 'none';
                 
-                // Wyświetl sam błąd, bez dodatkowego "Wystąpił błąd:"
+                // Wyświetl sam błąd
                 responseMessage.textContent = error.message;
                 responseContainer.className = 'error'; // Czerwony
                 responseContainer.style.display = 'block';
