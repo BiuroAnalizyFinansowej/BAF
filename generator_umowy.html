@@ -162,25 +162,6 @@
             border: 1px solid #fecaca;
             color: #b91c1c;
         }
-        
-        /* Style dla linków w sukcesie */
-        .success-link-container {
-            margin-top: 10px;
-            padding: 10px;
-            background: #e6f4ea;
-            border-radius: 4px;
-        }
-        .success-link-container strong { /* Będziemy tego używać do etykiet BAF/Prawna */
-            display: block;
-            font-size: 0.9rem;
-            color: #044319;
-        }
-        .success-link-container a {
-            font-weight: bold;
-            word-break: break-all;
-            color: #065f46;
-        }
-        
     </style>
 </head>
 <body>
@@ -211,7 +192,7 @@
         <section class="calc-section">
             <h2 class="section-title"><i class="fas fa-keyboard"></i>Wprowadź dane do umowy</h2>
             
-            <form id="contractForm" action="https://script.google.com/macros/s/AKfycbzWGOjxLPSCbU5AEWLJxI8w_r9Q2Kx-9FCVrCkppBOl1sjmYGlMQrH97pgp6mW3y77e/exec" method="POST">
+            <form id="contractForm" action="[TU WKLEJ SWÓJ NAJNOWSZY LINK.../exec]" method="POST">
                 <table class="calc-table">
                     <tbody>
                         <tr>
@@ -240,7 +221,6 @@
                             <td>Numer umowy kredytowej:</td>
                             <td><input type="text" id="nr_umowy" name="nr_umowy" class="input-field" required></td>
                         </tr>
-                        
                         <tr>
                             <td>Opłata początkowa (bez opłat sądowych i bez 250 zł za rozprawę):</td>
                             <td><input type="number" id="pre_oplata" name="pre_oplata" step="0.01" class="input-field" required placeholder="np. 1500.50"></td>
@@ -254,7 +234,7 @@
                 
                 <div class="calc-actions">
                     <button type="submit" class="calc-btn">
-                        <i class="fas fa-cogs"></i> GENERUJ UMOWY
+                        <i class="fas fa-cogs"></i> GENERUJ UMOWĘ
                     </button>
                 </div>
             </form>
@@ -283,59 +263,31 @@
                 method: 'POST',
                 body: new FormData(form)
             })
-            .then(response => response.text()) // Oczekujemy ZWYKŁEGO TEKSTU
+            .then(response => response.text()) // Odbieramy odpowiedź jako tekst
             .then(text => {
                 loader.style.display = 'none';
-
+                
                 // Sprawdzamy, czy tekst ZACZYNA SIĘ od linku
                 if (text.startsWith('https://docs.google.com/')) {
-                    // SUKCES! Mamy tekst z linkami.
+                    // SUKCES! Mamy link.
                     
-                    // Rozdzielamy tekst na dwa linki używając średnika
-                    const links = text.split(';');
-                    const urlBaf = links[0];
-                    const urlPrawna = links[1];
+                    // Stwórz hiperłącze
+                    var link = document.createElement('a');
+                    link.href = text;
+                    link.target = '_blank'; // Otwórz w nowej karcie
+                    link.textContent = text; // Tekst linku to sam link
+                    link.style.fontWeight = 'bold';
+                    link.style.display = 'block';
+                    link.style.marginTop = '10px';
+                    link.style.wordBreak = 'break-all'; // Złam link, jeśli za długi
 
-                    // Sprawdzamy, czy mamy oba linki
-                    if (urlBaf && urlPrawna) {
-                        responseMessage.textContent = 'Sukces! Wygenerowano dwie umowy:';
-
-                        // Kontener na pierwszy link (BAF)
-                        var linkContainer1 = document.createElement('div');
-                        linkContainer1.className = 'success-link-container';
-                        var label1 = document.createElement('strong');
-                        label1.textContent = 'Umowa Doradztwa BAF:'; // Podpis
-                        var link1 = document.createElement('a');
-                        link1.href = urlBaf;
-                        link1.target = '_blank';
-                        link1.textContent = urlBaf;
-                        linkContainer1.appendChild(label1);
-                        linkContainer1.appendChild(link1);
-
-                        // Kontener na drugi link (Prawna)
-                        var linkContainer2 = document.createElement('div');
-                        linkContainer2.className = 'success-link-container';
-                        linkContainer2.style.marginTop = '10px';
-                        var label2 = document.createElement('strong');
-                        label2.textContent = 'Umowa Obsługi Prawnej:'; // Podpis
-                        var link2 = document.createElement('a');
-                        link2.href = urlPrawna;
-                        link2.target = '_blank';
-                        link2.textContent = urlPrawna;
-                        linkContainer2.appendChild(label2);
-                        linkContainer2.appendChild(link2);
-                        
-                        // Wyświetl wszystko
-                        responseContainer.appendChild(linkContainer1);
-                        responseContainer.appendChild(linkContainer2);
-                        
-                        responseContainer.className = 'success'; // Zielony
-                        responseContainer.style.display = 'block';
-                        form.reset();
-                    } else {
-                        // Jeśli tekst jest linkiem, ale coś poszło nie tak z podziałem
-                        throw new Error('Otrzymano niekompletną odpowiedź z serwera (brak drugiego linku).');
-                    }
+                    // Wyświetl komunikat i hiperłącze
+                    responseMessage.textContent = 'Sukces! Wygenerowano umowę. Kliknij w link, aby otworzyć:';
+                    responseContainer.appendChild(link);
+                    
+                    responseContainer.className = 'success'; // Zielony
+                    responseContainer.style.display = 'block';
+                    form.reset();
 
                 } else {
                     // JEŚLI TEKST NIE JEST LINKIEM, to jest to błąd
@@ -343,11 +295,16 @@
                 }
             })
             .catch(error => {
-                // Ta sekcja złapie teraz "Failed to fetch" LUB błąd z 'throw new Error(text)'
                 loader.style.display = 'none';
                 
-                // Wyświetl sam błąd
-                responseMessage.textContent = error.message;
+                var errorMsg = error.message;
+
+                if (errorMsg.includes("Sukces! Wygenerowano umowę:")) {
+                    errorMsg = "KRYTYCZNY BŁĄD: Wygląda na to, że nie wdrożyłeś jeszcze nowego kodu Google Apps Script (z Kroku 1). Proszę, wdróż skrypt (Deploy -> New Deployment) i spróbuj ponownie.";
+                }
+
+                // Wyświetl sam błąd, bez dodatkowego "Wystąpił błąd:"
+                responseMessage.textContent = errorMsg;
                 responseContainer.className = 'error'; // Czerwony
                 responseContainer.style.display = 'block';
             });
