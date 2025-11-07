@@ -375,12 +375,12 @@
                         <tr>
                             <td><b>Sumaryczne Pre opłaty</b></td>
                             <td class="output-field" id="sum_pre_netto"></td>
-                            <td class="output-field highlight-blue-bg" id="sum_pre_brutto"></td>
+                            <td class="output-field" id="sum_pre_brutto"></td>
                         </tr>
                          <tr>
                             <td><b>Sumaryczne Pre opłaty + II instancja</b></td>
                             <td class="output-field" id="sum_pre_ii_netto"></td>
-                            <td class="output-field highlight" id="sum_pre_ii_brutto"></td>
+                            <td class="output-field" id="sum_pre_ii_brutto"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -432,7 +432,7 @@
                         <tr>
                             <td><b>Sumaryczne success fee</b></td>
                             <td class="output-field" id="sum_sf_netto"></td>
-                            <td class="output-field highlight" id="sum_sf_brutto"></td>
+                            <td class="output-field" id="sum_sf_brutto"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -451,7 +451,7 @@
                     </tr>
                     <tr>
                         <td><b>Sumarycznie do odzyskania</b></td>
-                        <td class="output-field highlight" id="sum_do_odzyskania"></td>
+                        <td class="output-field" id="sum_do_odzyskania"></td>
                     </tr>
                     <tr>
                         <td>WPS finalny z odsetkami za opóźnienie</td>
@@ -467,7 +467,7 @@
                     </tr>
                     <tr>
                         <td><b>Stopa zwrotu z inwestycji (ROI)</b></td>
-                        <td class="output-field highlight-success" id="roi"></td>
+                        <td class="output-field" id="roi"></td>
                     </tr>
                     <tr>
                         <td>Podział procentowy dla klienta</td>
@@ -745,10 +745,11 @@
             // V --- NOWA LOGIKA: PRZEKIEROWANIE DO GENERATORA Z DANYMI --- V
             const goToGeneratorBtn = document.getElementById('go-to-generator-btn');
             goToGeneratorBtn.addEventListener('click', () => {
-                // 1. Pobierz opłatę początkową (Miłosz + BAF, bez sądu)
-                const preMiloszNetto = getValue('pre_milosz_netto');
+                
+                // ZMIANA TUTAJ: Nowa logika obliczania opłaty (BAF + 2000)
+                // 1. Pobierz opłatę początkową
                 const preBafNetto = getValue('pre_baf_netto');
-                const oplataDoPrzekazania = preMiloszNetto + preBafNetto;
+                const oplataDoPrzekazania = preBafNetto + 2000;
                 
                 // 2. Pobierz Success Fee (Miłosz 8% + Nasze SF)
                 const sfMiloszProc = 8; // Na podstawie Twojego kalkulatora
