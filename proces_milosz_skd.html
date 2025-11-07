@@ -375,12 +375,12 @@
                         <tr>
                             <td><b>Sumaryczne Pre opłaty</b></td>
                             <td class="output-field" id="sum_pre_netto"></td>
-                            <td class="output-field" id="sum_pre_brutto"></td>
+                            <td class="output-field highlight-blue-bg" id="sum_pre_brutto"></td>
                         </tr>
                          <tr>
                             <td><b>Sumaryczne Pre opłaty + II instancja</b></td>
                             <td class="output-field" id="sum_pre_ii_netto"></td>
-                            <td class="output-field" id="sum_pre_ii_brutto"></td>
+                            <td class="output-field highlight" id="sum_pre_ii_brutto"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -432,7 +432,7 @@
                         <tr>
                             <td><b>Sumaryczne success fee</b></td>
                             <td class="output-field" id="sum_sf_netto"></td>
-                            <td class="output-field" id="sum_sf_brutto"></td>
+                            <td class="output-field highlight" id="sum_sf_brutto"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -451,7 +451,7 @@
                     </tr>
                     <tr>
                         <td><b>Sumarycznie do odzyskania</b></td>
-                        <td class="output-field" id="sum_do_odzyskania"></td>
+                        <td class="output-field highlight" id="sum_do_odzyskania"></td>
                     </tr>
                     <tr>
                         <td>WPS finalny z odsetkami za opóźnienie</td>
@@ -467,7 +467,7 @@
                     </tr>
                     <tr>
                         <td><b>Stopa zwrotu z inwestycji (ROI)</b></td>
-                        <td class="output-field" id="roi"></td>
+                        <td class="output-field highlight-success" id="roi"></td>
                     </tr>
                     <tr>
                         <td>Podział procentowy dla klienta</td>
@@ -498,21 +498,21 @@
                             <td class="output-field" id="payu_stawka_5"></td>
                             <td class="output-field" id="payu_prowizja_5"></td>
                             <td class="output-field" id="payu_rata_5"></td>
-                            <td class="output-field" id="payu_zysk_5"></td>
+                            <td class="output-field profit-column-cell" id="payu_zysk_5"></td>
                         </tr>
                         <tr>
                             <td>10</td>
                              <td class="output-field" id="payu_stawka_10"></td>
                             <td class="output-field" id="payu_prowizja_10"></td>
                             <td class="output-field" id="payu_rata_10"></td>
-                            <td class="output-field" id="payu_zysk_10"></td>
+                            <td class="output-field profit-column-cell" id="payu_zysk_10"></td>
                         </tr>
                          <tr>
                             <td>20</td>
                              <td class="output-field" id="payu_stawka_20"></td>
                             <td class="output-field" id="payu_prowizja_20"></td>
                             <td class="output-field" id="payu_rata_20"></td>
-                            <td class="output-field" id="payu_zysk_20"></td>
+                            <td class="output-field profit-column-cell" id="payu_zysk_20"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -745,18 +745,16 @@
             // V --- NOWA LOGIKA: PRZEKIEROWANIE DO GENERATORA Z DANYMI --- V
             const goToGeneratorBtn = document.getElementById('go-to-generator-btn');
             goToGeneratorBtn.addEventListener('click', () => {
-                
-                // ZMIANA TUTAJ: Nowa logika obliczania opłaty (BAF + 2000)
-                // 1. Pobierz opłatę początkową
+                // 1. Pobierz opłatę początkową (ZMIANA LOGIKI Z TWOJEJ PROŚBY)
                 const preBafNetto = getValue('pre_baf_netto');
-                const oplataDoPrzekazania = preBafNetto + 2000;
+                const oplataDoPrzekazania = preBafNetto + 2000; // NOWA LOGIKA: Pre opłaty BAF + 2 000 zł
                 
                 // 2. Pobierz Success Fee (Miłosz 8% + Nasze SF)
                 const sfMiloszProc = 8; // Na podstawie Twojego kalkulatora
                 const sfBafProc = getValue('nasze_sf_proc');
                 const procentDoPrzekazania = sfMiloszProc + sfBafProc;
                 
-                // 3. Zbuduj URL i przekieruj
+                // 3. Zbuduj URL i przekieruj (ZMIANA NAZWY PLIKU)
                 const url = `generator_umowy.html?pre_oplata=${oplataDoPrzekazania}&procent=${procentDoPrzekazania}`;
                 window.open(url, '_self'); // Otwórz w tej samej karcie
             });
