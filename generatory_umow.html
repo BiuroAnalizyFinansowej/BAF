@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAF - Generatory Umów</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="baf_logo_p.png">
+    
+    <style>
+        .nav-footer {
+            margin-top: 2.5rem; /* Zwiększony margines dla oddzielenia */
+            text-align: center;
+        }
+        .nav-back {
+            background-color: #6c757d; /* Neutralny kolor powrotu */
+            border-color: #6c757d;
+            display: inline-block; /* Aby pozwolić na padding i auto-szerokość */
+            width: auto;
+            padding-left: 2.5rem;
+            padding-right: 2.5rem;
+            font-weight: 500;
+        }
+        .nav-back:hover {
+            background-color: #5a6268;
+            border-color: #5a6268;
+        }
+        /* Dodanie ikony do przycisku powrotu */
+        .nav-back::before {
+            font-family: "Font Awesome 5 Free"; /* Założenie, że FA jest dostępny */
+            font-weight: 900;
+            content: "\f015"; /* Ikona domku */
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-container">
+        <div class="logo">
+            <img src="baf_logo.png" alt="Logo BAF">
+        </div>
+
+        <div class="button-grid grid-2-col">
+            <a href="generator_umowy_brokerskiej.html" class="menu-button">Generator Umowy Brokerskiej BAF</a>
+            <a href="generator_umowy.html" class="menu-button">Generator Umów SKD BAF</a>
+        </div>
+        
+        <div class="nav-footer">
+             <a href="index.html" class="menu-button nav-back">Menu Główne</a>
+        </div>
+    </div>
+
+</body>
+</html>
