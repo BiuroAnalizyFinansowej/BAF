@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Umowy Brokerskiej BAF</title>
+    
+    <link rel="icon" type="image/png" href="baf_logo_p.png"> 
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* =====================================
+           BAF CALCULATOR UNIFIED DESIGN
+           Styl skopiowany z generator_umowy (1).html
+        ===================================== */
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2d3748;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .calc-header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header-left-group { display: flex; align-items: center; gap: 1.5rem; }
+        .header-center-group { font-size: 1.5rem; font-weight: 600; color: #1e293b; }
+        .calc-brand { display: flex; align-items: center; gap: 1rem; }
+        .calc-logo { height: 40px; width: 40px; border-radius: 8px; }
+        .calc-title { font-size: 1.5rem; font-weight: 600; color: #1e293b; margin: 0; }
+        .calc-container { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
+        .calc-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-title i { color: #1e40af; }
+        .calc-table { width: 100%; border-collapse: collapse; }
+        .calc-table td { padding: 0.75rem 0.5rem; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; vertical-align: middle; }
+        .calc-table tr:last-child td { border-bottom: none; }
+        .calc-table td:first-child { font-weight: 500; color: #374151; width: 40%; }
+        .input-field {
+            width: 100%;
+            padding: 0.5rem 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background: #f8fafc;
+            transition: all 0.2s ease;
+            font-weight: 600;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #1e40af;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+        .calc-actions { 
+            margin-top: auto; 
+            padding-top: 1rem; 
+            border-top: 1px solid #e2e8f0; 
+            text-align: right; 
+            display: flex; 
+            justify-content: flex-end; 
+            gap: 10px;
+            flex-wrap: wrap; 
+        }
+        .calc-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #1e40af;
+            color: white;
+        }
+        .calc-btn:hover { background: #1e293b; }
+        
+        /* Spinner styles */
+        #loader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #loader p {
+            font-weight: 600;
+            margin-top: 15px;
+            color: #1e40af;
+        }
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #1e40af;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Rezultat */
+        #response-container {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        #response-container.success {
+            background: #f0fdf4;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+        #response-container.error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+        }
+    </style>
+</head>
+<body>
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>Generowanie dokumentu... To może potrwać do 30 sekund.</p>
+    </div>
+
+    <header class="calc-header">
+        <div class="header-left-group">
+            <div class="calc-brand">
+                <i class="fas fa-file-signature calc-logo" style="background: #1e40af; color: white; padding: 10px; font-size: 20px;"></i>
+                <h1 class="calc-title">Generator Umowy Brokerskiej BAF</h1>
+            </div>
+             </div>
+        <div class="header-center-group">
+            FORMULARZ
+        </div>
+        <div>
+            <img src="baf_logo.png" alt="Logo BAF" style="height: 50px;">
+        </div>
+    </header>
+
+    <main class="calc-container">
+        <section class="calc-section">
+            <h2 class="section-title"><i class="fas fa-keyboard"></i>Wprowadź dane do umowy brokerskiej</h2>
+            
+            <form id="contractForm" action="https://script.google.com/macros/s/AKfycbwjdDG6ZAcPPwB8SsxCuHGlwT2H3nFgHgYmnmNaUom9EfAxEQknoRT9YzpOCR1fmWui/exec" method="POST">
+                
+                <input type="hidden" id="script_action_type" name="script_action_type" value="">
+                
+                <input type="hidden" name="folderName" value="WYGENEROWANE UMOWY BROKERSKIE BAF">
+
+                <table class="calc-table">
+                    <tbody>
+                        <tr>
+                            <td>Nazwa firmy klienta:</td>
+                            <td><input type="text" id="nazwa_firmy" name="nazwa_firmy" class="input-field" required placeholder="Pełna nazwa firmy..."></td>
+                        </tr>
+                        <tr>
+                            <td>Adres firmy klienta:</td>
+                            <td><input type="text" id="adres_firmy" name="adres_firmy" class="input-field" required placeholder="np. ul. Wzorcowa 1, 00-001 Warszawa"></td>
+                        </tr>
+                        <tr>
+                            <td>NIP:</td>
+                            <td><input type="text" id="nip" name="nip" class="input-field" required pattern="\d{10}" title="NIP musi składać się z 10 cyfr"></td>
+                        </tr>
+                         <tr>
+                            <td>REGON:</td>
+                            <td><input type="text" id="regon" name="regon" class="input-field" required pattern="\d{9}|\d{14}" title="REGON musi składać się z 9 lub 14 cyfr"></td>
+                        </tr>
+                        <tr>
+                            <td>Success fee (%):</td>
+                            <td><input type="number" id="procent_sf" name="procent_sf" step="0.01" class="input-field" required placeholder="np. 2.5"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="calc-actions">
+                    <button type="button" id="generate-btn" class="calc-btn">
+                        <i class="fas fa-cogs"></i> GENERUJ UMOWĘ BROKERSKĄ
+                    </button>
+                </div>
+            </form>
+            
+            <div id="response-container">
+                <p id="response-message"></p>
+            </div>
+            
+        </section>
+    </main>
+
+    <script>
+        /**
+         * Ta funkcja jest wywoływana przez przycisk generowania.
+         * Jest identyczna jak w Twoim poprzednim generatorze - waliduje, pokazuje loader,
+         * wysyła dane i oczekuje linku do Google Doc jako odpowiedzi.
+         */
+        function handleSubmit() {
+            const form = document.getElementById('contractForm');
+            
+            // Sprawdź, czy formularz jest poprawnie wypełniony
+            if (!form.checkValidity()) {
+                form.reportValidity(); // Pokaż natywne dymki walidacji
+                return;
+            }
+            
+            const loader = document.getElementById('loader');
+            const responseContainer = document.getElementById('response-container');
+            const responseMessage = document.getElementById('response-message');
+            
+            loader.style.display = 'flex';
+            responseContainer.style.display = 'none';
+            responseMessage.innerHTML = ''; // Wyczyść poprzednie wyniki
+
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form) // Przesyła wszystkie dane, w tym ukryte pola
+            })
+            .then(response => response.text()) // Odbieramy odpowiedź jako tekst
+            .then(text => {
+                loader.style.display = 'none';
+                
+                if (text.startsWith('https://docs.google.com/')) {
+                    // SUKCES! Mamy link.
+                    var link = document.createElement('a');
+                    link.href = text;
+                    link.target = '_blank';
+                    link.textContent = 'Otwórz wygenerowaną umowę';
+                    link.style.fontWeight = 'bold';
+                    link.style.display = 'block';
+                    link.style.marginTop = '10px';
+                    link.style.wordBreak = 'break-all';
+
+                    responseMessage.textContent = 'Sukces! Wygenerowano umowę. Kliknij w link, aby otworzyć:';
+                    responseContainer.appendChild(link);
+                    
+                    responseContainer.className = 'success';
+                    responseContainer.style.display = 'block';
+                    form.reset(); // Zresetuj formularz po sukcesie
+                } else {
+                    // JEŚLI TEKST NIE JEST LINKIEM, to jest to błąd
+                    throw new Error(text);
+                }
+            })
+            .catch(error => {
+                loader.style.display = 'none';
+                responseMessage.textContent = "BŁĄD: " + error.message;
+                responseContainer.className = 'error';
+                responseContainer.style.display = 'block';
+            });
+        }
+        
+        // Logika uruchamiana po załadowaniu strony
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Logika dla przycisku generującego
+            document.getElementById('generate-btn').addEventListener('click', () => {
+                // Ustawiamy typ akcji, aby backend wiedział, który szablon wybrać
+                document.getElementById('script_action_type').value = 'umowa_brokerska_baf';
+                handleSubmit();
+            });
+
+            // 2. Usunąłem logikę wypełniania pól z URL, ponieważ ten generator jest samodzielny
+        });
+    </script>
+</body>
+</html>
