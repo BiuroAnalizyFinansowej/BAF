@@ -12,7 +12,6 @@
     <style>
         /* =====================================
            BAF CALCULATOR UNIFIED DESIGN
-           Styl skopiowany z generator_umowy (1).html
         ===================================== */
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -108,6 +107,26 @@
         }
         .calc-btn:hover { background: #1e293b; }
         
+        /* === DODANE STYLE DLA PRZYCISKÓW NAWIGACJI === */
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            background: #f1f5f9;
+            color: #64748b;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+        }
+        .nav-btn:hover { background: #1e40af; color: white; transform: translateY(-1px); }
+        .nav-btn i { transition: color 0.2s ease; }
+        .nav-btn:hover i { color: white; }
+        /* ========================================== */
+
         /* Spinner styles */
         #loader {
             display: none;
@@ -170,7 +189,13 @@
                 <i class="fas fa-file-signature calc-logo" style="background: #1e40af; color: white; padding: 10px; font-size: 20px;"></i>
                 <h1 class="calc-title">Generator Umowy Brokerskiej BAF</h1>
             </div>
-             </div>
+             <a href="generatory_umow.html" class="nav-btn">
+                <i class="fas fa-arrow-left"></i> Wróć
+            </a>
+            <a href="index.html" class="nav-btn">
+                <i class="fas fa-home"></i> Menu Główne
+            </a>
+        </div>
         <div class="header-center-group">
             FORMULARZ
         </div>
@@ -272,7 +297,7 @@
 
                     responseMessage.textContent = 'Sukces! Wygenerowano umowę. Kliknij w link, aby otworzyć:';
                     responseContainer.appendChild(link);
-                    
+
                     responseContainer.className = 'success';
                     responseContainer.style.display = 'block';
                     form.reset(); // Zresetuj formularz po sukcesie
