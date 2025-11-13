@@ -42,14 +42,12 @@
         .subject-button:last-child { margin-bottom: 0; }
         .subject-button.copied { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
 
-        /* --- NOWE STYLE DLA PRZEŁĄCZNIKA --- */
         #type-menu { background-color: #f8f9fa; border-radius: 5px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-top: 15px; }
         #type-menu h3 { margin: 0 0 10px 0; font-size: 16px; color: #333; text-align: center; }
         .type-button { display: block; width: 100%; padding: 8px 10px; margin-bottom: 8px; font-size: 14px; color: #5F7A95; background-color: #ffffff; border: 1px solid #5F7A95; border-radius: 4px; cursor: pointer; text-align: left; transition: background-color 0.3s ease, color 0.3s ease; }
         .type-button:hover { background-color: #5F7A95; color: #ffffff; }
         .type-button.active { background-color: #002d5a; color: #ffffff; border-color: #002d5a; font-weight: bold; }
         .type-button:last-child { margin-bottom: 0; }
-        /* --- KONIEC NOWYCH STYLI --- */
 
     </style>
 </head>
@@ -64,7 +62,7 @@
             <button class="type-button" onclick="switchAccountingType(this, 'ryczalt')">Ryczałt</button>
             <button class="type-button" onclick="switchAccountingType(this, 'pelna')">Pełna Księgowość</button>
         </div>
-        </div>
+    </div>
 
     <div id="controls-container">
         <button id="copyButton">Kopiuj treść</button>
@@ -111,7 +109,9 @@
                                         <li id="li-bik"><strong>Raport BIK</strong> prywatny i firmowy (instrukcja do pobrania raportów w załączniku),</li>
                                         <li id="li-accounting-doc"><strong>Podsumowanie KPiR</strong> za rok 2024 oraz bieżące miesiące 2025 roku,</li>
                                         <li id="li-pit"><strong>PIT</strong> za rok 2023 i 2024,</li>
+                                        <li id="li-assets"><strong>Ewidencja środków trwałych</strong> oraz tabele amortyzacji za poprzedni rok oraz rok bieżący,</li>
                                         <li>Informacja o terminowości opłacania składek <strong>ZUS i US</strong> (na ten moment wystarczy informacja, natomiast do uruchomienia prawdopodobnie będzie potrzebne zaświadczenie),</li>
+                                        <li><strong>Wyciągi z konta firmowego za 6m</strong> (Konto z wpływami z faktur i to na którym jest płacony ZUS i US),</li>
                                         <li>Parametry, a najlepiej <strong>umowa kredytu do refinansowania</strong> (umowa pozwoli mi lepiej podliczyć różnice i sprawdzić, jakie są ewentualne koszty wcześniejszego zamknięcia kredytu).</li>
                                     </ul>
                                     </div>
@@ -179,12 +179,13 @@
             });
         });
 
-        // --- NOWA FUNKCJA PRZEŁĄCZAJĄCA ---
+        // --- ZAKTUALIZOWANA FUNKCJA PRZEŁĄCZAJĄCA ---
         function switchAccountingType(button, type) {
             // Elementy listy do zmiany
             const liBik = document.getElementById('li-bik');
             const liAccountingDoc = document.getElementById('li-accounting-doc');
             const liPit = document.getElementById('li-pit');
+            const liAssets = document.getElementById('li-assets'); // NOWY ELEMENT
 
             // Zarządzanie klasą 'active' na przyciskach
             const allButtons = document.querySelectorAll('.type-button');
@@ -199,6 +200,7 @@
                     liAccountingDoc.style.display = 'list-item';
                     liPit.innerHTML = '<strong>PIT</strong> za rok 2023 i 2024,';
                     liPit.style.display = 'list-item';
+                    liAssets.style.display = 'list-item'; // POKAŻ Ewidencję
                     break;
                 case 'ryczalt':
                     liBik.innerHTML = '<strong>Raport BIK</strong> prywatny i firmowy (instrukcja do pobrania raportów w załączniku),';
@@ -206,16 +208,18 @@
                     liAccountingDoc.style.display = 'list-item';
                     liPit.innerHTML = '<strong>PIT</strong> za rok 2023 i 2024,';
                     liPit.style.display = 'list-item';
+                    liAssets.style.display = 'none'; // UKRYJ Ewidencję
                     break;
                 case 'pelna':
                     liBik.innerHTML = '<strong>Raport BIK</strong> prywatny (prezesa lub udziałowca większościowego) i firmowy (instrukcja do pobrania raportów w załączniku),';
                     liAccountingDoc.innerHTML = '<strong>Rachunek zysków i strat (RZIS)</strong> za dwa ostatnie lata oraz <strong>bilans spółki</strong> za dwa ostatnie lata,';
                     liAccountingDoc.style.display = 'list-item';
-                    liPit.style.display = 'none'; // Ukryj PIT dla pełnej księgowości
+                    liPit.style.display = 'none'; // Ukryj PIT
+                    liAssets.style.display = 'none'; // UKRYJ Ewidencję
                     break;
             }
         }
-        // --- KONIEC NOWEJ FUNKCJI ---
+        // --- KONIEC ZAKTUALIZOWANEJ FUNKCJI ---
 
         function copySubject(button, text) {
             navigator.clipboard.writeText(text).then(() => {
@@ -247,5 +251,3 @@
     </script>
 </body>
 </html>
-
-
