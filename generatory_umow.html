@@ -7,32 +7,6 @@
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     
-    <style>
-        .nav-footer {
-            margin-top: 2.5rem; /* Zwiększony margines dla oddzielenia */
-            text-align: center;
-        }
-        .nav-back {
-            background-color: #6c757d; /* Neutralny kolor powrotu */
-            border-color: #6c757d;
-            display: inline-block; /* Aby pozwolić na padding i auto-szerokość */
-            width: auto;
-            padding-left: 2.5rem;
-            padding-right: 2.5rem;
-            font-weight: 500;
-        }
-        .nav-back:hover {
-            background-color: #5a6268;
-            border-color: #5a6268;
-        }
-        /* Dodanie ikony do przycisku powrotu */
-        .nav-back::before {
-            font-family: "Font Awesome 5 Free"; /* Założenie, że FA jest dostępny */
-            font-weight: 900;
-            content: "\f015"; /* Ikona domku */
-            margin-right: 10px;
-        }
-    </style>
 </head>
 <body>
 
@@ -46,9 +20,14 @@
             <a href="generator_umowy.html" class="menu-button">Generator Umów SKD BAF</a>
         </div>
         
-        <div class="nav-footer">
-             <a href="index.html" class="menu-button nav-back">Menu Główne</a>
+        <div class="back-button-container">
+            <a href="#" onclick="history.back(); return false;" class="back-button">POWRÓT</a>
         </div>
+        <a href="index.html" class="home-button" title="Strona główna">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/>
+        </svg>
+    </a>
     </div>
 
 </body>
