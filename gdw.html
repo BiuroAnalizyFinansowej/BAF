@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Szablon: Refinansowanie (GDW)</title>
+    <title>Szablon: Przygotowanie do Kredytu</title>
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
         #back-controls-container { position: fixed; top: 20px; left: 30px; z-index: 1000; width: 140px; font-family: 'Lato', Arial, sans-serif; }
@@ -41,14 +41,15 @@
         .subject-button:hover { background-color: #17a2b8; color: #ffffff; }
         .subject-button:last-child { margin-bottom: 0; }
         .subject-button.copied { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
-
+        
+        /* --- STYLE DLA PRZEŁĄCZNIKA --- */
         #type-menu { background-color: #f8f9fa; border-radius: 5px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-top: 15px; }
         #type-menu h3 { margin: 0 0 10px 0; font-size: 16px; color: #333; text-align: center; }
         .type-button { display: block; width: 100%; padding: 8px 10px; margin-bottom: 8px; font-size: 14px; color: #5F7A95; background-color: #ffffff; border: 1px solid #5F7A95; border-radius: 4px; cursor: pointer; text-align: left; transition: background-color 0.3s ease, color 0.3s ease; }
         .type-button:hover { background-color: #5F7A95; color: #ffffff; }
         .type-button.active { background-color: #002d5a; color: #ffffff; border-color: #002d5a; font-weight: bold; }
         .type-button:last-child { margin-bottom: 0; }
-
+        /* --- KONIEC STYLI --- */
     </style>
 </head>
 <body style="margin: 0; padding: 0; background-color: #f4f7f9; font-family: 'Lato', Arial, sans-serif;">
@@ -62,7 +63,7 @@
             <button class="type-button" onclick="switchAccountingType(this, 'ryczalt')">Ryczałt</button>
             <button class="type-button" onclick="switchAccountingType(this, 'pelna')">Pełna Księgowość</button>
         </div>
-    </div>
+        </div>
 
     <div id="controls-container">
         <button id="copyButton">Kopiuj treść</button>
@@ -70,13 +71,13 @@
         <div id="subject-menu">
             <h3>Wybierz i skopiuj tytuł maila:</h3>
             <h4 class="subject-category">Wariant formalny i bezpośredni</h4>
-            <button class="subject-button" onclick="copySubject(this, '🔵 Refinansowanie zobowiązań – lista wymaganych dokumentów')">🔵 Refinansowanie zobowiązań – lista wymaganych dokumentów</button>
-            <button class="subject-button" onclick="copySubject(this, '🔵 Analiza możliwości konsolidacji kredytów – podsumowanie rozmowy')">🔵 Analiza możliwości konsolidacji kredytów – podsumowanie rozmowy</button>
-            <button class="subject-button" onclick="copySubject(this, '🔵 Biuro Analizy Finansowej: Dokumenty potrzebne do analizy refinansowania')">🔵 Biuro Analizy Finansowej: Dokumenty potrzebne do analizy refinansowania</button>
+            <button class="subject-button" onclick="copySubject(this, '🔵 Przygotowanie do procesu kredytowego – podsumowanie rozmowy')">🔵 Przygotowanie do procesu kredytowego – podsumowanie rozmowy</button>
+            <button class="subject-button" onclick="copySubject(this, '🔵 Wskazówki przed złożeniem wniosku o kredyt')">🔵 Wskazówki przed złożeniem wniosku o kredyt</button>
+            <button class="subject-button" onclick="copySubject(this, '🔵 Biuro Analizy Finansowej: Jak przygotować się do kredytu?')">🔵 Biuro Analizy Finansowej: Jak przygotować się do kredytu?</button>
             <h4 class="subject-category">Wariant skupiony na korzyściach</h4>
-            <button class="subject-button" onclick="copySubject(this, '🔵 Jak obniżyć miesięczne raty? Informacje po naszej rozmowie')">🔵 Jak obniżyć miesięczne raty? Informacje po naszej rozmowie</button>
-            <button class="subject-button" onclick="copySubject(this, '🔵 Jedna, niższa rata – propozycja i lista dokumentów')">🔵 Jedna, niższa rata – propozycja i lista dokumentów</button>
-            <button class="subject-button" onclick="copySubject(this, '🔵 Uporządkuj finanse swojej firmy – dalsze kroki')">🔵 Uporządkuj finanse swojej firmy – dalsze kroki</button>
+            <button class="subject-button" onclick="copySubject(this, '🔵 Jak zwiększyć swoje szanse na najlepszy kredyt? Kluczowe kroki')">🔵 Jak zwiększyć swoje szanse na najlepszy kredyt? Kluczowe kroki</button>
+            <button class="subject-button" onclick="copySubject(this, '🔵 Najkorzystniejsza oferta za 3 miesiące – plan działania')">🔵 Najkorzystniejsza oferta za 3 miesiące – plan działania</button>
+            <button class="subject-button" onclick="copySubject(this, '🔵 Zbuduj swoją wiarygodność finansową – wskazówki od eksperta')">🔵 Zbuduj swoją wiarygodność finansową – wskazówki od eksperta</button>
         </div>
     </div>
     
@@ -100,51 +101,78 @@
                         <tr>
                             <td style="background-color: #ffffff; padding: 40px 50px;">
                                 <h1 style="font-family: 'Lato', Arial, sans-serif; font-size: 28px; font-weight: 400; color: #002d5a; margin: 0 0 25px 0;">Dzień dobry,</h1>
-                                <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 0 0 35px 0; line-height: 1.6;">
-                                    w nawiązaniu do rozmowy telefonicznej - poniżej wysyłam listę dokumentów oraz informacji potrzebnych do przeprowadzenia <strong>bezpłatnej i niezobowiązującej</strong> analizy.
+                                <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 0 0 20px 0; line-height: 1.6;">
+                                    w nawiązaniu do naszej rozmowy telefonicznej, przesyłam zbiór najważniejszych wskazówek. Pomogą one Państwu skutecznie przygotować się do procesu kredytowego w ciągu najbliższych 3 miesięcy i znacząco zwiększyć szanse na uzyskanie najkorzystniejszego finansowania.
                                 </p>
-                                <div style="background: #f8faff; border-left: 4px solid #007bff; padding: 25px; border-radius: 4px; font-size: 1em; margin-bottom: 40px;">
-                                    <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 20px; color: #0056b3; margin: 0 0 20px 0; font-weight: 700;">Dokumenty potrzebne do wstępnej analizy finansowej:</h3>
-                                    <ul style="padding-left: 20px; margin: 0; font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; line-height: 1.9;">
-                                        <li id="li-bik"><strong>Raport BIK</strong> prywatny i firmowy,</li>
-                                        <li id="li-accounting-doc"><strong>Podsumowanie KPiR</strong> za rok 2024 oraz bieżące miesiące 2025 roku,</li>
-                                        <li id="li-pit"><strong>PIT</strong> za rok 2023 i 2024,</li>
-                                        <li id="li-assets"><strong>Ewidencja środków trwałych</strong> oraz tabele amortyzacji za poprzedni rok oraz rok bieżący,</li>
-                                        <li>Informacja o terminowości opłacania składek <strong>ZUS i US</strong> (na ten moment wystarczy informacja, natomiast do uruchomienia prawdopodobnie będzie potrzebne zaświadczenie),</li>
-                                        <li><strong>Wyciągi z konta firmowego za 6m</strong> (Konto z wpływami z faktur i to na którym jest płacony ZUS i US).</li>
-                                    </ul>
-                                    </div>
-                                <h2 style="font-family: 'Lato', Arial, sans-serif; font-size: 26px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin: 0 0 25px 0; font-weight: 700;">Dlaczego warto połączyć obecne zobowiązania?</h2>
-                                <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 0 0 25px 0; line-height: 1.6;">
-                                    Konsolidacja lub refinansowanie kredytów to strategiczne posunięcie, które pozwala uporządkować finanse i znacznie obniżyć miesięczne koszty. Zamiast kilku różnych rat, płacą Państwo jedną, często niższą, co uwalnia dodatkowe środki i upraszcza zarządzanie budżetem.
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 20px; border-bottom: 1px solid #e0e0e0; padding-bottom: 30px;">
+                                    <tr>
+                                        <td>
+                                            <h2 style="font-family: 'Lato', Arial, sans-serif; font-size: 26px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin: 0 0 25px 0; font-weight: 700;">Kluczowe kroki do najlepszej oferty</h2>
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 25px;">
+                                                <tr>
+                                                    <td width="40" valign="top" style="padding-right: 15px;">
+                                                        <img src="https://img.icons8.com/ios/50/0056b3/combo-chart.png" alt="Wykres" width="28" height="28">
+                                                    </td>
+                                                    <td valign="top">
+                                                        <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 19px; color: #0056b3; margin: 0 0 5px 0; font-weight: 700;">Zadbanie o stabilną sytuację finansową</h3>
+                                                        <p style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; margin: 0; line-height: 1.6;">Utrzymanie dyscypliny finansowej to fundament zdolności kredytowej. Nagła strata lub spadek przychodu w okresie poprzedzającym wnioskowanie może negatywnie wpłynąć na ocenę analityka.</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 25px;">
+                                                <tr>
+                                                    <td width="40" valign="top" style="padding-right: 15px;">
+                                                       <img src="https://img.icons8.com/ios/50/0056b3/approve.png" alt="Wiarygodność" width="28" height="28">
+                                                    </td>
+                                                    <td valign="top">
+                                                        <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 19px; color: #0056b3; margin: 0 0 10px 0; font-weight: 700;">Budowanie wiarygodności finansowej</h3>
+                                                        <ul style="padding-left: 20px; margin: 0; font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; line-height: 1.6;">
+                                                            <li style="margin-bottom: 8px;"><strong>Terminowe spłaty:</strong> Nawet najmniejsze opóźnienie jest odnotowywane w BIK.</li>
+                                                            <li style="margin-bottom: 8px;"><strong>Unikanie produktów pozabankowych:</strong> AllegroPay, PayPo, Klarna są raportowane jak chwilówki.</li>
+                                                            <li style="margin-bottom: 8px;"><strong>Ograniczenie zapytań kredytowych:</strong> Każde zapytanie obniża Państwa scoring.</li>
+                                                            <li style="margin-bottom: 8px;"><strong>Czyste konto bankowe:</strong> Należy unikać transakcji hazardowych i śladów postępowań komorniczych.</li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+                                                <tr>
+                                                    <td width="40" valign="top" style="padding-right: 15px;">
+                                                        <img src="https://img.icons8.com/ios/50/0056b3/stack-of-paper.png" alt="Dokumenty" width="28" height="28">
+                                                    </td>
+                                                    <td valign="top">
+                                                        <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 19px; color: #0056b3; margin: 0 0 5px 0; font-weight: 700;">Przygotowanie dokumentów</h3>
+                                                        <p style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; margin: 0; line-height: 1.6;">Warto uprzedzić księgowość o planowanym kredycie. Dzięki temu, gdy nadejdzie czas, wszystkie dokumenty (PIT, KPiR/Ewidencja Przychodów) będą gotowe od ręki.</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 20px;">
+                                    <tr>
+                                        <td>
+                                            <h2 style="font-family: 'Lato', Arial, sans-serif; font-size: 26px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin: 0 0 25px 0; font-weight: 700;">Rozpocznijmy analizę już dziś!</h2>
+                                            <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 0 0 20px 0; line-height: 1.6;">
+                                                Zachęcamy do przesłania poniższych dokumentów w celu przeprowadzenia <strong>bezpłatnej i niezobowiązującej analizy</strong>. Dzięki niej przekażemy Państwu precyzyjne wskazówki, aby za 3 miesiące otrzymać najkorzystniejszą ofertę na rynku.
+                                            </p>
+                                            <div style="background: #f8faff; border-left: 4px solid #007bff; padding: 20px; border-radius: 4px; font-size: 1em;">
+                                                <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 19px; color: #0056b3; margin: 0 0 15px 0; font-weight: 700;">Dokumenty potrzebne do wstępnej analizy finansowej:</h3>
+                                                <ul style="padding-left: 20px; margin: 0; font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; line-height: 1.9;">
+                                                    <li id="li-bik"><strong>Raport BIK</strong> prywatny i firmowy,</li>
+                                                    <li id="li-accounting-doc"><strong>Podsumowanie KPiR</strong> za rok 2024 oraz bieżące miesiące 2025 roku,</li>
+                                                    <li id="li-pit"><strong>PIT</strong> za rok 2023 i 2024,</li>
+                                                    <li id="li-assets"><strong>Ewidencja środków trwałych</strong> oraz tabele amortyzacji za poprzedni rok oraz rok bieżący,</li>
+                                                    <li>Informacja o terminowości opłacania składek <strong>ZUS i US</strong> (na ten moment wystarczy informacja, natomiast do uruchomienia prawdopodobnie będzie potrzebne zaświadczenie),</li>
+                                                    <li><strong>Wyciągi z konta firmowego za 6m</strong> (Konto z wpływami z faktur i to na którym jest płacony ZUS i US).</li>
+                                                </ul>
+                                                </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 30px 0 0 0; line-height: 1.6;">
+                                    W razie jakichkolwiek pytań lub wątpliwości, pozostajemy do Państwa pełnej dyspozycji.
                                 </p>
-                                <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 25px;">
-                                    <tr>
-                                        <td width="50" valign="top" style="padding-right: 20px;"><img src="https://img.icons8.com/ios/50/0056b3/get-cash.png" alt="niższa rata" width="40"></td>
-                                        <td valign="top">
-                                            <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 19px; color: #0056b3; margin: 0 0 5px 0; font-weight: 700;">Jedna, niższa rata</h3>
-                                            <p style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; margin: 0; line-height: 1.6;">Połączenie kilku kredytów w jeden często pozwala na uzyskanie lepszych warunków, w tym niższego oprocentowania, co bezpośrednio przekłada się na niższą miesięczną ratę.</p>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="margin-bottom: 25px;">
-                                    <tr>
-                                        <td width="50" valign="top" style="padding-right: 20px;"><img src="https://img.icons8.com/ios/50/0056b3/money-circulation.png" alt="Płynność finansowa" width="40"></td>
-                                        <td valign="top">
-                                            <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 19px; color: #0056b3; margin: 0 0 5px 0; font-weight: 700;">Poprawa płynności finansowej</h3>
-                                            <p style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; margin: 0; line-height: 1.6;">Mniejsze obciążenie miesięczne oznacza więcej wolnych środków, które można przeznaczyć na rozwój firmy, inwestycje lub po prostu zbudowanie poduszki finansowej.</p>
-                                        </td>
-                                    </tr>
-                                </table>
-                                 <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
-                                    <tr>
-                                        <td width="50" valign="top" style="padding-right: 20px;"><img src="https://img.icons8.com/ios/50/0056b3/approve.png" alt="Wygoda i controla" width="40"></td>
-                                        <td valign="top">
-                                            <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 19px; color: #0056b3; margin: 0 0 5px 0; font-weight: 700;">Wygoda i pełna kontrola</h3>
-                                            <p style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; margin: 0; line-height: 1.6;">Zarządzanie jedną płatnością zamiast kilkoma to oszczędność czasu i mniejsze ryzyko pominięcia terminu spłaty, co pozytywnie wpływa na historię kredytową.</p>
-                                        </td>
-                                    </tr>
-                                </table>
                             </td>
                         </tr>
                     </table>
@@ -152,7 +180,6 @@
             </tr>
         </table>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const copyBtn = document.getElementById('copyButton');
@@ -178,20 +205,17 @@
             });
         });
 
-        // --- ZAKTUALIZOWANA FUNKCJA PRZEŁĄCZAJĄCA (3 OPCJE) ---
+        // --- NOWA FUNKCJA PRZEŁĄCZAJĄCA ---
         function switchAccountingType(button, type) {
-            // Elementy listy do zmiany
             const liBik = document.getElementById('li-bik');
             const liAccountingDoc = document.getElementById('li-accounting-doc');
             const liPit = document.getElementById('li-pit');
             const liAssets = document.getElementById('li-assets'); 
 
-            // Zarządzanie klasą 'active' na przyciskach
             const allButtons = document.querySelectorAll('.type-button');
             allButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
 
-            // Zmiana treści na podstawie typu
             switch (type) {
                 case 'kpir':
                     liBik.innerHTML = '<strong>Raport BIK</strong> prywatny i firmowy,';
@@ -199,7 +223,7 @@
                     liAccountingDoc.style.display = 'list-item';
                     liPit.innerHTML = '<strong>PIT</strong> za rok 2023 i 2024,';
                     liPit.style.display = 'list-item';
-                    liAssets.style.display = 'list-item'; // POKAŻ Ewidencję
+                    liAssets.style.display = 'list-item';
                     break;
                 case 'ryczalt':
                     liBik.innerHTML = '<strong>Raport BIK</strong> prywatny i firmowy,';
@@ -207,18 +231,18 @@
                     liAccountingDoc.style.display = 'list-item';
                     liPit.innerHTML = '<strong>PIT</strong> za rok 2023 i 2024,';
                     liPit.style.display = 'list-item';
-                    liAssets.style.display = 'none'; // UKRYJ Ewidencję
+                    liAssets.style.display = 'none';
                     break;
                 case 'pelna':
                     liBik.innerHTML = '<strong>Raport BIK</strong> prywatny (prezesa lub udziałowca większościowego) i firmowy,';
                     liAccountingDoc.innerHTML = '<strong>Rachunek zysków i strat (RZIS)</strong> za dwa ostatnie lata oraz <strong>bilans spółki</strong> za dwa ostatnie lata,';
                     liAccountingDoc.style.display = 'list-item';
-                    liPit.style.display = 'none'; // Ukryj PIT
-                    liAssets.style.display = 'none'; // UKRYJ Ewidencję
+                    liPit.style.display = 'none';
+                    liAssets.style.display = 'none';
                     break;
             }
         }
-        // --- KONIEC ZAKTUALIZOWANEJ FUNKCJI ---
+        // --- KONIEC FUNKCJI ---
 
         function copySubject(button, text) {
             navigator.clipboard.writeText(text).then(() => {
