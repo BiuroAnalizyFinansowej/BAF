@@ -41,13 +41,28 @@
         .subject-button:hover { background-color: #17a2b8; color: #ffffff; }
         .subject-button:last-child { margin-bottom: 0; }
         .subject-button.copied { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+        
+        /* --- STYLE DLA PRZEŁĄCZNIKA --- */
+        #type-menu { background-color: #f8f9fa; border-radius: 5px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-top: 15px; }
+        #type-menu h3 { margin: 0 0 10px 0; font-size: 16px; color: #333; text-align: center; }
+        .type-button { display: block; width: 100%; padding: 8px 10px; margin-bottom: 8px; font-size: 14px; color: #5F7A95; background-color: #ffffff; border: 1px solid #5F7A95; border-radius: 4px; cursor: pointer; text-align: left; transition: background-color 0.3s ease, color 0.3s ease; }
+        .type-button:hover { background-color: #5F7A95; color: #ffffff; }
+        .type-button.active { background-color: #002d5a; color: #ffffff; border-color: #002d5a; font-weight: bold; }
+        .type-button:last-child { margin-bottom: 0; }
+        /* --- KONIEC STYLI --- */
     </style>
 </head>
 <body style="margin: 0; padding: 0; background-color: #f4f7f9; font-family: 'Lato', Arial, sans-serif;">
 
     <div id="back-controls-container">
         <button id="backButton" onclick="history.back()">Powrót</button>
-    </div>
+        
+        <div id="type-menu">
+            <h3>Wybierz typ księgowości:</h3>
+            <button class="type-button active" onclick="switchAccountingType(this, 'kpir')">KPIR</button>
+            <button class="type-button" onclick="switchAccountingType(this, 'ryczalt')">Ryczałt</button>
+        </div>
+        </div>
 
     <div id="controls-container">
         <button id="copyButton">Kopiuj treść</button>
@@ -77,7 +92,7 @@
                                         <span style="position: relative; z-index: 1;">B</span><span style="position: relative; z-index: 2;">A</span><span style="position: relative; z-index: 1;">F</span>
                                     </div>
                                     <div style="font-family: 'Roboto', sans-serif; font-size: 14px; color: #ffffff; letter-spacing: 1px; margin-top: 8px; text-align: center;">
-                                        BIURO ANALIZY FINANSOWEJ
+                                         BIURO ANALIZY FINANSOWEJ
                                     </div>
                                 </div>
                             </td>
@@ -131,7 +146,7 @@
                                                     <td width="50%" valign="top" style="padding: 10px;">
                                                         <div style="background-color: #f8fbff; border-left: 5px solid #007bff; padding: 20px; border-radius: 8px; height: 100%;">
                                                             <img src="https://img.icons8.com/ios/50/0056b3/percentage--v1.png" alt="Ikona oprocentowania" width="32" height="32" style="margin-bottom: 10px;">
-                                                            <h3 style="margin: 0 0 10px 0; font-family: 'Lato', Arial, sans-serif; font-size: 18px; color: #0056b3; font-weight: 700;">Atrakcyjne Oprocentowanie: 8,15%</h3>
+                                                            <h3 style="margin: 0 0 10px 0; font-family: 'Lato', Arial, sans-serif; font-size: 18px; color: #0056b3; font-weight: 700;">Atrakcyjne Oprocentowanie: 7,89%</h3>
                                                             <p style="margin: 0; font-family: 'Lato', Arial, sans-serif; font-size: 15px; color: #555; line-height: 1.6;">(Stała marża 3,5% + WIBOR 1M). Przejrzyste warunki, które pozwalają precyzyjnie planować budżet.</p>
                                                         </div>
                                                     </td>
@@ -163,7 +178,7 @@
                                                     <td width="50%" valign="top" style="padding: 10px;">
                                                         <div style="background-color: #f8fbff; border-left: 5px solid #007bff; padding: 20px; border-radius: 8px; height: 100%;">
                                                             <img src="https://img.icons8.com/ios/50/0056b3/calculator.png" alt="Ikona raty" width="32" height="32" style="margin-bottom: 10px;">
-                                                            <h3 style="margin: 0 0 10px 0; font-family: 'Lato', Arial, sans-serif; font-size: 18px; color: #0056b3; font-weight: 700;">Szacunkowa Rata: ok. 14 450 zł</h3>
+                                                            <h3 style="margin: 0 0 10px 0; font-family: 'Lato', Arial, sans-serif; font-size: 18px; color: #0056b3; font-weight: 700;">Szacunkowa Rata: ok. 14 238 zł</h3>
                                                             <p style="margin: 0; font-family: 'Lato', Arial, sans-serif; font-size: 15px; color: #555; line-height: 1.6;">Przykładowa kalkulacja dla 1,5 mln zł na 15 lat (180 miesięcy). Finalna rata zależy od oceny zdolności kredytowej.</p>
                                                         </div>
                                                     </td>
@@ -276,12 +291,12 @@
                                             <div style="background: #f8faff; border-left: 4px solid #007bff; padding: 20px; border-radius: 4px; font-size: 1em;">
                                                 <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 19px; color: #0056b3; margin: 0 0 15px 0; font-weight: 700;">Wymagane Dokumenty:</h3>
                                                 <ul style="padding-left: 20px; margin: 0; font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; line-height: 1.8;">
-                                                    <li style="margin-bottom: 8px;">PIT za poprzedni rok.</li>
-                                                    <li style="margin-bottom: 8px;">BIK prywatny oraz firmowy.</li>
-                                                    <li style="margin-bottom: 8px;">Dokumenty finansowe bieżące (Ewidencja lub KPiR z rozliczonym ostatnim miesiącem).</li>
+                                                    <li id="li-pit" style="margin-bottom: 8px;">PIT za poprzedni rok.</li>
+                                                    <li id="li-bik" style="margin-bottom: 8px;">BIK prywatny oraz firmowy.</li>
+                                                    <li id="li-accounting-doc" style="margin-bottom: 8px;"><strong>KPiR</strong> z rozliczonym ostatnim miesiącem.</li>
                                                     <li style="margin-bottom: 8px;">Zaświadczenia o niezaleganiu ZUS i US <em style="font-style: italic; color: #555;">(wymagane dopiero do podpisania umowy)</em>.</li>
                                                 </ul>
-                                            </div>
+                                                </div>
                                         </td>
                                     </tr>
                                 </table>
@@ -319,6 +334,25 @@
                 });
             });
         });
+
+        // --- NOWA FUNKCJA PRZEŁĄCZAJĄCA ---
+        function switchAccountingType(button, type) {
+            const liAccountingDoc = document.getElementById('li-accounting-doc');
+
+            const allButtons = document.querySelectorAll('.type-button');
+            allButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            switch (type) {
+                case 'kpir':
+                    liAccountingDoc.innerHTML = '<strong>KPiR</strong> z rozliczonym ostatnim miesiącem.';
+                    break;
+                case 'ryczalt':
+                    liAccountingDoc.innerHTML = '<strong>Ewidencja przychodu</strong> z rozliczonym ostatnim miesiącem.';
+                    break;
+            }
+        }
+        // --- KONIEC FUNKCJI ---
 
         function copySubject(button, text) {
             navigator.clipboard.writeText(text).then(() => {
