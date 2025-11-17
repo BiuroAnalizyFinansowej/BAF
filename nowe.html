@@ -61,6 +61,7 @@
             <h3>Wybierz typ księgowości:</h3>
             <button class="type-button active" onclick="switchAccountingType(this, 'kpir')">KPIR</button>
             <button class="type-button" onclick="switchAccountingType(this, 'ryczalt')">Ryczałt</button>
+            <button class="type-button" onclick="switchAccountingType(this, 'pelna')">Pełna Księgowość</button>
         </div>
         </div>
 
@@ -194,7 +195,7 @@
             });
         });
 
-        // --- NOWA FUNKCJA PRZEŁĄCZAJĄCA ---
+        // --- ZAKTUALIZOWANA FUNKCJA PRZEŁĄCZAJĄCA (3 OPCJE) ---
         function switchAccountingType(button, type) {
             const liBik = document.getElementById('li-bik');
             const liAccountingDoc = document.getElementById('li-accounting-doc');
@@ -205,20 +206,28 @@
             allButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
 
+            // Pokaż wszystkie elementy przed ukryciem (reset)
+            liAccountingDoc.style.display = 'list-item';
+            liPit.style.display = 'list-item';
+            liAssets.style.display = 'list-item';
+
             switch (type) {
                 case 'kpir':
                     liBik.innerHTML = '<strong>Raport BIK</strong> prywatny i firmowy,';
                     liAccountingDoc.innerHTML = '<strong>Podsumowanie KPiR</strong> za rok 2024 oraz bieżące miesiące 2025 roku,';
                     liPit.innerHTML = '<strong>PIT</strong> za rok 2023 i 2024,';
-                    liPit.style.display = 'list-item';
-                    liAssets.style.display = 'list-item';
                     break;
                 case 'ryczalt':
                     liBik.innerHTML = '<strong>Raport BIK</strong> prywatny i firmowy,';
                     liAccountingDoc.innerHTML = '<strong>Ewidencja przychodu</strong> za rok 2024 oraz bieżące miesiące 2025 roku,';
                     liPit.innerHTML = '<strong>PIT</strong> za rok 2023 i 2024,';
-                    liPit.style.display = 'list-item';
-                    liAssets.style.display = 'none';
+                    liAssets.style.display = 'none'; // Ukryj ewidencję ŚT
+                    break;
+                case 'pelna':
+                    liBik.innerHTML = '<strong>Raport BIK</strong> prywatny (prezesa lub udziałowca większościowego) i firmowy,';
+                    liAccountingDoc.innerHTML = '<strong>Rachunek zysków i strat (RZIS)</strong> za dwa ostatnie lata oraz <strong>bilans spółki</strong> za dwa ostatnie lata,';
+                    liPit.style.display = 'none'; // Ukryj PIT
+                    liAssets.style.display = 'none'; // Ukryj ewidencję ŚT
                     break;
             }
         }
