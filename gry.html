@@ -21,5 +21,20 @@
         </div>
     </div>
 
-</body>
 </html>
+
+    <script>
+        // BAF AUTO UPDATE - 05.12.2025
+        try {
+            document.getElementById('wibor-1m').textContent = '4,18%';
+            document.getElementById('wibor-3m').textContent = '4,12%';
+            document.getElementById('wibor-6m').textContent = '3,97%';
+            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
+            
+            const dzisiaj = 'Dane na dzień: 05.12.2025';
+            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
+            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
+        } catch(e) { console.log('Brak elementu w tym pliku'); }
+    </script>
+    </body>
+    

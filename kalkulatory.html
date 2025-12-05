@@ -12,18 +12,18 @@
     <div class="info-panel">
         <div class="info-container">
             <div class="info-header">Stawki Referencyjne</div>
-            <div class="info-date" id="current-date-wibor">...</div>
+            <div class="info-date" id="current-date-wibor">Dane na dzień: 05.12.2025</div>
             <div class="rates-grid">
-                <div class="rate-item"><p>WIBOR 1M</p><p class="value" id="wibor-1m">...</p></div>
-                <div class="rate-item"><p>WIBOR 3M</p><p class="value" id="wibor-3m">...</p></div>
-                <div class="rate-item"><p>WIBOR 6M</p><p class="value" id="wibor-6m">...</p></div>
+                <div class="rate-item"><p>WIBOR 1M</p><p class="value" id="wibor-1m">4,18%</p></div>
+                <div class="rate-item"><p>WIBOR 3M</p><p class="value" id="wibor-3m">4,12%</p></div>
+                <div class="rate-item"><p>WIBOR 6M</p><p class="value" id="wibor-6m">3,97%</p></div>
             </div>
             <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p>
         </div>
         <div class="info-container info-container-single">
             <div class="info-header">Odsetki ustawowe za opóźnienie</div>
-            <div class="info-date" id="current-date-odsetki">...</div>
-            <p class="value" id="odsetki-opoznienie">...</p>
+            <div class="info-date" id="current-date-odsetki">Dane na dzień: 05.12.2025</div>
+            <p class="value" id="odsetki-opoznienie">9,5%</p>
             <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p>
         </div>
     </div>
@@ -49,6 +49,25 @@
     </a>
     </div>
     
-    <script src="script.js"></script>
-</body>
+    <script>
+        
+        const dzisiaj = 'Dane na dzień: 05.12.2025';
+        document.getElementById('current-date-wibor').textContent = dzisiaj;
+        document.getElementById('current-date-odsetki').textContent = dzisiaj;
+    </script>
 </html>
+    <script>
+        // BAF AUTO UPDATE - 05.12.2025
+        try {
+            document.getElementById('wibor-1m').textContent = '4,18%';
+            document.getElementById('wibor-3m').textContent = '4,12%';
+            document.getElementById('wibor-6m').textContent = '3,97%';
+            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
+            
+            const dzisiaj = 'Dane na dzień: 05.12.2025';
+            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
+            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
+        } catch(e) { console.log('Brak elementu w tym pliku'); }
+    </script>
+    </body>
+    
