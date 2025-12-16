@@ -6,7 +6,66 @@
     <title>BAF - Menu Główne</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="baf_logo_p.png">
-</head>
+
+    <style>
+        .christmas-btn-container {
+            width: 100%;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .btn-christmas {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #d42426, #8a1c1e); /* Czerwony gradient */
+            color: #fff !important; /* Wymuszenie białego tekstu */
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(212, 36, 38, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 18px;
+            border: 2px solid #fff;
+            overflow: visible; /* Żeby czapka mogła wystawać */
+        }
+
+        .btn-christmas:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(212, 36, 38, 0.6);
+            background: linear-gradient(135deg, #e63537, #a02224);
+        }
+
+        /* Czapka Mikołaja jako element doczepiony */
+        .btn-christmas::after {
+            content: '🎅';
+            position: absolute;
+            top: -20px;
+            right: -10px;
+            font-size: 36px;
+            transform: rotate(15deg);
+            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3));
+            animation: wave 2s infinite ease-in-out;
+        }
+
+        /* Płatki śniegu jako ozdoba */
+        .btn-christmas::before {
+            content: '❄️ Wesołych Świąt ❄️';
+            display: block;
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 2px;
+            font-weight: normal;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(15deg); }
+            50% { transform: rotate(5deg); }
+        }
+    </style>
+    </head>
 <body>
 
     <div class="info-panel">
@@ -44,6 +103,11 @@
             <img src="baf_logo.png" alt="Logo BAF">
         </div>
 
+        <div class="christmas-btn-container">
+            <a href="zyczenia/zyczenia.html" class="btn-christmas">
+                Wyślij życzenia do Klientów
+            </a>
+        </div>
         <div class="button-grid grid-3-col">
             <a href="szablony.html" class="menu-button">Szablony maili</a>
             <a href="kalkulatory.html" class="menu-button">Kalkulatory</a>
@@ -119,4 +183,3 @@
         } catch(e) { console.log('Brak elementu w tym pliku'); }
     </script>
     </body>
-    
