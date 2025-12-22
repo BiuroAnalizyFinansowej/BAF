@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>Życzenia Świąteczne - Biuro Analizy Finansowej</title>
+    <style type="text/css">
+        /* Reset stylów */
+        body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+        table { border-collapse: collapse !important; }
+        body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; background-color: #f4f4f4; }
+        
+        /* Media Queries dla mobilnych */
+        @media screen and (max-width: 600px) {
+            .email-container { width: 100% !important; }
+            .fluid-img { width: 100% !important; max-width: 100% !important; height: auto !important; }
+            .text-pad { padding-left: 20px !important; padding-right: 20px !important; }
+        }
+
+        /* --- STYLE DLA PRZYCISKÓW (Niewidoczne w mailu, widoczne w przeglądarce) --- */
+        #back-controls-container { position: fixed; top: 20px; left: 30px; z-index: 1000; width: 140px; font-family: 'Lato', Arial, sans-serif; }
+        #controls-container { position: fixed; top: 20px; right: 30px; z-index: 1000; width: 200px; font-family: 'Lato', Arial, sans-serif; }
+        
+        #copyButton, #backButton {
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+        }
+        #copyButton:active, #backButton:active { transform: scale(0.98); }
+
+        #copyButton { background-color: #17a2b8; }
+        #copyButton:hover { background-color: #138496; }
+        #copyButton.copied { background-color: #28a745; }
+
+        #backButton { background-color: #5F7A95; }
+        #backButton:hover { background-color: #4e657b; }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f4f4;">
+
+    <div id="back-controls-container">
+        <button id="backButton" onclick="history.back()">Powrót</button>
+    </div>
+
+    <div id="controls-container">
+        <button id="copyButton">Kopiuj treść</button>
+    </div>
+
+    <div id="email-content-wrapper">
+        <center>
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f4f4;">
+                <tr>
+                    <td align="center" style="padding: 40px 0;">
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; box-shadow: 0px 4px 10px rgba(0,0,0,0.05);" class="email-container">
+                            
+                            <tr>
+                                <td align="center" style="padding: 40px 20px;">
+                                    <img src="https://raw.githubusercontent.com/BiuroAnalizyFinansowej/BAF/main/zyczenia/baf_logo.png" alt="Biuro Analizy Finansowej" width="200" style="display: block; font-family: Arial, sans-serif; color: #333333; font-size: 14px;" border="0">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td align="center" style="background-color: #ffffff;">
+                                    <img src="https://raw.githubusercontent.com/BiuroAnalizyFinansowej/BAF/main/zyczenia/zyczenia.JPG" alt="Świąteczny klimat" width="600" class="fluid-img" style="display: block; width: 100%; max-width: 600px; height: auto;" border="0">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td align="center" class="text-pad" style="padding: 50px 40px 30px 40px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align: center;">
+                                    <p style="margin: 0; font-size: 16px; line-height: 26px; color: #555555; letter-spacing: 0.5px;">
+                                        Szanowni Państwo,<br><br>
+                                        Dziękując za dotychczasową, owocną współpracę i okazany profesjonalizm, pragniemy złożyć Państwu najserdeczniejsze życzenia świąteczne.<br><br>
+                                        Niech ten wyjątkowy czas przyniesie chwilę wytchnienia od codziennych wyzwań, a nadchodzący Nowy Rok obfituje w stabilność, pomyślność oraz kolejne sukcesy w realizacji planów biznesowych i osobistych.
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td align="center" style="padding: 20px 0 60px 0;">
+                                    <h1 style="margin: 0; font-family: 'Times New Roman', Times, serif; font-size: 32px; line-height: 36px; color: #003366; font-weight: normal; letter-spacing: 1px;">
+                                        Wesołych Świąt!
+                                    </h1>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </center>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const copyBtn = document.getElementById('copyButton');
+            const emailWrapper = document.getElementById('email-content-wrapper');
+            
+            copyBtn.addEventListener('click', () => {
+                const htmlContent = emailWrapper.innerHTML;
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const richTextInput = new ClipboardItem({ 'text/html': blob });
+                
+                navigator.clipboard.write([richTextInput]).then(() => {
+                    copyBtn.textContent = 'Skopiowano treść';
+                    copyBtn.classList.add('copied');
+                    setTimeout(() => {
+                        copyBtn.textContent = 'Kopiuj treść';
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Błąd kopiowania: ', err);
+                    copyBtn.textContent = 'Błąd!';
+                     setTimeout(() => {
+                        copyBtn.textContent = 'Kopiuj treść';
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+    <script>
+        // BAF AUTO UPDATE - 17.12.2025
+        try {
+            document.getElementById('wibor-1m').textContent = '4,17%';
+            document.getElementById('wibor-3m').textContent = '4,03%';
+            document.getElementById('wibor-6m').textContent = '3,93%';
+            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
+            
+            const dzisiaj = 'Dane na dzień: 17.12.2025';
+            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
+            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
+        } catch(e) { console.log('Brak elementu w tym pliku'); }
+    </script>
+</body>
+</html>
