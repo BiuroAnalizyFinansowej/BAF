@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Propozycja Współpracy - BAF</title>
     <style>
-        /* --- STYLE PANELU STEROWANIA --- */
+        /* --- STYLE PANELU STEROWANIA (Tylko dla Twojego widoku, nie do maila) --- */
         body {
             margin: 0;
             padding: 0;
@@ -57,16 +57,10 @@
             text-align: center;
             font-weight: bold;
             border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            outline: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: background-color 0.3s ease, transform 0.2s ease;
             margin-bottom: 20px;
         }
         #copy-button:hover { background-color: #138496; }
         #copy-button.copied { background-color: #28a745; }
-        #copy-button:active { transform: scale(0.98); }
 
         h3.panel-header {
             font-size: 14px;
@@ -77,14 +71,15 @@
             border-bottom: 1px solid #eee;
             padding-bottom: 5px;
         }
-        
+
+        /* Styl nagłówka w podglądzie */
         .header { background-color: #f6f8fa; padding: 30px 20px; text-align: center; }
     </style>
 </head>
 <body>
 
     <div id="control-panel">
-        <button id="copy-button">Kopiuj treść</button>
+        <button id="copy-button" class="panel-btn">Kopiuj całość do maila</button>
         
         <h3 class="panel-header">Wybierz doradcę:</h3>
         
@@ -148,11 +143,11 @@
                                 <div style="background-color: #fcfdfd; border: 1px solid #e1e4e8; border-left: 4px solid #28a745; padding: 20px; border-radius: 4px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);">
                                     <span style="color: #002d5a; font-weight: 800; font-size: 16px; text-transform: uppercase; margin-bottom: 10px; display: block;">CASE STUDY:</span>
                                     <p style="margin:0; font-size: 15px; color: #444; line-height: 1.6;">
-                                        Klient posiadał zobowiązanie w wysokości <strong>223 020 zł</strong>, które przy wysokim oprocentowaniu <strong>13,23%</strong> na 111 miesięcy generowało obciążającą ratę 3 493 zł.
+                                        Klient posiadał zobowiązanie w wysokości <strong>223&nbsp;020&nbsp;zł</strong>, które przy wysokim oprocentowaniu <strong>13,23%</strong> na 111&nbsp;miesięcy generowało obciążającą ratę 3&nbsp;493&nbsp;zł.
                                         <br><br>
-                                        Przeprowadziliśmy proces refinansowania na okres 120 miesięcy, drastycznie redukując oprocentowanie do poziomu <strong>7,12%</strong>. Dzięki temu miesięczna płatność spadła do 2 603 zł, zapewniając klientowi finansowy oddech każdego miesiąca.
+                                        Przeprowadziliśmy proces refinansowania na okres 120&nbsp;miesięcy, drastycznie redukując oprocentowanie do poziomu <strong>7,12%</strong>. Dzięki temu miesięczna płatność spadła do 2&nbsp;603&nbsp;zł, zapewniając klientowi finansowy oddech każdego miesiąca.
                                         <br><br>
-                                        W skali całego okresu kredytowania ta jedna decyzja pozwoliła zachować w kieszeni klienta aż <strong style="color: #28a745;">75 363 zł</strong>, które pierwotnie oddałby bankowi.
+                                        W skali całego okresu kredytowania ta jedna decyzja pozwoliła zachować w kieszeni klienta aż <strong style="color: #28a745;">75&nbsp;363&nbsp;zł</strong>, które pierwotnie oddałby bankowi.
                                     </p>
                                 </div>
 
@@ -184,14 +179,13 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // OBSŁUGA KOPIOWANIA (Skopiowana z zyczenia.html)
+            // OBSŁUGA KOPIOWANIA - Wersja z Blob/ClipboardItem (lepsza dla obrazków)
             const copyBtn = document.getElementById('copy-button');
             const emailWrapper = document.getElementById('email-content-wrapper');
             
             copyBtn.addEventListener('click', () => {
                 const htmlContent = emailWrapper.innerHTML;
                 const blob = new Blob([htmlContent], { type: 'text/html' });
-                // Tworzymy ClipboardItem dla typu text/html
                 const richTextInput = new ClipboardItem({ 'text/html': blob });
                 
                 navigator.clipboard.write([richTextInput]).then(() => {
@@ -204,8 +198,8 @@
                     }, 2000);
                 }).catch(err => {
                     console.error('Błąd kopiowania: ', err);
-                    copyBtn.textContent = 'Błąd!';
-                     setTimeout(() => {
+                    copyBtn.textContent = 'Błąd! Sprawdź konsolę';
+                    setTimeout(() => {
                         copyBtn.textContent = 'Kopiuj treść';
                     }, 2000);
                 });
