@@ -6,24 +6,45 @@
     <title>BAF - Szablony maili</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="baf_logo_p.png">
+    <style>
+        /* Wyróżnik dla nowego przycisku */
+        .btn-special {
+            background: linear-gradient(135deg, #d4af37, #aa8418) !important; /* Złoty gradient */
+            color: #fff !important;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(170, 132, 24, 0.3);
+            animation: gentle-pulse 2s infinite;
+        }
+
+        .btn-special:hover {
+            background: linear-gradient(135deg, #e5c05b, #c59d1f) !important;
+            transform: scale(1.03);
+        }
+
+        @keyframes gentle-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+    </style>
 </head>
 <body>
 
     <div class="info-panel">
         <div class="info-container">
             <div class="info-header">Stawki Referencyjne</div>
-            <div class="info-date" id="current-date-wibor">...</div>
+            <div class="info-date" id="current-date-wibor">Dane na dzień: 26.01.2026</div>
             <div class="rates-grid">
-                <div class="rate-item"><p>WIBOR 1M</p><p class="value" id="wibor-1m">...</p></div>
-                <div class="rate-item"><p>WIBOR 3M</p><p class="value" id="wibor-3m">...</p></div>
-                <div class="rate-item"><p>WIBOR 6M</p><p class="value" id="wibor-6m">...</p></div>
+                <div class="rate-item"><p>WIBOR 1M</p><p class="value" id="wibor-1m">4,04%</p></div>
+                <div class="rate-item"><p>WIBOR 3M</p><p class="value" id="wibor-3m">3,92%</p></div>
+                <div class="rate-item"><p>WIBOR 6M</p><p class="value" id="wibor-6m">3,81%</p></div>
             </div>
             <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p>
         </div>
         <div class="info-container info-container-single">
             <div class="info-header">Odsetki ustawowe za opóźnienie</div>
-            <div class="info-date" id="current-date-odsetki">...</div>
-            <p class="value" id="odsetki-opoznienie">...</p>
+            <div class="info-date" id="current-date-odsetki">Dane na dzień: 26.01.2026</div>
+            <p class="value" id="odsetki-opoznienie">9,5%</p>
             <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p>
         </div>
     </div>
@@ -40,124 +61,32 @@
             <a href="restru.html" class="menu-button">Restrukturyzacja</a>
             <a href="nowe.html" class="menu-button">Nowe środki</a>
             <a href="bos.html" class="menu-button">BOŚie opłaca Lekarzom</a>
+            <a href="ksiegowi.html" class="menu-button btn-special">Współpraca z biurami rachunkowymi</a>
         </div>
 
         <div class="back-button-container">
             <a href="#" onclick="history.back(); return false;" class="back-button">POWRÓT</a>
         </div>
         <a href="index.html" class="home-button" title="Strona główna">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/>
-        </svg>
-    </a>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/>
+            </svg>
+        </a>
     </div>
 
     <script src="script.js"></script>
 
-</html>
-
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 08.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 10.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 15.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 17.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 08.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 16.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 22.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
     <script>
         // BAF AUTO UPDATE - 26.01.2026
         try {
-            document.getElementById('wibor-1m').textContent = '4,04%';
-            document.getElementById('wibor-3m').textContent = '3,92%';
-            document.getElementById('wibor-6m').textContent = '3,81%';
-            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
-            
-            const dzisiaj = 'Dane na dzień: 26.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
+            const w1m = '4,04%', w3m = '3,92%', w6m = '3,81%', ods = '9,5%', d = 'Dane na dzień: 26.01.2026';
+            document.getElementById('wibor-1m').textContent = w1m;
+            document.getElementById('wibor-3m').textContent = w3m;
+            document.getElementById('wibor-6m').textContent = w6m;
+            document.getElementById('odsetki-opoznienie').textContent = ods;
+            document.getElementById('current-date-wibor').textContent = d;
+            document.getElementById('current-date-odsetki').textContent = d;
+        } catch(e) { console.log('Błąd aktualizacji danych'); }
     </script>
-    </body>
-    
+</body>
+</html>
