@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Zdolności B2B - Styl Vibrant</title>
+    <style>
+        :root {
+            --primary-color: #6d28d9;
+            --primary-light: #8b5cf6;
+            --bg-light: #f3f4f6;
+            --text-dark: #111827;
+            --text-light: #4b5563;
+            --accent-green: #10b981;
+        }
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
+            background-color: var(--bg-light); color: var(--text-dark);
+            margin: 0; padding: 20px;
+        }
+        .calculator-container {
+            position: relative;
+            width: 100%; max-width: 800px; background-color: #ffffff; padding: 2.5rem;
+            border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        /* PRZYCISKI NAWIGACYJNE */
+        .home-button, .back-button {
+            position: absolute; top: 20px; width: 50px; height: 50px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s; z-index: 1001; text-decoration: none;
+        }
+        .home-button { left: 20px; background: var(--primary-color); box-shadow: 0 4px 15px rgba(109, 40, 217, 0.4); }
+        .back-button { left: 80px; background: var(--bg-light); border: 1px solid #e5e7eb; }
+        .home-button:hover, .back-button:hover { transform: scale(1.1); }
+        .home-button svg { width: 28px; height: 28px; fill: #ffffff; }
+        .back-button svg { width: 28px; height: 28px; fill: var(--primary-color); }
+
+        /* PANEL BOCZNY */
+        .info-panel {
+            position: fixed; top: 20px; right: 20px; width: 220px; 
+            background-color: #ffffff; border-radius: 20px; padding: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1); z-index: 1000;
+        }
+        .info-container { padding: 10px; background-color: var(--bg-light); border-radius: 12px; margin-bottom: 10px; border: 1px solid #e5e7eb; }
+        .info-header { font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 5px; }
+        .info-date { font-size: 10px; color: #9ca3af; margin-bottom: 10px; }
+        .rates-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; text-align: center; }
+        .rate-item p { margin: 0; font-size: 10px; color: var(--text-light); }
+        .rate-item .value { font-weight: 700; font-size: 13px; color: var(--primary-color); }
+
+        /* FORMULARZ */
+        h1 { text-align: center; margin-bottom: 2rem; font-weight: 700; color: var(--primary-color); }
+        .section-title { font-size: 1.1rem; font-weight: 700; margin: 1.5rem 0 1rem; border-bottom: 2px solid var(--bg-light); padding-bottom: 5px; }
+        
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .input-group { margin-bottom: 1.2rem; }
+        label { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem; display: block; color: var(--text-light); }
+        
+        input[type="text"], input[type="number"] { 
+            border: 2px solid #e5e7eb; width: 100%; padding: 0.8rem; border-radius: 10px; 
+            font-size: 1.1rem; font-weight: 700; color: var(--text-dark); box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        input:focus { border-color: var(--primary-color); outline: none; background: #fafafa; }
+
+        /* WYNIKI */
+        .output-section { margin-top: 2rem; padding: 1.5rem; border-radius: 15px; background: var(--bg-light); border: 2px solid var(--primary-light); }
+        .output-row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid #d1d5db; }
+        .output-row:last-child { border-bottom: none; margin-top: 10px; }
+        .label { font-weight: 500; color: var(--text-light); font-size: 0.95rem; }
+        .value { font-weight: 700; color: var(--text-dark); }
+        .result-big { font-size: 1.8rem; color: var(--primary-color); font-weight: 800; }
+
+        @media (max-width: 600px) {
+            .grid-inputs { grid-template-columns: 1fr; }
+            .info-panel { position: relative; width: 100%; right: 0; top: 0; margin-bottom: 20px; }
+            .calculator-container { padding: 1.5rem; padding-top: 4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="info-panel">
+        <div class="info-container">
+            <div class="info-header">Stawki Referencyjne</div>
+            <div id="current-date-wibor" class="info-date">Dane na dzień: 29.01.2026</div>
+            <div class="rates-grid">
+                <div class="rate-item"><p>WIBOR 1M</p><p class="value">4,04%</p></div>
+                <div class="rate-item"><p>WIBOR 3M</p><p class="value">3,92%</p></div>
+                <div class="rate-item"><p>WIBOR 6M</p><p class="value">3,81%</p></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="calculator-container">
+        <a href="index.html" class="home-button" title="Strona główna">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg>
+        </a>
+        <a href="#" onclick="history.back(); return false;" class="back-button" title="Powrót">
+            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </a>
+
+        <h1>Zdolność Kredytowa B2B</h1>
+
+        <div class="section-title">Obciążenia miesięczne</div>
+        <div class="grid-inputs">
+            <div class="input-group">
+                <label>Raty (prywatne + firmowe)</label>
+                <input type="number" id="monthlyRates" value="0" oninput="calculate()">
+            </div>
+            <div class="input-group">
+                <label>Suma limitów (karty/konta)</label>
+                <input type="number" id="creditLimits" value="0" oninput="calculate()">
+            </div>
+        </div>
+
+        <div class="section-title">Finanse Roczne (Logika Auto-uzupełniania)</div>
+        <div class="grid-inputs">
+            <div class="input-group">
+                <label>Roczny Przychód</label>
+                <input type="number" id="annualRevenue" oninput="handleFinance('rev')">
+            </div>
+            <div class="input-group">
+                <label>Roczne Koszty</label>
+                <input type="number" id="annualCosts" oninput="handleFinance('cost')">
+            </div>
+        </div>
+        <div class="input-group">
+            <label>Roczny Dochód (Przychód - Koszty)</label>
+            <input type="number" id="annualIncome" oninput="handleFinance('inc')" style="background: #fff9fe; border-color: var(--primary-light);">
+        </div>
+
+        <div class="output-section">
+            <div class="output-row">
+                <span class="label">Dochód netto (po 19% podatku)</span>
+                <span class="value" id="netAnnual">0,00 zł</span>
+            </div>
+            <div class="output-row">
+                <span class="label">Średni miesięczny netto (12 m-cy)</span>
+                <span class="value" id="monthlyNet">0,00 zł</span>
+            </div>
+            <div class="output-row">
+                <span class="label">Dostępne DTI (65%)</span>
+                <span class="value" id="dtiValue">0,00 zł</span>
+            </div>
+            <div class="output-row" style="border-top: 2px solid var(--primary-color);">
+                <span class="label"><strong>ZDOLNOŚĆ NA DODATKOWE RATY</strong></span>
+                <span class="result-big" id="finalAbility">0,00 zł</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const currencyFormatter = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' });
+
+        // Logika auto-uzupełniania pól finansowych
+        function handleFinance(changed) {
+            const rev = parseFloat(document.getElementById('annualRevenue').value) || 0;
+            const cost = parseFloat(document.getElementById('annualCosts').value) || 0;
+            const inc = parseFloat(document.getElementById('annualIncome').value) || 0;
+
+            if (changed === 'rev' || changed === 'cost') {
+                document.getElementById('annualIncome').value = (rev - cost).toFixed(2);
+            } else if (changed === 'inc') {
+                // Jeśli zmieniamy dochód, zakładamy stałe koszty i zmieniamy przychód
+                document.getElementById('annualRevenue').value = (inc + cost).toFixed(2);
+            }
+            calculate();
+        }
+
+        function calculate() {
+            const income = parseFloat(document.getElementById('annualIncome').value) || 0;
+            const rates = parseFloat(document.getElementById('monthlyRates').value) || 0;
+            const limits = parseFloat(document.getElementById('creditLimits').value) || 0;
+
+            // 1. Dochód netto (pomniejszony o 19% podatku)
+            const netAnnual = income * 0.81;
+            
+            // 2. Średni miesięczny netto
+            const monthlyNet = netAnnual / 12;
+
+            // 3. Maksymalna baza na raty (65% DTI)
+            const dtiBase = monthlyNet * 0.65;
+
+            // 4. Wyliczenie końcowe:
+            // Baza - 5000 (koszty życia) - raty - 5% z limitów
+            const ability = dtiBase - 5000 - rates - (limits * 0.05);
+
+            // Wyświetlanie wyników
+            document.getElementById('netAnnual').textContent = currencyFormatter.format(netAnnual);
+            document.getElementById('monthlyNet').textContent = currencyFormatter.format(monthlyNet);
+            document.getElementById('dtiValue').textContent = currencyFormatter.format(dtiBase);
+            
+            const finalEl = document.getElementById('finalAbility');
+            finalEl.textContent = currencyFormatter.format(Math.max(0, ability));
+            
+            // Kolorowanie wyniku
+            finalEl.style.color = ability > 0 ? 'var(--primary-color)' : '#ef4444';
+        }
+    </script>
+</body>
+</html>
