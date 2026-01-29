@@ -107,11 +107,11 @@
         <div class="grid-inputs">
             <div class="input-group">
                 <label>Suma rat (prywatne + firmowe)</label>
-                <input type="text" id="monthlyRates" value="0" oninput="formatAndCalc(this)">
+                <input type="text" id="monthlyRates" value="0,00" oninput="handleInput(this)">
             </div>
             <div class="input-group">
                 <label>Suma limitów (karty/limity w kontach)</label>
-                <input type="text" id="creditLimits" value="0" oninput="formatAndCalc(this)">
+                <input type="text" id="creditLimits" value="0,00" oninput="handleInput(this)">
             </div>
         </div>
 
@@ -119,16 +119,16 @@
         <div class="grid-inputs">
             <div class="input-group">
                 <label>Roczny Przychód</label>
-                <input type="text" id="annualRevenue" value="0" oninput="handleFinance('rev', this)">
+                <input type="text" id="annualRevenue" value="0,00" oninput="handleFinance('rev', this)">
             </div>
             <div class="input-group">
                 <label>Roczne Koszty</label>
-                <input type="text" id="annualCosts" value="0" oninput="handleFinance('cost', this)">
+                <input type="text" id="annualCosts" value="0,00" oninput="handleFinance('cost', this)">
             </div>
         </div>
         <div class="input-group">
             <label>Roczny Dochód (Przychód - Koszty)</label>
-            <input type="text" id="annualIncome" value="0" oninput="handleFinance('inc', this)" style="background: #f8fafc; border-color: var(--primary-light);">
+            <input type="text" id="annualIncome" value="0,00" oninput="handleFinance('inc', this)" style="background: #f8fafc; border-color: var(--primary-light);">
         </div>
 
         <div class="output-section">
@@ -152,21 +152,69 @@
     </div>
 
     <script>
-        const currencyFormatter = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' });
+        const currencyFormatter = new Intl.NumberFormat('pl-PL', { 
+            style: 'currency', 
+            currency: 'PLN', 
+            minimumFractionDigits: 2 
+        });
 
-        // Funkcja czyszcząca tekst do liczby
+        const numberFormatter = new Intl.NumberFormat('pl-PL', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+        });
+
+        // Parsowanie wartości z pola tekstowego na liczbę
         function parseVal(val) {
-            return parseFloat(val.toString().replace(/\s/g, '').replace(',', '.')) || 0;
+            if (!val) return 0;
+            // Usuwa spacje, zamienia przecinek na kropkę
+            let clean = val.toString().replace(/\s/g, '').replace(',', '.');
+            return parseFloat(clean) || 0;
         }
 
-        // Funkcja formatująca do zapisu księgowego (separatory tysięcy)
+        // Formatowanie podczas wpisywania
         function formatInput(input) {
-            let value = input.value.replace(/\D/g, '');
-            if (value === "") value = "0";
-            input.value = new Intl.NumberFormat('pl-PL').format(parseInt(value));
+            let cursorPosition = input.selectionStart;
+            let originalLength = input.value.length;
+            
+            // Pobieramy czystą wartość (cyfry i jeden separator dziesiętny)
+            let value = input.value.replace(/[^\d.,]/g, '');
+            value = value.replace(',', '.');
+            
+            // Obsługa wielu kropek - zostawiamy tylko pierwszą
+            let parts = value.split('.');
+            if (parts.length > 2) {
+                value = parts[0] + '.' + parts.slice(1).join('');
+            }
+
+            if (value === "") {
+                input.value = "";
+                return;
+            }
+
+            // Formatuje część całkowitą
+            let formattedValue = "";
+            let integerPart = parts[0];
+            let decimalPart = parts[1];
+
+            if (integerPart !== "") {
+                formattedValue = new Intl.NumberFormat('pl-PL').format(parseInt(integerPart));
+            } else if (value.startsWith('.')) {
+                formattedValue = "0";
+            }
+
+            // Dodaje część dziesiętną jeśli istnieje
+            if (value.includes('.')) {
+                formattedValue += ',' + (decimalPart !== undefined ? decimalPart.substring(0, 2) : "");
+            }
+
+            input.value = formattedValue;
+
+            // Przywracanie pozycji kursora (uproszczone)
+            let newLength = input.value.length;
+            input.setSelectionRange(cursorPosition + (newLength - originalLength), cursorPosition + (newLength - originalLength));
         }
 
-        function formatAndCalc(input) {
+        function handleInput(input) {
             formatInput(input);
             calculate();
         }
@@ -180,10 +228,10 @@
 
             if (changed === 'rev' || changed === 'cost') {
                 const result = rev - cost;
-                document.getElementById('annualIncome').value = new Intl.NumberFormat('pl-PL').format(result);
+                document.getElementById('annualIncome').value = numberFormatter.format(result);
             } else if (changed === 'inc') {
                 const result = inc + cost;
-                document.getElementById('annualRevenue').value = new Intl.NumberFormat('pl-PL').format(result);
+                document.getElementById('annualRevenue').value = numberFormatter.format(result);
             }
             calculate();
         }
@@ -197,7 +245,7 @@
             const monthlyNet = netAnnual / 12;
             const dtiBase = monthlyNet * 0.65;
 
-            // Logika: DTI - 5000 (sztywne) - raty - 5% limitów
+            // Logika: DTI - 5000 - raty - 5% limitów
             const ability = dtiBase - 5000 - rates - (limits * 0.05);
 
             document.getElementById('netAnnual').textContent = currencyFormatter.format(netAnnual);
@@ -205,15 +253,21 @@
             document.getElementById('dtiValue').textContent = currencyFormatter.format(dtiBase);
             
             const finalEl = document.getElementById('finalAbility');
-            finalEl.textContent = currencyFormatter.format(Math.max(0, ability));
+            const resultValue = Math.max(0, ability);
+            finalEl.textContent = currencyFormatter.format(resultValue);
             
             finalEl.style.color = ability > 0 ? 'var(--primary-color)' : '#ef4444';
         }
 
-        // Inicjalizacja formatowania na starcie
+        // Dodanie formatowania końcowego przy opuszczeniu pola (blur)
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener('blur', function() {
+                let val = parseVal(this.value);
+                this.value = numberFormatter.format(val);
+            });
+        });
+
         window.onload = () => {
-            const inputs = document.querySelectorAll('input[type="text"]');
-            inputs.forEach(i => formatInput(i));
             calculate();
         }
     </script>
