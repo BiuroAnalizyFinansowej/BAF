@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Zdolności - Styl Vibrant Navy</title>
+    <title>System Kalkulatorów Zdolności</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #1e3a8a; /* Granatowy */
@@ -11,51 +12,128 @@
             --bg-light: #f3f4f6;
             --text-dark: #111827;
             --text-light: #4b5563;
+            --accent-red: #ef4444;
         }
+
         body {
-            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            display: flex; justify-content: center; align-items: center; min-height: 100vh;
-            background-color: var(--bg-light); color: var(--text-dark);
-            margin: 0; padding: 20px;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
         }
+
+        /* PASEK BOCZNY Z PRZYCISKAMI */
+        .sidebar {
+            width: 280px;
+            background-color: #ffffff;
+            border-right: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 1rem;
+            gap: 1rem;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.05);
+            z-index: 100;
+        }
+
+        .nav-button {
+            padding: 1rem;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            background: var(--bg-light);
+            color: var(--text-light);
+            font-weight: 700;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+
+        .nav-button span {
+            display: block;
+            font-weight: 400;
+            font-size: 0.75rem;
+            margin-top: 4px;
+        }
+
+        .nav-button.active {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+        }
+
+        .nav-button:hover:not(.active) {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* GŁÓWNA TREŚĆ */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
         .calculator-container {
             position: relative;
-            width: 100%; max-width: 800px; background-color: #ffffff; padding: 2.5rem;
-            border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 800px;
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
         }
-        
-        /* PRZYCISKI NAWIGACYJNE */
-        .home-button, .back-button {
-            position: absolute; top: 20px; width: 50px; height: 50px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            transition: transform 0.2s; z-index: 1001; text-decoration: none;
-        }
-        .home-button { left: 20px; background: var(--primary-color); box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4); }
-        .back-button { left: 80px; background: var(--bg-light); border: 1px solid #e5e7eb; }
-        .home-button:hover, .back-button:hover { transform: scale(1.1); }
-        .home-button svg { width: 28px; height: 28px; fill: #ffffff; }
-        .back-button svg { width: 28px; height: 28px; fill: var(--primary-color); }
 
-        /* PANEL BOCZNY */
-        .info-panel {
-            position: fixed; top: 20px; right: 20px; width: 220px; 
-            background-color: #ffffff; border-radius: 20px; padding: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1); z-index: 1000;
+        /* PRZYCISKI GÓRNE */
+        .top-nav {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
         }
-        .info-container { padding: 10px; background-color: var(--bg-light); border-radius: 12px; margin-bottom: 10px; border: 1px solid #e5e7eb; }
-        .info-header { font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 5px; }
-        .info-date { font-size: 10px; color: #9ca3af; margin-bottom: 10px; }
-        .rates-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; text-align: center; }
-        .rate-item p { margin: 0; font-size: 10px; color: var(--text-light); }
-        .rate-item .value { font-weight: 700; font-size: 13px; color: var(--primary-color); }
+
+        .circle-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .home-btn { background: var(--primary-color); box-shadow: 0 4px 10px rgba(30, 58, 138, 0.3); }
+        .back-btn { background: var(--bg-light); border: 1px solid #e5e7eb; }
+        .circle-btn:hover { transform: scale(1.1); }
+        .circle-btn svg { width: 22px; height: 22px; }
+
+        /* WIDGET WIBOR */
+        .info-panel {
+            position: fixed; top: 20px; right: 20px; width: 200px; 
+            background-color: #ffffff; border-radius: 20px; padding: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); z-index: 1000;
+        }
+        .info-container { padding: 10px; background-color: var(--bg-light); border-radius: 12px; border: 1px solid #e5e7eb; }
+        .info-header { font-size: 11px; font-weight: 700; color: var(--text-light); margin-bottom: 5px; text-transform: uppercase; }
+        .rates-grid { display: grid; grid-template-columns: 1fr; gap: 5px; }
+        .rate-item { display: flex; justify-content: space-between; font-size: 12px; }
+        .rate-item .val { font-weight: 700; color: var(--primary-color); }
 
         /* FORMULARZ */
-        h1 { text-align: center; margin-bottom: 2rem; font-weight: 700; color: var(--primary-color); }
-        .section-title { font-size: 1.1rem; font-weight: 700; margin: 1.5rem 0 1rem; border-bottom: 2px solid var(--bg-light); padding-bottom: 5px; color: var(--primary-color); }
+        h1 { text-align: center; margin-bottom: 2rem; font-weight: 800; color: var(--primary-color); margin-top: 1rem; }
+        .section-title { font-size: 1rem; font-weight: 700; margin: 1.5rem 0 1rem; border-bottom: 2px solid var(--bg-light); padding-bottom: 5px; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px; }
         
         .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
         .input-group { margin-bottom: 1.2rem; }
-        label { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem; display: block; color: var(--text-light); }
+        label { font-weight: 600; font-size: 0.85rem; margin-bottom: 0.5rem; display: block; color: var(--text-light); }
         
         input[type="text"] { 
             border: 2px solid #e5e7eb; width: 100%; padding: 0.8rem; border-radius: 10px; 
@@ -67,209 +145,214 @@
         /* WYNIKI */
         .output-section { margin-top: 2rem; padding: 1.5rem; border-radius: 15px; background: var(--bg-light); border: 2px solid var(--primary-color); }
         .output-row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid #d1d5db; }
-        .output-row:last-child { border-bottom: none; margin-top: 10px; }
-        .label { font-weight: 500; color: var(--text-light); font-size: 0.95rem; }
+        .output-row:last-child { border-bottom: none; }
+        .label { font-weight: 600; color: var(--text-light); font-size: 0.9rem; }
         .value { font-weight: 700; color: var(--text-dark); }
         .result-big { font-size: 1.8rem; color: var(--primary-color); font-weight: 800; }
 
-        @media (max-width: 600px) {
-            .grid-inputs { grid-template-columns: 1fr; }
-            .info-panel { position: relative; width: 100%; right: 0; top: 0; margin-bottom: 20px; }
-            .calculator-container { padding: 1.5rem; padding-top: 4rem; }
+        .hidden { display: none; }
+
+        @media (max-width: 1024px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; flex-direction: row; padding: 10px; box-sizing: border-box; position: sticky; top: 0; }
+            .info-panel { display: none; }
         }
     </style>
 </head>
 <body>
 
+    <div class="sidebar">
+        <button class="nav-button active" onclick="switchTab('capacity')">
+            Zdolność
+            <span>ile jeszcze rat dźwignie</span>
+        </button>
+        <button class="nav-button" onclick="switchTab('income')">
+            Dochód
+            <span>ile musi mieć dochodu</span>
+        </button>
+    </div>
+
     <div class="info-panel">
         <div class="info-container">
-            <div class="info-header">Stawki Referencyjne</div>
-            <div id="current-date-wibor" class="info-date">Dane na dzień: 29.01.2026</div>
+            <div class="info-header">WIBOR (29.01.2026)</div>
             <div class="rates-grid">
-                <div class="rate-item"><p>WIBOR 1M</p><p class="value">4,04%</p></div>
-                <div class="rate-item"><p>WIBOR 3M</p><p class="value">3,92%</p></div>
-                <div class="rate-item"><p>WIBOR 6M</p><p class="value">3,81%</p></div>
+                <div class="rate-item"><span>WIBOR 1M</span><span class="val">4,04%</span></div>
+                <div class="rate-item"><span>WIBOR 3M</span><span class="val">3,92%</span></div>
+                <div class="rate-item"><span>WIBOR 6M</span><span class="val">3,81%</span></div>
             </div>
         </div>
     </div>
 
-    <div class="calculator-container">
-        <a href="index.html" class="home-button" title="Strona główna">
-            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg>
-        </a>
-        <a href="#" onclick="history.back(); return false;" class="back-button" title="Powrót">
-            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-        </a>
+    <div class="main-content">
+        <div class="calculator-container">
+            <div class="top-nav">
+                <a href="index.html" class="circle-btn home-btn">
+                    <svg viewBox="0 0 24 24" fill="white"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg>
+                </a>
+                <a href="#" onclick="history.back(); return false;" class="circle-btn back-btn">
+                    <svg viewBox="0 0 24 24" fill="#1e3a8a"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                </a>
+            </div>
 
-        <h1>Zdolność Kredytowa</h1>
+            <div id="tab-capacity">
+                <h1>Zdolność Kredytowa</h1>
+                <div class="section-title">Obciążenia miesięczne</div>
+                <div class="grid-inputs">
+                    <div class="input-group">
+                        <label>Suma rat (prywatne + firmowe)</label>
+                        <input type="text" id="cap-rates" value="0,00" oninput="handleInput(this, 'cap')">
+                    </div>
+                    <div class="input-group">
+                        <label>Suma limitów (karty/limity w kontach)</label>
+                        <input type="text" id="cap-limits" value="0,00" oninput="handleInput(this, 'cap')">
+                    </div>
+                </div>
 
-        <div class="section-title">Obciążenia miesięczne</div>
-        <div class="grid-inputs">
-            <div class="input-group">
-                <label>Suma rat (prywatne + firmowe)</label>
-                <input type="text" id="monthlyRates" value="0,00" oninput="handleInput(this)">
-            </div>
-            <div class="input-group">
-                <label>Suma limitów (karty/limity w kontach)</label>
-                <input type="text" id="creditLimits" value="0,00" oninput="handleInput(this)">
-            </div>
-        </div>
+                <div class="section-title">Dane finansowe za ostatnie 12 miesięcy</div>
+                <div class="grid-inputs">
+                    <div class="input-group">
+                        <label>Roczny Przychód</label>
+                        <input type="text" id="cap-rev" value="0,00" oninput="handleFinance('rev', this)">
+                    </div>
+                    <div class="input-group">
+                        <label>Roczne Koszty</label>
+                        <input type="text" id="cap-cost" value="0,00" oninput="handleFinance('cost', this)">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Roczny Dochód (Przychód - Koszty)</label>
+                    <input type="text" id="cap-inc" value="0,00" oninput="handleFinance('inc', this)" style="background: #f8fafc;">
+                </div>
 
-        <div class="section-title">Dane finansowe za ostatnie 12 miesięcy</div>
-        <div class="grid-inputs">
-            <div class="input-group">
-                <label>Roczny Przychód</label>
-                <input type="text" id="annualRevenue" value="0,00" oninput="handleFinance('rev', this)">
+                <div class="output-section">
+                    <div class="output-row"><span class="label">Dochód netto (po odjęciu 19%)</span><span id="cap-net-annual">0,00 zł</span></div>
+                    <div class="output-row"><span class="label">Średni miesięczny netto</span><span id="cap-net-month">0,00 zł</span></div>
+                    <div class="output-row"><span class="label">DTI (65%)</span><span id="cap-dti">0,00 zł</span></div>
+                    <div class="output-row" style="margin-top:15px; border-top: 2px solid var(--primary-color); padding-top:15px;">
+                        <span class="label">ZDOLNOŚĆ NA DODATKOWE RATY</span>
+                        <span class="result-big" id="cap-result">0,00 zł</span>
+                    </div>
+                </div>
             </div>
-            <div class="input-group">
-                <label>Roczne Koszty</label>
-                <input type="text" id="annualCosts" value="0,00" oninput="handleFinance('cost', this)">
-            </div>
-        </div>
-        <div class="input-group">
-            <label>Roczny Dochód (Przychód - Koszty)</label>
-            <input type="text" id="annualIncome" value="0,00" oninput="handleFinance('inc', this)" style="background: #f8fafc; border-color: var(--primary-light);">
-        </div>
 
-        <div class="output-section">
-            <div class="output-row">
-                <span class="label">Dochód netto (po odjęciu 19% podatku)</span>
-                <span class="value" id="netAnnual">0,00 zł</span>
-            </div>
-            <div class="output-row">
-                <span class="label">Średni miesięczny netto (12 m-cy)</span>
-                <span class="value" id="monthlyNet">0,00 zł</span>
-            </div>
-            <div class="output-row">
-                <span class="label">DTI (65%)</span>
-                <span class="value" id="dtiValue">0,00 zł</span>
-            </div>
-            <div class="output-row" style="border-top: 2px solid var(--primary-color);">
-                <span class="label"><strong>ZDOLNOŚĆ NA DODATKOWE RATY</strong></span>
-                <span class="result-big" id="finalAbility">0,00 zł</span>
+            <div id="tab-income" class="hidden">
+                <h1>Wymagany Dochód</h1>
+                <div class="section-title">Obciążenia i nowa rata</div>
+                <div class="grid-inputs">
+                    <div class="input-group">
+                        <label>Suma obecnych rat</label>
+                        <input type="text" id="inc-rates" value="0,00" oninput="handleInput(this, 'inc')">
+                    </div>
+                    <div class="input-group">
+                        <label>Suma limitów</label>
+                        <input type="text" id="inc-limits" value="0,00" oninput="handleInput(this, 'inc')">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Planowana nowa rata</label>
+                    <input type="text" id="inc-new-rate" value="0,00" oninput="handleInput(this, 'inc')" style="border-color: var(--primary-light);">
+                </div>
+
+                <div class="output-section">
+                    <div class="output-row"><span class="label">Wymagana baza DTI miesięcznie</span><span id="inc-req-dti">0,00 zł</span></div>
+                    <div class="output-row"><span class="label">Wymagany dochód netto miesięcznie</span><span id="inc-req-net-month">0,00 zł</span></div>
+                    <div class="output-row" style="margin-top:15px; border-top: 2px solid var(--primary-color); padding-top:15px;">
+                        <span class="label">WYMAGANY DOCHÓD ROCZNY (BRUTTO)</span>
+                        <span class="result-big" id="inc-result">0,00 zł</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        const currencyFormatter = new Intl.NumberFormat('pl-PL', { 
-            style: 'currency', 
-            currency: 'PLN', 
-            minimumFractionDigits: 2 
-        });
+        const currencyFormatter = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', minimumFractionDigits: 2 });
+        const numberFormatter = new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
-        const numberFormatter = new Intl.NumberFormat('pl-PL', {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2
-        });
-
-        // Parsowanie wartości z pola tekstowego na liczbę
         function parseVal(val) {
             if (!val) return 0;
-            // Usuwa spacje, zamienia przecinek na kropkę
-            let clean = val.toString().replace(/\s/g, '').replace(',', '.');
-            return parseFloat(clean) || 0;
+            return parseFloat(val.toString().replace(/\s/g, '').replace(',', '.')) || 0;
         }
 
-        // Formatowanie podczas wpisywania
         function formatInput(input) {
-            let cursorPosition = input.selectionStart;
-            let originalLength = input.value.length;
-            
-            // Pobieramy czystą wartość (cyfry i jeden separator dziesiętny)
-            let value = input.value.replace(/[^\d.,]/g, '');
-            value = value.replace(',', '.');
-            
-            // Obsługa wielu kropek - zostawiamy tylko pierwszą
+            let value = input.value.replace(/[^\d.,]/g, '').replace(',', '.');
             let parts = value.split('.');
-            if (parts.length > 2) {
-                value = parts[0] + '.' + parts.slice(1).join('');
-            }
-
-            if (value === "") {
-                input.value = "";
-                return;
-            }
-
-            // Formatuje część całkowitą
-            let formattedValue = "";
-            let integerPart = parts[0];
-            let decimalPart = parts[1];
-
-            if (integerPart !== "") {
-                formattedValue = new Intl.NumberFormat('pl-PL').format(parseInt(integerPart));
-            } else if (value.startsWith('.')) {
-                formattedValue = "0";
-            }
-
-            // Dodaje część dziesiętną jeśli istnieje
-            if (value.includes('.')) {
-                formattedValue += ',' + (decimalPart !== undefined ? decimalPart.substring(0, 2) : "");
-            }
-
-            input.value = formattedValue;
-
-            // Przywracanie pozycji kursora (uproszczone)
-            let newLength = input.value.length;
-            input.setSelectionRange(cursorPosition + (newLength - originalLength), cursorPosition + (newLength - originalLength));
+            if (parts.length > 2) value = parts[0] + '.' + parts.slice(1).join('');
+            if (value === "") { input.value = ""; return; }
+            let formatted = new Intl.NumberFormat('pl-PL').format(parseInt(parts[0] || 0));
+            if (value.includes('.')) formatted += ',' + (parts[1] !== undefined ? parts[1].substring(0, 2) : "");
+            input.value = formatted;
         }
 
-        function handleInput(input) {
+        function switchTab(tab) {
+            document.getElementById('tab-capacity').classList.toggle('hidden', tab !== 'capacity');
+            document.getElementById('tab-income').classList.toggle('hidden', tab !== 'income');
+            document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        function handleInput(input, type) {
             formatInput(input);
-            calculate();
+            type === 'cap' ? calculateCapacity() : calculateIncome();
         }
 
+        // KALKULATOR 1 - LOGIKA
         function handleFinance(changed, input) {
             formatInput(input);
-            
-            const rev = parseVal(document.getElementById('annualRevenue').value);
-            const cost = parseVal(document.getElementById('annualCosts').value);
-            const inc = parseVal(document.getElementById('annualIncome').value);
+            const rev = parseVal(document.getElementById('cap-rev').value);
+            const cost = parseVal(document.getElementById('cap-cost').value);
+            const inc = parseVal(document.getElementById('cap-inc').value);
 
             if (changed === 'rev' || changed === 'cost') {
-                const result = rev - cost;
-                document.getElementById('annualIncome').value = numberFormatter.format(result);
+                document.getElementById('cap-inc').value = numberFormatter.format(rev - cost);
             } else if (changed === 'inc') {
-                const result = inc + cost;
-                document.getElementById('annualRevenue').value = numberFormatter.format(result);
+                document.getElementById('cap-rev').value = numberFormatter.format(inc + cost);
             }
-            calculate();
+            calculateCapacity();
         }
 
-        function calculate() {
-            const income = parseVal(document.getElementById('annualIncome').value);
-            const rates = parseVal(document.getElementById('monthlyRates').value);
-            const limits = parseVal(document.getElementById('creditLimits').value);
+        function calculateCapacity() {
+            const income = parseVal(document.getElementById('cap-inc').value);
+            const rates = parseVal(document.getElementById('cap-rates').value);
+            const limits = parseVal(document.getElementById('cap-limits').value);
 
             const netAnnual = income * 0.81;
             const monthlyNet = netAnnual / 12;
             const dtiBase = monthlyNet * 0.65;
-
-            // Logika: DTI - 5000 - raty - 5% limitów
             const ability = dtiBase - 5000 - rates - (limits * 0.05);
 
-            document.getElementById('netAnnual').textContent = currencyFormatter.format(netAnnual);
-            document.getElementById('monthlyNet').textContent = currencyFormatter.format(monthlyNet);
-            document.getElementById('dtiValue').textContent = currencyFormatter.format(dtiBase);
-            
-            const finalEl = document.getElementById('finalAbility');
-            const resultValue = Math.max(0, ability);
-            finalEl.textContent = currencyFormatter.format(resultValue);
-            
-            finalEl.style.color = ability > 0 ? 'var(--primary-color)' : '#ef4444';
+            document.getElementById('cap-net-annual').textContent = currencyFormatter.format(netAnnual);
+            document.getElementById('cap-net-month').textContent = currencyFormatter.format(monthlyNet);
+            document.getElementById('cap-dti').textContent = currencyFormatter.format(dtiBase);
+            document.getElementById('cap-result').textContent = currencyFormatter.format(Math.max(0, ability));
         }
 
-        // Dodanie formatowania końcowego przy opuszczeniu pola (blur)
+        // KALKULATOR 2 - LOGIKA (ODWRÓCONA)
+        function calculateIncome() {
+            const rates = parseVal(document.getElementById('inc-rates').value);
+            const limits = parseVal(document.getElementById('inc-limits').value);
+            const newRate = parseVal(document.getElementById('inc-new-rate').value);
+
+            // Baza DTI musi pokryć: nową ratę + koszty życia (5000) + obecne raty + 5% limitów
+            const requiredDtiBase = newRate + 5000 + rates + (limits * 0.05);
+            
+            // Miesięczny netto = Baza / 0.65
+            const reqMonthlyNet = requiredDtiBase / 0.65;
+            
+            // Roczny Brutto = (Miesięczny netto * 12) / 0.81
+            const reqAnnualGross = (reqMonthlyNet * 12) / 0.81;
+
+            document.getElementById('inc-req-dti').textContent = currencyFormatter.format(requiredDtiBase);
+            document.getElementById('inc-req-net-month').textContent = currencyFormatter.format(reqMonthlyNet);
+            document.getElementById('inc-result').textContent = currencyFormatter.format(reqAnnualGross);
+        }
+
+        // Blur formatting
         document.querySelectorAll('input[type="text"]').forEach(input => {
             input.addEventListener('blur', function() {
-                let val = parseVal(this.value);
-                this.value = numberFormatter.format(val);
+                this.value = numberFormatter.format(parseVal(this.value));
             });
         });
-
-        window.onload = () => {
-            calculate();
-        }
     </script>
 </body>
 </html>
