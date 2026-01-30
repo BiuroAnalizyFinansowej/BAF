@@ -88,7 +88,7 @@
         .rate-item .value { font-weight: 700; font-size: 13px; color: var(--primary-color); }
         .disclaimer-text { font-size: 9px; font-style: italic; color: #9ca3af; margin-top: 10px; }
 
-        /* GŁÓWNA TREŚĆ - PRZESUNIĘTA W LEWO, BY UNIKNĄĆ PANELU INFO */
+        /* GŁÓWNA TREŚĆ */
         .main-content {
             flex: 1;
             display: flex;
@@ -105,7 +105,6 @@
             padding: 2.5rem;
             border-radius: 20px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            /* Centrowanie z uwzględnieniem panelu po prawej */
             margin-left: auto;
             margin-right: 260px; 
         }
@@ -135,12 +134,8 @@
         .result-big { font-size: 1.8rem; color: var(--primary-color); font-weight: 800; }
         .hidden { display: none; }
 
-        /* Media queries dla mniejszych rozdzielczości */
         @media (max-width: 1450px) {
-            .calculator-container {
-                margin-right: 20px; /* Rezygnacja z marginesu, gdy panel info zniknie */
-                margin-left: auto;
-            }
+            .calculator-container { margin-right: 20px; margin-left: auto; }
             .info-panel { display: none; }
         }
         @media (max-width: 1024px) { 
@@ -214,7 +209,7 @@
                 </div>
                 <div class="input-group"><label>Planowana nowa rata</label><input type="text" id="inc-new-rate" value="0,00" oninput="handleInput(this, 'inc')" style="border-color: var(--primary-light);"></div>
                 <div class="output-section">
-                    <div class="output-row"><span class="label">Wymagana baza rat (+5000 zł)</span><span id="inc-out-base">0,00 zł</span></div>
+                    <div class="output-row"><span class="label">Suma rat (+5000 zł)</span><span id="inc-out-base">0,00 zł</span></div>
                     <div class="output-row"><span class="label">Wymagany dochód netto miesięcznie</span><span id="inc-out-net">0,00 zł</span></div>
                     <div class="output-row" style="margin-top:10px; border-top: 2px solid var(--primary-color); padding-top:10px;"><span class="label">WYMAGANY DOCHÓD ROCZNY (BRUTTO)</span><span class="result-big" id="inc-out-result">0,00 zł</span></div>
                 </div>
