@@ -21,10 +21,9 @@
             margin: 0;
             display: flex;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
-        /* PASEK BOCZNY NAWIGACJI */
+        /* PASEK BOCZNY */
         .sidebar {
             width: 280px;
             min-width: 280px;
@@ -35,7 +34,10 @@
             padding: 2rem 1rem;
             gap: 1rem;
             box-shadow: 4px 0 15px rgba(0,0,0,0.05);
-            z-index: 100;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            box-sizing: border-box;
         }
 
         .nav-button {
@@ -63,13 +65,17 @@
             color: #ffffff;
         }
 
-        .nav-button.active span { color: #bfdbfe; }
-
         /* PANEL INFO (KOMPATYBILNY Z PYTHONEM) */
         .info-panel {
-            position: fixed; top: 20px; right: 20px; width: 220px; 
-            background-color: #ffffff; border-radius: 20px; padding: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1); z-index: 1000;
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            width: 220px; 
+            background-color: #ffffff; 
+            border-radius: 20px; 
+            padding: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1); 
+            z-index: 1000;
         }
         .info-container {
             padding: 10px; background-color: var(--bg-light);
@@ -82,14 +88,13 @@
         .rate-item .value { font-weight: 700; font-size: 13px; color: var(--primary-color); }
         .disclaimer-text { font-size: 9px; font-style: italic; color: #9ca3af; margin-top: 10px; }
 
-        /* GŁÓWNA TREŚĆ - WYSRODKOWANIE */
+        /* GŁÓWNA TREŚĆ - PRZESUNIĘTA W LEWO, BY UNIKNĄĆ PANELU INFO */
         .main-content {
             flex: 1;
             display: flex;
-            justify-content: center; /* Centrowanie w poziomie */
-            align-items: flex-start; /* Od góry */
-            padding: 40px 20px;
+            padding: 40px;
             box-sizing: border-box;
+            overflow-x: auto;
         }
 
         .calculator-container {
@@ -100,7 +105,9 @@
             padding: 2.5rem;
             border-radius: 20px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
+            /* Centrowanie z uwzględnieniem panelu po prawej */
+            margin-left: auto;
+            margin-right: 260px; 
         }
 
         .top-nav { position: absolute; top: 20px; left: 20px; display: flex; gap: 10px; }
@@ -128,12 +135,19 @@
         .result-big { font-size: 1.8rem; color: var(--primary-color); font-weight: 800; }
         .hidden { display: none; }
 
-        /* Media queries dla panelu info - ukrywanie, by nie nachodził na kontener */
-        @media (max-width: 1350px) { .info-panel { display: none; } }
+        /* Media queries dla mniejszych rozdzielczości */
+        @media (max-width: 1450px) {
+            .calculator-container {
+                margin-right: 20px; /* Rezygnacja z marginesu, gdy panel info zniknie */
+                margin-left: auto;
+            }
+            .info-panel { display: none; }
+        }
         @media (max-width: 1024px) { 
             body { flex-direction: column; }
-            .sidebar { width: 100%; min-width: 100%; flex-direction: row; padding: 10px; position: sticky; top: 0; box-sizing: border-box; }
-            .main-content { padding: 20px 10px; }
+            .sidebar { width: 100%; min-width: 100%; height: auto; flex-direction: row; padding: 10px; position: sticky; top: 0; }
+            .main-content { padding: 20px 10px; justify-content: center; }
+            .calculator-container { margin: 0; }
         }
     </style>
 </head>
