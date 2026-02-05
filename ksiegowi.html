@@ -114,11 +114,12 @@
 
         /* Responsywność dla środkowej treści */
         #email-content-wrapper {
-            margin: 0 280px; /* Miejsce na oba panele */
+            margin: 0 280px; 
         }
-        @media (max-width: 1200px) {
+        
+        @media (max-width: 1250px) {
             #email-content-wrapper { margin: 0 20px 0 260px; }
-            #control-panel-right { position: static; width: auto; margin: 20px 260px; }
+            #control-panel-right { position: relative; width: auto; margin: 20px 20px 20px 260px; top: 0; right: 0; }
         }
     </style>
 </head>
@@ -144,14 +145,14 @@
     </div>
 
     <div id="control-panel-right">
-        <h3 class="panel-header">Tematy z ikonami:</h3>
+        <h3 class="panel-header">Wybierz temat maila:</h3>
         <button class="panel-btn" onclick="copySubject('🔵 Szukamy partnerów wśród księgowych 🔵', this)">🔵 Szukamy partnerów...</button>
         <button class="panel-btn" onclick="copySubject('🤝 Propozycja stałej współpracy dla Biura Rachunkowego', this)">🤝 Propozycja współpracy</button>
         <button class="panel-btn" onclick="copySubject('📈 Jak zwiększyć zysk Państwa klientów? (Partnerstwo BAF)', this)">📈 Zwiększenie zysku</button>
         <button class="panel-btn" onclick="copySubject('💼 Wsparcie finansowe dla firm - oferta dla Księgowych', this)">💼 Wsparcie dla firm</button>
         <button class="panel-btn" onclick="copySubject('📉 Niższe raty dla Państwa Klientów - audyt kredytowy', this)">📉 Niższe raty (audyt)</button>
         
-        <h3 class="panel-header">Tematy konkretne:</h3>
+        <h3 class="panel-header">Inne warianty:</h3>
         <button class="panel-btn" onclick="copySubject('🚀 Gotówka dla firm od 6,5% – oferta współpracy', this)">🚀 Gotówka od 6,5%</button>
         <button class="panel-btn" onclick="copySubject('⚖️ SKD i pozwy frankowe – wsparcie prawne dla Klientów Biura', this)">⚖️ SKD i Frankowicze</button>
         <button class="panel-btn" onclick="copySubject('🔍 Bezpłatna analiza portfela kredytowego Państwa klientów', this)">🔍 Bezpłatna analiza</button>
@@ -159,31 +160,87 @@
     </div>
 
     <div id="email-content-wrapper">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="border-collapse: collapse;">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="border-collapse: collapse; font-family: 'Lato', Arial, sans-serif;">
             <tr>
                 <td align="center" style="padding: 20px 0;">
+                    
                     <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="max-width: 800px; background-color: #ffffff; margin: 0 auto; border-collapse: collapse; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+                        
                         <tr>
                             <td class="header" style="background-color: #002d5a; padding: 40px 20px; text-align: center;">
                                  <div style="background-color: #ffffff; display: inline-block; padding: 2px; border-radius: 4px;">
                                      <a href="https://biuroanalizyfinansowej.pl/" target="_blank" style="text-decoration: none;">
-                                         <img src="baf_logo.png" alt="BAF" width="220" style="display: block; border: 0;">
+                                         <img src="baf_logo.png" alt="Biuro Analizy Finansowej BAF" width="220" style="display: block; margin: 0 auto; max-width: 100%; height: auto; border: 0;">
                                      </a>
                                  </div>
                             </td>
                         </tr>
+
                         <tr>
-                            <td style="padding: 40px 50px; background-color: #ffffff;">
-                                <h1 style="font-size: 28px; color: #002d5a; margin: 0 0 25px 0;">Szanowni Państwo,</h1>
+                            <td style="padding: 40px 50px;">
+                                <h1 style="font-size: 28px; font-weight: 400; color: #002d5a; margin: 0 0 25px 0;">Szanowni Państwo,</h1>
+                                
                                 <p style="font-size: 17px; color: #555; line-height: 1.6; margin: 0 0 20px 0;">
                                     Szukamy partnerów wśród księgowych, którzy dbają o swoich klientów tak samo jak my. Nasza skuteczność opiera się na ludziach - mamy bezpośrednie, wypracowane latami kontakty z dyrektorami w konkretnych bankach.
                                 </p>
-                                <p style="font-size: 17px; color: #555; text-align: center;">Po więcej informacji zapraszam do kontaktu</p>
-                                <div align="center">
+                                <p style="font-size: 17px; color: #555; line-height: 1.6; margin: 0 0 20px 0;">
+                                    Działamy jak hurtownik: dzięki dużej liczbie składanych wniosków mamy inną pozycję negocjacyjną. Dzięki temu Państwa klienci zyskują dostęp do warunków cenowych, które są niedostępne dla klienta detalicznego.
+                                </p>
+
+                                <h2 style="font-size: 20px; color: #002d5a; margin: 30px 0 15px 0; border-bottom: 1px solid #dee2e6; padding-bottom: 10px;">Nasze możliwości finansowania:</h2>
+
+                                <div style="background: #f8faff; border-left: 4px solid #007bff; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+                                    <div style="font-weight: 700; color: #0056b3; font-size: 18px; margin-bottom: 5px;">Kredyt ratalny bez zabezpieczeń</div>
+                                    <p style="margin:0; font-size: 17px; color: #555;">Całościowe oprocentowanie nawet od <span style="color: #d9534f; font-weight: bold;">6,5%</span>.</p>
+                                </div>
+
+                                <div style="background: #f8faff; border-left: 4px solid #007bff; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+                                    <div style="font-weight: 700; color: #0056b3; font-size: 18px; margin-bottom: 5px;">Linia w rachunku bieżącym</div>
+                                    <p style="margin:0; font-size: 17px; color: #555;">Oprocentowanie ok. <span style="color: #d9534f; font-weight: bold;">8%</span> - brak opłat za niewykorzystany limit.</p>
+                                </div>
+
+                                <div style="background: #f8faff; border-left: 4px solid #007bff; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+                                    <div style="font-weight: 700; color: #0056b3; font-size: 18px; margin-bottom: 5px;">Kredyty inwestycyjne</div>
+                                    <p style="margin:0; font-size: 17px; color: #555;">Z biznesplanem i zabezpieczeniem nawet od <span style="color: #d9534f; font-weight: bold;">3,5%</span>.</p>
+                                </div>
+
+                                <div style="background: #f8faff; border-left: 4px solid #007bff; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+                                    <div style="font-weight: 700; color: #0056b3; font-size: 18px; margin-bottom: 5px;">Leasing operacyjny / finansowy / zwrotny</div>
+                                    <p style="margin:0; font-size: 17px; color: #555;">Szybkie finansowanie środków trwałych, pojazdów i maszyn.</p>
+                                </div>
+
+                                <div style="background-color: #fcfdfd; border: 1px solid #e1e4e8; border-left: 4px solid #28a745; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+                                    <span style="color: #002d5a; font-weight: 800; font-size: 16px; display: block; margin-bottom: 10px;">Przykład:</span>
+                                    <p style="margin:0; font-size: 15px; color: #444; line-height: 1.6;">
+                                        Klient posiadał zobowiązanie 223 020 zł (rata 3 493 zł). Po refinansowaniu na 7,12% rata spadła do 2 603 zł. 
+                                        Oszczędność: <strong style="color: #28a745;">75 363 zł</strong>.
+                                    </p>
+                                </div>
+
+                                <h2 style="font-size: 20px; color: #002d5a; margin: 30px 0 15px 0; border-bottom: 1px solid #dee2e6; padding-bottom: 10px;">Dlaczego BAF?</h2>
+                                <p style="font-size: 17px; color: #555; line-height: 1.6; margin: 0 0 20px 0;">
+                                    Nie działamy schematycznie. Każda analiza jest indywidualna, co pozwala nam dobrać bank idealnie dopasowany do unikalnej sytuacji Państwa klienta.
+                                </p>
+
+                                <div style="background-color: #eef2f5; padding: 20px; border-radius: 4px; margin: 30px 0;">
+                                    <strong style="color: #002d5a; font-size: 18px;">Wsparcie prawne:</strong>
+                                    <ul style="margin: 10px 0 0 0; color: #555; line-height: 1.6;">
+                                        <li>Sankcja Kredytu Darmowego (SKD)</li>
+                                        <li>Profesjonalne pozwy frankowe</li>
+                                        <li>Restrukturyzacja i upadłość</li>
+                                    </ul>
+                                </div>
+
+                                <p style="font-size: 17px; color: #555; line-height: 1.6; margin: 30px 0 10px 0; text-align: center;">
+                                    Po więcej informacji w imieniu BAF zapraszam do kontaktu
+                                </p>
+
+                                <div align="center" style="margin-bottom: 20px;">
                                     <a id="cta-link" href="https://q-r.to/DawidBlachnoBiuroBAF" style="display: inline-block; padding: 15px 35px; background-color: #17a2b8; color: #ffffff !important; text-decoration: none; font-weight: bold; border-radius: 5px; font-size: 18px;">Moja wizytówka</a>
                                 </div>
                             </td>
                         </tr>
+
                     </table>
                 </td>
             </tr>
@@ -208,7 +265,6 @@
             if (advisors[advisorKey]) {
                 linkElement.href = advisors[advisorKey];
             }
-            // Resetuj tylko przyciski w lewym panelu
             document.querySelectorAll('#control-panel-left .panel-btn').forEach(btn => {
                 if (btn.id !== 'copy-button') btn.classList.remove('active');
             });
@@ -218,10 +274,9 @@
         function copySubject(text, btnElement) {
             navigator.clipboard.writeText(text).then(() => {
                 const originalText = btnElement.textContent;
-                btnElement.textContent = '✅ Skopiowano temat!';
+                btnElement.textContent = '✅ Skopiowano!';
                 btnElement.style.backgroundColor = '#28a745';
                 btnElement.style.color = '#fff';
-                
                 setTimeout(() => {
                     btnElement.textContent = originalText;
                     btnElement.style.backgroundColor = '';
