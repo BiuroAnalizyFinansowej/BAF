@@ -24,7 +24,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             z-index: 1000;
             max-height: 90vh;
-            overflow-y: auto; /* Pasek przewijania dla mniejszych ekranów */
+            overflow-y: auto;
         }
 
         .panel-btn {
@@ -73,7 +73,6 @@
             padding-bottom: 5px;
         }
 
-        /* Style nawigacji (jak w szablony.html) */
         .nav-container {
             margin-top: 20px;
             text-align: center;
@@ -107,14 +106,19 @@
             transform: scale(1.1);
         }
 
-        /* Styl nagłówka w podglądzie */
         .header { background-color: #002d5a; padding: 40px 20px; text-align: center; }
     </style>
 </head>
 <body>
 
     <div id="control-panel">
-        <button id="copy-button" class="panel-btn">Kopiuj całość do maila</button>
+        <button id="copy-button" class="panel-btn">Kopiuj treść maila</button>
+
+        <h3 class="panel-header">Wybierz temat maila:</h3>
+        <button class="panel-btn" onclick="copySubject('🔵 Szukamy partnerów wśród księgowych 🔵', this)">🔵 Szukamy partnerów...</button>
+        <button class="panel-btn" onclick="copySubject('Propozycja współpracy dla Biura Rachunkowego - BAF', this)">Współpraca - Biuro Rach.</button>
+        <button class="panel-btn" onclick="copySubject('Wsparcie finansowe dla Państwa Klientów (nowe warunki)', this)">Wsparcie dla Klientów</button>
+        <button class="panel-btn" onclick="copySubject('Audyt kredytowy i refinansowanie - oferta dla partnerów', this)">Audyt i refinansowanie</button>
         
         <h3 class="panel-header">Wybierz doradcę:</h3>
         
@@ -247,7 +251,6 @@
     </div>
 
     <script>
-        // BAZA LINKÓW DORADCÓW
         const advisors = {
             'dawid': 'https://q-r.to/DawidBlachnoBiuroBAF',
             'weronika': 'https://q-r.to/WeronikaLekstonBiuroBAF',
@@ -260,77 +263,58 @@
             'mateusz': 'https://q-r.to/MateuszDzidkowskiBiuroBAF'
         };
 
-        // FUNKCJA ZMIANY DORADCY
         function setAdvisor(advisorKey, btnElement) {
-            // Zmiana linku w przycisku
             const linkElement = document.getElementById('cta-link');
             if (advisors[advisorKey]) {
                 linkElement.href = advisors[advisorKey];
             }
-
-            // Aktualizacja wyglądu przycisków w panelu
             const allButtons = document.querySelectorAll('#control-panel .panel-btn');
             allButtons.forEach(btn => {
-                // Nie zmieniamy przycisku kopiowania
-                if (btn.id !== 'copy-button') {
-                    btn.classList.remove('active');
+                if (!btn.hasAttribute('onclick') || !btn.getAttribute('onclick').includes('copySubject')) {
+                   btn.classList.remove('active');
                 }
             });
             btnElement.classList.add('active');
         }
 
-        // FUNKCJA KOPIOWANIA DO SCHOWKA
+        // FUNKCJA KOPIOWANIA TEMATU
+        function copySubject(text, btnElement) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btnElement.textContent;
+                btnElement.textContent = 'Skopiowano!';
+                btnElement.style.backgroundColor = '#28a745';
+                btnElement.style.color = '#fff';
+                
+                setTimeout(() => {
+                    btnElement.textContent = originalText;
+                    btnElement.style.backgroundColor = '';
+                    btnElement.style.color = '';
+                }, 1500);
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const copyBtn = document.getElementById('copy-button');
             const emailWrapper = document.getElementById('email-content-wrapper');
             
             copyBtn.addEventListener('click', () => {
-                // Kopiujemy HTML
                 const htmlContent = emailWrapper.innerHTML;
                 const blob = new Blob([htmlContent], { type: 'text/html' });
                 const richTextInput = new ClipboardItem({ 'text/html': blob });
                 
                 navigator.clipboard.write([richTextInput]).then(() => {
-                    // Sukces
                     const originalText = copyBtn.textContent;
                     copyBtn.textContent = 'Skopiowano całość!';
                     copyBtn.classList.add('copied');
-                    
-                    // Reset po 2 sekundach
                     setTimeout(() => {
                         copyBtn.textContent = originalText;
                         copyBtn.classList.remove('copied');
                     }, 2000);
                 }).catch(err => {
-                    console.error('Błąd kopiowania: ', err);
-                    alert('Nie udało się skopiować automatycznie. Spróbuj zaznaczyć ręcznie.');
+                    alert('Błąd kopiowania. Spróbuj zaznaczyć ręcznie.');
                 });
             });
         });
     </script>
+</body>
 </html>
-
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 02.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        // BAF AUTO UPDATE - 05.02.2026
-        try {
-            document.getElementById('wibor-1m').textContent = '4,02%';
-            document.getElementById('wibor-3m').textContent = '3,9%';
-            document.getElementById('wibor-6m').textContent = '3,79%';
-            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
-            
-            const dzisiaj = 'Dane na dzień: 05.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    </body>
-    
