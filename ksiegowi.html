@@ -109,24 +109,46 @@
             transition: all 0.3s;
         }
         .back-button:hover { background-color: #002d5a; color: #fff; }
+        .home-button {
+            display: block;
+            margin: 15px auto 0 auto;
+            width: 30px;
+            height: 30px;
+            fill: #002d5a;
+            transition: transform 0.2s;
+        }
+        .home-button:hover { transform: scale(1.1); }
 
         .header { background-color: #002d5a; padding: 40px 20px; text-align: center; }
 
-        /* Responsywność dla środkowej treści */
+        /* Responsywność dla środkowej treści - marginesy na oba panele */
         #email-content-wrapper {
             margin: 0 280px; 
         }
         
-        @media (max-width: 1250px) {
+        /* Dla mniejszych ekranów - panel prawy spada na dół lub chowa się, marginesy mniejsze */
+        @media (max-width: 1350px) {
             #email-content-wrapper { margin: 0 20px 0 260px; }
-            #control-panel-right { position: relative; width: auto; margin: 20px 20px 20px 260px; top: 0; right: 0; }
+            #control-panel-right { 
+                position: relative; 
+                width: auto; 
+                margin: 20px 20px 20px 260px; 
+                top: 0; 
+                right: 0;
+                max-width: 600px;
+            }
+        }
+        @media (max-width: 768px) {
+            #control-panel-left { position: relative; width: auto; margin: 20px; top: 0; left: 0; }
+            #email-content-wrapper { margin: 0; }
+            #control-panel-right { margin: 20px; }
         }
     </style>
 </head>
 <body>
 
     <div id="control-panel-left">
-        <button id="copy-button" class="panel-btn">Kopiuj treść maila</button>
+        <button id="copy-button" class="panel-btn">Kopiuj całość do maila</button>
         
         <h3 class="panel-header">Wybierz doradcę:</h3>
         <button class="panel-btn active" onclick="setAdvisor('dawid', this)">Dawid Błachno</button>
@@ -141,22 +163,46 @@
 
         <div class="nav-container">
             <a href="#" onclick="history.back(); return false;" class="back-button">POWRÓT</a>
+            <a href="index.html" class="home-button" title="Strona główna">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/>
+                </svg>
+            </a>
         </div>
     </div>
 
     <div id="control-panel-right">
-        <h3 class="panel-header">Wybierz temat maila:</h3>
-        <button class="panel-btn" onclick="copySubject('🔵 Szukamy partnerów wśród księgowych 🔵', this)">🔵 Szukamy partnerów...</button>
-        <button class="panel-btn" onclick="copySubject('🤝 Propozycja stałej współpracy dla Biura Rachunkowego', this)">🤝 Propozycja współpracy</button>
-        <button class="panel-btn" onclick="copySubject('📈 Jak zwiększyć zysk Państwa klientów? (Partnerstwo BAF)', this)">📈 Zwiększenie zysku</button>
-        <button class="panel-btn" onclick="copySubject('💼 Wsparcie finansowe dla firm - oferta dla Księgowych', this)">💼 Wsparcie dla firm</button>
-        <button class="panel-btn" onclick="copySubject('📉 Niższe raty dla Państwa Klientów - audyt kredytowy', this)">📉 Niższe raty (audyt)</button>
+        <h3 class="panel-header" style="margin-top:0;">Kliknij, aby skopiować temat:</h3>
+        
+        <button class="panel-btn" onclick="copySubject('🔵 Szukamy partnerów wśród księgowych 🔵', this)">
+            🔵 Szukamy partnerów...
+        </button>
+        <button class="panel-btn" onclick="copySubject('🤝 Propozycja stałej współpracy dla Biura Rachunkowego', this)">
+            🤝 Propozycja współpracy
+        </button>
+        <button class="panel-btn" onclick="copySubject('📈 Jak zwiększyć zysk Państwa klientów? (Partnerstwo BAF)', this)">
+            📈 Zwiększenie zysku
+        </button>
+        <button class="panel-btn" onclick="copySubject('💼 Wsparcie finansowe dla firm - oferta dla Księgowych', this)">
+            💼 Wsparcie dla firm
+        </button>
+        <button class="panel-btn" onclick="copySubject('📉 Niższe raty dla Państwa Klientów - audyt kredytowy', this)">
+            📉 Niższe raty (audyt)
+        </button>
         
         <h3 class="panel-header">Inne warianty:</h3>
-        <button class="panel-btn" onclick="copySubject('🚀 Gotówka dla firm od 6,5% – oferta współpracy', this)">🚀 Gotówka od 6,5%</button>
-        <button class="panel-btn" onclick="copySubject('⚖️ SKD i pozwy frankowe – wsparcie prawne dla Klientów Biura', this)">⚖️ SKD i Frankowicze</button>
-        <button class="panel-btn" onclick="copySubject('🔍 Bezpłatna analiza portfela kredytowego Państwa klientów', this)">🔍 Bezpłatna analiza</button>
-        <button class="panel-btn" onclick="copySubject('📩 Zaproszenie do sieci partnerskiej BAF', this)">📩 Zaproszenie do sieci</button>
+        <button class="panel-btn" onclick="copySubject('🚀 Gotówka dla firm od 6,5% – oferta współpracy', this)">
+            🚀 Gotówka od 6,5%
+        </button>
+        <button class="panel-btn" onclick="copySubject('⚖️ SKD i pozwy frankowe – wsparcie prawne dla Klientów Biura', this)">
+            ⚖️ SKD i Frankowicze
+        </button>
+        <button class="panel-btn" onclick="copySubject('🔍 Bezpłatna analiza portfela kredytowego Państwa klientów', this)">
+            🔍 Bezpłatna analiza
+        </button>
+        <button class="panel-btn" onclick="copySubject('📩 Zaproszenie do sieci partnerskiej BAF', this)">
+            📩 Zaproszenie do sieci
+        </button>
     </div>
 
     <div id="email-content-wrapper">
@@ -164,13 +210,13 @@
             <tr>
                 <td align="center" style="padding: 20px 0;">
                     
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="max-width: 800px; background-color: #ffffff; margin: 0 auto; border-collapse: collapse; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="max-width: 800px; background-color: #ffffff; margin: 0 auto; border-collapse: collapse;">
                         
                         <tr>
                             <td class="header" style="background-color: #002d5a; padding: 40px 20px; text-align: center;">
                                  <div style="background-color: #ffffff; display: inline-block; padding: 2px; border-radius: 4px;">
-                                     <a href="https://biuroanalizyfinansowej.pl/" target="_blank" style="text-decoration: none;">
-                                         <img src="baf_logo.png" alt="Biuro Analizy Finansowej BAF" width="220" style="display: block; margin: 0 auto; max-width: 100%; height: auto; border: 0;">
+                                     <a href="https://biuroanalizyfinansowej.pl/" target="_blank" style="text-decoration: none; border: 0;">
+                                         <img src="baf_logo.png" alt="Biuro Analizy Finansowej BAF" width="220" style="display: block; margin: 0 auto; max-width: 100%; height: auto; border: 0; outline: none; text-decoration: none;">
                                      </a>
                                  </div>
                             </td>
@@ -178,16 +224,16 @@
 
                         <tr>
                             <td style="padding: 40px 50px;">
-                                <h1 style="font-size: 28px; font-weight: 400; color: #002d5a; margin: 0 0 25px 0;">Szanowni Państwo,</h1>
+                                <h1 style="font-size: 28px; font-weight: 400; color: #002d5a; margin: 0 0 25px 0; font-family: 'Lato', Arial, sans-serif;">Szanowni Państwo,</h1>
                                 
-                                <p style="font-size: 17px; color: #555; line-height: 1.6; margin: 0 0 20px 0;">
+                                <p style="font-size: 17px; color: #555; line-height: 1.6; margin: 0 0 20px 0; font-family: 'Lato', Arial, sans-serif;">
                                     Szukamy partnerów wśród księgowych, którzy dbają o swoich klientów tak samo jak my. Nasza skuteczność opiera się na ludziach - mamy bezpośrednie, wypracowane latami kontakty z dyrektorami w konkretnych bankach.
                                 </p>
-                                <p style="font-size: 17px; color: #555; line-height: 1.6; margin: 0 0 20px 0;">
+                                <p style="font-size: 17px; color: #555; line-height: 1.6; margin: 0 0 20px 0; font-family: 'Lato', Arial, sans-serif;">
                                     Działamy jak hurtownik: dzięki dużej liczbie składanych wniosków mamy inną pozycję negocjacyjną. Dzięki temu Państwa klienci zyskują dostęp do warunków cenowych, które są niedostępne dla klienta detalicznego.
                                 </p>
 
-                                <h2 style="font-size: 20px; color: #002d5a; margin: 30px 0 15px 0; border-bottom: 1px solid #dee2e6; padding-bottom: 10px;">Nasze możliwości finansowania:</h2>
+                                <h2 style="font-size: 20px; color: #002d5a; margin: 30px 0 15px 0; border-bottom: 1px solid #dee2e6; padding-bottom: 10px; font-family: 'Lato', Arial, sans-serif;">Nasze możliwości finansowania:</h2>
 
                                 <div style="background: #f8faff; border-left: 4px solid #007bff; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
                                     <div style="font-weight: 700; color: #0056b3; font-size: 18px; margin-bottom: 5px;">Kredyt ratalny bez zabezpieczeń</div>
@@ -206,48 +252,69 @@
 
                                 <div style="background: #f8faff; border-left: 4px solid #007bff; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
                                     <div style="font-weight: 700; color: #0056b3; font-size: 18px; margin-bottom: 5px;">Leasing operacyjny / finansowy / zwrotny</div>
-                                    <p style="margin:0; font-size: 17px; color: #555;">Szybkie finansowanie środków trwałych, pojazdów i maszyn.</p>
-                                </div>
-
-                                <div style="background-color: #fcfdfd; border: 1px solid #e1e4e8; border-left: 4px solid #28a745; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
-                                    <span style="color: #002d5a; font-weight: 800; font-size: 16px; display: block; margin-bottom: 10px;">Przykład:</span>
-                                    <p style="margin:0; font-size: 15px; color: #444; line-height: 1.6;">
-                                        Klient posiadał zobowiązanie 223 020 zł (rata 3 493 zł). Po refinansowaniu na 7,12% rata spadła do 2 603 zł. 
-                                        Oszczędność: <strong style="color: #28a745;">75 363 zł</strong>.
+                                    <p style="margin:0; font-size: 17px; color: #555;">
+                                        Szybkie finansowanie środków trwałych, pojazdów i maszyn. Elastyczne warunki i uproszczone procedury dopasowane do specyfiki branży.
                                     </p>
                                 </div>
 
-                                <h2 style="font-size: 20px; color: #002d5a; margin: 30px 0 15px 0; border-bottom: 1px solid #dee2e6; padding-bottom: 10px;">Dlaczego BAF?</h2>
-                                <p style="font-size: 17px; color: #555; line-height: 1.6; margin: 0 0 20px 0;">
-                                    Nie działamy schematycznie. Każda analiza jest indywidualna, co pozwala nam dobrać bank idealnie dopasowany do unikalnej sytuacji Państwa klienta.
+                                <div style="background: #f8faff; border-left: 4px solid #007bff; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+                                    <div style="font-weight: 700; color: #0056b3; font-size: 18px; margin-bottom: 5px;">Faktoring</div>
+                                    <p style="margin:0; font-size: 17px; color: #555;">
+                                        Poprawa płynności finansowej dzięki zamianie faktur na gotówkę. Skuteczne narzędzie do finansowania bieżącej działalności bez zadłużania się.
+                                    </p>
+                                </div>
+
+                                <div style="background: #f8faff; border-left: 4px solid #007bff; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+                                    <div style="font-weight: 700; color: #0056b3; font-size: 18px; margin-bottom: 5px;">Refinansowanie</div>
+                                    <p style="margin:0; font-size: 17px; color: #555;">
+                                        Poza organizacją nowych kredytów oferujemy audyt obecnych zobowiązań. Sprawdzimy możliwości refinansowania, aby uprościć płatności do jednej raty, a przede wszystkim - obniżyć całkowite koszty kredytu.
+                                    </p>
+                                </div>
+
+                                <div style="background-color: #fcfdfd; border: 1px solid #e1e4e8; border-left: 4px solid #28a745; padding: 20px; border-radius: 4px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);">
+                                    <span style="color: #002d5a; font-weight: 800; font-size: 16px; margin-bottom: 10px; display: block;">Przykład:</span>
+                                    <p style="margin:0; font-size: 15px; color: #444; line-height: 1.6;">
+                                        Klient posiadał zobowiązanie w wysokości <strong>223&nbsp;020&nbsp;zł</strong>, które przy wysokim oprocentowaniu <strong>13,23%</strong> na 111&nbsp;miesięcy generowało obciążającą ratę 3&nbsp;493&nbsp;zł.
+                                        <br><br>
+                                        Przeprowadziliśmy proces refinansowania na okres 120&nbsp;miesięcy, drastycznie redukując oprocentowanie do poziomu <strong>7,12%</strong>. Dzięki temu miesięczna płatność spadła do 2&nbsp;603&nbsp;zł, zapewniając klientowi finansowy oddech każdego miesiąca.
+                                        <br><br>
+                                        W skali całego okresu kredytowania ta jedna decyzja pozwoliła zachować w kieszeni klienta aż <strong style="color: #28a745;">75&nbsp;363&nbsp;zł</strong>, które pierwotnie oddałby bankowi.
+                                    </p>
+                                </div>
+
+                                <h2 style="font-size: 20px; color: #002d5a; margin: 30px 0 15px 0; border-bottom: 1px solid #dee2e6; padding-bottom: 10px; font-family: 'Lato', Arial, sans-serif;">Dlaczego BAF?</h2>
+                                <p style="font-size: 17px; color: #555; line-height: 1.6; margin: 0 0 20px 0; font-family: 'Lato', Arial, sans-serif;">
+                                    Nie działamy schematycznie. Każda analiza jest indywidualna, co pozwala nam dobrać bank idealnie dopasowany do unikalnej sytuacji Państwa klienta, maksymalizując szansę na pozytywną decyzję.
                                 </p>
 
                                 <div style="background-color: #eef2f5; padding: 20px; border-radius: 4px; margin: 30px 0;">
-                                    <strong style="color: #002d5a; font-size: 18px;">Wsparcie prawne:</strong>
-                                    <ul style="margin: 10px 0 0 0; color: #555; line-height: 1.6;">
+                                    <strong style="color: #002d5a; font-size: 18px; font-family: 'Lato', Arial, sans-serif;">Udzielamy również wsparcia prawnego:</strong>
+                                    <ul style="margin: 10px 0 0 0; color: #555; line-height: 1.6; font-family: 'Lato', Arial, sans-serif;">
                                         <li>Sankcja Kredytu Darmowego (SKD)</li>
                                         <li>Profesjonalne pozwy frankowe</li>
                                         <li>Restrukturyzacja i upadłość</li>
                                     </ul>
                                 </div>
 
-                                <p style="font-size: 17px; color: #555; line-height: 1.6; margin: 30px 0 10px 0; text-align: center;">
+                                <p style="font-size: 17px; color: #555; line-height: 1.6; margin: 30px 0 10px 0; text-align: center; font-family: 'Lato', Arial, sans-serif;">
                                     Po więcej informacji w imieniu BAF zapraszam do kontaktu
                                 </p>
 
                                 <div align="center" style="margin-bottom: 20px;">
-                                    <a id="cta-link" href="https://q-r.to/DawidBlachnoBiuroBAF" style="display: inline-block; padding: 15px 35px; background-color: #17a2b8; color: #ffffff !important; text-decoration: none; font-weight: bold; border-radius: 5px; font-size: 18px;">Moja wizytówka</a>
+                                    <a id="cta-link" href="https://q-r.to/DawidBlachnoBiuroBAF" style="display: inline-block; padding: 15px 35px; background-color: #17a2b8; color: #ffffff !important; text-decoration: none; font-weight: bold; border-radius: 5px; font-size: 18px; margin: 10px 0 20px 0; font-family: 'Lato', Arial, sans-serif;">Moja wizytówka</a>
                                 </div>
                             </td>
                         </tr>
 
                     </table>
+
                 </td>
             </tr>
         </table>
     </div>
 
     <script>
+        // BAZA LINKÓW DORADCÓW
         const advisors = {
             'dawid': 'https://q-r.to/DawidBlachnoBiuroBAF',
             'weronika': 'https://q-r.to/WeronikaLekstonBiuroBAF',
@@ -260,46 +327,96 @@
             'mateusz': 'https://q-r.to/MateuszDzidkowskiBiuroBAF'
         };
 
+        // FUNKCJA ZMIANY DORADCY
         function setAdvisor(advisorKey, btnElement) {
+            // Zmiana linku w przycisku
             const linkElement = document.getElementById('cta-link');
             if (advisors[advisorKey]) {
                 linkElement.href = advisors[advisorKey];
             }
-            document.querySelectorAll('#control-panel-left .panel-btn').forEach(btn => {
-                if (btn.id !== 'copy-button') btn.classList.remove('active');
+
+            // Aktualizacja wyglądu przycisków tylko w LEWYM panelu
+            const allButtons = document.querySelectorAll('#control-panel-left .panel-btn');
+            allButtons.forEach(btn => {
+                if (btn.id !== 'copy-button') {
+                    btn.classList.remove('active');
+                }
             });
             btnElement.classList.add('active');
         }
 
+        // NOWA FUNKCJA: KOPIOWANIE TEMATU
         function copySubject(text, btnElement) {
             navigator.clipboard.writeText(text).then(() => {
                 const originalText = btnElement.textContent;
+                // Prosty efekt wizualny
                 btnElement.textContent = '✅ Skopiowano!';
                 btnElement.style.backgroundColor = '#28a745';
                 btnElement.style.color = '#fff';
+                btnElement.style.borderColor = '#28a745';
+                
+                // Reset po 1.5 sekundy
                 setTimeout(() => {
                     btnElement.textContent = originalText;
                     btnElement.style.backgroundColor = '';
                     btnElement.style.color = '';
+                    btnElement.style.borderColor = '';
                 }, 1500);
+            }).catch(err => {
+                console.error('Błąd kopiowania tematu:', err);
             });
         }
 
-        document.getElementById('copy-button').addEventListener('click', function() {
+        // FUNKCJA KOPIOWANIA TREŚCI MAILA (HTML)
+        document.addEventListener('DOMContentLoaded', () => {
+            const copyBtn = document.getElementById('copy-button');
             const emailWrapper = document.getElementById('email-content-wrapper');
-            const htmlContent = emailWrapper.innerHTML;
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const richTextInput = new ClipboardItem({ 'text/html': blob });
             
-            navigator.clipboard.write([richTextInput]).then(() => {
-                this.textContent = 'Skopiowano treść!';
-                this.classList.add('copied');
-                setTimeout(() => {
-                    this.textContent = 'Kopiuj treść maila';
-                    this.classList.remove('copied');
-                }, 2000);
+            copyBtn.addEventListener('click', () => {
+                // Kopiujemy HTML
+                const htmlContent = emailWrapper.innerHTML;
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const richTextInput = new ClipboardItem({ 'text/html': blob });
+                
+                navigator.clipboard.write([richTextInput]).then(() => {
+                    // Sukces
+                    const originalText = copyBtn.textContent;
+                    copyBtn.textContent = 'Skopiowano całość!';
+                    copyBtn.classList.add('copied');
+                    
+                    // Reset po 2 sekundach
+                    setTimeout(() => {
+                        copyBtn.textContent = originalText;
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Błąd kopiowania: ', err);
+                    alert('Nie udało się skopiować automatycznie. Spróbuj zaznaczyć ręcznie.');
+                });
             });
         });
+    </script>
+    
+    <script>
+        try {
+            const dzisiaj = 'Dane na dzień: 02.02.2026';
+            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
+            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
+        } catch(e) { console.log('Brak elementu w tym pliku'); }
+    </script>
+    
+    <script>
+        // BAF AUTO UPDATE - 05.02.2026
+        try {
+            if(document.getElementById('wibor-1m')) document.getElementById('wibor-1m').textContent = '4,02%';
+            if(document.getElementById('wibor-3m')) document.getElementById('wibor-3m').textContent = '3,9%';
+            if(document.getElementById('wibor-6m')) document.getElementById('wibor-6m').textContent = '3,79%';
+            if(document.getElementById('odsetki-opoznienie')) document.getElementById('odsetki-opoznienie').textContent = '9,5%';
+            
+            const dzisiaj = 'Dane na dzień: 05.02.2026';
+            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
+            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
+        } catch(e) { console.log('Brak elementu w tym pliku'); }
     </script>
 </body>
 </html>
