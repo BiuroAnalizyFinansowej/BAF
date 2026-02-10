@@ -406,17 +406,27 @@
     </script>
     
     <script>
-        // BAF AUTO UPDATE - 05.02.2026
         try {
-            if(document.getElementById('wibor-1m')) document.getElementById('wibor-1m').textContent = '4,02%';
-            if(document.getElementById('wibor-3m')) document.getElementById('wibor-3m').textContent = '3,9%';
-            if(document.getElementById('wibor-6m')) document.getElementById('wibor-6m').textContent = '3,79%';
-            if(document.getElementById('odsetki-opoznienie')) document.getElementById('odsetki-opoznienie').textContent = '9,5%';
             
             const dzisiaj = 'Dane na dzień: 05.02.2026';
             if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
             if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
         } catch(e) { console.log('Brak elementu w tym pliku'); }
     </script>
-</body>
 </html>
+
+    <script>
+        // BAF AUTO UPDATE - 10.02.2026
+        try {
+            document.getElementById('wibor-1m').textContent = '4,03%';
+            document.getElementById('wibor-3m').textContent = '3,88%';
+            document.getElementById('wibor-6m').textContent = '3,77%';
+            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
+            
+            const dzisiaj = 'Dane na dzień: 10.02.2026';
+            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
+            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
+        } catch(e) { console.log('Brak elementu w tym pliku'); }
+    </script>
+    </body>
+    
