@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Propozycja Finansowania - BAF</title>
     <style>
-        /* Import czcionki dla podglądu w przeglądarce */
+        /* Import czcionki (dla podglądu w przeglądarce) */
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
         
-        /* Style interfejsu (tło strony, przycisk) - to nie idzie do maila */
+        /* Style interfejsu strony (tło, przycisk) - to nie idzie do maila */
         body {
             margin: 0;
             padding: 0;
@@ -27,7 +27,6 @@
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             z-index: 1000;
-            font-family: Arial, sans-serif;
         }
 
         .panel-btn {
@@ -44,6 +43,7 @@
             transition: all 0.3s ease;
             background-color: #17a2b8;
             color: white;
+            font-family: Arial, sans-serif;
         }
 
         .panel-btn:hover { background-color: #138496; }
@@ -256,7 +256,6 @@
             const btn = this;
             const emailWrapper = document.getElementById('email-content-wrapper');
             
-            // Zaznaczenie
             const range = document.createRange();
             range.selectNode(emailWrapper);
             window.getSelection().removeAllRanges();
@@ -273,7 +272,6 @@
                         successEffect(btn);
                     }).catch(err => {
                         console.error("Clipboard API Error", err);
-                        // Fallback
                         document.execCommand('copy');
                         successEffect(btn);
                     });
