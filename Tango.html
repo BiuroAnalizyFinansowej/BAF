@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propozycja Finansowania - BAF</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+
+        /* --- STYLE OGÓLNE --- */
+        body {
+            font-family: 'Lato', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* --- PANEL STEROWANIA (Z LEWEJ) --- */
+        #control-panel-left {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 220px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .panel-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .panel-btn:hover { background-color: #138496; }
+        .panel-btn.copied { background-color: #28a745; }
+
+        /* --- GŁÓWNA TREŚĆ MAILA (WRAPPER DO KOPIOWANIA) --- */
+        #email-content-wrapper {
+            margin: 0 auto; 
+            padding: 20px 0 20px 260px; /* Margines na panel boczny */
+            max-width: 900px;
+        }
+
+        /* Style wewnątrz maila */
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 77, 153, 0.1);
+            overflow: hidden;
+            border: 1px solid #e1e4e8;
+        }
+
+        .header-logo {
+            padding: 30px 0;
+            background-color: #ffffff;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .header-logo img {
+            max-width: 250px;
+            height: auto;
+        }
+
+        .content {
+            padding: 40px 50px;
+        }
+
+        h1, h2, h3 {
+            color: #004d99;
+            font-weight: 700;
+        }
+        
+        .salutation {
+            font-size: 2.2em;
+            color: #002d5a;
+            margin-bottom: 25px;
+            margin-top: 0;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 30px;
+        }
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        h2 {
+            font-size: 1.6em;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+
+        /* KARTY WARIANTÓW */
+        .variants-container {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .offer-card {
+            background-color: #fdfdfd;
+            border: 1px solid #dcebf7;
+            border-top: 4px solid #007bff;
+            border-radius: 8px;
+            padding: 25px;
+            flex: 1;
+            min-width: 300px;
+            box-shadow: 0 4px 15px rgba(0, 77, 153, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .offer-card h3 {
+            margin-top: 0;
+            font-size: 1.4em;
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .offer-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            margin-bottom: auto;
+        }
+
+        .offer-card li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 1em;
+        }
+        .offer-card li:last-child { border-bottom: none; }
+
+        .offer-card .label { color: #666; }
+        .offer-card .value { font-weight: 700; color: #333; text-align: right; }
+
+        .highlight-rate {
+            background-color: #f0f7ff;
+            border: 1px solid #cce5ff;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .rate-value {
+            display: block;
+            font-size: 1.25em;
+            font-weight: 700;
+            color: #004d99;
+            margin-bottom: 5px;
+        }
+        .rate-desc { font-size: 0.85em; color: #666; }
+
+        .variant-condition {
+            font-size: 0.85em;
+            color: #2e5c8a;
+            background-color: #e8f4fd;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 4px;
+            line-height: 1.4;
+            border-left: 3px solid #0056b3;
+        }
+
+        /* SEKCJA KORZYŚCI (IKONY) */
+        .benefits {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .benefits li {
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .benefits .icon {
+            width: 28px;
+            height: 28px;
+            margin-right: 20px;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        /* NOTE BGK */
+        .note {
+            background: #e6f7ff;
+            border-left: 5px solid #007bff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* SUCCESS FEE */
+        .fee-calculation {
+            background-color: #f8faff;
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 20px;
+            border: 1px solid #e0e9f5;
+            text-align: center;
+        }
+        .fee-rate {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #28a745;
+            display: block;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 900px) {
+            #control-panel-left { position: relative; top: 0; left: 0; width: auto; margin: 20px; }
+            #email-content-wrapper { padding: 0 20px; margin: 0; }
+            .variants-container { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="control-panel-left">
+        <button id="copy-button" class="panel-btn">Kopiuj całość do maila</button>
+        <div style="font-size: 11px; color: #777; margin-top: 10px; text-align: center;">
+            Kliknij, aby skopiować gotowy szablon (z obrazkami i formatowaniem).
+        </div>
+    </div>
+
+    <div id="email-content-wrapper">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="font-family: 'Lato', Arial, sans-serif;">
+            <tr>
+                <td align="center">
+                    
+                    <div class="container" style="max-width: 900px; text-align: left; background: #fff;">
+                        
+                        <div class="header-logo">
+                            <img src="baf_logo.png" alt="Logo Biuro Analizy Finansowej">
+                        </div>
+
+                        <div class="content">
+                            <h1 class="salutation">Panie Kamilu,</h1>
+                            <p>w nawiązaniu do rozmowy przesyłam kalkulacje propozycji finansowania. Przeanalizowałam dostępne możliwości i przygotowałam ofertę kredytu firmowego ratalnego, o którym już wspominałam telefonicznie, w dwóch wariantach, różniących się strukturą kosztów początkowych.</p>
+                            
+                            <div class="section">
+                                <h2>Rodzaj Finansowania: Kredyt firmowy ratalny</h2>
+                                
+                                <div class="variants-container">
+                                    <div class="offer-card">
+                                        <h3>I WARIANT</h3>
+                                        <ul>
+                                            <li><span class="label">Kwota Netto:</span> <span class="value">1 000 000 PLN</span></li>
+                                            <li><span class="label">Kwota Brutto:</span> <span class="value">1 025 000 PLN</span></li>
+                                            <li><span class="label">Prowizja bankowa:</span> <span class="value">2,5%</span></li>
+                                            <li><span class="label">Marża banku:</span> <span class="value">2,5%</span></li>
+                                            <li><span class="label">WIBOR 1M (luty):</span> <span class="value">4,02%</span></li>
+                                            <li style="border-top: 1px solid #ddd; margin-top: 5px; padding-top: 10px;"><span class="label"><strong>Oprocentowanie:</strong></span> <span class="value"><strong>6,52%</strong></span></li>
+                                        </ul>
+                                        <div class="highlight-rate">
+                                            <span class="rate-value">11 614,47 PLN</span>
+                                            <span class="rate-desc">Rata szacunkowa (120 mies.)</span>
+                                            <br>
+                                            <span class="rate-value" style="font-size: 1.1em; margin-top: 10px;">20 005,26 PLN</span>
+                                            <span class="rate-desc">Rata szacunkowa (60 mies.)</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="offer-card" style="border-top-color: #28a745;">
+                                        <h3 style="color: #28a745;">II WARIANT</h3>
+                                        <ul>
+                                            <li><span class="label">Kwota Netto:</span> <span class="value">1 000 000 PLN</span></li>
+                                            <li><span class="label">Kwota Brutto:</span> <span class="value">1 000 000 PLN</span></li>
+                                            <li><span class="label">Prowizja bankowa:</span> <span class="value" style="color: #28a745; font-weight: bold;">0%</span></li>
+                                            <li><span class="label">Marża banku:</span> <span class="value">2,5%</span></li>
+                                            <li><span class="label">WIBOR 1M (luty):</span> <span class="value">4,02%</span></li>
+                                            <li style="border-top: 1px solid #ddd; margin-top: 5px; padding-top: 10px;"><span class="label"><strong>Oprocentowanie:</strong></span> <span class="value"><strong>6,52%</strong></span></li>
+                                        </ul>
+                                        
+                                        <div class="variant-condition">
+                                            <strong>Warunek uzyskania wariantu:</strong><br>
+                                            Konsolidacja obecnego kredytu firmowego w Alior Banku 
+                                            <br><em>LUB</em><br>
+                                            Wnioskowanie dodatkowo o kredyt w rachunku bieżącym na jednym wniosku (kwota możliwa do pozyskania do 200 000 PLN).
+                                        </div>
+
+                                        <div class="highlight-rate" style="background-color: #f0fff4; border-color: #c3e6cb;">
+                                            <span class="rate-value" style="color: #28a745;">11 331,19 PLN</span>
+                                            <span class="rate-desc">Rata szacunkowa (120 mies.)</span>
+                                            <br>
+                                            <span class="rate-value" style="font-size: 1.1em; margin-top: 10px; color: #28a745;">19 517,32 PLN</span>
+                                            <span class="rate-desc">Rata szacunkowa (60 mies.)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="note">
+                                    <p><strong>Gwarancja DE MINIMIS:</strong> W obu wariantach występuje Poręczenie BGK 0,5% od kwoty gwarancji (60% salda kredytu), płatne raz w roku przez 5 lat.</p>
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <h2>Kluczowe Korzyści</h2>
+                                <ul class="benefits">
+                                    <li>
+                                        <img class="icon" src="https://img.icons8.com/ios/50/0056b3/wallet--v1.png" alt="Brak opłat">
+                                        <div><strong>BRAK OPŁAT KWARTALNYCH!</strong> Nie ma żadnych ukrytych kosztów za utrzymanie finansowania.</div>
+                                    </li>
+                                    <li>
+                                        <img class="icon" src="https://img.icons8.com/ios/50/0056b3/ok--v1.png" alt="Jasne warunki">
+                                        <div><strong>Przejrzyste warunki:</strong> Umowa bez "gwiazdek" i dodatkowych, nieoczekiwanych kosztów.</div>
+                                    </li>
+                                    <li>
+                                        <img class="icon" src="https://img.icons8.com/ios/50/0056b3/unlock.png" alt="Elastyczność">
+                                        <div><strong>Pełna elastyczność:</strong> Całkowity brak opłat za nadpłatę oraz wcześniejszą całkowitą spłatę kredytu. Może Pan zamknąć finansowanie w dowolnym momencie bez kosztów.</div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="section">
+                                <h2>Wynagrodzenie za Doradztwo</h2>
+                                <p>Rozliczenie oparte o sukces (Success Fee), płatne dopiero po uruchomieniu środków.</p>
+                                <div class="fee-calculation">
+                                    <p>Stawka za sukces</p>
+                                    <span class="fee-rate">4% <span style="font-size: 0.5em; color: #555; font-weight: 400;">+ VAT</span></span>
+                                    <div style="border-top: 1px solid #e0e9f5; margin-top: 15px; padding-top: 15px;">
+                                        <p style="margin: 0;">Kwota wynagrodzenia: <strong>40 000,00 PLN + VAT</strong></p>
+                                        <small style="color: #777;">(liczone od kwoty pozyskanych środków 1 000 000 PLN)</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <p style="margin-top: 30px;">Czekam na Pana decyzję odnośnie wyboru wariantu, abyśmy mogli sprawnie przejść do procesowania wniosku.</p>
+                            
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById('copy-button').addEventListener('click', function() {
+            const btn = this;
+            const emailWrapper = document.getElementById('email-content-wrapper');
+            
+            // Tworzenie zakresu zaznaczenia
+            const range = document.createRange();
+            range.selectNode(emailWrapper);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+
+            try {
+                // Kopiowanie jako HTML (Rich Text)
+                // Metoda nowoczesna (Clipboard API) z fallbackiem
+                const htmlContent = emailWrapper.innerHTML;
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const richTextInput = new ClipboardItem({ 'text/html': blob });
+                
+                if (typeof navigator.clipboard !== 'undefined' && navigator.clipboard.write) {
+                    navigator.clipboard.write([richTextInput]).then(() => {
+                        successEffect(btn);
+                    }).catch(err => {
+                        // Fallback dla przeglądarek blokujących ClipboardItem
+                        document.execCommand('copy');
+                        successEffect(btn);
+                    });
+                } else {
+                    document.execCommand('copy');
+                    successEffect(btn);
+                }
+            } catch (err) {
+                console.error('Błąd kopiowania:', err);
+                alert('Wystąpił problem z automatycznym kopiowaniem. Zaznaczono treść - użyj Ctrl+C.');
+            }
+            
+            window.getSelection().removeAllRanges();
+        });
+
+        function successEffect(btn) {
+            const originalText = 'Kopiuj całość do maila';
+            btn.textContent = '✅ Skopiowano!';
+            btn.classList.add('copied');
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.classList.remove('copied');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
