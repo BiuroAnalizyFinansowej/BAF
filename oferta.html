@@ -50,7 +50,7 @@
                                                     <tr id="row-w1-brutto"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Brutto:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-gross"></td></tr>
                                                     <tr id="row-w1-prowizja"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Prowizja bankowa:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-prov"></td></tr>
                                                     <tr id="row-w1-marza"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Marża banku:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-margin"></td></tr>
-                                                    <tr id="row-w1-wibor"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">WIBOR:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" class="wibor-val"></td></tr>
+                                                    <tr id="row-w1-wibor"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">WIBOR:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-wibor"></td></tr>
                                                     <tr id="row-w1-oproc"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Oprocentowanie:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #333;" id="w1-rate"></td></tr>
                                                     <tr id="row-w1-koszt"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Koszt Całkowity:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #dc3545;" id="w1-koszt"></td></tr>
                                                 </table>
@@ -69,7 +69,7 @@
                                                     <tr id="row-w2-brutto"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Brutto:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-gross"></td></tr>
                                                     <tr id="row-w2-prowizja"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Prowizja bankowa:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #28a745;" id="w2-prov"></td></tr>
                                                     <tr id="row-w2-marza"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Marża banku:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-margin"></td></tr>
-                                                    <tr id="row-w2-wibor"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">WIBOR:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" class="wibor-val"></td></tr>
+                                                    <tr id="row-w2-wibor"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">WIBOR:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-wibor"></td></tr>
                                                     <tr id="row-w2-oproc"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Oprocentowanie:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #333;" id="w2-rate"></td></tr>
                                                     <tr id="row-w2-koszt"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Koszt Całkowity:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #dc3545;" id="w2-koszt"></td></tr>
                                                 </table>
@@ -123,7 +123,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const storedData = localStorage.getItem('bafOfferData_V4');
+            const storedData = localStorage.getItem('bafOfferData_V4_5');
             if (storedData) {
                 const data = JSON.parse(storedData);
 
@@ -135,30 +135,27 @@
                 const genderClient = data.clientGender;
                 document.getElementById('client-decision-grammar').textContent = genderClient === 'F' ? "Pani" : "Pana";
 
-                // Wariant 2 Widoczność
                 if(!data.hasVariant2) {
                     document.getElementById('var2-container').style.display = 'none';
                     document.getElementById('var-separator').style.display = 'none';
                     document.getElementById('h3-var1').textContent = "OFERTA"; 
                 }
 
-                // Wstawianie Danych
+                // Wstawianie Danych (Helper)
                 const setVal = (id, val) => { if(document.getElementById(id)) document.getElementById(id).textContent = val; };
                 
-                // W1
                 setVal('w1-net', data.w1.netto); setVal('w1-gross', data.w1.brutto); setVal('w1-prov', data.w1.prowizja);
                 setVal('w1-margin', data.w1.marza); setVal('w1-rate', data.w1.oproc); setVal('w1-rata', data.w1.rata); setVal('w1-koszt', data.w1.koszt);
-                
-                // W2
+                setVal('w1-wibor', data.w1.wibor);
+
                 if(data.hasVariant2) {
                     setVal('w2-net', data.w2.netto); setVal('w2-gross', data.w2.brutto); setVal('w2-prov', data.w2.prowizja);
                     setVal('w2-margin', data.w2.marza); setVal('w2-rate', data.w2.oproc); setVal('w2-rata', data.w2.rata); setVal('w2-koszt', data.w2.koszt);
+                    setVal('w2-wibor', data.w2.wibor);
                 }
 
-                // Kontrola Widoczności Wierszy
                 const toggleRow = (id, visible) => { if(document.getElementById(id)) document.getElementById(id).style.display = visible ? 'table-row' : 'none'; };
                 
-                // W1 Visibility
                 toggleRow('row-w1-netto', data.visibility.w1_netto);
                 toggleRow('row-w1-brutto', data.visibility.w1_brutto);
                 toggleRow('row-w1-prowizja', data.visibility.w1_prowizja);
@@ -167,7 +164,6 @@
                 toggleRow('row-w1-oproc', data.visibility.w1_oproc);
                 toggleRow('row-w1-koszt', data.visibility.w1_koszt);
 
-                // W2 Visibility
                 toggleRow('row-w2-netto', data.visibility.w2_netto);
                 toggleRow('row-w2-brutto', data.visibility.w2_brutto);
                 toggleRow('row-w2-prowizja', data.visibility.w2_prowizja);
@@ -176,9 +172,7 @@
                 toggleRow('row-w2-oproc', data.visibility.w2_oproc);
                 toggleRow('row-w2-koszt', data.visibility.w2_koszt);
 
-                // Inne
                 document.querySelectorAll('.months-display').forEach(el => el.textContent = data.months);
-                document.querySelectorAll('.wibor-val').forEach(el => el.textContent = data.wibor + '%');
 
                 if(!data.showBGK) document.getElementById('bgk-section').style.display = 'none';
                 else if(!data.hasVariant2) document.querySelector('#bgk-section p').innerHTML = document.querySelector('#bgk-section p').innerHTML.replace("W obu wariantach", "W ofercie");
@@ -188,7 +182,6 @@
                 setVal('fee-suffix', suffix);
                 setVal('fee-kwota', data.feeKwota + " " + suffix);
 
-                // Korzyści
                 const benefitsContainer = document.getElementById('dynamic-benefits-container');
                 let html = '<table border="0" cellpadding="0" cellspacing="0" width="100%">';
                 const iconUrls = {
