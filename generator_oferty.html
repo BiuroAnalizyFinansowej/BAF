@@ -3,85 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Ofert BAF v4.0</title>
+    <title>Generator Ofert BAF v4.5</title>
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
         
         body { font-family: 'Lato', sans-serif; background: #f4f7f9; color: #333; padding: 20px; margin: 0; }
         
-        /* Layout Wrapper */
+        /* Layout */
         .layout-wrapper { display: flex; max-width: 1250px; margin: 0 auto; gap: 20px; align-items: flex-start; }
         .container { flex: 1; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .sidebar { width: 260px; flex-shrink: 0; position: sticky; top: 20px; }
 
-        /* Style Panelu Bocznego (WIBOR) */
+        /* Panel Boczny */
         .info-container { background-color: #ffffff; color: #333; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e1e4e8; }
         .info-header { font-size: 1.1em; font-weight: 700; color: #002d5a; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
         .info-date { font-size: 0.85em; color: #777; text-align: center; margin-bottom: 15px; }
         .rates-grid { display: flex; flex-direction: column; gap: 12px; }
         .rate-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.95em; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; }
         .rate-item:last-child { border-bottom: none; }
-        .rate-item p { margin: 0; color: #555; }
         .rate-item .value { font-weight: 700; color: #002d5a; font-size: 1.1em; }
         .info-container-single .value { text-align: center; font-size: 2em; font-weight: 700; color: #dc3545; margin: 10px 0; }
-        .disclaimer-text { font-size: 0.7em; color: #999; text-align: center; margin-top: 15px; margin-bottom: 0; line-height: 1.4; }
+        .disclaimer-text { font-size: 0.7em; color: #999; text-align: center; margin-top: 15px; margin-bottom: 0; }
 
         /* Nawigacja */
         .top-nav { max-width: 1250px; margin: 0 auto 20px auto; display: flex; justify-content: space-between; align-items: center; }
         .nav-btn { text-decoration: none; color: #002d5a; font-weight: bold; border: 2px solid #002d5a; padding: 8px 15px; border-radius: 6px; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; font-size: 14px; background-color: transparent; }
         .nav-btn:hover { background-color: #002d5a; color: white; }
-        .nav-btn svg { width: 20px; height: 20px; fill: currentColor; margin-bottom: 2px; }
+        .nav-btn svg { width: 20px; height: 20px; fill: currentColor; }
 
         /* Formularz */
-        h1, h2, h3 { color: #002d5a; margin-top: 0; }
+        h1, h2 { color: #002d5a; margin-top: 0; }
         h2 { font-size: 1.1em; border-bottom: 2px solid #007bff; padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; }
-        h3 { font-size: 1em; color: #555; margin-bottom: 10px; }
         .row { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
         .col { flex: 1; min-width: 250px; }
         .form-group { margin-bottom: 12px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.85em; color: #555; }
         input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-family: 'Lato', sans-serif; font-size: 14px; }
-        input:focus, textarea:focus { border-color: #007bff; outline: none; }
+        input:focus { border-color: #007bff; outline: none; }
         input[readonly] { background-color: #e9ecef; color: #495057; font-weight: bold; cursor: not-allowed; }
 
-        /* Grupa Input z Checkboxem (Widoczność) */
+        /* KOLORY SELECT */
+        select option.firmowe { color: #28a745; font-weight: bold; }
+        select option.prywatne { color: #dc3545; font-weight: bold; }
+
+        /* OKO - CHECKBOX */
         .input-with-check { display: flex; align-items: center; gap: 8px; }
-        .input-with-check input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; accent-color: #007bff; }
-        .check-tooltip { font-size: 0.7em; color: #999; margin-left: 5px; font-weight: normal; }
+        
+        /* Ukrywamy standardowy checkbox */
+        .eye-checkbox { display: none; }
+        
+        /* Styl Labela jako Oka */
+        .eye-label {
+            cursor: pointer;
+            font-size: 1.4em;
+            user-select: none;
+            transition: all 0.2s;
+            line-height: 1;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        
+        /* Stan zaznaczony (Widoczne) */
+        .eye-checkbox:checked + .eye-label {
+            opacity: 1;
+            filter: none;
+        }
+        .eye-checkbox:checked + .eye-label::after {
+            content: '👁️';
+        }
 
-        /* Checkboxy sekcji */
+        /* Stan odznaczony (Ukryte) */
+        .eye-checkbox:not(:checked) + .eye-label {
+            opacity: 0.3;
+            filter: grayscale(100%);
+        }
+        .eye-checkbox:not(:checked) + .eye-label::after {
+            content: '👁️'; /* Można zmienić na inny znak jeśli wolisz */
+            text-decoration: line-through; /* Przekreślenie */
+        }
+
+        /* Sekcje toggle */
         .toggle-section { background: #eef6ff; padding: 10px; border-radius: 6px; border: 1px solid #badce3; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; }
-        .toggle-section label { margin: 0; font-size: 1em; color: #004d99; cursor: pointer; display: flex; align-items: center; width: 100%; }
-        .toggle-section input[type="checkbox"] { width: auto; transform: scale(1.5); margin-right: 15px; }
+        .toggle-section label { margin: 0; font-size: 1em; color: #004d99; cursor: pointer; width: 100%; }
+        .toggle-section input[type="checkbox"] { width: auto; margin-right: 15px; transform: scale(1.5); }
 
-        /* Ikony */
+        /* Ikony i przyciski */
         .icon-selector { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
-        .icon-opt { border: 2px solid #ddd; padding: 5px; border-radius: 5px; cursor: pointer; background: #fff; position: relative; transition: 0.2s; width: 32px; height: 32px; }
-        .icon-opt:hover { border-color: #99caff; }
-        .icon-opt.active { border-color: #007bff; background: #e6f7ff; box-shadow: 0 0 5px rgba(0,123,255,0.3); }
-        .icon-opt.disabled { opacity: 0.3; pointer-events: none; border-color: #ccc; background: #eee; }
+        .icon-opt { border: 2px solid #ddd; padding: 5px; border-radius: 5px; cursor: pointer; background: #fff; width: 32px; height: 32px; }
+        .icon-opt.active { border-color: #007bff; background: #e6f7ff; }
+        .icon-opt.disabled { opacity: 0.3; pointer-events: none; }
         .icon-opt img { width: 100%; height: 100%; display: block; }
-
-        /* Lista dodanych korzyści */
+        
         #addedBenefitsList { margin-top: 15px; }
         .added-benefit-item { background: #fff; border: 1px solid #ddd; padding: 8px 12px; margin-bottom: 5px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9em; }
-        .added-benefit-item img { width: 20px; height: 20px; margin-right: 10px; vertical-align: middle; }
-        .remove-ben-btn { color: #dc3545; cursor: pointer; font-weight: bold; font-size: 1.2em; margin-left: 10px; }
+        .added-benefit-item img { width: 20px; height: 20px; margin-right: 10px; }
+        .remove-ben-btn { color: #dc3545; cursor: pointer; font-weight: bold; margin-left: 10px; }
 
-        /* Przyciski */
         button.generate-btn { background-color: #28a745; color: white; border: none; padding: 15px; width: 100%; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 30px; transition: 0.3s; }
         button.generate-btn:hover { background-color: #218838; }
-        .btn-small { padding: 5px 10px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
         .btn-add { background: #007bff; margin-top: 10px; width: 100%; padding: 10px; font-size: 14px; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        .btn-add:hover { background: #0056b3; }
 
-        @media (max-width: 900px) {
-            .layout-wrapper { flex-direction: column-reverse; }
-            .sidebar { width: 100%; position: relative; top: 0; }
-            .top-nav { flex-direction: column; gap: 10px; }
-            .nav-btn { width: 100%; justify-content: center; }
-        }
+        @media (max-width: 900px) { .layout-wrapper { flex-direction: column-reverse; } .sidebar { width: 100%; } }
     </style>
 </head>
 <body>
@@ -97,19 +120,13 @@
     <div class="container">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h1>Generator Oferty</h1>
-            <div style="text-align:right; font-size:0.8em; color:#777;">v4.0 Full</div>
+            <div style="text-align:right; font-size:0.8em; color:#777;">v4.5</div>
         </div>
 
         <h2>1. Dane i Wstęp</h2>
         <div class="row">
-            <div class="col form-group">
-                <label>Nagłówek</label>
-                <input type="text" id="clientName" value="Panie Kamilu">
-            </div>
-            <div class="col form-group">
-                <label>Płeć Klienta</label>
-                <select id="clientGender"><option value="M">Mężczyzna</option><option value="F">Kobieta</option></select>
-            </div>
+            <div class="col form-group"><label>Nagłówek</label><input type="text" id="clientName" value="Panie Kamilu"></div>
+            <div class="col form-group"><label>Płeć</label><select id="clientGender"><option value="M">Mężczyzna</option><option value="F">Kobieta</option></select></div>
             <div class="col form-group">
                 <label>Doradca</label>
                 <select id="advisor">
@@ -127,23 +144,24 @@
         </div>
         
         <div class="form-group">
-            <label>Rodzaj Finansowania (Wybierz)</label>
+            <label>Rodzaj Finansowania (Kolorowe)</label>
             <select id="financingType">
-                <option value="Kredyt firmowy ratalny">Kredyt firmowy (ratalny firmowy)</option>
-                <option value="Kredyt gotówkowy">Kredyt gotówkowy (ratalny prywatny)</option>
-                <option value="Kredyt w rachunku bieżącym">KRB (Kredyt w rachunku bieżącym - firmowy)</option>
-                <option value="Limit odnawialny">Limit odnawialny (prywatny)</option>
+                <optgroup label="Firmowe">
+                    <option value="Kredyt firmowy ratalny" class="firmowe">🟢 Kredyt firmowy ratalny</option>
+                    <option value="Kredyt w rachunku bieżącym" class="firmowe">🟢 KRB (Kredyt w rachunku bieżącym)</option>
+                </optgroup>
+                <optgroup label="Prywatne">
+                    <option value="Kredyt gotówkowy" class="prywatne">🔴 Kredyt gotówkowy (prywatny)</option>
+                    <option value="Limit odnawialny" class="prywatne">🔴 Limit odnawialny (prywatny)</option>
+                </optgroup>
             </select>
         </div>
 
-        <div class="form-group">
-            <label>Treść maila</label>
-            <textarea id="introText" rows="3"></textarea>
-        </div>
+        <div class="form-group"><label>Treść maila</label><textarea id="introText" rows="3"></textarea></div>
 
         <h2>2. Parametry Bazowe</h2>
         <div class="row" style="background: #fdfdfd; padding: 15px; border: 1px solid #eee; border-radius: 8px;">
-            <div class="col form-group"><label>WIBOR (%)</label><input type="number" step="0.01" id="wibor" value="4.02"></div>
+            <div class="col form-group"><label>WIBOR BAZOWY (%)</label><input type="number" step="0.01" id="wibor" value="4.02"><small style="color:#777">Służy do obliczeń</small></div>
             <div class="col form-group"><label>Okres (mies.)</label><input type="number" id="months" value="120"></div>
             <div class="col form-group"><label>Kwota Netto</label><input type="text" id="loanAmount" value="1000000"></div>
         </div>
@@ -153,38 +171,35 @@
                 <h3 style="color: #0056b3;">Wariant I</h3>
                 
                 <div class="form-group">
-                    <label>Kwota Netto <span class="check-tooltip">(Pokaż)</span></label>
-                    <div class="input-with-check"><input type="checkbox" id="check_w1_netto" checked><input type="text" id="w1_netto_display" readonly></div>
+                    <label>Kwota Netto</label>
+                    <div class="input-with-check"><input type="checkbox" id="check_w1_netto" class="eye-checkbox" checked><label for="check_w1_netto" class="eye-label" title="Pokaż/Ukryj"></label><input type="text" id="w1_netto_display" readonly></div>
                 </div>
                 <div class="form-group">
-                    <label>Kwota Brutto <span class="check-tooltip">(Pokaż)</span></label>
-                    <div class="input-with-check"><input type="checkbox" id="check_w1_brutto" checked><input type="text" id="w1_brutto_display" readonly></div>
+                    <label>Kwota Brutto</label>
+                    <div class="input-with-check"><input type="checkbox" id="check_w1_brutto" class="eye-checkbox" checked><label for="check_w1_brutto" class="eye-label"></label><input type="text" id="w1_brutto_display" readonly></div>
                 </div>
                 <div class="form-group">
-                    <label>Prowizja (%) <span class="check-tooltip">(Pokaż)</span></label>
-                    <div class="input-with-check"><input type="checkbox" id="check_w1_prowizja" checked><input type="number" step="0.01" id="w1_prowizja_proc" value="2.5"></div>
+                    <label>Prowizja (%)</label>
+                    <div class="input-with-check"><input type="checkbox" id="check_w1_prowizja" class="eye-checkbox" checked><label for="check_w1_prowizja" class="eye-label"></label><input type="number" step="0.01" id="w1_prowizja_proc" value="2.5"></div>
                 </div>
                 <div class="form-group">
-                    <label>Marża (%) <span class="check-tooltip">(Pokaż)</span></label>
-                    <div class="input-with-check"><input type="checkbox" id="check_w1_marza" checked><input type="number" step="0.01" id="w1_marza" value="2.5"></div>
+                    <label>Marża (%)</label>
+                    <div class="input-with-check"><input type="checkbox" id="check_w1_marza" class="eye-checkbox" checked><label for="check_w1_marza" class="eye-label"></label><input type="number" step="0.01" id="w1_marza" value="2.5"></div>
                 </div>
                 <div class="form-group">
-                    <label>WIBOR <span class="check-tooltip">(Pokaż)</span></label>
-                    <div class="input-with-check"><input type="checkbox" id="check_w1_wibor" checked><input type="text" value="Auto" disabled style="background:#eee;"></div>
+                    <label>WIBOR (Tekst w ofercie)</label>
+                    <div class="input-with-check"><input type="checkbox" id="check_w1_wibor" class="eye-checkbox" checked><label for="check_w1_wibor" class="eye-label"></label><input type="text" id="w1_wibor_text" value="4.02%"></div>
                 </div>
                 <hr style="border-top: 1px solid #eee;">
                 <div class="form-group">
-                    <label>Oprocentowanie <span class="check-tooltip">(Pokaż)</span></label>
-                    <div class="input-with-check"><input type="checkbox" id="check_w1_oproc" checked><input type="text" id="w1_oproc_display" readonly></div>
+                    <label>Oprocentowanie</label>
+                    <div class="input-with-check"><input type="checkbox" id="check_w1_oproc" class="eye-checkbox" checked><label for="check_w1_oproc" class="eye-label"></label><input type="text" id="w1_oproc_display" readonly></div>
                 </div>
                 <div class="form-group">
-                    <label>Koszt Całkowity <span class="check-tooltip">(Pokaż)</span></label>
-                    <div class="input-with-check"><input type="checkbox" id="check_w1_koszt" checked><input type="text" id="w1_koszt_display" readonly style="color:#dc3545;"></div>
+                    <label>Koszt Całkowity</label>
+                    <div class="input-with-check"><input type="checkbox" id="check_w1_koszt" class="eye-checkbox" checked><label for="check_w1_koszt" class="eye-label"></label><input type="text" id="w1_koszt_display" readonly style="color:#dc3545;"></div>
                 </div>
-                <div class="form-group">
-                    <label>Rata</label>
-                    <input type="text" id="w1_rata_display" readonly style="color: #004d99; font-weight:bold;">
-                </div>
+                <div class="form-group"><label>Rata</label><input type="text" id="w1_rata_display" readonly style="color: #004d99; font-weight:bold;"></div>
             </div>
 
             <div class="col" id="col_variant2" style="border-top: 4px solid #28a745; background: #fdfdfd; padding: 15px; border-radius: 4px;">
@@ -194,38 +209,35 @@
                 </div>
                 <div id="w2_controls" style="margin-top: 15px;">
                     <div class="form-group">
-                        <label>Kwota Netto <span class="check-tooltip">(Pokaż)</span></label>
-                        <div class="input-with-check"><input type="checkbox" id="check_w2_netto" checked><input type="text" id="w2_netto_display" readonly></div>
+                        <label>Kwota Netto</label>
+                        <div class="input-with-check"><input type="checkbox" id="check_w2_netto" class="eye-checkbox" checked><label for="check_w2_netto" class="eye-label"></label><input type="text" id="w2_netto_display" readonly></div>
                     </div>
                     <div class="form-group">
-                        <label>Kwota Brutto <span class="check-tooltip">(Pokaż)</span></label>
-                        <div class="input-with-check"><input type="checkbox" id="check_w2_brutto" checked><input type="text" id="w2_brutto_display" readonly></div>
+                        <label>Kwota Brutto</label>
+                        <div class="input-with-check"><input type="checkbox" id="check_w2_brutto" class="eye-checkbox" checked><label for="check_w2_brutto" class="eye-label"></label><input type="text" id="w2_brutto_display" readonly></div>
                     </div>
                     <div class="form-group">
-                        <label>Prowizja (%) <span class="check-tooltip">(Pokaż)</span></label>
-                        <div class="input-with-check"><input type="checkbox" id="check_w2_prowizja" checked><input type="number" step="0.01" id="w2_prowizja_proc" value="0"></div>
+                        <label>Prowizja (%)</label>
+                        <div class="input-with-check"><input type="checkbox" id="check_w2_prowizja" class="eye-checkbox" checked><label for="check_w2_prowizja" class="eye-label"></label><input type="number" step="0.01" id="w2_prowizja_proc" value="0"></div>
                     </div>
                     <div class="form-group">
-                        <label>Marża (%) <span class="check-tooltip">(Pokaż)</span></label>
-                        <div class="input-with-check"><input type="checkbox" id="check_w2_marza" checked><input type="number" step="0.01" id="w2_marza" value="2.5"></div>
+                        <label>Marża (%)</label>
+                        <div class="input-with-check"><input type="checkbox" id="check_w2_marza" class="eye-checkbox" checked><label for="check_w2_marza" class="eye-label"></label><input type="number" step="0.01" id="w2_marza" value="2.5"></div>
                     </div>
                     <div class="form-group">
-                        <label>WIBOR <span class="check-tooltip">(Pokaż)</span></label>
-                        <div class="input-with-check"><input type="checkbox" id="check_w2_wibor" checked><input type="text" value="Auto" disabled style="background:#eee;"></div>
+                        <label>WIBOR (Tekst w ofercie)</label>
+                        <div class="input-with-check"><input type="checkbox" id="check_w2_wibor" class="eye-checkbox" checked><label for="check_w2_wibor" class="eye-label"></label><input type="text" id="w2_wibor_text" value="4.02%"></div>
                     </div>
                     <hr style="border-top: 1px solid #eee;">
                     <div class="form-group">
-                        <label>Oprocentowanie <span class="check-tooltip">(Pokaż)</span></label>
-                        <div class="input-with-check"><input type="checkbox" id="check_w2_oproc" checked><input type="text" id="w2_oproc_display" readonly></div>
+                        <label>Oprocentowanie</label>
+                        <div class="input-with-check"><input type="checkbox" id="check_w2_oproc" class="eye-checkbox" checked><label for="check_w2_oproc" class="eye-label"></label><input type="text" id="w2_oproc_display" readonly></div>
                     </div>
                     <div class="form-group">
-                        <label>Koszt Całkowity <span class="check-tooltip">(Pokaż)</span></label>
-                        <div class="input-with-check"><input type="checkbox" id="check_w2_koszt" checked><input type="text" id="w2_koszt_display" readonly style="color:#dc3545;"></div>
+                        <label>Koszt Całkowity</label>
+                        <div class="input-with-check"><input type="checkbox" id="check_w2_koszt" class="eye-checkbox" checked><label for="check_w2_koszt" class="eye-label"></label><input type="text" id="w2_koszt_display" readonly style="color:#dc3545;"></div>
                     </div>
-                    <div class="form-group">
-                        <label>Rata</label>
-                        <input type="text" id="w2_rata_display" readonly style="color: #28a745; font-weight:bold;">
-                    </div>
+                    <div class="form-group"><label>Rata</label><input type="text" id="w2_rata_display" readonly style="color: #28a745; font-weight:bold;"></div>
                 </div>
             </div>
         </div>
@@ -248,11 +260,9 @@
         <div class="form-group" style="background: #f8faff; padding: 15px; border-radius: 6px; border: 1px solid #e1e4e8;">
             <label>Dodaj nową korzyść (Pogrubione automatycznie)</label>
             <input type="text" id="customBenText" placeholder="Wpisz treść...">
-            
             <div style="margin-top: 10px; font-size: 14px; color:#555;">Wybierz ikonę (Użyte są zablokowane):</div>
             <div class="icon-selector" id="iconSelector"></div>
             <input type="hidden" id="selectedCustomIcon" value="">
-
             <button type="button" class="btn-add" onclick="addCustomBenefit()">+ DODAJ KORZYŚĆ</button>
         </div>
         <div id="addedBenefitsList"></div>
@@ -280,7 +290,7 @@
 </div>
 
 <script>
-    // --- BAF UPDATE LOGIC ---
+    // --- SKRYPT AKTUALIZACJI WIBOR ---
     try {
         document.getElementById('wibor-1m').textContent = '4,03%';
         document.getElementById('wibor-3m').textContent = '3,88%';
@@ -289,8 +299,14 @@
         const dzisiaj = 'Dane na dzień: 10.02.2026';
         if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
         if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        if(document.getElementById('wibor')) document.getElementById('wibor').value = 4.03;
-    } catch(e){}
+        
+        // Ustawienia początkowe w formularzu
+        const startWibor = '4.03';
+        if(document.getElementById('wibor')) document.getElementById('wibor').value = startWibor;
+        if(document.getElementById('w1_wibor_text')) document.getElementById('w1_wibor_text').value = startWibor + '%';
+        if(document.getElementById('w2_wibor_text')) document.getElementById('w2_wibor_text').value = startWibor + '%';
+
+    } catch(e) { console.log('Błąd BAF logic'); }
 
     // --- IKONY ---
     const iconsDB = {
@@ -335,7 +351,6 @@
         });
     }
 
-    // --- TEKST ---
     function updateIntroText() {
         const genderAdv = document.getElementById('advisor').value.split('|')[1];
         let t_anal = genderAdv === 'F' ? 'Przeanalizowałam' : 'Przeanalizowałem';
@@ -345,16 +360,12 @@
     }
     document.getElementById('advisor').addEventListener('change', updateIntroText);
 
-    // --- KORZYŚCI ---
     function addCustomBenefit() {
         const text = document.getElementById('customBenText').value;
         const icon = document.getElementById('selectedCustomIcon').value;
         if(text.trim() === '' || icon === '') return alert('Uzupełnij tekst i ikonę');
-        
         let finalText = text;
-        // Zawsze pogrubiamy jeśli nie ma tagów
         if(!finalText.includes('<b>') && !finalText.includes('<strong>')) finalText = '<strong>' + finalText + '</strong>';
-        
         customBenefits.push({ text: finalText, icon: icon });
         renderCustomBenefits();
         document.getElementById('customBenText').value = '';
@@ -372,7 +383,6 @@
         });
     }
 
-    // --- KALKULACJE ---
     function parseMoney(val) { return parseFloat(val.toString().replace(/\s/g, '').replace('PLN','').replace(',','.')) || 0; }
     function formatMoney(num) { return num.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' PLN'; }
     function calculatePMT(rate, periods, pv) {
@@ -382,7 +392,8 @@
     }
 
     function updateCalculations() {
-        const wibor = parseFloat(document.getElementById('wibor').value) || 0;
+        // Parametry do obliczeń biorę z GÓRY (WIBOR liczbowy), ale tekst z dołu
+        const wiborMath = parseFloat(document.getElementById('wibor').value) || 0;
         const months = parseInt(document.getElementById('months').value) || 120;
         let loanNetto = parseMoney(document.getElementById('loanAmount').value);
         const successFeeProc = parseFloat(document.getElementById('successFeeProc').value) || 0;
@@ -391,7 +402,7 @@
         const w1_p = parseFloat(document.getElementById('w1_prowizja_proc').value) || 0;
         const w1_m = parseFloat(document.getElementById('w1_marza').value) || 0;
         const w1_calc_brutto = loanNetto * (1 + w1_p/100);
-        const w1_rate = wibor + w1_m;
+        const w1_rate = wiborMath + w1_m;
         const w1_rata = calculatePMT(w1_rate, months, w1_calc_brutto);
         const w1_koszt = (w1_rata * months) - loanNetto;
 
@@ -407,7 +418,7 @@
             const w2_p = parseFloat(document.getElementById('w2_prowizja_proc').value) || 0;
             const w2_m = parseFloat(document.getElementById('w2_marza').value) || 0;
             const w2_calc_brutto = loanNetto * (1 + w2_p/100);
-            const w2_rate = wibor + w2_m;
+            const w2_rate = wiborMath + w2_m;
             const w2_rata = calculatePMT(w2_rate, months, w2_calc_brutto);
             const w2_koszt = (w2_rata * months) - loanNetto;
 
@@ -423,6 +434,16 @@
 
         document.getElementById('successFeeKwota').value = formatMoney(loanNetto * (successFeeProc / 100));
     }
+
+    // Logic for updating the editable WIBOR text fields if base WIBOR changes
+    document.getElementById('wibor').addEventListener('input', function() {
+        const val = this.value + '%';
+        // Only auto-update if user hasn't typed something custom? Or just overwrite?
+        // Simplest: Just overwrite to keep it synced unless user manages it manually right after.
+        document.getElementById('w1_wibor_text').value = val;
+        document.getElementById('w2_wibor_text').value = val;
+        updateCalculations();
+    });
 
     document.querySelectorAll('input, select').forEach(el => {
         if(el.id !== 'customBenText') el.addEventListener('input', updateCalculations);
@@ -441,7 +462,6 @@
             hasVariant2: document.getElementById('enableVariant2').checked,
             vatType: document.getElementById('vatType').value,
             months: document.getElementById('months').value,
-            wibor: document.getElementById('wibor').value,
             
             // Visibility Flags
             visibility: {
@@ -467,6 +487,7 @@
                 brutto: document.getElementById('w1_brutto_display').value,
                 prowizja: document.getElementById('w1_prowizja_proc').value + '%',
                 marza: document.getElementById('w1_marza').value + '%',
+                wibor: document.getElementById('w1_wibor_text').value, // Pobieramy tekst
                 oproc: document.getElementById('w1_oproc_display').value,
                 rata: document.getElementById('w1_rata_display').value,
                 koszt: document.getElementById('w1_koszt_display').value
@@ -476,6 +497,7 @@
                 brutto: document.getElementById('w2_brutto_display').value,
                 prowizja: document.getElementById('w2_prowizja_proc').value + '%',
                 marza: document.getElementById('w2_marza').value + '%',
+                wibor: document.getElementById('w2_wibor_text').value, // Pobieramy tekst
                 oproc: document.getElementById('w2_oproc_display').value,
                 rata: document.getElementById('w2_rata_display').value,
                 koszt: document.getElementById('w2_koszt_display').value
@@ -497,7 +519,7 @@
         });
         customBenefits.forEach(ben => data.benefits.push(ben));
 
-        localStorage.setItem('bafOfferData_V4', JSON.stringify(data));
+        localStorage.setItem('bafOfferData_V4_5', JSON.stringify(data));
         window.location.href = 'oferta.html';
     }
 
