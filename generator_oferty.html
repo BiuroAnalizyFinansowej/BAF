@@ -3,229 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Oferty BAF</title>
+    <title>Generator Ofert BAF</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
         
         body {
             font-family: 'Lato', sans-serif;
             background-color: #f4f7f9;
-            margin: 0;
-            padding: 40px;
             color: #333;
+            padding: 20px;
         }
-
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background: #fff;
-            padding: 40px;
+            padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 77, 153, 0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-
-        h1 { color: #002d5a; margin-top: 0; }
-        h2 { color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-top: 30px; }
-
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
-        input[type="text"], input[type="number"], select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 16px;
+        h1, h2 { color: #002d5a; margin-top: 0; }
+        h2 { font-size: 1.2em; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-top: 30px; }
+        
+        .row { display: flex; gap: 20px; flex-wrap: wrap; }
+        .col { flex: 1; min-width: 200px; }
+        
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9em; color: #555; }
+        input, select { 
+            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; 
+            box-sizing: border-box; font-family: 'Lato', sans-serif;
         }
-
-        .row { display: flex; gap: 20px; }
-        .col { flex: 1; }
-
-        .checkbox-group {
-            background: #f8faff;
-            padding: 15px;
-            border-radius: 6px;
-            border: 1px solid #e0e9f5;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
+        
+        .benefit-item {
+            background: #f8faff; padding: 10px; margin-bottom: 5px; 
+            border: 1px solid #e1e4e8; border-radius: 5px; display: flex; align-items: center;
         }
-        .checkbox-group input { margin-right: 15px; transform: scale(1.2); }
-        .checkbox-group label { margin: 0; cursor: pointer; }
-
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 40px;
-            text-align: center;
-            text-decoration: none;
+        .benefit-item input { width: auto; margin-right: 10px; }
+        
+        .custom-benefit {
+            background: #eef6ff; padding: 15px; border-radius: 8px; border: 1px solid #badce3;
         }
-        .btn:hover { background-color: #218838; }
-
-        .icon-select {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
+        .icon-selector { display: flex; gap: 10px; margin-top: 10px; }
+        .icon-opt { 
+            border: 2px solid #ddd; padding: 5px; border-radius: 5px; cursor: pointer; background: #fff;
         }
-        .icon-option {
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            padding: 5px;
-            cursor: pointer;
-        }
-        .icon-option.selected { border-color: #007bff; background: #e6f7ff; }
-        .icon-option img { width: 30px; height: 30px; display: block; }
+        .icon-opt.active { border-color: #007bff; background: #e6f7ff; }
+        .icon-opt img { width: 30px; height: 30px; display: block; }
 
+        button.generate-btn {
+            background-color: #28a745; color: white; border: none; padding: 15px;
+            width: 100%; font-size: 18px; font-weight: bold; border-radius: 8px;
+            cursor: pointer; margin-top: 30px; transition: 0.3s;
+        }
+        button.generate-btn:hover { background-color: #218838; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Generator Oferty Porównawczej</h1>
-        
-        <div class="row">
-            <div class="col form-group">
-                <label>Imię Klienta (Wołacz, np. Panie Kamilu)</label>
-                <input type="text" id="clientName" value="Panie Kamilu">
-            </div>
-            <div class="col form-group">
-                <label>Wybierz Doradcę (Wykrywa płeć)</label>
-                <select id="advisor">
-                    <option value="Dawid Błachno|M">Dawid Błachno</option>
-                    <option value="Weronika Lekston|F">Weronika Lekston</option>
-                    <option value="Mieczysław Andrzejewski|M">Mieczysław Andrzejewski</option>
-                    <option value="Joanna Karpała|F">Joanna Karpała</option>
-                    <option value="Piotr Pakuła|M">Piotr Pakuła</option>
-                    <option value="Wiktoria Nojek|F">Wiktoria Nojek</option>
-                    <option value="Wojciech Młynarczyk|M">Wojciech Młynarczyk</option>
-                    <option value="Maja Zięba|F">Maja Zięba</option>
-                    <option value="Mateusz Dzidkowski|M">Mateusz Dzidkowski</option>
-                </select>
-            </div>
-        </div>
+<div class="container">
+    <h1>Generator Oferty Finansowania</h1>
 
-        <h2>Parametry Porównawcze</h2>
-        <div class="row">
-            <div class="col form-group">
-                <label>Opłata kwartalna Alior (%)</label>
-                <input type="text" id="aliorQuarterFee" value="0,5">
-            </div>
-            <div class="col form-group">
-                <label>Prowizja ukryta 10 lat (%)</label>
-                <input type="text" id="hiddenProv10" value="5">
-            </div>
-            <div class="col form-group">
-                <label>Prowizja ukryta 5 lat (%)</label>
-                <input type="text" id="hiddenProv5" value="2,5">
-            </div>
+    <div class="row">
+        <div class="col form-group">
+            <label>Nagłówek (np. Panie Kamilu)</label>
+            <input type="text" id="clientName" value="Panie Kamilu">
         </div>
-        <div class="row">
-            <div class="col form-group">
-                <label>Success Fee BAF (%)</label>
-                <input type="text" id="bafFee" value="3,5">
-            </div>
-            <div class="col form-group">
-                <label>Marża Alior (%)</label>
-                <input type="text" id="aliorMargin" value="3,75">
-            </div>
-            <div class="col form-group">
-                <label>Marża BAF (%)</label>
-                <input type="text" id="bafMargin" value="2,5">
-            </div>
+        <div class="col form-group">
+            <label>Doradca (Automatyczna odmiana płci)</label>
+            <select id="advisor">
+                <option value="Dawid Błachno|M">Dawid Błachno</option>
+                <option value="Weronika Lekston|F">Weronika Lekston</option>
+                <option value="Mieczysław Andrzejewski|M">Mieczysław Andrzejewski</option>
+                <option value="Joanna Karpała|F">Joanna Karpała</option>
+                <option value="Piotr Pakuła|M">Piotr Pakuła</option>
+                <option value="Wiktoria Nojek|F">Wiktoria Nojek</option>
+                <option value="Wojciech Młynarczyk|M">Wojciech Młynarczyk</option>
+                <option value="Maja Zięba|F">Maja Zięba</option>
+                <option value="Mateusz Dzidkowski|M">Mateusz Dzidkowski</option>
+            </select>
         </div>
-
-        <h2>Kluczowe Korzyści</h2>
-        <div id="benefits-container">
-            <div class="checkbox-group">
-                <input type="checkbox" id="ben1" checked>
-                <label for="ben1"><strong>BRAK OPŁAT KWARTALNYCH!</strong> Nie ma żadnych ukrytych kosztów za utrzymanie finansowania.</label>
-                <input type="hidden" id="icon_ben1" value="wallet">
-            </div>
-            <div class="checkbox-group">
-                <input type="checkbox" id="ben2" checked>
-                <label for="ben2"><strong>Przejrzyste warunki:</strong> Umowa bez "gwiazdek" i dodatkowych, nieoczekiwanych kosztów.</label>
-                <input type="hidden" id="icon_ben2" value="ok">
-            </div>
-            <div class="checkbox-group">
-                <input type="checkbox" id="ben3" checked>
-                <label for="ben3"><strong>Wcześniejsza spłata 0%:</strong> W Alior 3% za nadpłatę, u nas 0%.</label>
-                <input type="hidden" id="icon_ben3" value="unlock">
-            </div>
-        </div>
-
-        <div class="form-group" style="background: #eef6ff; padding: 15px; border-radius: 6px; border: 1px solid #badce3;">
-            <label>Dodaj własną korzyść (opcjonalnie)</label>
-            <input type="text" id="customBenText" placeholder="Wpisz treść korzyści...">
-            <div style="margin-top: 10px; font-size: 14px; color: #555;">Wybierz ikonę:</div>
-            <div class="icon-select">
-                <div class="icon-option selected" onclick="selectIcon(this, 'ok')"><img src="https://img.icons8.com/ios/50/0056b3/ok--v1.png"></div>
-                <div class="icon-option" onclick="selectIcon(this, 'wallet')"><img src="https://img.icons8.com/ios/50/0056b3/wallet--v1.png"></div>
-                <div class="icon-option" onclick="selectIcon(this, 'unlock')"><img src="https://img.icons8.com/ios/50/0056b3/unlock.png"></div>
-                <div class="icon-option" onclick="selectIcon(this, 'discount')"><img src="https://img.icons8.com/ios/50/0056b3/discount--v1.png"></div>
-            </div>
-            <input type="hidden" id="customBenIcon" value="ok">
-        </div>
-
-        <button class="btn" onclick="generateOffer()">GENERUJ OFERTĘ</button>
     </div>
 
-    <script>
-        function selectIcon(el, iconName) {
-            document.querySelectorAll('.icon-option').forEach(d => d.classList.remove('selected'));
-            el.classList.add('selected');
-            document.getElementById('customBenIcon').value = iconName;
-        }
+    <div class="row">
+        <div class="col">
+            <h2>Wariant I (Prowizja)</h2>
+            <div class="form-group"><label>Kwota Netto</label><input type="text" id="w1_netto" value="1 000 000 PLN"></div>
+            <div class="form-group"><label>Kwota Brutto</label><input type="text" id="w1_brutto" value="1 025 000 PLN"></div>
+            <div class="form-group"><label>Prowizja (%)</label><input type="text" id="w1_prowizja" value="2,5%"></div>
+            <div class="form-group"><label>Marża (%)</label><input type="text" id="w1_marza" value="2,5%"></div>
+            <div class="form-group"><label>Oprocentowanie (%)</label><input type="text" id="w1_oproc" value="6,52%"></div>
+            <div class="form-group"><label>Rata 120 mies.</label><input type="text" id="w1_rata120" value="11 614,47 PLN"></div>
+            <div class="form-group"><label>Rata 60 mies.</label><input type="text" id="w1_rata60" value="20 005,26 PLN"></div>
+        </div>
+        <div class="col">
+            <h2>Wariant II (0% Prowizji)</h2>
+            <div class="form-group"><label>Kwota Netto</label><input type="text" id="w2_netto" value="1 000 000 PLN"></div>
+            <div class="form-group"><label>Kwota Brutto</label><input type="text" id="w2_brutto" value="1 000 000 PLN"></div>
+            <div class="form-group"><label>Prowizja (%)</label><input type="text" id="w2_prowizja" value="0%"></div>
+            <div class="form-group"><label>Marża (%)</label><input type="text" id="w2_marza" value="2,5%"></div>
+            <div class="form-group"><label>Oprocentowanie (%)</label><input type="text" id="w2_oproc" value="6,52%"></div>
+            <div class="form-group"><label>Rata 120 mies.</label><input type="text" id="w2_rata120" value="11 331,19 PLN"></div>
+            <div class="form-group"><label>Rata 60 mies.</label><input type="text" id="w2_rata60" value="19 517,32 PLN"></div>
+        </div>
+    </div>
 
-        function generateOffer() {
-            // Pobieranie danych
-            const data = {
-                clientName: document.getElementById('clientName').value,
-                advisorData: document.getElementById('advisor').value,
-                
-                // Parametry
-                aliorQuarterFee: document.getElementById('aliorQuarterFee').value,
-                hiddenProv10: document.getElementById('hiddenProv10').value,
-                hiddenProv5: document.getElementById('hiddenProv5').value,
-                bafFee: document.getElementById('bafFee').value,
-                aliorMargin: document.getElementById('aliorMargin').value,
-                bafMargin: document.getElementById('bafMargin').value,
+    <div class="row">
+        <div class="col form-group">
+            <label>Aktualny WIBOR 1M</label>
+            <input type="text" id="wibor" value="4,02%">
+        </div>
+        <div class="col form-group">
+            <label>Wynagrodzenie Success Fee (%)</label>
+            <input type="text" id="successFeeProc" value="4%">
+        </div>
+        <div class="col form-group">
+            <label>Kwota Wynagrodzenia (Netto)</label>
+            <input type="text" id="successFeeKwota" value="40 000,00 PLN">
+        </div>
+    </div>
 
-                // Korzyści
-                benefits: []
-            };
+    <h2>Korzyści (Zaznacz lub dodaj własne)</h2>
+    <div id="benefitsList">
+        <div class="benefit-item">
+            <input type="checkbox" id="ben1" checked>
+            <label for="ben1"><strong>BRAK OPŁAT KWARTALNYCH!</strong> Nie ma żadnych ukrytych kosztów za utrzymanie finansowania.</label>
+            <input type="hidden" id="icon_ben1" value="wallet">
+        </div>
+        <div class="benefit-item">
+            <input type="checkbox" id="ben2" checked>
+            <label for="ben2"><strong>Przejrzyste warunki:</strong> Umowa bez "gwiazdek" i dodatkowych, nieoczekiwanych kosztów.</label>
+            <input type="hidden" id="icon_ben2" value="ok">
+        </div>
+        <div class="benefit-item">
+            <input type="checkbox" id="ben3" checked>
+            <label for="ben3"><strong>Pełna elastyczność:</strong> Całkowity brak opłat za nadpłatę oraz wcześniejszą całkowitą spłatę kredytu.</label>
+            <input type="hidden" id="icon_ben3" value="unlock">
+        </div>
+    </div>
 
-            // Zbieranie zaznaczonych korzyści standardowych
-            for(let i=1; i<=3; i++) {
-                if(document.getElementById('ben'+i).checked) {
-                    data.benefits.push({
-                        text: document.querySelector(`label[for="ben${i}"]`).innerHTML,
-                        icon: document.getElementById('icon_ben'+i).value
-                    });
-                }
-            }
+    <div class="custom-benefit" style="margin-top: 15px;">
+        <label>Dodaj własną korzyść (Opcjonalnie)</label>
+        <input type="text" id="customBenText" placeholder="Wpisz tekst korzyści (możesz używać <strong>pogrubienia</strong>)">
+        <div style="margin-top: 10px; font-size: 14px;">Wybierz ikonę:</div>
+        <div class="icon-selector">
+            <div class="icon-opt active" onclick="selectIcon(this, 'ok')"><img src="https://img.icons8.com/ios/50/0056b3/ok--v1.png"></div>
+            <div class="icon-opt" onclick="selectIcon(this, 'wallet')"><img src="https://img.icons8.com/ios/50/0056b3/wallet--v1.png"></div>
+            <div class="icon-opt" onclick="selectIcon(this, 'unlock')"><img src="https://img.icons8.com/ios/50/0056b3/unlock.png"></div>
+            <div class="icon-opt" onclick="selectIcon(this, 'discount')"><img src="https://img.icons8.com/ios/50/0056b3/discount--v1.png"></div>
+        </div>
+        <input type="hidden" id="customBenIcon" value="ok">
+    </div>
 
-            // Dodatkowa korzyść
-            const customText = document.getElementById('customBenText').value;
-            if(customText.trim() !== "") {
+    <button class="generate-btn" onclick="generateOffer()">GENERUJ OFERTĘ</button>
+</div>
+
+<script>
+    function selectIcon(el, iconName) {
+        document.querySelectorAll('.icon-opt').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('customBenIcon').value = iconName;
+    }
+
+    function generateOffer() {
+        const data = {
+            // Dane osobowe
+            clientName: document.getElementById('clientName').value,
+            advisorData: document.getElementById('advisor').value,
+            
+            // Wariant 1
+            w1: {
+                netto: document.getElementById('w1_netto').value,
+                brutto: document.getElementById('w1_brutto').value,
+                prowizja: document.getElementById('w1_prowizja').value,
+                marza: document.getElementById('w1_marza').value,
+                oproc: document.getElementById('w1_oproc').value,
+                rata120: document.getElementById('w1_rata120').value,
+                rata60: document.getElementById('w1_rata60').value
+            },
+            // Wariant 2
+            w2: {
+                netto: document.getElementById('w2_netto').value,
+                brutto: document.getElementById('w2_brutto').value,
+                prowizja: document.getElementById('w2_prowizja').value,
+                marza: document.getElementById('w2_marza').value,
+                oproc: document.getElementById('w2_oproc').value,
+                rata120: document.getElementById('w2_rata120').value,
+                rata60: document.getElementById('w2_rata60').value
+            },
+            // Inne
+            wibor: document.getElementById('wibor').value,
+            feeProc: document.getElementById('successFeeProc').value,
+            feeKwota: document.getElementById('successFeeKwota').value,
+            
+            // Korzyści
+            benefits: []
+        };
+
+        // Zbieranie standardowych korzyści
+        for(let i=1; i<=3; i++) {
+            if(document.getElementById('ben'+i).checked) {
                 data.benefits.push({
-                    text: customText,
-                    icon: document.getElementById('customBenIcon').value
+                    text: document.querySelector(`label[for="ben${i}"]`).innerHTML,
+                    icon: document.getElementById('icon_ben'+i).value
                 });
             }
-
-            // Zapis do localStorage i przekierowanie
-            localStorage.setItem('bafOfferData', JSON.stringify(data));
-            window.location.href = 'oferta.html';
         }
-    </script>
+
+        // Dodanie niestandardowej korzyści
+        const customText = document.getElementById('customBenText').value;
+        if(customText.trim() !== "") {
+            data.benefits.push({
+                text: customText,
+                icon: document.getElementById('customBenIcon').value
+            });
+        }
+
+        // Zapis do pamięci przeglądarki i przekierowanie
+        localStorage.setItem('bafOfferData_Variants', JSON.stringify(data));
+        window.location.href = 'oferta.html';
+    }
+</script>
+
 </body>
 </html>
