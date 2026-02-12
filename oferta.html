@@ -9,34 +9,21 @@
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
         body { margin: 0; padding: 0; background-color: #f4f7f9; font-family: 'Lato', Arial, sans-serif; }
         
-        #control-panel-left {
-            position: fixed; top: 20px; left: 20px; width: 220px; background: #ffffff;
-            padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000;
-        }
-        .panel-btn {
-            display: block; width: 100%; padding: 12px; margin-bottom: 8px; border: none; border-radius: 5px;
-            cursor: pointer; font-size: 13px; font-weight: bold; text-align: center; transition: all 0.3s ease;
-            background-color: #17a2b8; color: white; font-family: Arial, sans-serif;
-        }
+        #control-panel-left { position: fixed; top: 20px; left: 20px; width: 220px; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000; }
+        .panel-btn { display: block; width: 100%; padding: 12px; margin-bottom: 8px; border: none; border-radius: 5px; cursor: pointer; font-size: 13px; font-weight: bold; text-align: center; transition: all 0.3s ease; background-color: #17a2b8; color: white; font-family: Arial, sans-serif; }
         .panel-btn:hover { background-color: #138496; }
         .panel-btn.copied { background-color: #28a745; }
         .back-link { display: block; text-align: center; margin-top: 10px; color: #555; text-decoration: none; font-size: 12px; }
         
         #email-content-wrapper { margin: 0 auto; padding: 20px 0 20px 260px; max-width: 900px; }
-        
-        @media (max-width: 1200px) {
-            #control-panel-left { position: relative; top: 0; left: 0; width: auto; margin: 20px; }
-            #email-content-wrapper { padding: 0 20px; margin: 0; }
-        }
+        @media (max-width: 1200px) { #control-panel-left { position: relative; top: 0; left: 0; width: auto; margin: 20px; } #email-content-wrapper { padding: 0 20px; margin: 0; } }
     </style>
 </head>
 <body>
 
     <div id="control-panel-left">
         <button id="copy-button" class="panel-btn">Kopiuj całość do maila</button>
-        <div style="font-size: 11px; color: #777; margin-top: 10px; text-align: center;">
-            Kliknij, aby skopiować gotowy szablon.
-        </div>
+        <div style="font-size: 11px; color: #777; margin-top: 10px; text-align: center;">Kliknij, aby skopiować gotowy szablon.</div>
         <a href="generator_oferty.html" class="back-link">« Wróć do generatora</a>
     </div>
 
@@ -44,53 +31,28 @@
         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: 'Lato', Arial, sans-serif; background-color: #f4f7f9; color: #333333;">
             <tr>
                 <td align="center" style="padding: 20px;">
-                    
                     <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 900px; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 77, 153, 0.1); border: 1px solid #e1e4e8;">
-                        <tr>
-                            <td align="center" style="padding: 30px 0; background-color: #ffffff; border-bottom: 1px solid #f0f0f0;">
-                                <img src="baf_logo.png" alt="Biuro Analizy Finansowej" width="250" style="display: block; width: 250px; max-width: 100%; height: auto; border: 0;">
-                            </td>
-                        </tr>
+                        <tr><td align="center" style="padding: 30px 0; background-color: #ffffff; border-bottom: 1px solid #f0f0f0;"><img src="baf_logo.png" alt="Biuro Analizy Finansowej" width="250" style="display: block; width: 250px; max-width: 100%; height: auto; border: 0;"></td></tr>
                         <tr>
                             <td style="padding: 40px 50px;">
-                                
                                 <h1 id="client-greeting" style="color: #002d5a; font-size: 28px; margin: 0 0 25px 0; font-weight: 700; font-family: 'Lato', Arial, sans-serif;">Panie Kamilu,</h1>
-                                
-                                <p id="intro-paragraph" style="font-size: 17px; color: #555555; margin-bottom: 25px; line-height: 1.6;">
-                                    </p>
+                                <p id="intro-paragraph" style="font-size: 17px; color: #555555; margin-bottom: 25px; line-height: 1.6;"></p>
 
                                 <div style="border-bottom: 1px solid #e0e0e0; padding-bottom: 30px; margin-bottom: 40px;">
-                                    <h2 style="font-size: 24px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 25px; font-weight: 700; margin-top: 0;">Rodzaj Finansowania: Kredyt firmowy ratalny</h2>
+                                    <h2 style="font-size: 24px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 25px; font-weight: 700; margin-top: 0;">Rodzaj Finansowania: <span id="financing-header">Kredyt firmowy ratalny</span></h2>
 
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                         <tr>
                                             <td valign="top" width="48%" style="background-color: #fdfdfd; border: 1px solid #dcebf7; border-top: 4px solid #007bff; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 77, 153, 0.05);">
                                                 <h3 id="h3-var1" style="margin-top: 0; font-size: 20px; color: #0056b3; text-align: center; margin-bottom: 20px; font-weight: 700;">I WARIANT</h3>
                                                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
-                                                    <tr>
-                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Netto:</td>
-                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-net"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Brutto:</td>
-                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-gross"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Prowizja bankowa:</td>
-                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-prov"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Marża banku:</td>
-                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-margin"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">WIBOR 1M:</td>
-                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" class="wibor-val"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Oprocentowanie:</td>
-                                                        <td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #333;" id="w1-rate"></td>
-                                                    </tr>
+                                                    <tr id="row-w1-netto"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Netto:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-net"></td></tr>
+                                                    <tr id="row-w1-brutto"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Brutto:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-gross"></td></tr>
+                                                    <tr id="row-w1-prowizja"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Prowizja bankowa:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-prov"></td></tr>
+                                                    <tr id="row-w1-marza"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Marża banku:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-margin"></td></tr>
+                                                    <tr id="row-w1-wibor"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">WIBOR:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" class="wibor-val"></td></tr>
+                                                    <tr id="row-w1-oproc"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Oprocentowanie:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #333;" id="w1-rate"></td></tr>
+                                                    <tr id="row-w1-koszt"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Koszt Całkowity:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #dc3545;" id="w1-koszt"></td></tr>
                                                 </table>
                                                 <div style="background-color: #f0f7ff; border: 1px solid #cce5ff; border-radius: 6px; padding: 15px; margin-top: 20px; text-align: center;">
                                                     <span style="display: block; font-size: 22px; font-weight: 700; color: #004d99; margin-bottom: 5px;" id="w1-rata"></span>
@@ -103,35 +65,18 @@
                                             <td id="var2-container" valign="top" width="48%" style="background-color: #fdfdfd; border: 1px solid #dcebf7; border-top: 4px solid #28a745; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 77, 153, 0.05);">
                                                 <h3 style="margin-top: 0; font-size: 20px; color: #28a745; text-align: center; margin-bottom: 20px; font-weight: 700;">II WARIANT</h3>
                                                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
-                                                    <tr>
-                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Netto:</td>
-                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-net"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Brutto:</td>
-                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-gross"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Prowizja bankowa:</td>
-                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #28a745;" id="w2-prov"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Marża banku:</td>
-                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-margin"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">WIBOR 1M:</td>
-                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" class="wibor-val"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Oprocentowanie:</td>
-                                                        <td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #333;" id="w2-rate"></td>
-                                                    </tr>
+                                                    <tr id="row-w2-netto"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Netto:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-net"></td></tr>
+                                                    <tr id="row-w2-brutto"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Brutto:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-gross"></td></tr>
+                                                    <tr id="row-w2-prowizja"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Prowizja bankowa:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #28a745;" id="w2-prov"></td></tr>
+                                                    <tr id="row-w2-marza"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Marża banku:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-margin"></td></tr>
+                                                    <tr id="row-w2-wibor"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">WIBOR:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" class="wibor-val"></td></tr>
+                                                    <tr id="row-w2-oproc"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Oprocentowanie:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #333;" id="w2-rate"></td></tr>
+                                                    <tr id="row-w2-koszt"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Koszt Całkowity:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #dc3545;" id="w2-koszt"></td></tr>
                                                 </table>
                                                 
                                                 <div style="font-size: 13px; color: #2e5c8a; background-color: #e8f4fd; padding: 12px; margin-top: 15px; border-radius: 4px; line-height: 1.5; border-left: 3px solid #0056b3;">
                                                     <strong>Warunek uzyskania wariantu:</strong><br>
-                                                    Konsolidacja obecnego kredytu firmowego w Alior Banku 
+                                                    Konsolidacja obecnie spłacanego kredytu firmowego ratalnego 
                                                     <br><em>LUB</em><br>
                                                     Wnioskowanie dodatkowo o kredyt w rachunku bieżącym na jednym wniosku (kwota możliwa do pozyskania do 200 000 PLN - <strong>wnioskujemy o minimum 10 000 PLN limitu</strong>).
                                                 </div>
@@ -167,13 +112,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                
                                 <p style="margin-top: 40px; font-size: 17px; color: #555;">Czekam na <span id="client-decision-grammar">Pana</span> decyzję odnośnie wyboru wariantu, abyśmy mogli sprawnie przejść do procesowania wniosku.</p>
-                                
                             </td>
                         </tr>
                     </table>
-
                 </td>
             </tr>
         </table>
@@ -181,70 +123,74 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const storedData = localStorage.getItem('bafOfferData_V3');
+            const storedData = localStorage.getItem('bafOfferData_V4');
             if (storedData) {
                 const data = JSON.parse(storedData);
 
-                // 1. TEKSTY OSOBOWE I WSTĘP
+                // Teksty
                 document.getElementById('client-greeting').textContent = data.clientName + ",";
                 document.getElementById('intro-paragraph').innerHTML = data.introText.replace(/\n/g, '<br>');
+                document.getElementById('financing-header').textContent = data.financingType;
 
-                // Klient (Pana/Pani decyzję)
                 const genderClient = data.clientGender;
-                if(genderClient === 'F') {
-                    document.getElementById('client-decision-grammar').textContent = "Pani";
-                } else {
-                    document.getElementById('client-decision-grammar').textContent = "Pana";
-                }
+                document.getElementById('client-decision-grammar').textContent = genderClient === 'F' ? "Pani" : "Pana";
 
-                // 2. WARIANTY UI
+                // Wariant 2 Widoczność
                 if(!data.hasVariant2) {
                     document.getElementById('var2-container').style.display = 'none';
                     document.getElementById('var-separator').style.display = 'none';
                     document.getElementById('h3-var1').textContent = "OFERTA"; 
                 }
 
-                // 3. DANE LICZBOWE
-                const fields = [
-                    'w1-net', 'w1-gross', 'w1-prov', 'w1-margin', 'w1-rate', 'w1-rata',
-                    'w2-net', 'w2-gross', 'w2-prov', 'w2-margin', 'w2-rate', 'w2-rata'
-                ];
-                fields.forEach(id => {
-                    const el = document.getElementById(id);
-                    if(el) {
-                        const parts = id.split('-');
-                        const variant = parts[0] === 'w1' ? data.w1 : data.w2;
-                        const keyMap = {
-                            'net': 'netto', 'gross': 'brutto', 'prov': 'prowizja', 
-                            'margin': 'marza', 'rate': 'oproc', 'rata': 'rata'
-                        };
-                        el.textContent = variant[keyMap[parts[1]]];
-                    }
-                });
+                // Wstawianie Danych
+                const setVal = (id, val) => { if(document.getElementById(id)) document.getElementById(id).textContent = val; };
+                
+                // W1
+                setVal('w1-net', data.w1.netto); setVal('w1-gross', data.w1.brutto); setVal('w1-prov', data.w1.prowizja);
+                setVal('w1-margin', data.w1.marza); setVal('w1-rate', data.w1.oproc); setVal('w1-rata', data.w1.rata); setVal('w1-koszt', data.w1.koszt);
+                
+                // W2
+                if(data.hasVariant2) {
+                    setVal('w2-net', data.w2.netto); setVal('w2-gross', data.w2.brutto); setVal('w2-prov', data.w2.prowizja);
+                    setVal('w2-margin', data.w2.marza); setVal('w2-rate', data.w2.oproc); setVal('w2-rata', data.w2.rata); setVal('w2-koszt', data.w2.koszt);
+                }
 
+                // Kontrola Widoczności Wierszy
+                const toggleRow = (id, visible) => { if(document.getElementById(id)) document.getElementById(id).style.display = visible ? 'table-row' : 'none'; };
+                
+                // W1 Visibility
+                toggleRow('row-w1-netto', data.visibility.w1_netto);
+                toggleRow('row-w1-brutto', data.visibility.w1_brutto);
+                toggleRow('row-w1-prowizja', data.visibility.w1_prowizja);
+                toggleRow('row-w1-marza', data.visibility.w1_marza);
+                toggleRow('row-w1-wibor', data.visibility.w1_wibor);
+                toggleRow('row-w1-oproc', data.visibility.w1_oproc);
+                toggleRow('row-w1-koszt', data.visibility.w1_koszt);
+
+                // W2 Visibility
+                toggleRow('row-w2-netto', data.visibility.w2_netto);
+                toggleRow('row-w2-brutto', data.visibility.w2_brutto);
+                toggleRow('row-w2-prowizja', data.visibility.w2_prowizja);
+                toggleRow('row-w2-marza', data.visibility.w2_marza);
+                toggleRow('row-w2-wibor', data.visibility.w2_wibor);
+                toggleRow('row-w2-oproc', data.visibility.w2_oproc);
+                toggleRow('row-w2-koszt', data.visibility.w2_koszt);
+
+                // Inne
                 document.querySelectorAll('.months-display').forEach(el => el.textContent = data.months);
                 document.querySelectorAll('.wibor-val').forEach(el => el.textContent = data.wibor + '%');
 
-                // 4. BGK
-                if(!data.showBGK) {
-                    document.getElementById('bgk-section').style.display = 'none';
-                } else {
-                    if(!data.hasVariant2) {
-                        const bgkText = document.querySelector('#bgk-section p');
-                        bgkText.innerHTML = bgkText.innerHTML.replace("W obu wariantach", "W ofercie");
-                    }
-                }
+                if(!data.showBGK) document.getElementById('bgk-section').style.display = 'none';
+                else if(!data.hasVariant2) document.querySelector('#bgk-section p').innerHTML = document.querySelector('#bgk-section p').innerHTML.replace("W obu wariantach", "W ofercie");
 
-                // 5. FEE
                 const suffix = (data.vatType === 'VAT') ? '+ VAT' : 'zw. z VAT';
-                document.getElementById('fee-proc').textContent = data.feeProc;
-                document.getElementById('fee-suffix').textContent = suffix;
-                document.getElementById('fee-kwota').textContent = data.feeKwota + " " + suffix;
+                setVal('fee-proc', data.feeProc);
+                setVal('fee-suffix', suffix);
+                setVal('fee-kwota', data.feeKwota + " " + suffix);
 
-                // 6. KORZYŚCI
+                // Korzyści
                 const benefitsContainer = document.getElementById('dynamic-benefits-container');
                 let html = '<table border="0" cellpadding="0" cellspacing="0" width="100%">';
-                
                 const iconUrls = {
                     'wallet': 'https://img.icons8.com/ios/50/0056b3/wallet--v1.png',
                     'ok': 'https://img.icons8.com/ios/50/0056b3/ok--v1.png',
@@ -257,29 +203,15 @@
                     'handshake': 'https://img.icons8.com/ios/50/0056b3/handshake.png',
                     'money': 'https://img.icons8.com/ios/50/0056b3/money-circulation.png'
                 };
-
                 data.benefits.forEach(ben => {
                     const iconSrc = iconUrls[ben.icon] || iconUrls['ok'];
-                    html += `
-                        <tr>
-                            <td valign="top" width="50" style="padding-bottom: 25px;">
-                                <img src="${iconSrc}" width="30" height="30" style="display: block;">
-                            </td>
-                            <td valign="top" style="padding-bottom: 25px;">
-                                <div style="font-size: 17px; color: #555; line-height: 1.5;">
-                                    ${ben.text}
-                                </div>
-                            </td>
-                        </tr>
-                    `;
+                    html += `<tr><td valign="top" width="50" style="padding-bottom: 25px;"><img src="${iconSrc}" width="30" height="30" style="display: block;"></td><td valign="top" style="padding-bottom: 25px;"><div style="font-size: 17px; color: #555; line-height: 1.5;">${ben.text}</div></td></tr>`;
                 });
-                
                 html += '</table>';
                 benefitsContainer.innerHTML = html;
             }
         });
 
-        // KOPIOWANIE
         document.getElementById('copy-button').addEventListener('click', function() {
             const btn = this;
             const emailWrapper = document.getElementById('email-content-wrapper');
@@ -287,52 +219,19 @@
             range.selectNode(emailWrapper);
             window.getSelection().removeAllRanges();
             window.getSelection().addRange(range);
-
             try {
-                const htmlContent = emailWrapper.innerHTML;
-                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const blob = new Blob([emailWrapper.innerHTML], { type: 'text/html' });
                 const richTextInput = new ClipboardItem({ 'text/html': blob });
-                
-                if (typeof navigator.clipboard !== 'undefined' && navigator.clipboard.write) {
-                    navigator.clipboard.write([richTextInput]).then(() => { successEffect(btn); });
-                } else {
-                    document.execCommand('copy');
-                    successEffect(btn);
-                }
-            } catch (err) {
-                document.execCommand('copy');
-                successEffect(btn);
-            }
+                navigator.clipboard.write([richTextInput]).then(() => successEffect(btn)).catch(() => { document.execCommand('copy'); successEffect(btn); });
+            } catch (err) { document.execCommand('copy'); successEffect(btn); }
             window.getSelection().removeAllRanges();
         });
 
         function successEffect(btn) {
-            const originalText = 'Kopiuj całość do maila';
-            const originalColor = '#17a2b8';
-            btn.textContent = '✅ Skopiowano!';
-            btn.style.backgroundColor = '#28a745';
-            btn.classList.add('copied');
-            setTimeout(() => {
-                btn.textContent = originalText;
-                btn.style.backgroundColor = originalColor;
-                btn.classList.remove('copied');
-            }, 2000);
+            const originalText = 'Kopiuj całość do maila'; const originalColor = '#17a2b8';
+            btn.textContent = '✅ Skopiowano!'; btn.style.backgroundColor = '#28a745'; btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = originalText; btn.style.backgroundColor = originalColor; btn.classList.remove('copied'); }, 2000);
         }
     </script>
+</body>
 </html>
-
-    <script>
-        // BAF AUTO UPDATE - 12.02.2026
-        try {
-            document.getElementById('wibor-1m').textContent = '3,98%';
-            document.getElementById('wibor-3m').textContent = '3,87%';
-            document.getElementById('wibor-6m').textContent = '3,76%';
-            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
-            
-            const dzisiaj = 'Dane na dzień: 12.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    </body>
-    
