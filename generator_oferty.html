@@ -3,174 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Ofert BAF v3.3</title>
+    <title>Generator Ofert BAF v4.0</title>
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
         
         body { font-family: 'Lato', sans-serif; background: #f4f7f9; color: #333; padding: 20px; margin: 0; }
         
-        /* --- NAWIGACJA GÓRNA --- */
-        .top-nav {
-            max-width: 1250px;
-            margin: 0 auto 20px auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        /* Layout Wrapper */
+        .layout-wrapper { display: flex; max-width: 1250px; margin: 0 auto; gap: 20px; align-items: flex-start; }
+        .container { flex: 1; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .sidebar { width: 260px; flex-shrink: 0; position: sticky; top: 20px; }
 
-        .nav-btn {
-            text-decoration: none;
-            color: #002d5a;
-            font-weight: bold;
-            border: 2px solid #002d5a;
-            padding: 8px 15px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            background-color: transparent;
-        }
-
-        .nav-btn:hover {
-            background-color: #002d5a;
-            color: white;
-        }
-
-        .nav-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-            margin-bottom: 2px;
-        }
-
-        /* --- UKŁAD STRONY --- */
-        .layout-wrapper {
-            display: flex;
-            max-width: 1250px;
-            margin: 0 auto;
-            gap: 20px;
-            align-items: flex-start;
-        }
-
-        /* Główny kontener formularza */
-        .container { 
-            flex: 1; 
-            background: #fff; 
-            padding: 30px; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-        }
-
-        /* --- PANEL BOCZNY (WIBOR) - STYL JASNY --- */
-        .sidebar {
-            width: 260px;
-            flex-shrink: 0;
-            position: sticky;
-            top: 20px;
-        }
-
-        .info-container {
-            background-color: #ffffff; /* Białe tło */
-            color: #333; /* Ciemny tekst */
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border: 1px solid #e1e4e8; /* Szara ramka */
-        }
-
-        .info-header {
-            font-size: 1.1em;
-            font-weight: 700;
-            color: #002d5a; /* Granatowy nagłówek */
-            border-bottom: 2px solid #007bff; /* Niebieskie podkreślenie */
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .info-date {
-            font-size: 0.85em;
-            color: #777;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .rates-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .rate-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.95em;
-            border-bottom: 1px solid #f0f0f0;
-            padding-bottom: 8px;
-        }
+        /* Style Panelu Bocznego (WIBOR) */
+        .info-container { background-color: #ffffff; color: #333; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e1e4e8; }
+        .info-header { font-size: 1.1em; font-weight: 700; color: #002d5a; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
+        .info-date { font-size: 0.85em; color: #777; text-align: center; margin-bottom: 15px; }
+        .rates-grid { display: flex; flex-direction: column; gap: 12px; }
+        .rate-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.95em; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; }
         .rate-item:last-child { border-bottom: none; }
-
         .rate-item p { margin: 0; color: #555; }
-        
-        .rate-item .value {
-            font-weight: 700;
-            color: #002d5a; /* Ciemny granat dla wartości */
-            font-size: 1.1em;
-        }
+        .rate-item .value { font-weight: 700; color: #002d5a; font-size: 1.1em; }
+        .info-container-single .value { text-align: center; font-size: 2em; font-weight: 700; color: #dc3545; margin: 10px 0; }
+        .disclaimer-text { font-size: 0.7em; color: #999; text-align: center; margin-top: 15px; margin-bottom: 0; line-height: 1.4; }
 
-        .info-container-single .value {
-            text-align: center;
-            font-size: 2em;
-            font-weight: 700;
-            color: #dc3545; /* Czerwony dla odsetek */
-            margin: 10px 0;
-        }
+        /* Nawigacja */
+        .top-nav { max-width: 1250px; margin: 0 auto 20px auto; display: flex; justify-content: space-between; align-items: center; }
+        .nav-btn { text-decoration: none; color: #002d5a; font-weight: bold; border: 2px solid #002d5a; padding: 8px 15px; border-radius: 6px; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; font-size: 14px; background-color: transparent; }
+        .nav-btn:hover { background-color: #002d5a; color: white; }
+        .nav-btn svg { width: 20px; height: 20px; fill: currentColor; margin-bottom: 2px; }
 
-        .disclaimer-text {
-            font-size: 0.7em;
-            color: #999;
-            text-align: center;
-            margin-top: 15px;
-            margin-bottom: 0;
-            line-height: 1.4;
-        }
-
-        /* --- Style Formularza --- */
+        /* Formularz */
         h1, h2, h3 { color: #002d5a; margin-top: 0; }
         h2 { font-size: 1.1em; border-bottom: 2px solid #007bff; padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; }
         h3 { font-size: 1em; color: #555; margin-bottom: 10px; }
-
         .row { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
-        .col { flex: 1; min-width: 200px; }
-        
+        .col { flex: 1; min-width: 250px; }
         .form-group { margin-bottom: 12px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.85em; color: #555; }
-        input, select, textarea { 
-            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; 
-            box-sizing: border-box; font-family: 'Lato', sans-serif; font-size: 14px;
-        }
+        input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-family: 'Lato', sans-serif; font-size: 14px; }
         input:focus, textarea:focus { border-color: #007bff; outline: none; }
-        input[readonly] { background-color: #e9ecef; color: #495057; font-weight: bold; border-color: #ced4da; cursor: not-allowed; }
+        input[readonly] { background-color: #e9ecef; color: #495057; font-weight: bold; cursor: not-allowed; }
 
-        /* Checkboxy */
-        .toggle-section {
-            background: #eef6ff; padding: 10px; border-radius: 6px; border: 1px solid #badce3; margin-bottom: 15px;
-            display: flex; align-items: center; justify-content: space-between;
-        }
+        /* Grupa Input z Checkboxem (Widoczność) */
+        .input-with-check { display: flex; align-items: center; gap: 8px; }
+        .input-with-check input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; accent-color: #007bff; }
+        .check-tooltip { font-size: 0.7em; color: #999; margin-left: 5px; font-weight: normal; }
+
+        /* Checkboxy sekcji */
+        .toggle-section { background: #eef6ff; padding: 10px; border-radius: 6px; border: 1px solid #badce3; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; }
         .toggle-section label { margin: 0; font-size: 1em; color: #004d99; cursor: pointer; display: flex; align-items: center; width: 100%; }
         .toggle-section input[type="checkbox"] { width: auto; transform: scale(1.5); margin-right: 15px; }
 
         /* Ikony */
         .icon-selector { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
-        .icon-opt { 
-            border: 2px solid #ddd; padding: 5px; border-radius: 5px; cursor: pointer; background: #fff;
-            position: relative; transition: 0.2s; width: 32px; height: 32px;
-        }
+        .icon-opt { border: 2px solid #ddd; padding: 5px; border-radius: 5px; cursor: pointer; background: #fff; position: relative; transition: 0.2s; width: 32px; height: 32px; }
         .icon-opt:hover { border-color: #99caff; }
         .icon-opt.active { border-color: #007bff; background: #e6f7ff; box-shadow: 0 0 5px rgba(0,123,255,0.3); }
         .icon-opt.disabled { opacity: 0.3; pointer-events: none; border-color: #ccc; background: #eee; }
@@ -178,23 +65,15 @@
 
         /* Lista dodanych korzyści */
         #addedBenefitsList { margin-top: 15px; }
-        .added-benefit-item {
-            background: #fff; border: 1px solid #ddd; padding: 8px 12px; margin-bottom: 5px; border-radius: 4px;
-            display: flex; justify-content: space-between; align-items: center; font-size: 0.9em;
-        }
+        .added-benefit-item { background: #fff; border: 1px solid #ddd; padding: 8px 12px; margin-bottom: 5px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9em; }
         .added-benefit-item img { width: 20px; height: 20px; margin-right: 10px; vertical-align: middle; }
         .remove-ben-btn { color: #dc3545; cursor: pointer; font-weight: bold; font-size: 1.2em; margin-left: 10px; }
 
         /* Przyciski */
-        button.generate-btn {
-            background-color: #28a745; color: white; border: none; padding: 15px;
-            width: 100%; font-size: 18px; font-weight: bold; border-radius: 8px;
-            cursor: pointer; margin-top: 30px; transition: 0.3s;
-        }
+        button.generate-btn { background-color: #28a745; color: white; border: none; padding: 15px; width: 100%; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 30px; transition: 0.3s; }
         button.generate-btn:hover { background-color: #218838; }
-
         .btn-small { padding: 5px 10px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
-        .btn-add { background: #007bff; margin-top: 10px; width: 100%; padding: 10px; font-size: 14px; }
+        .btn-add { background: #007bff; margin-top: 10px; width: 100%; padding: 10px; font-size: 14px; color: white; border: none; border-radius: 5px; cursor: pointer; }
         .btn-add:hover { background: #0056b3; }
 
         @media (max-width: 900px) {
@@ -208,37 +87,28 @@
 <body>
 
 <div class="top-nav">
-    <a href="kalkulatory.html" class="nav-btn">
-        &laquo; Wróć do Kalkulatorów
-    </a>
+    <a href="kalkulatory.html" class="nav-btn">&laquo; Wróć do Kalkulatorów</a>
     <a href="index.html" class="nav-btn" title="Strona Główna">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/>
-        </svg>
-        Strona Główna
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg> Strona Główna
     </a>
 </div>
 
 <div class="layout-wrapper">
-    
     <div class="container">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h1>Generator Oferty Finansowania</h1>
-            <div style="text-align:right; font-size:0.8em; color:#777;">v3.3 BAF</div>
+            <h1>Generator Oferty</h1>
+            <div style="text-align:right; font-size:0.8em; color:#777;">v4.0 Full</div>
         </div>
 
-        <h2>1. Dane i Treść Wstępna</h2>
+        <h2>1. Dane i Wstęp</h2>
         <div class="row">
             <div class="col form-group">
-                <label>Nagłówek (np. Panie Kamilu)</label>
+                <label>Nagłówek</label>
                 <input type="text" id="clientName" value="Panie Kamilu">
             </div>
             <div class="col form-group">
                 <label>Płeć Klienta</label>
-                <select id="clientGender">
-                    <option value="M">Mężczyzna</option>
-                    <option value="F">Kobieta</option>
-                </select>
+                <select id="clientGender"><option value="M">Mężczyzna</option><option value="F">Kobieta</option></select>
             </div>
             <div class="col form-group">
                 <label>Doradca</label>
@@ -257,45 +127,105 @@
         </div>
         
         <div class="form-group">
-            <label>Treść maila (Edytowalna, aktualizuje się po zmianie doradcy/płci)</label>
-            <textarea id="introText" rows="4"></textarea>
+            <label>Rodzaj Finansowania (Wybierz)</label>
+            <select id="financingType">
+                <option value="Kredyt firmowy ratalny">Kredyt firmowy (ratalny firmowy)</option>
+                <option value="Kredyt gotówkowy">Kredyt gotówkowy (ratalny prywatny)</option>
+                <option value="Kredyt w rachunku bieżącym">KRB (Kredyt w rachunku bieżącym - firmowy)</option>
+                <option value="Limit odnawialny">Limit odnawialny (prywatny)</option>
+            </select>
         </div>
 
-        <h2>2. Parametry Kredytu</h2>
+        <div class="form-group">
+            <label>Treść maila</label>
+            <textarea id="introText" rows="3"></textarea>
+        </div>
+
+        <h2>2. Parametry Bazowe</h2>
         <div class="row" style="background: #fdfdfd; padding: 15px; border: 1px solid #eee; border-radius: 8px;">
-            <div class="col form-group">
-                <label>WIBOR (%)</label>
-                <input type="number" step="0.01" id="wibor" value="4.02">
-            </div>
-            <div class="col form-group"><label>Okres (miesiące)</label><input type="number" id="months" value="120"></div>
-            <div class="col form-group"><label>Kwota Netto (PLN)</label><input type="text" id="loanAmount" value="1000000"></div>
+            <div class="col form-group"><label>WIBOR (%)</label><input type="number" step="0.01" id="wibor" value="4.02"></div>
+            <div class="col form-group"><label>Okres (mies.)</label><input type="number" id="months" value="120"></div>
+            <div class="col form-group"><label>Kwota Netto</label><input type="text" id="loanAmount" value="1000000"></div>
         </div>
 
         <div class="row" style="margin-top: 20px;">
-            <div class="col" style="border-top: 4px solid #007bff; background: #fdfdfd; padding: 15px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+            <div class="col" style="border-top: 4px solid #007bff; background: #fdfdfd; padding: 15px; border-radius: 4px;">
                 <h3 style="color: #0056b3;">Wariant I</h3>
-                <div class="form-group"><label>Prowizja (%)</label><input type="number" step="0.01" id="w1_prowizja_proc" value="2.5"></div>
-                <div class="form-group"><label>Marża (%)</label><input type="number" step="0.01" id="w1_marza" value="2.5"></div>
+                
+                <div class="form-group">
+                    <label>Kwota Netto <span class="check-tooltip">(Pokaż)</span></label>
+                    <div class="input-with-check"><input type="checkbox" id="check_w1_netto" checked><input type="text" id="w1_netto_display" readonly></div>
+                </div>
+                <div class="form-group">
+                    <label>Kwota Brutto <span class="check-tooltip">(Pokaż)</span></label>
+                    <div class="input-with-check"><input type="checkbox" id="check_w1_brutto" checked><input type="text" id="w1_brutto_display" readonly></div>
+                </div>
+                <div class="form-group">
+                    <label>Prowizja (%) <span class="check-tooltip">(Pokaż)</span></label>
+                    <div class="input-with-check"><input type="checkbox" id="check_w1_prowizja" checked><input type="number" step="0.01" id="w1_prowizja_proc" value="2.5"></div>
+                </div>
+                <div class="form-group">
+                    <label>Marża (%) <span class="check-tooltip">(Pokaż)</span></label>
+                    <div class="input-with-check"><input type="checkbox" id="check_w1_marza" checked><input type="number" step="0.01" id="w1_marza" value="2.5"></div>
+                </div>
+                <div class="form-group">
+                    <label>WIBOR <span class="check-tooltip">(Pokaż)</span></label>
+                    <div class="input-with-check"><input type="checkbox" id="check_w1_wibor" checked><input type="text" value="Auto" disabled style="background:#eee;"></div>
+                </div>
                 <hr style="border-top: 1px solid #eee;">
-                <div class="form-group"><label>Oprocentowanie</label><input type="text" id="w1_oproc_display" readonly></div>
-                <div class="form-group"><label>Rata</label><input type="text" id="w1_rata_display" readonly style="color: #004d99; font-weight:bold;"></div>
-                <div class="form-group"><label>Brutto</label><input type="text" id="w1_brutto_display" readonly></div>
+                <div class="form-group">
+                    <label>Oprocentowanie <span class="check-tooltip">(Pokaż)</span></label>
+                    <div class="input-with-check"><input type="checkbox" id="check_w1_oproc" checked><input type="text" id="w1_oproc_display" readonly></div>
+                </div>
+                <div class="form-group">
+                    <label>Koszt Całkowity <span class="check-tooltip">(Pokaż)</span></label>
+                    <div class="input-with-check"><input type="checkbox" id="check_w1_koszt" checked><input type="text" id="w1_koszt_display" readonly style="color:#dc3545;"></div>
+                </div>
+                <div class="form-group">
+                    <label>Rata</label>
+                    <input type="text" id="w1_rata_display" readonly style="color: #004d99; font-weight:bold;">
+                </div>
             </div>
 
-            <div class="col" id="col_variant2" style="border-top: 4px solid #28a745; background: #fdfdfd; padding: 15px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+            <div class="col" id="col_variant2" style="border-top: 4px solid #28a745; background: #fdfdfd; padding: 15px; border-radius: 4px;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <h3 style="color: #28a745; margin:0;">Wariant II</h3>
-                    <label style="margin:0; font-size: 0.8em; display:flex; align-items:center; cursor:pointer;">
-                        <input type="checkbox" id="enableVariant2" checked style="width:auto; margin-right:5px;"> Włączony
-                    </label>
+                    <label style="margin:0; font-size: 0.8em; cursor:pointer;"><input type="checkbox" id="enableVariant2" checked> Włączony</label>
                 </div>
                 <div id="w2_controls" style="margin-top: 15px;">
-                    <div class="form-group"><label>Prowizja (%)</label><input type="number" step="0.01" id="w2_prowizja_proc" value="0"></div>
-                    <div class="form-group"><label>Marża (%)</label><input type="number" step="0.01" id="w2_marza" value="2.5"></div>
+                    <div class="form-group">
+                        <label>Kwota Netto <span class="check-tooltip">(Pokaż)</span></label>
+                        <div class="input-with-check"><input type="checkbox" id="check_w2_netto" checked><input type="text" id="w2_netto_display" readonly></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Kwota Brutto <span class="check-tooltip">(Pokaż)</span></label>
+                        <div class="input-with-check"><input type="checkbox" id="check_w2_brutto" checked><input type="text" id="w2_brutto_display" readonly></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Prowizja (%) <span class="check-tooltip">(Pokaż)</span></label>
+                        <div class="input-with-check"><input type="checkbox" id="check_w2_prowizja" checked><input type="number" step="0.01" id="w2_prowizja_proc" value="0"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Marża (%) <span class="check-tooltip">(Pokaż)</span></label>
+                        <div class="input-with-check"><input type="checkbox" id="check_w2_marza" checked><input type="number" step="0.01" id="w2_marza" value="2.5"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>WIBOR <span class="check-tooltip">(Pokaż)</span></label>
+                        <div class="input-with-check"><input type="checkbox" id="check_w2_wibor" checked><input type="text" value="Auto" disabled style="background:#eee;"></div>
+                    </div>
                     <hr style="border-top: 1px solid #eee;">
-                    <div class="form-group"><label>Oprocentowanie</label><input type="text" id="w2_oproc_display" readonly></div>
-                    <div class="form-group"><label>Rata</label><input type="text" id="w2_rata_display" readonly style="color: #28a745; font-weight:bold;"></div>
-                    <div class="form-group"><label>Brutto</label><input type="text" id="w2_brutto_display" readonly></div>
+                    <div class="form-group">
+                        <label>Oprocentowanie <span class="check-tooltip">(Pokaż)</span></label>
+                        <div class="input-with-check"><input type="checkbox" id="check_w2_oproc" checked><input type="text" id="w2_oproc_display" readonly></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Koszt Całkowity <span class="check-tooltip">(Pokaż)</span></label>
+                        <div class="input-with-check"><input type="checkbox" id="check_w2_koszt" checked><input type="text" id="w2_koszt_display" readonly style="color:#dc3545;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Rata</label>
+                        <input type="text" id="w2_rata_display" readonly style="color: #28a745; font-weight:bold;">
+                    </div>
                 </div>
             </div>
         </div>
@@ -308,35 +238,23 @@
         </div>
         <div class="toggle-section"><label><input type="checkbox" id="showBGK" checked> Dodaj informację o Gwarancji BGK</label></div>
 
-        <h2>5. Korzyści (Domyślne + Własne)</h2>
-        
+        <h2>5. Korzyści</h2>
         <div id="defaultBenefits">
-            <div class="toggle-section" style="background:white; border-color:#eee;">
-                <label><input type="checkbox" id="ben1" checked data-icon="wallet" onchange="refreshIcons()"> BRAK OPŁAT KWARTALNYCH!</label>
-            </div>
-            <div class="toggle-section" style="background:white; border-color:#eee;">
-                <label><input type="checkbox" id="ben2" checked data-icon="ok" onchange="refreshIcons()"> Przejrzyste warunki</label>
-            </div>
-            <div class="toggle-section" style="background:white; border-color:#eee;">
-                <label><input type="checkbox" id="ben3" checked data-icon="unlock" onchange="refreshIcons()"> Pełna elastyczność (nadpłata 0%)</label>
-            </div>
+            <div class="toggle-section" style="background:white; border-color:#eee;"><label><input type="checkbox" id="ben1" checked data-icon="wallet" onchange="refreshIcons()"> BRAK OPŁAT KWARTALNYCH!</label></div>
+            <div class="toggle-section" style="background:white; border-color:#eee;"><label><input type="checkbox" id="ben2" checked data-icon="ok" onchange="refreshIcons()"> Przejrzyste warunki</label></div>
+            <div class="toggle-section" style="background:white; border-color:#eee;"><label><input type="checkbox" id="ben3" checked data-icon="unlock" onchange="refreshIcons()"> Pełna elastyczność (nadpłata 0%)</label></div>
         </div>
 
         <div class="form-group" style="background: #f8faff; padding: 15px; border-radius: 6px; border: 1px solid #e1e4e8;">
-            <label>Dodaj nową korzyść</label>
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="customBenText" placeholder="Wpisz treść...">
-                <button type="button" class="btn-small" onclick="insertBold()">Pogrubienie</button>
-            </div>
+            <label>Dodaj nową korzyść (Pogrubione automatycznie)</label>
+            <input type="text" id="customBenText" placeholder="Wpisz treść...">
             
             <div style="margin-top: 10px; font-size: 14px; color:#555;">Wybierz ikonę (Użyte są zablokowane):</div>
-            <div class="icon-selector" id="iconSelector">
-                </div>
+            <div class="icon-selector" id="iconSelector"></div>
             <input type="hidden" id="selectedCustomIcon" value="">
 
-            <button type="button" class="btn-small btn-add" onclick="addCustomBenefit()">+ DODAJ KORZYŚĆ DO LISTY</button>
+            <button type="button" class="btn-add" onclick="addCustomBenefit()">+ DODAJ KORZYŚĆ</button>
         </div>
-
         <div id="addedBenefitsList"></div>
 
         <button class="generate-btn" onclick="generateOffer()">GENERUJ OFERTĘ</button>
@@ -351,35 +269,30 @@
                 <div class="rate-item"><p>WIBOR 3M</p><p class="value" id="wibor-3m">-</p></div>
                 <div class="rate-item"><p>WIBOR 6M</p><p class="value" id="wibor-6m">-</p></div>
             </div>
-            <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie w czasie rzeczywistym.</p>
-        </div>
-        <div class="info-container info-container-single">
-            <div class="info-header">Odsetki ustawowe za opóźnienie</div>
-            <div class="info-date" id="current-date-odsetki">Ładowanie...</div>
-            <p class="value" id="odsetki-opoznienie">-</p>
             <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia.</p>
         </div>
+        <div class="info-container info-container-single">
+            <div class="info-header">Odsetki ustawowe</div>
+            <div class="info-date" id="current-date-odsetki">Ładowanie...</div>
+            <p class="value" id="odsetki-opoznienie">-</p>
+        </div>
     </div>
-
 </div>
 
 <script>
-    // --- SKRYPT AKTUALIZACJI WIBOR ---
+    // --- BAF UPDATE LOGIC ---
     try {
-        
+        document.getElementById('wibor-1m').textContent = '4,03%';
+        document.getElementById('wibor-3m').textContent = '3,88%';
+        document.getElementById('wibor-6m').textContent = '3,77%';
+        document.getElementById('odsetki-opoznienie').textContent = '9,5%';
         const dzisiaj = 'Dane na dzień: 10.02.2026';
         if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
         if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        
-        // Ustaw WIBOR w formularzu na wartość 1M z panelu
-        const wibor1mVal = parseFloat('4,03'.replace(',', '.'));
-        if(document.getElementById('wibor')) {
-            document.getElementById('wibor').value = wibor1mVal;
-        }
+        if(document.getElementById('wibor')) document.getElementById('wibor').value = 4.03;
+    } catch(e){}
 
-    } catch(e) { console.log('Błąd aktualizacji stawek BAF'); }
-
-    // --- BAZA DANYCH IKON ---
+    // --- IKONY ---
     const iconsDB = {
         'wallet': 'https://img.icons8.com/ios/50/0056b3/wallet--v1.png',
         'ok': 'https://img.icons8.com/ios/50/0056b3/ok--v1.png',
@@ -392,10 +305,8 @@
         'handshake': 'https://img.icons8.com/ios/50/0056b3/handshake.png',
         'money': 'https://img.icons8.com/ios/50/0056b3/money-circulation.png'
     };
+    let customBenefits = [];
 
-    let customBenefits = []; 
-
-    // --- FUNKCJE STARTOWE ---
     function initIcons() {
         const selector = document.getElementById('iconSelector');
         selector.innerHTML = '';
@@ -408,113 +319,60 @@
             selector.appendChild(div);
         }
     }
-
     function selectIcon(el) {
         if(el.classList.contains('disabled')) return;
         document.querySelectorAll('.icon-opt').forEach(i => i.classList.remove('active'));
         el.classList.add('active');
         document.getElementById('selectedCustomIcon').value = el.dataset.icon;
     }
-
     function refreshIcons() {
         const usedIcons = new Set();
-        document.querySelectorAll('#defaultBenefits input[type="checkbox"]').forEach(chk => {
-            if(chk.checked) usedIcons.add(chk.dataset.icon);
-        });
+        document.querySelectorAll('#defaultBenefits input[type="checkbox"]').forEach(chk => { if(chk.checked) usedIcons.add(chk.dataset.icon); });
         customBenefits.forEach(ben => usedIcons.add(ben.icon));
-
         document.querySelectorAll('.icon-opt').forEach(opt => {
-            const iconKey = opt.dataset.icon;
-            if(usedIcons.has(iconKey)) {
-                opt.classList.add('disabled');
-                opt.classList.remove('active');
-                if(document.getElementById('selectedCustomIcon').value === iconKey) {
-                    document.getElementById('selectedCustomIcon').value = '';
-                }
-            } else {
-                opt.classList.remove('disabled');
-            }
+            if(usedIcons.has(opt.dataset.icon)) { opt.classList.add('disabled'); opt.classList.remove('active'); }
+            else { opt.classList.remove('disabled'); }
         });
     }
 
-    // --- LOGIKA TEKSTU WSTĘPNEGO ---
+    // --- TEKST ---
     function updateIntroText() {
-        const advVal = document.getElementById('advisor').value;
-        const genderAdv = advVal.split('|')[1]; 
-        
+        const genderAdv = document.getElementById('advisor').value.split('|')[1];
         let t_anal = genderAdv === 'F' ? 'Przeanalizowałam' : 'Przeanalizowałem';
         let t_prep = genderAdv === 'F' ? 'przygotowałam' : 'przygotowałem';
         let t_ment = genderAdv === 'F' ? 'wspominałam' : 'wspominałem';
-        
-        const text = `w nawiązaniu do rozmowy przesyłam kalkulacje propozycji finansowania. ${t_anal} dostępne możliwości i ${t_prep} ofertę kredytu firmowego ratalnego, o którym już ${t_ment} telefonicznie, w dwóch wariantach, różniących się strukturą kosztów początkowych.`;
-        
-        document.getElementById('introText').value = text;
+        document.getElementById('introText').value = `w nawiązaniu do rozmowy przesyłam kalkulacje propozycji finansowania. ${t_anal} dostępne możliwości i ${t_prep} ofertę kredytu firmowego ratalnego, o którym już ${t_ment} telefonicznie, w dwóch wariantach, różniących się strukturą kosztów początkowych.`;
     }
-
     document.getElementById('advisor').addEventListener('change', updateIntroText);
-    
-    // --- LOGIKA WŁASNYCH KORZYŚCI ---
-    function insertBold() {
-        const input = document.getElementById('customBenText');
-        const start = input.selectionStart;
-        const end = input.selectionEnd;
-        const text = input.value;
-        const selectedText = text.substring(start, end);
-        
-        if (selectedText) {
-            input.value = text.substring(0, start) + '<b>' + selectedText + '</b>' + text.substring(end);
-        } else {
-            input.value = text.substring(0, start) + '<b></b>' + text.substring(end);
-        }
-        input.focus();
-    }
 
+    // --- KORZYŚCI ---
     function addCustomBenefit() {
         const text = document.getElementById('customBenText').value;
         const icon = document.getElementById('selectedCustomIcon').value;
-
-        if(text.trim() === '') { alert('Wpisz treść korzyści.'); return; }
-        if(icon === '') { alert('Wybierz dostępną ikonę.'); return; }
-
+        if(text.trim() === '' || icon === '') return alert('Uzupełnij tekst i ikonę');
+        
         let finalText = text;
-        if(!finalText.includes('<b>') && !finalText.includes('<strong>')) {
-            finalText = '<strong>' + finalText + '</strong>';
-        }
-
+        // Zawsze pogrubiamy jeśli nie ma tagów
+        if(!finalText.includes('<b>') && !finalText.includes('<strong>')) finalText = '<strong>' + finalText + '</strong>';
+        
         customBenefits.push({ text: finalText, icon: icon });
         renderCustomBenefits();
-        
         document.getElementById('customBenText').value = '';
         document.getElementById('selectedCustomIcon').value = '';
         document.querySelectorAll('.icon-opt').forEach(i => i.classList.remove('active'));
-        
         refreshIcons();
     }
-
-    function removeCustomBenefit(index) {
-        customBenefits.splice(index, 1);
-        renderCustomBenefits();
-        refreshIcons();
-    }
-
+    function removeCustomBenefit(index) { customBenefits.splice(index, 1); renderCustomBenefits(); refreshIcons(); }
     function renderCustomBenefits() {
-        const list = document.getElementById('addedBenefitsList');
-        list.innerHTML = '';
+        const list = document.getElementById('addedBenefitsList'); list.innerHTML = '';
         customBenefits.forEach((ben, index) => {
-            const div = document.createElement('div');
-            div.className = 'added-benefit-item';
-            div.innerHTML = `
-                <div style="display:flex; align-items:center;">
-                    <img src="${iconsDB[ben.icon]}">
-                    <span>${ben.text}</span>
-                </div>
-                <span class="remove-ben-btn" onclick="removeCustomBenefit(${index})">&times;</span>
-            `;
+            const div = document.createElement('div'); div.className = 'added-benefit-item';
+            div.innerHTML = `<div style="display:flex;align-items:center;"><img src="${iconsDB[ben.icon]}"><span>${ben.text}</span></div><span class="remove-ben-btn" onclick="removeCustomBenefit(${index})">&times;</span>`;
             list.appendChild(div);
         });
     }
 
-    // --- KALKULATOR ---
+    // --- KALKULACJE ---
     function parseMoney(val) { return parseFloat(val.toString().replace(/\s/g, '').replace('PLN','').replace(',','.')) || 0; }
     function formatMoney(num) { return num.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' PLN'; }
     function calculatePMT(rate, periods, pv) {
@@ -532,32 +390,37 @@
         // W1
         const w1_p = parseFloat(document.getElementById('w1_prowizja_proc').value) || 0;
         const w1_m = parseFloat(document.getElementById('w1_marza').value) || 0;
-        const w1_brutto = loanNetto * (1 + w1_p/100);
+        const w1_calc_brutto = loanNetto * (1 + w1_p/100);
         const w1_rate = wibor + w1_m;
-        const w1_rata = calculatePMT(w1_rate, months, w1_brutto);
-        
+        const w1_rata = calculatePMT(w1_rate, months, w1_calc_brutto);
+        const w1_koszt = (w1_rata * months) - loanNetto;
+
+        document.getElementById('w1_netto_display').value = formatMoney(loanNetto);
+        document.getElementById('w1_brutto_display').value = formatMoney(w1_calc_brutto);
         document.getElementById('w1_oproc_display').value = w1_rate.toFixed(2) + '%';
-        document.getElementById('w1_brutto_display').value = formatMoney(w1_brutto);
         document.getElementById('w1_rata_display').value = formatMoney(w1_rata);
+        document.getElementById('w1_koszt_display').value = formatMoney(w1_koszt);
 
         // W2
         const isW2 = document.getElementById('enableVariant2').checked;
         if(isW2) {
             const w2_p = parseFloat(document.getElementById('w2_prowizja_proc').value) || 0;
             const w2_m = parseFloat(document.getElementById('w2_marza').value) || 0;
-            const w2_brutto = loanNetto * (1 + w2_p/100);
+            const w2_calc_brutto = loanNetto * (1 + w2_p/100);
             const w2_rate = wibor + w2_m;
-            const w2_rata = calculatePMT(w2_rate, months, w2_brutto);
-            
+            const w2_rata = calculatePMT(w2_rate, months, w2_calc_brutto);
+            const w2_koszt = (w2_rata * months) - loanNetto;
+
+            document.getElementById('w2_netto_display').value = formatMoney(loanNetto);
+            document.getElementById('w2_brutto_display').value = formatMoney(w2_calc_brutto);
             document.getElementById('w2_oproc_display').value = w2_rate.toFixed(2) + '%';
-            document.getElementById('w2_brutto_display').value = formatMoney(w2_brutto);
             document.getElementById('w2_rata_display').value = formatMoney(w2_rata);
+            document.getElementById('w2_koszt_display').value = formatMoney(w2_koszt);
             document.getElementById('w2_controls').style.opacity = '1';
         } else {
             document.getElementById('w2_controls').style.opacity = '0.5';
         }
 
-        // Fee
         document.getElementById('successFeeKwota').value = formatMoney(loanNetto * (successFeeProc / 100));
     }
 
@@ -566,39 +429,59 @@
     });
     document.getElementById('enableVariant2').addEventListener('change', updateCalculations);
 
-    // --- GENEROWANIE JSON ---
+    // --- GENERUJ ---
     function generateOffer() {
         const data = {
             clientName: document.getElementById('clientName').value,
             clientGender: document.getElementById('clientGender').value,
             advisorData: document.getElementById('advisor').value,
+            financingType: document.getElementById('financingType').value,
             introText: document.getElementById('introText').value,
-            
             showBGK: document.getElementById('showBGK').checked,
             hasVariant2: document.getElementById('enableVariant2').checked,
             vatType: document.getElementById('vatType').value,
             months: document.getElementById('months').value,
             wibor: document.getElementById('wibor').value,
+            
+            // Visibility Flags
+            visibility: {
+                w1_netto: document.getElementById('check_w1_netto').checked,
+                w1_brutto: document.getElementById('check_w1_brutto').checked,
+                w1_prowizja: document.getElementById('check_w1_prowizja').checked,
+                w1_marza: document.getElementById('check_w1_marza').checked,
+                w1_wibor: document.getElementById('check_w1_wibor').checked,
+                w1_oproc: document.getElementById('check_w1_oproc').checked,
+                w1_koszt: document.getElementById('check_w1_koszt').checked,
+                
+                w2_netto: document.getElementById('check_w2_netto').checked,
+                w2_brutto: document.getElementById('check_w2_brutto').checked,
+                w2_prowizja: document.getElementById('check_w2_prowizja').checked,
+                w2_marza: document.getElementById('check_w2_marza').checked,
+                w2_wibor: document.getElementById('check_w2_wibor').checked,
+                w2_oproc: document.getElementById('check_w2_oproc').checked,
+                w2_koszt: document.getElementById('check_w2_koszt').checked
+            },
 
             w1: {
-                netto: formatMoney(parseMoney(document.getElementById('loanAmount').value)),
+                netto: document.getElementById('w1_netto_display').value,
                 brutto: document.getElementById('w1_brutto_display').value,
                 prowizja: document.getElementById('w1_prowizja_proc').value + '%',
                 marza: document.getElementById('w1_marza').value + '%',
                 oproc: document.getElementById('w1_oproc_display').value,
-                rata: document.getElementById('w1_rata_display').value
+                rata: document.getElementById('w1_rata_display').value,
+                koszt: document.getElementById('w1_koszt_display').value
             },
             w2: {
-                netto: formatMoney(parseMoney(document.getElementById('loanAmount').value)),
+                netto: document.getElementById('w2_netto_display').value,
                 brutto: document.getElementById('w2_brutto_display').value,
                 prowizja: document.getElementById('w2_prowizja_proc').value + '%',
                 marza: document.getElementById('w2_marza').value + '%',
                 oproc: document.getElementById('w2_oproc_display').value,
-                rata: document.getElementById('w2_rata_display').value
+                rata: document.getElementById('w2_rata_display').value,
+                koszt: document.getElementById('w2_koszt_display').value
             },
             feeProc: document.getElementById('successFeeProc').value + '%',
             feeKwota: document.getElementById('successFeeKwota').value,
-            
             benefits: []
         };
 
@@ -607,43 +490,18 @@
             'ben2': '<strong>Przejrzyste warunki:</strong> Umowa bez "gwiazdek" i dodatkowych, nieoczekiwanych kosztów.',
             'ben3': '<strong>Pełna elastyczność:</strong> Całkowity brak opłat za nadpłatę oraz wcześniejszą całkowitą spłatę kredytu.'
         };
-        
         ['ben1','ben2','ben3'].forEach(id => {
             if(document.getElementById(id).checked) {
-                data.benefits.push({
-                    text: defaultTexts[id],
-                    icon: document.getElementById(id).dataset.icon
-                });
+                data.benefits.push({ text: defaultTexts[id], icon: document.getElementById(id).dataset.icon });
             }
         });
-
         customBenefits.forEach(ben => data.benefits.push(ben));
 
-        localStorage.setItem('bafOfferData_V3', JSON.stringify(data));
+        localStorage.setItem('bafOfferData_V4', JSON.stringify(data));
         window.location.href = 'oferta.html';
     }
 
-    // INIT
-    initIcons();
-    updateIntroText(); 
-    updateCalculations();
-    refreshIcons();
+    initIcons(); updateIntroText(); updateCalculations(); refreshIcons();
 </script>
-
+</body>
 </html>
-
-    <script>
-        // BAF AUTO UPDATE - 12.02.2026
-        try {
-            document.getElementById('wibor-1m').textContent = '3,98%';
-            document.getElementById('wibor-3m').textContent = '3,87%';
-            document.getElementById('wibor-6m').textContent = '3,76%';
-            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
-            
-            const dzisiaj = 'Dane na dzień: 12.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    </body>
-    
