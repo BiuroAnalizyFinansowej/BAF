@@ -4,18 +4,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generator Ofert BAF v3.0</title>
+    <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
         
-        body { font-family: 'Lato', sans-serif; background: #f4f7f9; color: #333; padding: 20px; }
-        .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        body { font-family: 'Lato', sans-serif; background: #f4f7f9; color: #333; padding: 20px; margin: 0; }
         
+        /* Layout Wrapper dla układu dwukolumnowego */
+        .layout-wrapper {
+            display: flex;
+            max-width: 1250px;
+            margin: 0 auto;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        /* Główny kontener formularza */
+        .container { 
+            flex: 1; /* Zajmuje pozostałe miejsce */
+            background: #fff; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+        }
+
+        /* Panel Boczny (WIBOR) */
+        .sidebar {
+            width: 260px;
+            flex-shrink: 0;
+            position: sticky; /* Przykleja się podczas przewijania */
+            top: 20px;
+        }
+
+        .info-container {
+            background-color: #002d5a;
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .info-header {
+            font-size: 1.1em;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .info-date {
+            font-size: 0.85em;
+            color: #a3bffa;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .rates-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .rate-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95em;
+        }
+
+        .rate-item p { margin: 0; }
+        
+        .rate-item .value {
+            font-weight: 700;
+            color: #4ade80; /* Zielony akcent */
+            font-size: 1.1em;
+        }
+
+        .info-container-single .value {
+            text-align: center;
+            font-size: 2em;
+            font-weight: 700;
+            color: #fca5a5; /* Czerwony akcent dla odsetek */
+            margin: 10px 0;
+        }
+
+        .disclaimer-text {
+            font-size: 0.7em;
+            color: rgba(255,255,255,0.6);
+            text-align: center;
+            margin-top: 15px;
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+
+        /* Style Formularza */
         h1, h2, h3 { color: #002d5a; margin-top: 0; }
         h2 { font-size: 1.1em; border-bottom: 2px solid #007bff; padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; }
         h3 { font-size: 1em; color: #555; margin-bottom: 10px; }
 
         .row { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
-        .col { flex: 1; min-width: 250px; }
+        .col { flex: 1; min-width: 200px; }
         
         .form-group { margin-bottom: 12px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.85em; color: #555; }
@@ -65,130 +155,181 @@
         .btn-small { padding: 5px 10px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
         .btn-add { background: #007bff; margin-top: 10px; width: 100%; padding: 10px; font-size: 14px; }
         .btn-add:hover { background: #0056b3; }
+
+        @media (max-width: 900px) {
+            .layout-wrapper { flex-direction: column-reverse; }
+            .sidebar { width: 100%; position: relative; top: 0; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h1>Generator Oferty Finansowania</h1>
-        <div style="text-align:right; font-size:0.8em; color:#777;">v3.0 Multi-Benefit</div>
-    </div>
-
-    <h2>1. Dane i Treść Wstępna</h2>
-    <div class="row">
-        <div class="col form-group">
-            <label>Nagłówek (np. Panie Kamilu)</label>
-            <input type="text" id="clientName" value="Panie Kamilu">
-        </div>
-        <div class="col form-group">
-            <label>Płeć Klienta</label>
-            <select id="clientGender">
-                <option value="M">Mężczyzna</option>
-                <option value="F">Kobieta</option>
-            </select>
-        </div>
-        <div class="col form-group">
-            <label>Doradca</label>
-            <select id="advisor">
-                <option value="Dawid Błachno|M">Dawid Błachno</option>
-                <option value="Weronika Lekston|F">Weronika Lekston</option>
-                <option value="Mieczysław Andrzejewski|M">Mieczysław Andrzejewski</option>
-                <option value="Joanna Karpała|F">Joanna Karpała</option>
-                <option value="Piotr Pakuła|M">Piotr Pakuła</option>
-                <option value="Wiktoria Nojek|F">Wiktoria Nojek</option>
-                <option value="Wojciech Młynarczyk|M">Wojciech Młynarczyk</option>
-                <option value="Maja Zięba|F">Maja Zięba</option>
-                <option value="Mateusz Dzidkowski|M">Mateusz Dzidkowski</option>
-            </select>
-        </div>
-    </div>
+<div class="layout-wrapper">
     
-    <div class="form-group">
-        <label>Treść maila (Edytowalna, aktualizuje się po zmianie doradcy/płci)</label>
-        <textarea id="introText" rows="4"></textarea>
-    </div>
-
-    <h2>2. Parametry Kredytu</h2>
-    <div class="row" style="background: #fdfdfd; padding: 15px; border: 1px solid #eee; border-radius: 8px;">
-        <div class="col form-group"><label>WIBOR 1M (%)</label><input type="number" step="0.01" id="wibor" value="4.02"></div>
-        <div class="col form-group"><label>Okres (miesiące)</label><input type="number" id="months" value="120"></div>
-        <div class="col form-group"><label>Kwota Netto (PLN)</label><input type="text" id="loanAmount" value="1000000"></div>
-    </div>
-
-    <div class="row" style="margin-top: 20px;">
-        <div class="col" style="border-top: 4px solid #007bff; background: #fdfdfd; padding: 15px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-            <h3 style="color: #0056b3;">Wariant I</h3>
-            <div class="form-group"><label>Prowizja (%)</label><input type="number" step="0.01" id="w1_prowizja_proc" value="2.5"></div>
-            <div class="form-group"><label>Marża (%)</label><input type="number" step="0.01" id="w1_marza" value="2.5"></div>
-            <hr style="border-top: 1px solid #eee;">
-            <div class="form-group"><label>Oprocentowanie</label><input type="text" id="w1_oproc_display" readonly></div>
-            <div class="form-group"><label>Rata</label><input type="text" id="w1_rata_display" readonly style="color: #004d99; font-weight:bold;"></div>
-            <div class="form-group"><label>Brutto</label><input type="text" id="w1_brutto_display" readonly></div>
+    <div class="container">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h1>Generator Oferty Finansowania</h1>
+            <div style="text-align:right; font-size:0.8em; color:#777;">v3.1 BAF</div>
         </div>
 
-        <div class="col" id="col_variant2" style="border-top: 4px solid #28a745; background: #fdfdfd; padding: 15px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h3 style="color: #28a745; margin:0;">Wariant II</h3>
-                <label style="margin:0; font-size: 0.8em; display:flex; align-items:center; cursor:pointer;">
-                    <input type="checkbox" id="enableVariant2" checked style="width:auto; margin-right:5px;"> Włączony
-                </label>
+        <h2>1. Dane i Treść Wstępna</h2>
+        <div class="row">
+            <div class="col form-group">
+                <label>Nagłówek (np. Panie Kamilu)</label>
+                <input type="text" id="clientName" value="Panie Kamilu">
             </div>
-            <div id="w2_controls" style="margin-top: 15px;">
-                <div class="form-group"><label>Prowizja (%)</label><input type="number" step="0.01" id="w2_prowizja_proc" value="0"></div>
-                <div class="form-group"><label>Marża (%)</label><input type="number" step="0.01" id="w2_marza" value="2.5"></div>
-                <hr style="border-top: 1px solid #eee;">
-                <div class="form-group"><label>Oprocentowanie</label><input type="text" id="w2_oproc_display" readonly></div>
-                <div class="form-group"><label>Rata</label><input type="text" id="w2_rata_display" readonly style="color: #28a745; font-weight:bold;"></div>
-                <div class="form-group"><label>Brutto</label><input type="text" id="w2_brutto_display" readonly></div>
+            <div class="col form-group">
+                <label>Płeć Klienta</label>
+                <select id="clientGender">
+                    <option value="M">Mężczyzna</option>
+                    <option value="F">Kobieta</option>
+                </select>
             </div>
-        </div>
-    </div>
-
-    <h2>4. Wynagrodzenie i Opcje</h2>
-    <div class="row">
-        <div class="col form-group"><label>Success Fee (%)</label><input type="number" step="0.1" id="successFeeProc" value="4.0"></div>
-        <div class="col form-group"><label>VAT</label><select id="vatType"><option value="VAT">+ VAT</option><option value="ZW">zw. z VAT</option></select></div>
-        <div class="col form-group"><label>Kwota Fee</label><input type="text" id="successFeeKwota" readonly></div>
-    </div>
-    <div class="toggle-section"><label><input type="checkbox" id="showBGK" checked> Dodaj informację o Gwarancji BGK</label></div>
-
-    <h2>5. Korzyści (Domyślne + Własne)</h2>
-    
-    <div id="defaultBenefits">
-        <div class="toggle-section" style="background:white; border-color:#eee;">
-            <label><input type="checkbox" id="ben1" checked data-icon="wallet" onchange="refreshIcons()"> BRAK OPŁAT KWARTALNYCH!</label>
-        </div>
-        <div class="toggle-section" style="background:white; border-color:#eee;">
-            <label><input type="checkbox" id="ben2" checked data-icon="ok" onchange="refreshIcons()"> Przejrzyste warunki</label>
-        </div>
-        <div class="toggle-section" style="background:white; border-color:#eee;">
-            <label><input type="checkbox" id="ben3" checked data-icon="unlock" onchange="refreshIcons()"> Pełna elastyczność (nadpłata 0%)</label>
-        </div>
-    </div>
-
-    <div class="form-group" style="background: #f8faff; padding: 15px; border-radius: 6px; border: 1px solid #e1e4e8;">
-        <label>Dodaj nową korzyść</label>
-        <div style="display:flex; gap:10px;">
-            <input type="text" id="customBenText" placeholder="Wpisz treść...">
-            <button type="button" class="btn-small" onclick="insertBold()">Pogrubienie</button>
+            <div class="col form-group">
+                <label>Doradca</label>
+                <select id="advisor">
+                    <option value="Dawid Błachno|M">Dawid Błachno</option>
+                    <option value="Weronika Lekston|F">Weronika Lekston</option>
+                    <option value="Mieczysław Andrzejewski|M">Mieczysław Andrzejewski</option>
+                    <option value="Joanna Karpała|F">Joanna Karpała</option>
+                    <option value="Piotr Pakuła|M">Piotr Pakuła</option>
+                    <option value="Wiktoria Nojek|F">Wiktoria Nojek</option>
+                    <option value="Wojciech Młynarczyk|M">Wojciech Młynarczyk</option>
+                    <option value="Maja Zięba|F">Maja Zięba</option>
+                    <option value="Mateusz Dzidkowski|M">Mateusz Dzidkowski</option>
+                </select>
+            </div>
         </div>
         
-        <div style="margin-top: 10px; font-size: 14px; color:#555;">Wybierz ikonę (Użyte są zablokowane):</div>
-        <div class="icon-selector" id="iconSelector">
-            </div>
-        <input type="hidden" id="selectedCustomIcon" value="">
+        <div class="form-group">
+            <label>Treść maila (Edytowalna, aktualizuje się po zmianie doradcy/płci)</label>
+            <textarea id="introText" rows="4"></textarea>
+        </div>
 
-        <button type="button" class="btn-small btn-add" onclick="addCustomBenefit()">+ DODAJ KORZYŚĆ DO LISTY</button>
+        <h2>2. Parametry Kredytu</h2>
+        <div class="row" style="background: #fdfdfd; padding: 15px; border: 1px solid #eee; border-radius: 8px;">
+            <div class="col form-group">
+                <label>WIBOR (%)</label>
+                <input type="number" step="0.01" id="wibor" value="4.02">
+            </div>
+            <div class="col form-group"><label>Okres (miesiące)</label><input type="number" id="months" value="120"></div>
+            <div class="col form-group"><label>Kwota Netto (PLN)</label><input type="text" id="loanAmount" value="1000000"></div>
+        </div>
+
+        <div class="row" style="margin-top: 20px;">
+            <div class="col" style="border-top: 4px solid #007bff; background: #fdfdfd; padding: 15px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <h3 style="color: #0056b3;">Wariant I</h3>
+                <div class="form-group"><label>Prowizja (%)</label><input type="number" step="0.01" id="w1_prowizja_proc" value="2.5"></div>
+                <div class="form-group"><label>Marża (%)</label><input type="number" step="0.01" id="w1_marza" value="2.5"></div>
+                <hr style="border-top: 1px solid #eee;">
+                <div class="form-group"><label>Oprocentowanie</label><input type="text" id="w1_oproc_display" readonly></div>
+                <div class="form-group"><label>Rata</label><input type="text" id="w1_rata_display" readonly style="color: #004d99; font-weight:bold;"></div>
+                <div class="form-group"><label>Brutto</label><input type="text" id="w1_brutto_display" readonly></div>
+            </div>
+
+            <div class="col" id="col_variant2" style="border-top: 4px solid #28a745; background: #fdfdfd; padding: 15px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3 style="color: #28a745; margin:0;">Wariant II</h3>
+                    <label style="margin:0; font-size: 0.8em; display:flex; align-items:center; cursor:pointer;">
+                        <input type="checkbox" id="enableVariant2" checked style="width:auto; margin-right:5px;"> Włączony
+                    </label>
+                </div>
+                <div id="w2_controls" style="margin-top: 15px;">
+                    <div class="form-group"><label>Prowizja (%)</label><input type="number" step="0.01" id="w2_prowizja_proc" value="0"></div>
+                    <div class="form-group"><label>Marża (%)</label><input type="number" step="0.01" id="w2_marza" value="2.5"></div>
+                    <hr style="border-top: 1px solid #eee;">
+                    <div class="form-group"><label>Oprocentowanie</label><input type="text" id="w2_oproc_display" readonly></div>
+                    <div class="form-group"><label>Rata</label><input type="text" id="w2_rata_display" readonly style="color: #28a745; font-weight:bold;"></div>
+                    <div class="form-group"><label>Brutto</label><input type="text" id="w2_brutto_display" readonly></div>
+                </div>
+            </div>
+        </div>
+
+        <h2>4. Wynagrodzenie i Opcje</h2>
+        <div class="row">
+            <div class="col form-group"><label>Success Fee (%)</label><input type="number" step="0.1" id="successFeeProc" value="4.0"></div>
+            <div class="col form-group"><label>VAT</label><select id="vatType"><option value="VAT">+ VAT</option><option value="ZW">zw. z VAT</option></select></div>
+            <div class="col form-group"><label>Kwota Fee</label><input type="text" id="successFeeKwota" readonly></div>
+        </div>
+        <div class="toggle-section"><label><input type="checkbox" id="showBGK" checked> Dodaj informację o Gwarancji BGK</label></div>
+
+        <h2>5. Korzyści (Domyślne + Własne)</h2>
+        
+        <div id="defaultBenefits">
+            <div class="toggle-section" style="background:white; border-color:#eee;">
+                <label><input type="checkbox" id="ben1" checked data-icon="wallet" onchange="refreshIcons()"> BRAK OPŁAT KWARTALNYCH!</label>
+            </div>
+            <div class="toggle-section" style="background:white; border-color:#eee;">
+                <label><input type="checkbox" id="ben2" checked data-icon="ok" onchange="refreshIcons()"> Przejrzyste warunki</label>
+            </div>
+            <div class="toggle-section" style="background:white; border-color:#eee;">
+                <label><input type="checkbox" id="ben3" checked data-icon="unlock" onchange="refreshIcons()"> Pełna elastyczność (nadpłata 0%)</label>
+            </div>
+        </div>
+
+        <div class="form-group" style="background: #f8faff; padding: 15px; border-radius: 6px; border: 1px solid #e1e4e8;">
+            <label>Dodaj nową korzyść</label>
+            <div style="display:flex; gap:10px;">
+                <input type="text" id="customBenText" placeholder="Wpisz treść...">
+                <button type="button" class="btn-small" onclick="insertBold()">Pogrubienie</button>
+            </div>
+            
+            <div style="margin-top: 10px; font-size: 14px; color:#555;">Wybierz ikonę (Użyte są zablokowane):</div>
+            <div class="icon-selector" id="iconSelector">
+                </div>
+            <input type="hidden" id="selectedCustomIcon" value="">
+
+            <button type="button" class="btn-small btn-add" onclick="addCustomBenefit()">+ DODAJ KORZYŚĆ DO LISTY</button>
+        </div>
+
+        <div id="addedBenefitsList"></div>
+
+        <button class="generate-btn" onclick="generateOffer()">GENERUJ OFERTĘ</button>
     </div>
 
-    <div id="addedBenefitsList"></div>
+    <div class="sidebar">
+        <div class="info-container">
+            <div class="info-header">Stawki Referencyjne</div>
+            <div class="info-date" id="current-date-wibor">Ładowanie...</div>
+            <div class="rates-grid">
+                <div class="rate-item"><p>WIBOR 1M</p><p class="value" id="wibor-1m">-</p></div>
+                <div class="rate-item"><p>WIBOR 3M</p><p class="value" id="wibor-3m">-</p></div>
+                <div class="rate-item"><p>WIBOR 6M</p><p class="value" id="wibor-6m">-</p></div>
+            </div>
+            <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie w czasie rzeczywistym.</p>
+        </div>
+        <div class="info-container info-container-single">
+            <div class="info-header">Odsetki ustawowe za opóźnienie</div>
+            <div class="info-date" id="current-date-odsetki">Ładowanie...</div>
+            <p class="value" id="odsetki-opoznienie">-</p>
+            <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia.</p>
+        </div>
+    </div>
 
-    <button class="generate-btn" onclick="generateOffer()">GENERUJ OFERTĘ</button>
 </div>
 
 <script>
-    // --- BAZA DANYCH ---
+    // --- SKRYPT AKTUALIZACJI WIBOR (Skopiowany z źródła) ---
+    try {
+        // BAF AUTO UPDATE - 10.02.2026
+        document.getElementById('wibor-1m').textContent = '4,03%';
+        document.getElementById('wibor-3m').textContent = '3,88%';
+        document.getElementById('wibor-6m').textContent = '3,77%';
+        document.getElementById('odsetki-opoznienie').textContent = '9,5%';
+        
+        const dzisiaj = 'Dane na dzień: 10.02.2026';
+        if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
+        if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
+        
+        // Dodatkowa logika: Ustaw WIBOR w formularzu na wartość 1M z panelu bocznego
+        const wibor1mVal = parseFloat('4,03'.replace(',', '.'));
+        if(document.getElementById('wibor')) {
+            document.getElementById('wibor').value = wibor1mVal;
+        }
+
+    } catch(e) { console.log('Błąd aktualizacji stawek BAF'); }
+
+    // --- BAZA DANYCH IKON ---
     const iconsDB = {
         'wallet': 'https://img.icons8.com/ios/50/0056b3/wallet--v1.png',
         'ok': 'https://img.icons8.com/ios/50/0056b3/ok--v1.png',
@@ -202,7 +343,7 @@
         'money': 'https://img.icons8.com/ios/50/0056b3/money-circulation.png'
     };
 
-    let customBenefits = []; // Tablica na własne korzyści
+    let customBenefits = []; 
 
     // --- FUNKCJE STARTOWE ---
     function initIcons() {
@@ -226,24 +367,17 @@
     }
 
     function refreshIcons() {
-        // 1. Zbierz użyte ikony (domyślne checkbox + customowe dodane)
         const usedIcons = new Set();
-        
-        // Domyślne
         document.querySelectorAll('#defaultBenefits input[type="checkbox"]').forEach(chk => {
             if(chk.checked) usedIcons.add(chk.dataset.icon);
         });
-
-        // Customowe już dodane do listy
         customBenefits.forEach(ben => usedIcons.add(ben.icon));
 
-        // 2. Aktualizuj UI ikon
         document.querySelectorAll('.icon-opt').forEach(opt => {
             const iconKey = opt.dataset.icon;
             if(usedIcons.has(iconKey)) {
                 opt.classList.add('disabled');
                 opt.classList.remove('active');
-                // Jeśli zablokowaliśmy aktualnie wybraną, czyścimy wybór
                 if(document.getElementById('selectedCustomIcon').value === iconKey) {
                     document.getElementById('selectedCustomIcon').value = '';
                 }
@@ -256,22 +390,17 @@
     // --- LOGIKA TEKSTU WSTĘPNEGO ---
     function updateIntroText() {
         const advVal = document.getElementById('advisor').value;
-        const genderAdv = advVal.split('|')[1]; // M or F
-        const clientVal = document.getElementById('clientName').value;
+        const genderAdv = advVal.split('|')[1]; 
         
         let t_anal = genderAdv === 'F' ? 'Przeanalizowałam' : 'Przeanalizowałem';
         let t_prep = genderAdv === 'F' ? 'przygotowałam' : 'przygotowałem';
         let t_ment = genderAdv === 'F' ? 'wspominałam' : 'wspominałem';
-        
-        // Można tu dodać logikę dla "Pana/Pani" jeśli tekst tego wymaga, 
-        // ale w podanym wzorze nie ma bezpośrednich zwrotów do klienta poza nagłówkiem.
         
         const text = `w nawiązaniu do rozmowy przesyłam kalkulacje propozycji finansowania. ${t_anal} dostępne możliwości i ${t_prep} ofertę kredytu firmowego ratalnego, o którym już ${t_ment} telefonicznie, w dwóch wariantach, różniących się strukturą kosztów początkowych.`;
         
         document.getElementById('introText').value = text;
     }
 
-    // Listener na zmianę doradcy
     document.getElementById('advisor').addEventListener('change', updateIntroText);
     
     // --- LOGIKA WŁASNYCH KORZYŚCI ---
@@ -297,24 +426,18 @@
         if(text.trim() === '') { alert('Wpisz treść korzyści.'); return; }
         if(icon === '') { alert('Wybierz dostępną ikonę.'); return; }
 
-        // Domyślne pogrubienie, jeśli user nie użył tagów
         let finalText = text;
         if(!finalText.includes('<b>') && !finalText.includes('<strong>')) {
             finalText = '<strong>' + finalText + '</strong>';
         }
 
-        // Dodaj do tablicy
         customBenefits.push({ text: finalText, icon: icon });
-
-        // Renderuj listę
         renderCustomBenefits();
         
-        // Reset formularza
         document.getElementById('customBenText').value = '';
         document.getElementById('selectedCustomIcon').value = '';
         document.querySelectorAll('.icon-opt').forEach(i => i.classList.remove('active'));
         
-        // Odśwież blokady
         refreshIcons();
     }
 
@@ -341,7 +464,7 @@
         });
     }
 
-    // --- KALKULATOR (SKRÓCONY Z POPRZEDNIEJ WERSJI) ---
+    // --- KALKULATOR ---
     function parseMoney(val) { return parseFloat(val.toString().replace(/\s/g, '').replace('PLN','').replace(',','.')) || 0; }
     function formatMoney(num) { return num.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' PLN'; }
     function calculatePMT(rate, periods, pv) {
@@ -388,7 +511,6 @@
         document.getElementById('successFeeKwota').value = formatMoney(loanNetto * (successFeeProc / 100));
     }
 
-    // Listenery kalkulatora
     document.querySelectorAll('input, select').forEach(el => {
         if(el.id !== 'customBenText') el.addEventListener('input', updateCalculations);
     });
@@ -400,7 +522,7 @@
             clientName: document.getElementById('clientName').value,
             clientGender: document.getElementById('clientGender').value,
             advisorData: document.getElementById('advisor').value,
-            introText: document.getElementById('introText').value, // NOWE
+            introText: document.getElementById('introText').value,
             
             showBGK: document.getElementById('showBGK').checked,
             hasVariant2: document.getElementById('enableVariant2').checked,
@@ -430,7 +552,6 @@
             benefits: []
         };
 
-        // Zbieranie domyślnych
         const defaultTexts = {
             'ben1': '<strong>BRAK OPŁAT KWARTALNYCH!</strong> Nie ma żadnych ukrytych kosztów za utrzymanie finansowania.',
             'ben2': '<strong>Przejrzyste warunki:</strong> Umowa bez "gwiazdek" i dodatkowych, nieoczekiwanych kosztów.',
@@ -446,7 +567,6 @@
             }
         });
 
-        // Dodawanie własnych
         customBenefits.forEach(ben => data.benefits.push(ben));
 
         localStorage.setItem('bafOfferData_V3', JSON.stringify(data));
@@ -455,7 +575,7 @@
 
     // INIT
     initIcons();
-    updateIntroText(); // Generuje tekst na start
+    updateIntroText(); 
     updateCalculations();
     refreshIcons();
 </script>
