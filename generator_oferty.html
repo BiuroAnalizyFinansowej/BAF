@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Ofert BAF v3.2</title>
+    <title>Generator Ofert BAF v3.3</title>
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
@@ -64,7 +64,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
         }
 
-        /* Panel Boczny (WIBOR) */
+        /* --- PANEL BOCZNY (WIBOR) - STYL JASNY --- */
         .sidebar {
             width: 260px;
             flex-shrink: 0;
@@ -73,18 +73,20 @@
         }
 
         .info-container {
-            background-color: #002d5a;
-            color: #ffffff;
+            background-color: #ffffff; /* Białe tło */
+            color: #333; /* Ciemny tekst */
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #e1e4e8; /* Szara ramka */
         }
 
         .info-header {
             font-size: 1.1em;
             font-weight: 700;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
+            color: #002d5a; /* Granatowy nagłówek */
+            border-bottom: 2px solid #007bff; /* Niebieskie podkreślenie */
             padding-bottom: 10px;
             margin-bottom: 15px;
             text-align: center;
@@ -92,7 +94,7 @@
 
         .info-date {
             font-size: 0.85em;
-            color: #a3bffa;
+            color: #777;
             text-align: center;
             margin-bottom: 15px;
         }
@@ -108,13 +110,16 @@
             justify-content: space-between;
             align-items: center;
             font-size: 0.95em;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 8px;
         }
+        .rate-item:last-child { border-bottom: none; }
 
-        .rate-item p { margin: 0; }
+        .rate-item p { margin: 0; color: #555; }
         
         .rate-item .value {
             font-weight: 700;
-            color: #4ade80;
+            color: #002d5a; /* Ciemny granat dla wartości */
             font-size: 1.1em;
         }
 
@@ -122,20 +127,20 @@
             text-align: center;
             font-size: 2em;
             font-weight: 700;
-            color: #fca5a5;
+            color: #dc3545; /* Czerwony dla odsetek */
             margin: 10px 0;
         }
 
         .disclaimer-text {
             font-size: 0.7em;
-            color: rgba(255,255,255,0.6);
+            color: #999;
             text-align: center;
             margin-top: 15px;
             margin-bottom: 0;
             line-height: 1.4;
         }
 
-        /* Style Formularza */
+        /* --- Style Formularza --- */
         h1, h2, h3 { color: #002d5a; margin-top: 0; }
         h2 { font-size: 1.1em; border-bottom: 2px solid #007bff; padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; }
         h3 { font-size: 1em; color: #555; margin-bottom: 10px; }
@@ -219,7 +224,7 @@
     <div class="container">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h1>Generator Oferty Finansowania</h1>
-            <div style="text-align:right; font-size:0.8em; color:#777;">v3.2 BAF</div>
+            <div style="text-align:right; font-size:0.8em; color:#777;">v3.3 BAF</div>
         </div>
 
         <h2>1. Dane i Treść Wstępna</h2>
@@ -359,7 +364,7 @@
 </div>
 
 <script>
-    // --- SKRYPT AKTUALIZACJI WIBOR (Skopiowany z źródła) ---
+    // --- SKRYPT AKTUALIZACJI WIBOR ---
     try {
         // BAF AUTO UPDATE - 10.02.2026
         document.getElementById('wibor-1m').textContent = '4,03%';
@@ -371,7 +376,7 @@
         if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
         if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
         
-        // Dodatkowa logika: Ustaw WIBOR w formularzu na wartość 1M z panelu bocznego
+        // Ustaw WIBOR w formularzu na wartość 1M z panelu
         const wibor1mVal = parseFloat('4,03'.replace(',', '.'));
         if(document.getElementById('wibor')) {
             document.getElementById('wibor').value = wibor1mVal;
