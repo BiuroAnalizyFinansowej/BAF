@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oferta Finansowania - BAF</title>
+    <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
         body { margin: 0; padding: 0; background-color: #f4f7f9; font-family: 'Lato', Arial, sans-serif; }
@@ -186,8 +187,6 @@
 
                 // 1. TEKSTY OSOBOWE I WSTĘP
                 document.getElementById('client-greeting').textContent = data.clientName + ",";
-                document.getElementById('intro-paragraph').innerHTML = data.introText; // Używamy innerHTML aby ew. entery zachować? Textarea daje \n.
-                // Textarea daje \n, html ignoruje \n. Zamieńmy \n na <br>
                 document.getElementById('intro-paragraph').innerHTML = data.introText.replace(/\n/g, '<br>');
 
                 // Klient (Pana/Pani decyzję)
@@ -213,7 +212,6 @@
                 fields.forEach(id => {
                     const el = document.getElementById(id);
                     if(el) {
-                        // Pobieramy wartość ze struktury data.w1 lub data.w2
                         const parts = id.split('-');
                         const variant = parts[0] === 'w1' ? data.w1 : data.w2;
                         const keyMap = {
