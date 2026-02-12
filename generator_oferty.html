@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Ofert BAF v4.5</title>
+    <title>Generator Ofert BAF v4.6</title>
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
@@ -24,7 +24,7 @@
         .rate-item:last-child { border-bottom: none; }
         .rate-item .value { font-weight: 700; color: #002d5a; font-size: 1.1em; }
         .info-container-single .value { text-align: center; font-size: 2em; font-weight: 700; color: #dc3545; margin: 10px 0; }
-        .disclaimer-text { font-size: 0.7em; color: #999; text-align: center; margin-top: 15px; margin-bottom: 0; }
+        .disclaimer-text { font-size: 0.7em; color: #999; text-align: center; margin-top: 15px; margin-bottom: 0; line-height: 1.4; }
 
         /* Nawigacja */
         .top-nav { max-width: 1250px; margin: 0 auto 20px auto; display: flex; justify-content: space-between; align-items: center; }
@@ -35,57 +35,37 @@
         /* Formularz */
         h1, h2 { color: #002d5a; margin-top: 0; }
         h2 { font-size: 1.1em; border-bottom: 2px solid #007bff; padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; }
+        
+        /* Flex nagłówek z okiem */
+        .header-with-toggle { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #007bff; padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; }
+        .header-with-toggle h2 { border: none; margin: 0; padding: 0; }
+
         .row { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
         .col { flex: 1; min-width: 250px; }
         .form-group { margin-bottom: 12px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.85em; color: #555; }
         input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-family: 'Lato', sans-serif; font-size: 14px; }
-        input:focus { border-color: #007bff; outline: none; }
+        input:focus, textarea:focus { border-color: #007bff; outline: none; }
         input[readonly] { background-color: #e9ecef; color: #495057; font-weight: bold; cursor: not-allowed; }
 
-        /* KOLORY SELECT */
-        select option.firmowe { color: #28a745; font-weight: bold; }
-        select option.prywatne { color: #dc3545; font-weight: bold; }
-
+        /* Stylizacja Selecta Finansowania - Pastelowe */
+        #financingType option.firmowe { background-color: #d1e7dd; color: #0f5132; } /* Pastelowa zieleń */
+        #financingType option.prywatne { background-color: #f8d7da; color: #842029; } /* Pastelowa czerwień */
+        
         /* OKO - CHECKBOX */
         .input-with-check { display: flex; align-items: center; gap: 8px; }
-        
-        /* Ukrywamy standardowy checkbox */
         .eye-checkbox { display: none; }
+        .eye-label { cursor: pointer; font-size: 1.4em; user-select: none; transition: all 0.2s; line-height: 1; padding: 5px; border-radius: 4px; }
         
-        /* Styl Labela jako Oka */
-        .eye-label {
-            cursor: pointer;
-            font-size: 1.4em;
-            user-select: none;
-            transition: all 0.2s;
-            line-height: 1;
-            padding: 5px;
-            border-radius: 4px;
-        }
-        
-        /* Stan zaznaczony (Widoczne) */
-        .eye-checkbox:checked + .eye-label {
-            opacity: 1;
-            filter: none;
-        }
-        .eye-checkbox:checked + .eye-label::after {
-            content: '👁️';
-        }
+        .eye-checkbox:checked + .eye-label { opacity: 1; filter: none; }
+        .eye-checkbox:checked + .eye-label::after { content: '👁️'; }
+        .eye-checkbox:not(:checked) + .eye-label { opacity: 0.3; filter: grayscale(100%); }
+        .eye-checkbox:not(:checked) + .eye-label::after { content: '👁️'; text-decoration: line-through; }
+        .check-tooltip { font-size: 0.7em; color: #999; margin-left: 5px; font-weight: normal; }
 
-        /* Stan odznaczony (Ukryte) */
-        .eye-checkbox:not(:checked) + .eye-label {
-            opacity: 0.3;
-            filter: grayscale(100%);
-        }
-        .eye-checkbox:not(:checked) + .eye-label::after {
-            content: '👁️'; /* Można zmienić na inny znak jeśli wolisz */
-            text-decoration: line-through; /* Przekreślenie */
-        }
-
-        /* Sekcje toggle */
+        /* Checkboxy sekcji */
         .toggle-section { background: #eef6ff; padding: 10px; border-radius: 6px; border: 1px solid #badce3; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; }
-        .toggle-section label { margin: 0; font-size: 1em; color: #004d99; cursor: pointer; width: 100%; }
+        .toggle-section label { margin: 0; font-size: 1em; color: #004d99; cursor: pointer; display: flex; align-items: center; width: 100%; }
         .toggle-section input[type="checkbox"] { width: auto; margin-right: 15px; transform: scale(1.5); }
 
         /* Ikony i przyciski */
@@ -120,7 +100,7 @@
     <div class="container">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h1>Generator Oferty</h1>
-            <div style="text-align:right; font-size:0.8em; color:#777;">v4.5</div>
+            <div style="text-align:right; font-size:0.8em; color:#777;">v4.6</div>
         </div>
 
         <h2>1. Dane i Wstęp</h2>
@@ -144,15 +124,15 @@
         </div>
         
         <div class="form-group">
-            <label>Rodzaj Finansowania (Kolorowe)</label>
+            <label>Rodzaj Finansowania</label>
             <select id="financingType">
                 <optgroup label="Firmowe">
-                    <option value="Kredyt firmowy ratalny" class="firmowe">🟢 Kredyt firmowy ratalny</option>
-                    <option value="Kredyt w rachunku bieżącym" class="firmowe">🟢 KRB (Kredyt w rachunku bieżącym)</option>
+                    <option value="Kredyt firmowy ratalny" class="firmowe">Kredyt firmowy ratalny</option>
+                    <option value="Kredyt w rachunku bieżącym" class="firmowe">KRB (Kredyt w rachunku bieżącym)</option>
                 </optgroup>
                 <optgroup label="Prywatne">
-                    <option value="Kredyt gotówkowy" class="prywatne">🔴 Kredyt gotówkowy (prywatny)</option>
-                    <option value="Limit odnawialny" class="prywatne">🔴 Limit odnawialny (prywatny)</option>
+                    <option value="Kredyt gotówkowy" class="prywatne">Kredyt gotówkowy (prywatny)</option>
+                    <option value="Limit odnawialny" class="prywatne">Limit odnawialny (prywatny)</option>
                 </optgroup>
             </select>
         </div>
@@ -242,7 +222,14 @@
             </div>
         </div>
 
-        <h2>4. Wynagrodzenie i Opcje</h2>
+        <div class="header-with-toggle">
+            <h2>4. Wynagrodzenie i Opcje</h2>
+            <div class="input-with-check">
+                <input type="checkbox" id="check_fee_visibility" class="eye-checkbox" checked>
+                <label for="check_fee_visibility" class="eye-label" title="Pokaż/Ukryj całą sekcję wynagrodzenia"></label>
+            </div>
+        </div>
+        
         <div class="row">
             <div class="col form-group"><label>Success Fee (%)</label><input type="number" step="0.1" id="successFeeProc" value="4.0"></div>
             <div class="col form-group"><label>VAT</label><select id="vatType"><option value="VAT">+ VAT</option><option value="ZW">zw. z VAT</option></select></div>
@@ -260,9 +247,11 @@
         <div class="form-group" style="background: #f8faff; padding: 15px; border-radius: 6px; border: 1px solid #e1e4e8;">
             <label>Dodaj nową korzyść (Pogrubione automatycznie)</label>
             <input type="text" id="customBenText" placeholder="Wpisz treść...">
+            
             <div style="margin-top: 10px; font-size: 14px; color:#555;">Wybierz ikonę (Użyte są zablokowane):</div>
             <div class="icon-selector" id="iconSelector"></div>
             <input type="hidden" id="selectedCustomIcon" value="">
+
             <button type="button" class="btn-add" onclick="addCustomBenefit()">+ DODAJ KORZYŚĆ</button>
         </div>
         <div id="addedBenefitsList"></div>
@@ -279,7 +268,7 @@
                 <div class="rate-item"><p>WIBOR 3M</p><p class="value" id="wibor-3m">-</p></div>
                 <div class="rate-item"><p>WIBOR 6M</p><p class="value" id="wibor-6m">-</p></div>
             </div>
-            <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia.</p>
+            <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p>
         </div>
         <div class="info-container info-container-single">
             <div class="info-header">Odsetki ustawowe</div>
@@ -300,7 +289,6 @@
         if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
         if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
         
-        // Ustawienia początkowe w formularzu
         const startWibor = '4.03';
         if(document.getElementById('wibor')) document.getElementById('wibor').value = startWibor;
         if(document.getElementById('w1_wibor_text')) document.getElementById('w1_wibor_text').value = startWibor + '%';
@@ -392,7 +380,6 @@
     }
 
     function updateCalculations() {
-        // Parametry do obliczeń biorę z GÓRY (WIBOR liczbowy), ale tekst z dołu
         const wiborMath = parseFloat(document.getElementById('wibor').value) || 0;
         const months = parseInt(document.getElementById('months').value) || 120;
         let loanNetto = parseMoney(document.getElementById('loanAmount').value);
@@ -435,11 +422,8 @@
         document.getElementById('successFeeKwota').value = formatMoney(loanNetto * (successFeeProc / 100));
     }
 
-    // Logic for updating the editable WIBOR text fields if base WIBOR changes
     document.getElementById('wibor').addEventListener('input', function() {
         const val = this.value + '%';
-        // Only auto-update if user hasn't typed something custom? Or just overwrite?
-        // Simplest: Just overwrite to keep it synced unless user manages it manually right after.
         document.getElementById('w1_wibor_text').value = val;
         document.getElementById('w2_wibor_text').value = val;
         updateCalculations();
@@ -465,6 +449,8 @@
             
             // Visibility Flags
             visibility: {
+                feeSection: document.getElementById('check_fee_visibility').checked,
+                
                 w1_netto: document.getElementById('check_w1_netto').checked,
                 w1_brutto: document.getElementById('check_w1_brutto').checked,
                 w1_prowizja: document.getElementById('check_w1_prowizja').checked,
@@ -487,7 +473,7 @@
                 brutto: document.getElementById('w1_brutto_display').value,
                 prowizja: document.getElementById('w1_prowizja_proc').value + '%',
                 marza: document.getElementById('w1_marza').value + '%',
-                wibor: document.getElementById('w1_wibor_text').value, // Pobieramy tekst
+                wibor: document.getElementById('w1_wibor_text').value, 
                 oproc: document.getElementById('w1_oproc_display').value,
                 rata: document.getElementById('w1_rata_display').value,
                 koszt: document.getElementById('w1_koszt_display').value
@@ -497,7 +483,7 @@
                 brutto: document.getElementById('w2_brutto_display').value,
                 prowizja: document.getElementById('w2_prowizja_proc').value + '%',
                 marza: document.getElementById('w2_marza').value + '%',
-                wibor: document.getElementById('w2_wibor_text').value, // Pobieramy tekst
+                wibor: document.getElementById('w2_wibor_text').value,
                 oproc: document.getElementById('w2_oproc_display').value,
                 rata: document.getElementById('w2_rata_display').value,
                 koszt: document.getElementById('w2_koszt_display').value
@@ -519,7 +505,7 @@
         });
         customBenefits.forEach(ben => data.benefits.push(ben));
 
-        localStorage.setItem('bafOfferData_V4_5', JSON.stringify(data));
+        localStorage.setItem('bafOfferData_V4_6', JSON.stringify(data));
         window.location.href = 'oferta.html';
     }
 
