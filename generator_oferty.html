@@ -3,14 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Ofert BAF v3.0</title>
+    <title>Generator Ofert BAF v3.2</title>
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
         
         body { font-family: 'Lato', sans-serif; background: #f4f7f9; color: #333; padding: 20px; margin: 0; }
         
-        /* Layout Wrapper dla układu dwukolumnowego */
+        /* --- NAWIGACJA GÓRNA --- */
+        .top-nav {
+            max-width: 1250px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-btn {
+            text-decoration: none;
+            color: #002d5a;
+            font-weight: bold;
+            border: 2px solid #002d5a;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            background-color: transparent;
+        }
+
+        .nav-btn:hover {
+            background-color: #002d5a;
+            color: white;
+        }
+
+        .nav-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+            margin-bottom: 2px;
+        }
+
+        /* --- UKŁAD STRONY --- */
         .layout-wrapper {
             display: flex;
             max-width: 1250px;
@@ -21,7 +57,7 @@
 
         /* Główny kontener formularza */
         .container { 
-            flex: 1; /* Zajmuje pozostałe miejsce */
+            flex: 1; 
             background: #fff; 
             padding: 30px; 
             border-radius: 12px; 
@@ -32,7 +68,7 @@
         .sidebar {
             width: 260px;
             flex-shrink: 0;
-            position: sticky; /* Przykleja się podczas przewijania */
+            position: sticky;
             top: 20px;
         }
 
@@ -78,7 +114,7 @@
         
         .rate-item .value {
             font-weight: 700;
-            color: #4ade80; /* Zielony akcent */
+            color: #4ade80;
             font-size: 1.1em;
         }
 
@@ -86,7 +122,7 @@
             text-align: center;
             font-size: 2em;
             font-weight: 700;
-            color: #fca5a5; /* Czerwony akcent dla odsetek */
+            color: #fca5a5;
             margin: 10px 0;
         }
 
@@ -159,17 +195,31 @@
         @media (max-width: 900px) {
             .layout-wrapper { flex-direction: column-reverse; }
             .sidebar { width: 100%; position: relative; top: 0; }
+            .top-nav { flex-direction: column; gap: 10px; }
+            .nav-btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
 <body>
+
+<div class="top-nav">
+    <a href="kalkulatory.html" class="nav-btn">
+        &laquo; Wróć do Kalkulatorów
+    </a>
+    <a href="index.html" class="nav-btn" title="Strona Główna">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/>
+        </svg>
+        Strona Główna
+    </a>
+</div>
 
 <div class="layout-wrapper">
     
     <div class="container">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h1>Generator Oferty Finansowania</h1>
-            <div style="text-align:right; font-size:0.8em; color:#777;">v3.1 BAF</div>
+            <div style="text-align:right; font-size:0.8em; color:#777;">v3.2 BAF</div>
         </div>
 
         <h2>1. Dane i Treść Wstępna</h2>
