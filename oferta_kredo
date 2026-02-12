@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propozycja Finansowania - BAF</title>
+    <style>
+        /* Import czcionki (dla podglądu w przeglądarce) */
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+        
+        /* Style interfejsu strony (tło, przycisk) - to nie idzie do maila */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f9;
+            font-family: 'Lato', Arial, sans-serif;
+        }
+
+        /* Panel sterowania */
+        #control-panel-left {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 220px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .panel-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+            background-color: #17a2b8;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .panel-btn:hover { background-color: #138496; }
+        .panel-btn.copied { background-color: #28a745; }
+        
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #555;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        /* Wrapper treści maila */
+        #email-content-wrapper {
+            margin: 0 auto; 
+            padding: 20px 0 20px 260px;
+            max-width: 900px;
+        }
+
+        @media (max-width: 1200px) {
+            #control-panel-left { position: relative; top: 0; left: 0; width: auto; margin: 20px; }
+            #email-content-wrapper { padding: 0 20px; margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="control-panel-left">
+        <button id="copy-button" class="panel-btn">Kopiuj całość do maila</button>
+        <div style="font-size: 11px; color: #777; margin-top: 10px; text-align: center;">
+            Kliknij, aby skopiować gotowy szablon.
+        </div>
+        <a href="generator.html" class="back-link">« Wróć do edycji</a>
+    </div>
+
+    <div id="email-content-wrapper">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: 'Lato', Arial, sans-serif; background-color: #f4f7f9; color: #333333;">
+            <tr>
+                <td align="center" style="padding: 20px;">
+                    
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 800px; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 77, 153, 0.1); border: 1px solid #e1e4e8;">
+                        
+                        <tr>
+                            <td align="center" style="padding: 30px 0; background-color: #ffffff; border-bottom: 1px solid #f0f0f0;">
+                                <img src="baf_logo.png" alt="Biuro Analizy Finansowej" width="250" style="display: block; width: 250px; max-width: 100%; height: auto; border: 0;">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding: 40px 50px;">
+                                
+                                <h1 id="greeting" style="color: #002d5a; font-size: 28px; margin: 0 0 25px 0; font-weight: 700; font-family: 'Lato', Arial, sans-serif;">Panie Kamilu,</h1>
+                                
+                                <p style="font-size: 16px; color: #555555; margin-bottom: 25px; line-height: 1.6;">
+                                    doprecyzowując ofertę z Alior Banku, którą Pan otrzymał - jest w niej opłata kwartalna <span id="val-aliorFee">0,5</span>% rocznie, w skali 10 lat to <span id="val-hidden10">5</span>% (ukryta dodatkowa prowizja do tej podstawowej 1%, czyli razem to 6%), a biorąc pod uwagę wariant na 5 lat to jest dodatkowe <span id="val-hidden5">2,5</span>% prowizji (łącznie 3,5%).
+                                </p>
+
+                                <p style="font-size: 16px; color: #555555; margin-bottom: 25px; line-height: 1.6;">
+                                    W związku z powyższym możemy się umówić na stawkę wynagrodzenia dla mojego Biura BAF za doradztwo może zostać obniżona do poziomu <span id="val-bafFee">3,5</span>% niezależnie na który okres Pan się zdecyduje, co przy marży banku <span id="val-bafMargin">2,5</span>% (w Alior Banku <span id="val-aliorMargin">3,75</span>%) gwarantuje Panu znacznie niższe koszty kredytowe.
+                                </p>
+
+                                <div style="text-align: center; margin-bottom: 30px;">
+                                    <span style="background-color: #28a745; color: #ffffff; padding: 10px 25px; border-radius: 50px; font-weight: bold; font-size: 16px; display: inline-block;">
+                                        ✅ Zero ukrytych kosztów!
+                                    </span>
+                                </div>
+
+                                <div style="background: #e6f7ff; border-left: 5px solid #007bff; padding: 20px; margin-bottom: 30px; border-radius: 0 8px 8px 0;">
+                                    <p style="margin: 0; font-size: 16px; color: #333;">
+                                        <strong>Ważne:</strong> W produkcie, który Panu proponuję nie musi Pan robić wysokich obrotów, do czego zmusza Alior Bank.
+                                    </p>
+                                </div>
+
+                                <div id="benefits-section" style="border-top: 1px solid #eee; padding-top: 25px; margin-bottom: 30px;">
+                                    </div>
+
+                                <p style="font-size: 16px; color: #555555; margin-top: 20px; line-height: 1.6;">
+                                    W Alior banku będzie Pan miał 3% za wcześniejszą spłatę i nadpłatę kredytu, w mojej propozycji ta opłata to 0%!
+                                </p>
+
+                                <div style="margin-top: 40px; border-top: 2px solid #f0f0f0; padding-top: 20px;">
+                                    <p style="font-size: 16px; color: #333; margin: 0;">
+                                        <strong id="advisor-name">Dawid Błachno</strong>
+                                    </p>
+                                    <p style="font-size: 14px; color: #777; margin: 5px 0 0 0;" id="advisor-role">
+                                        Ekspert ds. Finansowania Przedsiębiorstw
+                                    </p>
+                                </div>
+
+                            </td>
+                        </tr>
+                    </table>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Pobieranie danych z localStorage
+            const storedData = localStorage.getItem('bafOfferData');
+            
+            if (storedData) {
+                const data = JSON.parse(storedData);
+
+                // 1. Podstawienie Imienia
+                document.getElementById('greeting').textContent = data.clientName + ",";
+
+                // 2. Podstawienie Liczb
+                document.getElementById('val-aliorFee').textContent = data.aliorQuarterFee;
+                document.getElementById('val-hidden10').textContent = data.hiddenProv10;
+                document.getElementById('val-hidden5').textContent = data.hiddenProv5;
+                document.getElementById('val-bafFee').textContent = data.bafFee;
+                document.getElementById('val-bafMargin').textContent = data.bafMargin;
+                document.getElementById('val-aliorMargin').textContent = data.aliorMargin;
+
+                // 3. Podstawienie Doradcy i Płeć
+                const advisorParts = data.advisorData.split('|');
+                const advisorName = advisorParts[0];
+                const gender = advisorParts[1]; // M lub F
+                
+                document.getElementById('advisor-name').textContent = advisorName;
+                
+                // Zmiana końcówki stanowiska w stopce (opcjonalne, dla estetyki)
+                if(gender === 'F') {
+                    document.getElementById('advisor-role').textContent = "Ekspertka ds. Finansowania Przedsiębiorstw";
+                }
+
+                // 4. Generowanie Korzyści (Ikony + Tekst)
+                const benefitsContainer = document.getElementById('benefits-section');
+                let benefitsHTML = '<table border="0" cellpadding="0" cellspacing="0" width="100%">';
+                
+                const iconUrls = {
+                    'wallet': 'https://img.icons8.com/ios/50/0056b3/wallet--v1.png',
+                    'ok': 'https://img.icons8.com/ios/50/0056b3/ok--v1.png',
+                    'unlock': 'https://img.icons8.com/ios/50/0056b3/unlock.png',
+                    'discount': 'https://img.icons8.com/ios/50/0056b3/discount--v1.png'
+                };
+
+                data.benefits.forEach(ben => {
+                    const iconSrc = iconUrls[ben.icon] || iconUrls['ok'];
+                    benefitsHTML += `
+                        <tr>
+                            <td width="50" valign="top" style="padding-bottom: 20px;">
+                                <img src="${iconSrc}" width="35" height="35" style="display: block;">
+                            </td>
+                            <td valign="top" style="padding-bottom: 20px;">
+                                <div style="font-size: 16px; color: #555; line-height: 1.5;">
+                                    ${ben.text}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                benefitsHTML += '</table>';
+                benefitsContainer.innerHTML = benefitsHTML;
+            }
+        });
+
+        // SKRYPT KOPIOWANIA (taki sam jak wcześniej)
+        document.getElementById('copy-button').addEventListener('click', function() {
+            const btn = this;
+            const emailWrapper = document.getElementById('email-content-wrapper');
+            
+            const range = document.createRange();
+            range.selectNode(emailWrapper);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+
+            try {
+                const htmlContent = emailWrapper.innerHTML;
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const richTextInput = new ClipboardItem({ 'text/html': blob });
+                
+                if (typeof navigator.clipboard !== 'undefined' && navigator.clipboard.write) {
+                    navigator.clipboard.write([richTextInput]).then(() => {
+                        successEffect(btn);
+                    }).catch(err => {
+                        document.execCommand('copy');
+                        successEffect(btn);
+                    });
+                } else {
+                    document.execCommand('copy');
+                    successEffect(btn);
+                }
+            } catch (err) {
+                document.execCommand('copy');
+                successEffect(btn);
+            }
+            window.getSelection().removeAllRanges();
+        });
+
+        function successEffect(btn) {
+            const originalText = 'Kopiuj całość do maila';
+            const originalColor = '#17a2b8';
+            btn.textContent = '✅ Skopiowano!';
+            btn.style.backgroundColor = '#28a745';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.backgroundColor = originalColor;
+                btn.classList.remove('copied');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
