@@ -50,14 +50,8 @@
         .panel-btn.copied { background-color: #28a745; }
         
         .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 15px;
-            color: #555;
-            text-decoration: none;
-            font-size: 12px;
+            display: block; text-align: center; margin-top: 10px; color: #555; text-decoration: none; font-size: 12px;
         }
-        .back-link:hover { text-decoration: underline; }
 
         /* Wrapper treści maila */
         #email-content-wrapper {
@@ -79,7 +73,7 @@
         <div style="font-size: 11px; color: #777; margin-top: 10px; text-align: center;">
             Kliknij, aby skopiować gotowy szablon.
         </div>
-        <a href="generator.html" class="back-link">« Wróć do edycji</a>
+        <a href="generator.html" class="back-link">« Wróć do generatora</a>
     </div>
 
     <div id="email-content-wrapper">
@@ -87,7 +81,7 @@
             <tr>
                 <td align="center" style="padding: 20px;">
                     
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 800px; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 77, 153, 0.1); border: 1px solid #e1e4e8;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 900px; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 77, 153, 0.1); border: 1px solid #e1e4e8;">
                         
                         <tr>
                             <td align="center" style="padding: 30px 0; background-color: #ffffff; border-bottom: 1px solid #f0f0f0;">
@@ -98,44 +92,131 @@
                         <tr>
                             <td style="padding: 40px 50px;">
                                 
-                                <h1 id="greeting" style="color: #002d5a; font-size: 28px; margin: 0 0 25px 0; font-weight: 700; font-family: 'Lato', Arial, sans-serif;">Panie Kamilu,</h1>
+                                <h1 id="client-greeting" style="color: #002d5a; font-size: 28px; margin: 0 0 25px 0; font-weight: 700; font-family: 'Lato', Arial, sans-serif;">Panie Kamilu,</h1>
                                 
-                                <p style="font-size: 16px; color: #555555; margin-bottom: 25px; line-height: 1.6;">
-                                    doprecyzowując ofertę z Alior Banku, którą Pan otrzymał - jest w niej opłata kwartalna <span id="val-aliorFee">0,5</span>% rocznie, w skali 10 lat to <span id="val-hidden10">5</span>% (ukryta dodatkowa prowizja do tej podstawowej 1%, czyli razem to 6%), a biorąc pod uwagę wariant na 5 lat to jest dodatkowe <span id="val-hidden5">2,5</span>% prowizji (łącznie 3,5%).
+                                <p style="font-size: 17px; color: #555555; margin-bottom: 25px; line-height: 1.6;">
+                                    w nawiązaniu do rozmowy przesyłam kalkulacje propozycji finansowania. <span id="verb-analyzed">Przeanalizowałam</span> dostępne możliwości i <span id="verb-prepared">przygotowałam</span> ofertę kredytu firmowego ratalnego, o którym już <span id="verb-mentioned">wspominałam</span> telefonicznie, w dwóch wariantach, różniących się strukturą kosztów początkowych.
                                 </p>
 
-                                <p style="font-size: 16px; color: #555555; margin-bottom: 25px; line-height: 1.6;">
-                                    W związku z powyższym możemy się umówić na stawkę wynagrodzenia dla mojego Biura BAF za doradztwo może zostać obniżona do poziomu <span id="val-bafFee">3,5</span>% niezależnie na który okres Pan się zdecyduje, co przy marży banku <span id="val-bafMargin">2,5</span>% (w Alior Banku <span id="val-aliorMargin">3,75</span>%) gwarantuje Panu znacznie niższe koszty kredytowe.
-                                </p>
+                                <div style="border-bottom: 1px solid #e0e0e0; padding-bottom: 30px; margin-bottom: 40px;">
+                                    <h2 style="font-size: 24px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 25px; font-weight: 700; margin-top: 0;">Rodzaj Finansowania: Kredyt firmowy ratalny</h2>
 
-                                <div style="text-align: center; margin-bottom: 30px;">
-                                    <span style="background-color: #28a745; color: #ffffff; padding: 10px 25px; border-radius: 50px; font-weight: bold; font-size: 16px; display: inline-block;">
-                                        ✅ Zero ukrytych kosztów!
-                                    </span>
-                                </div>
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                        <tr>
+                                            <td valign="top" width="48%" style="background-color: #fdfdfd; border: 1px solid #dcebf7; border-top: 4px solid #007bff; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 77, 153, 0.05);">
+                                                <h3 style="margin-top: 0; font-size: 20px; color: #0056b3; text-align: center; margin-bottom: 20px; font-weight: 700;">I WARIANT</h3>
+                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
+                                                    <tr>
+                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Netto:</td>
+                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-net">1 000 000 PLN</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Brutto:</td>
+                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-gross">1 025 000 PLN</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Prowizja bankowa:</td>
+                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-prov">2,5%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Marża banku:</td>
+                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-margin">2,5%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">WIBOR 1M:</td>
+                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" class="wibor-val">4,02%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Oprocentowanie:</td>
+                                                        <td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #333;" id="w1-rate">6,52%</td>
+                                                    </tr>
+                                                </table>
+                                                <div style="background-color: #f0f7ff; border: 1px solid #cce5ff; border-radius: 6px; padding: 15px; margin-top: 20px; text-align: center;">
+                                                    <span style="display: block; font-size: 19px; font-weight: 700; color: #004d99; margin-bottom: 5px;" id="w1-inst120">11 614,47 PLN</span>
+                                                    <span style="font-size: 13px; color: #666;">Rata szacunkowa (120 mies.)</span>
+                                                    <br><br>
+                                                    <span style="display: block; font-size: 19px; font-weight: 700; color: #004d99; margin-bottom: 5px;" id="w1-inst60">20 005,26 PLN</span>
+                                                    <span style="font-size: 13px; color: #666;">Rata szacunkowa (60 mies.)</span>
+                                                </div>
+                                            </td>
+                                            
+                                            <td width="4%"></td>
 
-                                <div style="background: #e6f7ff; border-left: 5px solid #007bff; padding: 20px; margin-bottom: 30px; border-radius: 0 8px 8px 0;">
-                                    <p style="margin: 0; font-size: 16px; color: #333;">
-                                        <strong>Ważne:</strong> W produkcie, który Panu proponuję nie musi Pan robić wysokich obrotów, do czego zmusza Alior Bank.
-                                    </p>
-                                </div>
+                                            <td valign="top" width="48%" style="background-color: #fdfdfd; border: 1px solid #dcebf7; border-top: 4px solid #28a745; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 77, 153, 0.05);">
+                                                <h3 style="margin-top: 0; font-size: 20px; color: #28a745; text-align: center; margin-bottom: 20px; font-weight: 700;">II WARIANT</h3>
+                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
+                                                    <tr>
+                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Netto:</td>
+                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-net">1 000 000 PLN</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Brutto:</td>
+                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-gross">1 000 000 PLN</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Prowizja bankowa:</td>
+                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #28a745;" id="w2-prov">0%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Marża banku:</td>
+                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-margin">2,5%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">WIBOR 1M:</td>
+                                                        <td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" class="wibor-val">4,02%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Oprocentowanie:</td>
+                                                        <td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #333;" id="w2-rate">6,52%</td>
+                                                    </tr>
+                                                </table>
+                                                
+                                                <div style="font-size: 13px; color: #2e5c8a; background-color: #e8f4fd; padding: 12px; margin-top: 15px; border-radius: 4px; line-height: 1.5; border-left: 3px solid #0056b3;">
+                                                    <strong>Warunek uzyskania wariantu:</strong><br>
+                                                    Konsolidacja obecnego kredytu firmowego w Alior Banku 
+                                                    <br><em>LUB</em><br>
+                                                    Wnioskowanie dodatkowo o kredyt w rachunku bieżącym na jednym wniosku (kwota możliwa do pozyskania do 200 000 PLN).
+                                                </div>
 
-                                <div id="benefits-section" style="border-top: 1px solid #eee; padding-top: 25px; margin-bottom: 30px;">
+                                                <div style="background-color: #f0fff4; border: 1px solid #c3e6cb; border-radius: 6px; padding: 15px; margin-top: 20px; text-align: center;">
+                                                    <span style="display: block; font-size: 19px; font-weight: 700; color: #28a745; margin-bottom: 5px;" id="w2-inst120">11 331,19 PLN</span>
+                                                    <span style="font-size: 13px; color: #666;">Rata szacunkowa (120 mies.)</span>
+                                                    <br><br>
+                                                    <span style="display: block; font-size: 19px; font-weight: 700; color: #28a745; margin-bottom: 5px;" id="w2-inst60">19 517,32 PLN</span>
+                                                    <span style="font-size: 13px; color: #666;">Rata szacunkowa (60 mies.)</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <div style="background: #e6f7ff; border-left: 5px solid #007bff; padding: 20px; margin: 25px 0 0 0; border-radius: 0 8px 8px 0;">
+                                        <p style="margin: 0; font-size: 16px; color: #333;"><strong>Gwarancja DE MINIMIS:</strong> W obu wariantach występuje Poręczenie BGK 0,5% od kwoty gwarancji (60% salda kredytu), płatne raz w roku przez 5 lat.</p>
                                     </div>
-
-                                <p style="font-size: 16px; color: #555555; margin-top: 20px; line-height: 1.6;">
-                                    W Alior banku będzie Pan miał 3% za wcześniejszą spłatę i nadpłatę kredytu, w mojej propozycji ta opłata to 0%!
-                                </p>
-
-                                <div style="margin-top: 40px; border-top: 2px solid #f0f0f0; padding-top: 20px;">
-                                    <p style="font-size: 16px; color: #333; margin: 0;">
-                                        <strong id="advisor-name">Dawid Błachno</strong>
-                                    </p>
-                                    <p style="font-size: 14px; color: #777; margin: 5px 0 0 0;" id="advisor-role">
-                                        Ekspert ds. Finansowania Przedsiębiorstw
-                                    </p>
                                 </div>
 
+                                <div style="border-bottom: 1px solid #e0e0e0; padding-bottom: 30px; margin-bottom: 40px;">
+                                    <h2 style="font-size: 24px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 25px; font-weight: 700; margin-top: 0;">Kluczowe Korzyści</h2>
+                                    
+                                    <div id="dynamic-benefits-container">
+                                        </div>
+                                </div>
+
+                                <div style="margin-bottom: 30px;">
+                                    <h2 style="font-size: 24px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 25px; font-weight: 700; margin-top: 0;">Wynagrodzenie za Doradztwo</h2>
+                                    <p style="font-size: 17px; color: #555; margin-bottom: 20px;">Rozliczenie oparte o sukces (Success Fee), płatne dopiero po uruchomieniu środków.</p>
+                                    
+                                    <div style="background-color: #f8faff; border-radius: 8px; padding: 30px; border: 1px solid #e0e9f5; text-align: center;">
+                                        <p style="margin: 0; padding: 0; font-size: 17px; color: #333;">Stawka za sukces</p>
+                                        <span style="font-size: 32px; font-weight: 700; color: #28a745; display: block; margin: 15px 0;"><span id="fee-proc">4%</span> <span style="font-size: 16px; color: #555; font-weight: 400; vertical-align: middle;">+ VAT</span></span>
+                                        <div style="border-top: 1px solid #c9dff7; margin-top: 20px; padding-top: 20px;">
+                                            <p style="margin: 0; font-size: 18px; color: #333;">Kwota wynagrodzenia: <strong id="fee-kwota">40 000,00 PLN + VAT</strong></p>
+                                            <small style="color: #777; font-size: 14px; display: block; margin-top: 8px;">(liczone od kwoty pozyskanych środków)</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <p style="margin-top: 40px; font-size: 17px; color: #555;">Czekam na Pana decyzję odnośnie wyboru wariantu, abyśmy mogli sprawnie przejść do procesowania wniosku.</p>
+                                
                             </td>
                         </tr>
                     </table>
@@ -147,38 +228,55 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Pobieranie danych z localStorage
-            const storedData = localStorage.getItem('bafOfferData');
-            
+            const storedData = localStorage.getItem('bafOfferData_Variants');
             if (storedData) {
                 const data = JSON.parse(storedData);
 
-                // 1. Podstawienie Imienia
-                document.getElementById('greeting').textContent = data.clientName + ",";
-
-                // 2. Podstawienie Liczb
-                document.getElementById('val-aliorFee').textContent = data.aliorQuarterFee;
-                document.getElementById('val-hidden10').textContent = data.hiddenProv10;
-                document.getElementById('val-hidden5').textContent = data.hiddenProv5;
-                document.getElementById('val-bafFee').textContent = data.bafFee;
-                document.getElementById('val-bafMargin').textContent = data.bafMargin;
-                document.getElementById('val-aliorMargin').textContent = data.aliorMargin;
-
-                // 3. Podstawienie Doradcy i Płeć
+                // 1. DANE OSOBOWE I GRAMATYKA
+                document.getElementById('client-greeting').textContent = data.clientName + ",";
+                
                 const advisorParts = data.advisorData.split('|');
-                const advisorName = advisorParts[0];
-                const gender = advisorParts[1]; // M lub F
+                const gender = advisorParts[1];
                 
-                document.getElementById('advisor-name').textContent = advisorName;
-                
-                // Zmiana końcówki stanowiska w stopce (opcjonalne, dla estetyki)
-                if(gender === 'F') {
-                    document.getElementById('advisor-role').textContent = "Ekspertka ds. Finansowania Przedsiębiorstw";
+                if (gender === 'M') {
+                    document.getElementById('verb-analyzed').textContent = "Przeanalizowałem";
+                    document.getElementById('verb-prepared').textContent = "przygotowałem";
+                    document.getElementById('verb-mentioned').textContent = "wspominałem";
+                } else {
+                    document.getElementById('verb-analyzed').textContent = "Przeanalizowałam";
+                    document.getElementById('verb-prepared').textContent = "przygotowałam";
+                    document.getElementById('verb-mentioned').textContent = "wspominałam";
                 }
 
-                // 4. Generowanie Korzyści (Ikony + Tekst)
-                const benefitsContainer = document.getElementById('benefits-section');
-                let benefitsHTML = '<table border="0" cellpadding="0" cellspacing="0" width="100%">';
+                // 2. DANE FINANSOWE
+                // Wariant 1
+                document.getElementById('w1-net').textContent = data.w1.netto;
+                document.getElementById('w1-gross').textContent = data.w1.brutto;
+                document.getElementById('w1-prov').textContent = data.w1.prowizja;
+                document.getElementById('w1-margin').textContent = data.w1.marza;
+                document.getElementById('w1-rate').textContent = data.w1.oproc;
+                document.getElementById('w1-inst120').textContent = data.w1.rata120;
+                document.getElementById('w1-inst60').textContent = data.w1.rata60;
+
+                // Wariant 2
+                document.getElementById('w2-net').textContent = data.w2.netto;
+                document.getElementById('w2-gross').textContent = data.w2.brutto;
+                document.getElementById('w2-prov').textContent = data.w2.prowizja;
+                document.getElementById('w2-margin').textContent = data.w2.marza;
+                document.getElementById('w2-rate').textContent = data.w2.oproc;
+                document.getElementById('w2-inst120').textContent = data.w2.rata120;
+                document.getElementById('w2-inst60').textContent = data.w2.rata60;
+
+                // WIBOR
+                document.querySelectorAll('.wibor-val').forEach(el => el.textContent = data.wibor);
+
+                // SUCCESS FEE
+                document.getElementById('fee-proc').textContent = data.feeProc;
+                document.getElementById('fee-kwota').textContent = data.feeKwota + " + VAT";
+
+                // 3. GENEROWANIE KORZYŚCI
+                const benefitsContainer = document.getElementById('dynamic-benefits-container');
+                let html = '<table border="0" cellpadding="0" cellspacing="0" width="100%">';
                 
                 const iconUrls = {
                     'wallet': 'https://img.icons8.com/ios/50/0056b3/wallet--v1.png',
@@ -189,30 +287,29 @@
 
                 data.benefits.forEach(ben => {
                     const iconSrc = iconUrls[ben.icon] || iconUrls['ok'];
-                    benefitsHTML += `
+                    html += `
                         <tr>
-                            <td width="50" valign="top" style="padding-bottom: 20px;">
-                                <img src="${iconSrc}" width="35" height="35" style="display: block;">
+                            <td valign="top" width="50" style="padding-bottom: 25px;">
+                                <img src="${iconSrc}" width="30" height="30" style="display: block;">
                             </td>
-                            <td valign="top" style="padding-bottom: 20px;">
-                                <div style="font-size: 16px; color: #555; line-height: 1.5;">
+                            <td valign="top" style="padding-bottom: 25px;">
+                                <div style="font-size: 17px; color: #555; line-height: 1.5;">
                                     ${ben.text}
                                 </div>
                             </td>
                         </tr>
                     `;
                 });
-
-                benefitsHTML += '</table>';
-                benefitsContainer.innerHTML = benefitsHTML;
+                
+                html += '</table>';
+                benefitsContainer.innerHTML = html;
             }
         });
 
-        // SKRYPT KOPIOWANIA (taki sam jak wcześniej)
+        // SKRYPT KOPIOWANIA
         document.getElementById('copy-button').addEventListener('click', function() {
             const btn = this;
             const emailWrapper = document.getElementById('email-content-wrapper');
-            
             const range = document.createRange();
             range.selectNode(emailWrapper);
             window.getSelection().removeAllRanges();
@@ -224,12 +321,7 @@
                 const richTextInput = new ClipboardItem({ 'text/html': blob });
                 
                 if (typeof navigator.clipboard !== 'undefined' && navigator.clipboard.write) {
-                    navigator.clipboard.write([richTextInput]).then(() => {
-                        successEffect(btn);
-                    }).catch(err => {
-                        document.execCommand('copy');
-                        successEffect(btn);
-                    });
+                    navigator.clipboard.write([richTextInput]).then(() => { successEffect(btn); });
                 } else {
                     document.execCommand('copy');
                     successEffect(btn);
