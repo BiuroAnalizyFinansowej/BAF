@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analiza Porównawcza - BAF</title>
+    <style>
+        /* Import czcionki (dla podglądu w przeglądarce) */
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+        
+        /* Style interfejsu strony (tło, przycisk) - to nie idzie do maila */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f9;
+            font-family: 'Lato', Arial, sans-serif;
+        }
+
+        /* Panel sterowania */
+        #control-panel-left {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 220px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+            font-family: Arial, sans-serif;
+        }
+
+        .panel-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+            background-color: #17a2b8;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .panel-btn:hover { background-color: #138496; }
+        .panel-btn.copied { background-color: #28a745; }
+
+        /* Wrapper treści maila */
+        #email-content-wrapper {
+            margin: 0 auto; 
+            padding: 20px 0 20px 260px;
+            max-width: 900px;
+        }
+
+        @media (max-width: 1200px) {
+            #control-panel-left { position: relative; top: 0; left: 0; width: auto; margin: 20px; }
+            #email-content-wrapper { padding: 0 20px; margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="control-panel-left">
+        <button id="copy-button" class="panel-btn">Kopiuj całość do maila</button>
+        <div style="font-size: 11px; color: #777; margin-top: 10px; text-align: center;">
+            Kliknij, aby skopiować gotowy szablon.
+        </div>
+    </div>
+
+    <div id="email-content-wrapper">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: 'Lato', Arial, sans-serif; background-color: #f4f7f9; color: #333333;">
+            <tr>
+                <td align="center" style="padding: 20px;">
+                    
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 800px; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 77, 153, 0.1); border: 1px solid #e1e4e8;">
+                        
+                        <tr>
+                            <td align="center" style="padding: 30px 0; background-color: #ffffff; border-bottom: 1px solid #f0f0f0;">
+                                <img src="baf_logo.png" alt="Biuro Analizy Finansowej" width="250" style="display: block; width: 250px; max-width: 100%; height: auto; border: 0;">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="padding: 40px 50px;">
+                                
+                                <h1 style="color: #002d5a; font-size: 28px; margin: 0 0 25px 0; font-weight: 700; font-family: 'Lato', Arial, sans-serif;">Panie Kamilu,</h1>
+                                
+                                <p style="font-size: 16px; color: #555555; margin-bottom: 25px; line-height: 1.6;">
+                                    doprecyzowując ofertę z Alior Banku, którą Pan otrzymał - warto zwrócić uwagę na konstrukcję kosztów. Znajduje się w niej opłata kwartalna 0,5% rocznie. Choć na pierwszy rzut oka wydaje się niewielka, w dłuższej perspektywie generuje znaczący koszt:
+                                </p>
+
+                                <div style="background-color: #fff5f5; border-left: 5px solid #dc3545; padding: 20px; border-radius: 0 8px 8px 0; margin-bottom: 30px;">
+                                    <strong style="color: #a71d2a; display: block; margin-bottom: 10px;">Ukryte koszty w ofercie konkurencyjnej:</strong>
+                                    <ul style="margin: 0; padding-left: 20px; color: #555;">
+                                        <li style="margin-bottom: 8px;">W skali 10 lat to <strong>5%</strong> dodatkowej, "ukrytej" prowizji (razem z podstawową daje to 6%).</li>
+                                        <li>W wariancie na 5 lat to dodatkowe <strong>2,5%</strong> prowizji (łącznie 3,5%).</li>
+                                    </ul>
+                                </div>
+
+                                <p style="font-size: 16px; color: #555555; margin-bottom: 25px; line-height: 1.6;">
+                                    W związku z powyższym, stawka wynagrodzenia dla mojego Biura BAF za doradztwo może zostać <strong>obniżona do poziomu 3,5%</strong> niezależnie od okresu, na który się Pan zdecyduje. W połączeniu z niższą marżą banku, gwarantuje to Panu znacznie niższe koszty całkowite kredytu.
+                                </p>
+
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 30px; border-collapse: separate; border-spacing: 0;">
+                                    <tr>
+                                        <td width="50%" valign="top" style="background-color: #fdfdfd; border: 1px solid #dcebf7; border-top: 4px solid #007bff; border-radius: 8px; padding: 20px; margin-right: 10px;">
+                                            <h3 style="margin: 0 0 15px 0; font-size: 18px; color: #0056b3; text-align: center;">Alior Bank</h3>
+                                            <div style="font-size: 15px; color: #555; padding: 5px 0; border-bottom: 1px solid #eee;">
+                                                Marża: <strong>3,75%</strong>
+                                            </div>
+                                            <div style="font-size: 15px; color: #555; padding: 5px 0; border-bottom: 1px solid #eee;">
+                                                Prowizja łączna: <strong>ok. 3,5% - 6%</strong>
+                                            </div>
+                                            <div style="font-size: 15px; color: #555; padding: 5px 0;">
+                                                Opłata za spłatę: <strong style="color: #dc3545;">3%</strong>
+                                            </div>
+                                        </td>
+                                        <td width="4%"></td> <td width="46%" valign="top" style="background-color: #f0fff4; border: 1px solid #c3e6cb; border-top: 4px solid #28a745; border-radius: 8px; padding: 20px;">
+                                            <h3 style="margin: 0 0 15px 0; font-size: 18px; color: #28a745; text-align: center;">Moja Propozycja</h3>
+                                            <div style="font-size: 15px; color: #333; padding: 5px 0; border-bottom: 1px solid #dbeidd;">
+                                                Marża: <strong style="color: #28a745; font-size: 1.1em;">2,50%</strong>
+                                            </div>
+                                            <div style="font-size: 15px; color: #333; padding: 5px 0; border-bottom: 1px solid #dbeidd;">
+                                                Success Fee BAF: <strong style="color: #28a745; font-size: 1.1em;">3,5%</strong>
+                                            </div>
+                                            <div style="font-size: 15px; color: #333; padding: 5px 0;">
+                                                Opłata za spłatę: <strong style="color: #28a745;">0%</strong>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <div style="text-align: center; margin-bottom: 30px;">
+                                    <span style="background-color: #28a745; color: #ffffff; padding: 10px 20px; border-radius: 50px; font-weight: bold; font-size: 16px; display: inline-block;">
+                                        ✅ Zero ukrytych kosztów!
+                                    </span>
+                                </div>
+
+                                <div style="background: #e6f7ff; border-left: 5px solid #007bff; padding: 20px; margin-bottom: 30px; border-radius: 0 8px 8px 0;">
+                                    <p style="margin: 0; font-size: 16px; color: #333;">
+                                        <strong>Ważne:</strong> W produkcie, który Panu proponuję <strong>nie musi Pan robić wysokich obrotów</strong>, do czego zmusza Alior Bank. To daje Panu pełną swobodę w zarządzaniu finansami firmy.
+                                    </p>
+                                </div>
+
+                                <div style="border-top: 1px solid #eee; padding-top: 25px;">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                        <tr>
+                                            <td width="50" valign="top">
+                                                <img src="https://img.icons8.com/ios/50/0056b3/unlock.png" alt="Unlock Icon" width="35" height="35" style="display: block;">
+                                            </td>
+                                            <td>
+                                                <p style="margin: 0 0 5px 0; font-size: 16px; color: #333; font-weight: bold;">
+                                                    Całkowity brak opłat za wcześniejszą spłatę
+                                                </p>
+                                                <p style="margin: 0; font-size: 15px; color: #555;">
+                                                    W Alior Banku będzie Pan miał 3% prowizji za wcześniejszą spłatę i nadpłatę kredytu. <strong>W mojej propozycji ta opłata wynosi 0%!</strong>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                            </td>
+                        </tr>
+                    </table>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById('copy-button').addEventListener('click', function() {
+            const btn = this;
+            const emailWrapper = document.getElementById('email-content-wrapper');
+            
+            const range = document.createRange();
+            range.selectNode(emailWrapper);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+
+            try {
+                // Kopiowanie HTML
+                const htmlContent = emailWrapper.innerHTML;
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const richTextInput = new ClipboardItem({ 'text/html': blob });
+                
+                if (typeof navigator.clipboard !== 'undefined' && navigator.clipboard.write) {
+                    navigator.clipboard.write([richTextInput]).then(() => {
+                        successEffect(btn);
+                    }).catch(err => {
+                        console.error("Clipboard API Error", err);
+                        document.execCommand('copy');
+                        successEffect(btn);
+                    });
+                } else {
+                    document.execCommand('copy');
+                    successEffect(btn);
+                }
+            } catch (err) {
+                console.error('Błąd kopiowania:', err);
+                document.execCommand('copy');
+                successEffect(btn);
+            }
+            
+            window.getSelection().removeAllRanges();
+        });
+
+        function successEffect(btn) {
+            const originalText = 'Kopiuj całość do maila';
+            const originalColor = '#17a2b8';
+            
+            btn.textContent = '✅ Skopiowano!';
+            btn.style.backgroundColor = '#28a745';
+            btn.classList.add('copied');
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.backgroundColor = originalColor;
+                btn.classList.remove('copied');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
