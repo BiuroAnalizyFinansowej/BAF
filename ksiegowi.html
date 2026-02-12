@@ -3,153 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Propozycja Współpracy - BAF</title>
+    <title>Oferta dla Księgowych - BAF</title>
+    <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
-        /* --- STYLE PANELI STEROWANIA --- */
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #f4f7f9;
-            font-family: 'Lato', Arial, sans-serif;
-        }
+        /* ZMIANA: Białe tło */
+        body { margin: 0; padding: 0; background-color: #ffffff; font-family: 'Lato', Arial, sans-serif; }
         
-        /* Panel Lewy (Doradcy i Kopiowanie całości) */
-        #control-panel-left {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            width: 220px;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            z-index: 1000;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        /* Panel Prawy (Tematy maili) */
-        #control-panel-right {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 240px;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            z-index: 1000;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .panel-btn {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-            text-align: left;
-            transition: all 0.3s ease;
-            background-color: #fff;
-            color: #555;
-            line-height: 1.4;
-        }
-
+        #control-panel-left { position: fixed; top: 20px; left: 20px; width: 220px; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000; border: 1px solid #eee; }
+        #control-panel-right { position: fixed; top: 20px; right: 20px; width: 240px; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000; border: 1px solid #eee; }
+        
+        .panel-btn { display: block; width: 100%; padding: 10px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; font-size: 12px; text-align: left; background-color: #fff; color: #555; }
         .panel-btn:hover { background-color: #f0f0f0; }
-
-        .panel-btn.active {
-            background-color: #002d5a;
-            color: #fff;
-            border-color: #002d5a;
-            font-weight: bold;
-        }
-
-        #copy-button {
-            background-color: #17a2b8;
-            color: white;
-            text-align: center;
-            font-weight: bold;
-            border: none;
-            margin-bottom: 20px;
-            padding: 12px;
-            font-size: 13px;
-        }
+        .panel-btn.active { background-color: #002d5a; color: #fff; border-color: #002d5a; font-weight: bold; }
+        
+        #copy-button { background-color: #17a2b8; color: white; text-align: center; font-weight: bold; border: none; margin-bottom: 20px; padding: 12px; font-size: 13px; }
         #copy-button:hover { background-color: #138496; }
         #copy-button.copied { background-color: #28a745; }
 
-        h3.panel-header {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: #888;
-            margin-top: 15px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-        }
-
-        .nav-container {
-            margin-top: 20px;
-            text-align: center;
-            border-top: 1px solid #eee;
-            padding-top: 15px;
-        }
-        .back-button {
-            display: inline-block;
-            text-decoration: none;
-            color: #002d5a;
-            font-weight: bold;
-            font-size: 13px;
-            border: 2px solid #002d5a;
-            padding: 6px 15px;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
+        h3.panel-header { font-size: 11px; text-transform: uppercase; color: #888; margin-top: 15px; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        
+        .nav-container { margin-top: 20px; text-align: center; border-top: 1px solid #eee; padding-top: 15px; }
+        .back-button { display: inline-block; text-decoration: none; color: #002d5a; font-weight: bold; font-size: 13px; border: 2px solid #002d5a; padding: 6px 15px; border-radius: 5px; }
         .back-button:hover { background-color: #002d5a; color: #fff; }
-        .home-button {
-            display: block;
-            margin: 15px auto 0 auto;
-            width: 30px;
-            height: 30px;
-            fill: #002d5a;
-            transition: transform 0.2s;
-        }
+        .home-button { display: block; margin: 15px auto 0 auto; width: 30px; height: 30px; fill: #002d5a; transition: transform 0.2s; }
         .home-button:hover { transform: scale(1.1); }
 
-        .header { background-color: #002d5a; padding: 40px 20px; text-align: center; }
-
-        /* Responsywność dla środkowej treści - marginesy na oba panele */
-        #email-content-wrapper {
-            margin: 0 280px; 
-        }
+        #email-content-wrapper { margin: 0 280px; }
         
-        /* Dla mniejszych ekranów - panel prawy spada na dół lub chowa się, marginesy mniejsze */
-        @media (max-width: 1350px) {
-            #email-content-wrapper { margin: 0 20px 0 260px; }
-            #control-panel-right { 
-                position: relative; 
-                width: auto; 
-                margin: 20px 20px 20px 260px; 
-                top: 0; 
-                right: 0;
-                max-width: 600px;
-            }
-        }
-        @media (max-width: 768px) {
-            #control-panel-left { position: relative; width: auto; margin: 20px; top: 0; left: 0; }
-            #email-content-wrapper { margin: 0; }
-            #control-panel-right { margin: 20px; }
-        }
+        @media (max-width: 1350px) { #email-content-wrapper { margin: 0 20px 0 260px; } #control-panel-right { position: relative; width: auto; margin: 20px 20px 20px 260px; top: 0; right: 0; max-width: 600px; } }
+        @media (max-width: 768px) { #control-panel-left { position: relative; width: auto; margin: 20px; top: 0; left: 0; } #email-content-wrapper { margin: 0; } #control-panel-right { margin: 20px; } }
     </style>
 </head>
 <body>
 
     <div id="control-panel-left">
         <button id="copy-button" class="panel-btn">Kopiuj całość do maila</button>
-        
         <h3 class="panel-header">Wybierz doradcę:</h3>
         <button class="panel-btn active" onclick="setAdvisor('dawid', this)">Dawid Błachno</button>
         <button class="panel-btn" onclick="setAdvisor('weronika', this)">Weronika Lekston</button>
@@ -164,54 +52,31 @@
         <div class="nav-container">
             <a href="#" onclick="history.back(); return false;" class="back-button">POWRÓT</a>
             <a href="index.html" class="home-button" title="Strona główna">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/>
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg>
             </a>
         </div>
     </div>
 
     <div id="control-panel-right">
         <h3 class="panel-header" style="margin-top:0;">Kliknij, aby skopiować temat:</h3>
-        
-        <button class="panel-btn" onclick="copySubject('🔵 Szukamy partnerów wśród księgowych 🔵', this)">
-            🔵 Szukamy partnerów...
-        </button>
-        <button class="panel-btn" onclick="copySubject('🤝 Propozycja stałej współpracy dla Biura Rachunkowego', this)">
-            🤝 Propozycja współpracy
-        </button>
-        <button class="panel-btn" onclick="copySubject('📈 Jak zwiększyć zysk Państwa klientów? (Partnerstwo BAF)', this)">
-            📈 Zwiększenie zysku
-        </button>
-        <button class="panel-btn" onclick="copySubject('💼 Wsparcie finansowe dla firm - oferta dla Księgowych', this)">
-            💼 Wsparcie dla firm
-        </button>
-        <button class="panel-btn" onclick="copySubject('📉 Niższe raty dla Państwa Klientów - audyt kredytowy', this)">
-            📉 Niższe raty (audyt)
-        </button>
+        <button class="panel-btn" onclick="copySubject('🔵 Szukamy partnerów wśród księgowych 🔵', this)">🔵 Szukamy partnerów...</button>
+        <button class="panel-btn" onclick="copySubject('🤝 Propozycja stałej współpracy dla Biura Rachunkowego', this)">🤝 Propozycja współpracy</button>
+        <button class="panel-btn" onclick="copySubject('📈 Jak zwiększyć zysk Państwa klientów? (Partnerstwo BAF)', this)">📈 Zwiększenie zysku</button>
+        <button class="panel-btn" onclick="copySubject('💼 Wsparcie finansowe dla firm - oferta dla Księgowych', this)">💼 Wsparcie dla firm</button>
+        <button class="panel-btn" onclick="copySubject('📉 Niższe raty dla Państwa Klientów - audyt kredytowy', this)">📉 Niższe raty (audyt)</button>
         
         <h3 class="panel-header">Inne warianty:</h3>
-        <button class="panel-btn" onclick="copySubject('🚀 Gotówka dla firm od 6,5% – oferta współpracy', this)">
-            🚀 Gotówka od 6,5%
-        </button>
-        <button class="panel-btn" onclick="copySubject('⚖️ SKD i pozwy frankowe – wsparcie prawne dla Klientów Biura', this)">
-            ⚖️ SKD i Frankowicze
-        </button>
-        <button class="panel-btn" onclick="copySubject('🔍 Bezpłatna analiza portfela kredytowego Państwa klientów', this)">
-            🔍 Bezpłatna analiza
-        </button>
-        <button class="panel-btn" onclick="copySubject('📩 Zaproszenie do sieci partnerskiej BAF', this)">
-            📩 Zaproszenie do sieci
-        </button>
+        <button class="panel-btn" onclick="copySubject('🚀 Gotówka dla firm od 6,5% – oferta współpracy', this)">🚀 Gotówka od 6,5%</button>
+        <button class="panel-btn" onclick="copySubject('⚖️ SKD i pozwy frankowe – wsparcie prawne dla Klientów Biura', this)">⚖️ SKD i Frankowicze</button>
+        <button class="panel-btn" onclick="copySubject('🔍 Bezpłatna analiza portfela kredytowego Państwa klientów', this)">🔍 Bezpłatna analiza</button>
+        <button class="panel-btn" onclick="copySubject('📩 Zaproszenie do sieci partnerskiej BAF', this)">📩 Zaproszenie do sieci</button>
     </div>
 
     <div id="email-content-wrapper">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="border-collapse: collapse; font-family: 'Lato', Arial, sans-serif;">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="border-collapse: collapse; font-family: 'Lato', Arial, sans-serif; background-color: #ffffff;">
             <tr>
                 <td align="center" style="padding: 20px 0;">
-                    
                     <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="max-width: 800px; background-color: #ffffff; margin: 0 auto; border-collapse: collapse;">
-                        
                         <tr>
                             <td class="header" style="background-color: #002d5a; padding: 40px 20px; text-align: center;">
                                  <div style="background-color: #ffffff; display: inline-block; padding: 2px; border-radius: 4px;">
@@ -221,7 +86,6 @@
                                  </div>
                             </td>
                         </tr>
-
                         <tr>
                             <td style="padding: 40px 50px;">
                                 <h1 style="font-size: 28px; font-weight: 400; color: #002d5a; margin: 0 0 25px 0; font-family: 'Lato', Arial, sans-serif;">Szanowni Państwo,</h1>
@@ -305,16 +169,13 @@
                                 </div>
                             </td>
                         </tr>
-
                     </table>
-
                 </td>
             </tr>
         </table>
     </div>
 
     <script>
-        // BAZA LINKÓW DORADCÓW
         const advisors = {
             'dawid': 'https://q-r.to/DawidBlachnoBiuroBAF',
             'weronika': 'https://q-r.to/WeronikaLekstonBiuroBAF',
@@ -327,115 +188,48 @@
             'mateusz': 'https://q-r.to/MateuszDzidkowskiBiuroBAF'
         };
 
-        // FUNKCJA ZMIANY DORADCY
         function setAdvisor(advisorKey, btnElement) {
-            // Zmiana linku w przycisku
             const linkElement = document.getElementById('cta-link');
-            if (advisors[advisorKey]) {
-                linkElement.href = advisors[advisorKey];
-            }
-
-            // Aktualizacja wyglądu przycisków tylko w LEWYM panelu
+            if (advisors[advisorKey]) linkElement.href = advisors[advisorKey];
             const allButtons = document.querySelectorAll('#control-panel-left .panel-btn');
-            allButtons.forEach(btn => {
-                if (btn.id !== 'copy-button') {
-                    btn.classList.remove('active');
-                }
-            });
+            allButtons.forEach(btn => { if (btn.id !== 'copy-button') btn.classList.remove('active'); });
             btnElement.classList.add('active');
         }
 
-        // NOWA FUNKCJA: KOPIOWANIE TEMATU
         function copySubject(text, btnElement) {
             navigator.clipboard.writeText(text).then(() => {
                 const originalText = btnElement.textContent;
-                // Prosty efekt wizualny
                 btnElement.textContent = '✅ Skopiowano!';
                 btnElement.style.backgroundColor = '#28a745';
                 btnElement.style.color = '#fff';
                 btnElement.style.borderColor = '#28a745';
-                
-                // Reset po 1.5 sekundy
                 setTimeout(() => {
                     btnElement.textContent = originalText;
                     btnElement.style.backgroundColor = '';
                     btnElement.style.color = '';
                     btnElement.style.borderColor = '';
                 }, 1500);
-            }).catch(err => {
-                console.error('Błąd kopiowania tematu:', err);
             });
         }
 
-        // FUNKCJA KOPIOWANIA TREŚCI MAILA (HTML)
         document.addEventListener('DOMContentLoaded', () => {
             const copyBtn = document.getElementById('copy-button');
             const emailWrapper = document.getElementById('email-content-wrapper');
-            
             copyBtn.addEventListener('click', () => {
-                // Kopiujemy HTML
                 const htmlContent = emailWrapper.innerHTML;
                 const blob = new Blob([htmlContent], { type: 'text/html' });
                 const richTextInput = new ClipboardItem({ 'text/html': blob });
-                
                 navigator.clipboard.write([richTextInput]).then(() => {
-                    // Sukces
                     const originalText = copyBtn.textContent;
                     copyBtn.textContent = 'Skopiowano całość!';
                     copyBtn.classList.add('copied');
-                    
-                    // Reset po 2 sekundach
                     setTimeout(() => {
                         copyBtn.textContent = originalText;
                         copyBtn.classList.remove('copied');
                     }, 2000);
-                }).catch(err => {
-                    console.error('Błąd kopiowania: ', err);
-                    alert('Nie udało się skopiować automatycznie. Spróbuj zaznaczyć ręcznie.');
                 });
             });
         });
     </script>
-    
-    <script>
-        try {
-            const dzisiaj = 'Dane na dzień: 02.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
+</body>
 </html>
-
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 10.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        // BAF AUTO UPDATE - 12.02.2026
-        try {
-            document.getElementById('wibor-1m').textContent = '3,98%';
-            document.getElementById('wibor-3m').textContent = '3,87%';
-            document.getElementById('wibor-6m').textContent = '3,76%';
-            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
-            
-            const dzisiaj = 'Dane na dzień: 12.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    </body>
-    
