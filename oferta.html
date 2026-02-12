@@ -6,7 +6,6 @@
     <title>Oferta Finansowania - BAF</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
-        
         body { margin: 0; padding: 0; background-color: #f4f7f9; font-family: 'Lato', Arial, sans-serif; }
         
         #control-panel-left {
@@ -56,9 +55,8 @@
                                 
                                 <h1 id="client-greeting" style="color: #002d5a; font-size: 28px; margin: 0 0 25px 0; font-weight: 700; font-family: 'Lato', Arial, sans-serif;">Panie Kamilu,</h1>
                                 
-                                <p style="font-size: 17px; color: #555555; margin-bottom: 25px; line-height: 1.6;">
-                                    w nawiązaniu do rozmowy przesyłam kalkulacje propozycji finansowania. <span id="verb-analyzed">Przeanalizowałam</span> dostępne możliwości i <span id="verb-prepared">przygotowałam</span> ofertę kredytu firmowego ratalnego, o którym już <span id="verb-mentioned">wspominałam</span> telefonicznie, w <span id="variant-count-text">dwóch wariantach, różniących</span> się strukturą kosztów początkowych.
-                                </p>
+                                <p id="intro-paragraph" style="font-size: 17px; color: #555555; margin-bottom: 25px; line-height: 1.6;">
+                                    </p>
 
                                 <div style="border-bottom: 1px solid #e0e0e0; padding-bottom: 30px; margin-bottom: 40px;">
                                     <h2 style="font-size: 24px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 25px; font-weight: 700; margin-top: 0;">Rodzaj Finansowania: Kredyt firmowy ratalny</h2>
@@ -182,24 +180,15 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const storedData = localStorage.getItem('bafOfferData_Advanced');
+            const storedData = localStorage.getItem('bafOfferData_V3');
             if (storedData) {
                 const data = JSON.parse(storedData);
 
-                // --- 1. GRAMATYKA KLIENTA I DORADCY ---
+                // 1. TEKSTY OSOBOWE I WSTĘP
                 document.getElementById('client-greeting').textContent = data.clientName + ",";
-                
-                // Doradca (wspominałem/am)
-                const genderAdvisor = data.advisorData.split('|')[1];
-                if (genderAdvisor === 'M') {
-                    document.getElementById('verb-analyzed').textContent = "Przeanalizowałem";
-                    document.getElementById('verb-prepared').textContent = "przygotowałem";
-                    document.getElementById('verb-mentioned').textContent = "wspominałem";
-                } else {
-                    document.getElementById('verb-analyzed').textContent = "Przeanalizowałam";
-                    document.getElementById('verb-prepared').textContent = "przygotowałam";
-                    document.getElementById('verb-mentioned').textContent = "wspominałam";
-                }
+                document.getElementById('intro-paragraph').innerHTML = data.introText; // Używamy innerHTML aby ew. entery zachować? Textarea daje \n.
+                // Textarea daje \n, html ignoruje \n. Zamieńmy \n na <br>
+                document.getElementById('intro-paragraph').innerHTML = data.introText.replace(/\n/g, '<br>');
 
                 // Klient (Pana/Pani decyzję)
                 const genderClient = data.clientGender;
@@ -209,60 +198,52 @@
                     document.getElementById('client-decision-grammar').textContent = "Pana";
                 }
 
-                // --- 2. ZARZĄDZANIE WARIANTEM 2 ---
+                // 2. WARIANTY UI
                 if(!data.hasVariant2) {
-                    // Ukryj kolumnę 2, separator i zmień tekst nagłówka
                     document.getElementById('var2-container').style.display = 'none';
                     document.getElementById('var-separator').style.display = 'none';
-                    document.getElementById('variant-count-text').textContent = "formie oferty"; // zamiast "w dwóch wariantach"
-                    document.getElementById('h3-var1').textContent = "OFERTA"; // zamiast "I WARIANT"
-                    // Zmień szerokość Wariantu 1 na 100% lub centruj? 
-                    // Lepiej wygląda centrując 100% max-width np 500px.
-                    // Ale prościej: Zostawiamy w tabeli jako TD.
-                    // Można dać colspan, ale w tabeli są 3 td.
-                    // Najlepiej po prostu usunąć td, tabela się przeskaluje.
+                    document.getElementById('h3-var1').textContent = "OFERTA"; 
                 }
 
-                // --- 3. DANE FINANSOWE WARIANT 1 ---
-                document.getElementById('w1-net').textContent = data.w1.netto;
-                document.getElementById('w1-gross').textContent = data.w1.brutto;
-                document.getElementById('w1-prov').textContent = data.w1.prowizja;
-                document.getElementById('w1-margin').textContent = data.w1.marza;
-                document.getElementById('w1-rate').textContent = data.w1.oproc;
-                document.getElementById('w1-rata').textContent = data.w1.rata;
+                // 3. DANE LICZBOWE
+                const fields = [
+                    'w1-net', 'w1-gross', 'w1-prov', 'w1-margin', 'w1-rate', 'w1-rata',
+                    'w2-net', 'w2-gross', 'w2-prov', 'w2-margin', 'w2-rate', 'w2-rata'
+                ];
+                fields.forEach(id => {
+                    const el = document.getElementById(id);
+                    if(el) {
+                        // Pobieramy wartość ze struktury data.w1 lub data.w2
+                        const parts = id.split('-');
+                        const variant = parts[0] === 'w1' ? data.w1 : data.w2;
+                        const keyMap = {
+                            'net': 'netto', 'gross': 'brutto', 'prov': 'prowizja', 
+                            'margin': 'marza', 'rate': 'oproc', 'rata': 'rata'
+                        };
+                        el.textContent = variant[keyMap[parts[1]]];
+                    }
+                });
 
-                // --- 4. DANE FINANSOWE WARIANT 2 (tylko jeśli aktywny) ---
-                if(data.hasVariant2) {
-                    document.getElementById('w2-net').textContent = data.w2.netto;
-                    document.getElementById('w2-gross').textContent = data.w2.brutto;
-                    document.getElementById('w2-prov').textContent = data.w2.prowizja;
-                    document.getElementById('w2-margin').textContent = data.w2.marza;
-                    document.getElementById('w2-rate').textContent = data.w2.oproc;
-                    document.getElementById('w2-rata').textContent = data.w2.rata;
-                }
-
-                // --- 5. OKRES KREDYTOWANIA (DISPLAY) ---
                 document.querySelectorAll('.months-display').forEach(el => el.textContent = data.months);
                 document.querySelectorAll('.wibor-val').forEach(el => el.textContent = data.wibor + '%');
 
-                // --- 6. BGK ---
+                // 4. BGK
                 if(!data.showBGK) {
                     document.getElementById('bgk-section').style.display = 'none';
                 } else {
-                    // Jeśli jest tylko 1 wariant, zmień "W obu wariantach" na "W ofercie"
                     if(!data.hasVariant2) {
                         const bgkText = document.querySelector('#bgk-section p');
                         bgkText.innerHTML = bgkText.innerHTML.replace("W obu wariantach", "W ofercie");
                     }
                 }
 
-                // --- 7. FEE & VAT ---
+                // 5. FEE
                 const suffix = (data.vatType === 'VAT') ? '+ VAT' : 'zw. z VAT';
                 document.getElementById('fee-proc').textContent = data.feeProc;
                 document.getElementById('fee-suffix').textContent = suffix;
                 document.getElementById('fee-kwota').textContent = data.feeKwota + " " + suffix;
 
-                // --- 8. KORZYŚCI ---
+                // 6. KORZYŚCI
                 const benefitsContainer = document.getElementById('dynamic-benefits-container');
                 let html = '<table border="0" cellpadding="0" cellspacing="0" width="100%">';
                 
@@ -274,24 +255,13 @@
                     'idea': 'https://img.icons8.com/ios/50/0056b3/idea.png',
                     'star': 'https://img.icons8.com/ios/50/0056b3/star.png',
                     'time': 'https://img.icons8.com/ios/50/0056b3/time.png',
-                    'rocket': 'https://img.icons8.com/ios/50/0056b3/rocket.png'
-                };
-
-                // Standard Texts Map (dla pewności formatowania)
-                const standardTexts = {
-                    'ben1': '<strong>BRAK OPŁAT KWARTALNYCH!</strong> Nie ma żadnych ukrytych kosztów za utrzymanie finansowania.',
-                    'ben2': '<strong>Przejrzyste warunki:</strong> Umowa bez "gwiazdek" i dodatkowych, nieoczekiwanych kosztów.',
-                    'ben3': '<strong>Pełna elastyczność:</strong> Całkowity brak opłat za nadpłatę oraz wcześniejszą całkowitą spłatę kredytu.'
+                    'rocket': 'https://img.icons8.com/ios/50/0056b3/rocket.png',
+                    'handshake': 'https://img.icons8.com/ios/50/0056b3/handshake.png',
+                    'money': 'https://img.icons8.com/ios/50/0056b3/money-circulation.png'
                 };
 
                 data.benefits.forEach(ben => {
                     const iconSrc = iconUrls[ben.icon] || iconUrls['ok'];
-                    let textContent = ben.text;
-                    // Jeśli to standardowa korzyść, użyj bezpiecznego HTML ze stałej mapy
-                    if(ben.id && standardTexts[ben.id]) {
-                        textContent = standardTexts[ben.id];
-                    }
-
                     html += `
                         <tr>
                             <td valign="top" width="50" style="padding-bottom: 25px;">
@@ -299,7 +269,7 @@
                             </td>
                             <td valign="top" style="padding-bottom: 25px;">
                                 <div style="font-size: 17px; color: #555; line-height: 1.5;">
-                                    ${textContent}
+                                    ${ben.text}
                                 </div>
                             </td>
                         </tr>
@@ -311,7 +281,7 @@
             }
         });
 
-        // SKRYPT KOPIOWANIA
+        // KOPIOWANIE
         document.getElementById('copy-button').addEventListener('click', function() {
             const btn = this;
             const emailWrapper = document.getElementById('email-content-wrapper');
