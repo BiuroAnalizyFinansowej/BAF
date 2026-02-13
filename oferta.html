@@ -54,7 +54,7 @@
                                                     <tr id="row-w1-marza"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Marża banku:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-margin"></td></tr>
                                                     <tr id="row-w1-wibor"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">WIBOR:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" class="wibor-val" id="w1-wibor-val"></td></tr>
                                                     <tr id="row-w1-oproc"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Oprocentowanie:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #333;" id="w1-rate"></td></tr>
-                                                    <tr id="row-w1-koszt"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Koszt Całkowity:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #dc3545;" id="w1-koszt"></td></tr>
+                                                    <tr id="row-w1-koszt"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Koszt Całkowity:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #28a745;" id="w1-koszt"></td></tr>
                                                 </table>
                                                 <div style="background-color: #f0f7ff; border: 1px solid #cce5ff; border-radius: 6px; padding: 15px; margin-top: 20px; text-align: center;">
                                                     <span style="display: block; font-size: 22px; font-weight: 700; color: #004d99; margin-bottom: 5px;" id="w1-rata"></span>
@@ -73,7 +73,7 @@
                                                     <tr id="row-w2-marza"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Marża banku:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-margin"></td></tr>
                                                     <tr id="row-w2-wibor"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">WIBOR:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" class="wibor-val" id="w2-wibor-val"></td></tr>
                                                     <tr id="row-w2-oproc"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Oprocentowanie:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #333;" id="w2-rate"></td></tr>
-                                                    <tr id="row-w2-koszt"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Koszt Całkowity:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #dc3545;" id="w2-koszt"></td></tr>
+                                                    <tr id="row-w2-koszt"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Koszt Całkowity:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #28a745;" id="w2-koszt"></td></tr>
                                                 </table>
                                                 
                                                 <div style="font-size: 13px; color: #2e5c8a; background-color: #e8f4fd; padding: 12px; margin-top: 15px; border-radius: 4px; line-height: 1.5; border-left: 3px solid #0056b3;">
@@ -97,12 +97,12 @@
                                 </div>
 
                                 <div style="border-bottom: 1px solid #e0e0e0; padding-bottom: 30px; margin-bottom: 40px;">
-                                    <h2 style="font-size: 24px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 25px; font-weight: 700; margin-top: 0;">Kluczowe Korzyści</h2>
+                                    <h2 id="benefits-header" style="font-size: 24px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 25px; font-weight: 700; margin-top: 0;">Kluczowe Korzyści</h2>
                                     <div id="dynamic-benefits-container"></div>
                                 </div>
 
                                 <div id="fee-container" style="margin-bottom: 30px;">
-                                    <h2 style="font-size: 24px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 25px; font-weight: 700; margin-top: 0;">Wynagrodzenie za Doradztwo</h2>
+                                    <h2 id="fee-header" style="font-size: 24px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 25px; font-weight: 700; margin-top: 0;">Wynagrodzenie za Doradztwo</h2>
                                     <p style="font-size: 17px; color: #555; margin-bottom: 20px;">Rozliczenie oparte o sukces (Success Fee), płatne dopiero po uruchomieniu środków.</p>
                                     
                                     <div style="background-color: #f8faff; border-radius: 8px; padding: 30px; border: 1px solid #e0e9f5; text-align: center;">
@@ -114,7 +114,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p style="margin-top: 40px; font-size: 17px; color: #555;">Czekam na <span id="client-decision-grammar">Pana</span> decyzję odnośnie wyboru wariantu, abyśmy mogli sprawnie przejść do procesowania wniosku.</p>
+                                <p id="footer-text" style="margin-top: 40px; font-size: 17px; color: #555;">Czekam na <span id="client-decision-grammar">Pana</span> decyzję odnośnie wyboru wariantu, abyśmy mogli sprawnie przejść do procesowania wniosku.</p>
                             </td>
                         </tr>
                     </table>
@@ -129,13 +129,25 @@
             if (storedData) {
                 const data = JSON.parse(storedData);
 
-                // Teksty
+                // Podstawowe dane
                 document.getElementById('client-greeting').textContent = data.clientName + ",";
                 document.getElementById('intro-paragraph').innerHTML = data.introText.replace(/\n/g, '<br>');
                 document.getElementById('financing-header').textContent = data.financingType;
 
-                const genderClient = data.clientGender;
-                document.getElementById('client-decision-grammar').textContent = genderClient === 'F' ? "Pani" : "Pana";
+                // Edytowalne nagłówki
+                if (data.customHeaders) {
+                    if (data.customHeaders.benefits) document.getElementById('benefits-header').textContent = data.customHeaders.benefits;
+                    if (data.customHeaders.fee) document.getElementById('fee-header').textContent = data.customHeaders.fee;
+                }
+
+                // Stopka / Tekst końcowy
+                if (data.closingText) {
+                    document.getElementById('footer-text').innerHTML = data.closingText;
+                } else {
+                    // Fallback dla starych danych
+                    const genderClient = data.clientGender;
+                    document.getElementById('client-decision-grammar').textContent = genderClient === 'F' ? "Pani" : "Pana";
+                }
 
                 if(!data.hasVariant2) {
                     document.getElementById('var2-container').style.display = 'none';
@@ -143,12 +155,10 @@
                     document.getElementById('h3-var1').textContent = "OFERTA"; 
                 }
 
-                // UKRYWANIE CAŁEJ SEKCJI FEE
                 if(!data.visibility.feeSection) {
                     document.getElementById('fee-container').style.display = 'none';
                 }
 
-                // Wstawianie Danych (Helper)
                 const setVal = (id, val) => { if(document.getElementById(id)) document.getElementById(id).textContent = val; };
                 
                 setVal('w1-net', data.w1.netto); setVal('w1-gross', data.w1.brutto); setVal('w1-prov', data.w1.prowizja);
@@ -234,19 +244,3 @@
         }
     </script>
 </html>
-
-    <script>
-        // BAF AUTO UPDATE - 12.02.2026
-        try {
-            document.getElementById('wibor-1m').textContent = '3,98%';
-            document.getElementById('wibor-3m').textContent = '3,87%';
-            document.getElementById('wibor-6m').textContent = '3,76%';
-            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
-            
-            const dzisiaj = 'Dane na dzień: 12.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    </body>
-    
