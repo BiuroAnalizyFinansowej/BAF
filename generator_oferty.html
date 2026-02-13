@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Ofert BAF v4.7</title>
+    <title>Generator Ofert BAF v4.8</title>
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
@@ -49,8 +49,8 @@
         input[readonly] { background-color: #e9ecef; color: #495057; font-weight: bold; cursor: not-allowed; }
 
         /* Stylizacja Selecta Finansowania - Pastelowe */
-        #financingType option.firmowe { background-color: #d1e7dd; color: #0f5132; } /* Pastelowa zieleń */
-        #financingType option.prywatne { background-color: #f8d7da; color: #842029; } /* Pastelowa czerwień */
+        #financingType option.firmowe { background-color: #d1e7dd; color: #0f5132; }
+        #financingType option.prywatne { background-color: #f8d7da; color: #842029; }
         
         /* OKO - CHECKBOX */
         .input-with-check { display: flex; align-items: center; gap: 8px; }
@@ -80,7 +80,7 @@
         .added-benefit-item img { width: 20px; height: 20px; margin-right: 10px; }
         .remove-ben-btn { color: #dc3545; cursor: pointer; font-weight: bold; margin-left: 10px; }
 
-        button.generate-btn { background-color: #28a745; color: white; border: none; padding: 15px; width: 100%; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 30px; transition: 0.3s; }
+        button.generate-btn { background-color: #28a745; color: white; border: none; padding: 15px; width: 100%; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; }
         button.generate-btn:hover { background-color: #218838; }
         .btn-add { background: #007bff; margin-top: 10px; width: 100%; padding: 10px; font-size: 14px; color: white; border: none; border-radius: 5px; cursor: pointer; }
 
@@ -100,7 +100,7 @@
     <div class="container">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h1>Generator Oferty</h1>
-            <div style="text-align:right; font-size:0.8em; color:#777;">v4.7</div>
+            <div style="text-align:right; font-size:0.8em; color:#777;">v4.8</div>
         </div>
 
         <h2>1. Dane i Wstęp</h2>
@@ -125,16 +125,20 @@
         
         <div class="form-group">
             <label>Rodzaj Finansowania</label>
-            <select id="financingType">
-                <optgroup label="Firmowe">
-                    <option value="Kredyt firmowy ratalny" class="firmowe">Kredyt firmowy ratalny</option>
-                    <option value="Kredyt w rachunku bieżącym" class="firmowe">KRB (Kredyt w rachunku bieżącym)</option>
-                </optgroup>
-                <optgroup label="Prywatne">
-                    <option value="Kredyt gotówkowy" class="prywatne">Kredyt gotówkowy (prywatny)</option>
-                    <option value="Limit odnawialny" class="prywatne">Limit odnawialny (prywatny)</option>
-                </optgroup>
-            </select>
+            <div style="display: flex; gap: 10px;">
+                <select id="financingType" style="flex: 1;" onchange="toggleCustomFinancing()">
+                    <optgroup label="Firmowe">
+                        <option value="Kredyt firmowy ratalny" class="firmowe">Kredyt firmowy ratalny</option>
+                        <option value="Kredyt w rachunku bieżącym" class="firmowe">KRB (Kredyt w rachunku bieżącym)</option>
+                    </optgroup>
+                    <optgroup label="Prywatne">
+                        <option value="Kredyt gotówkowy" class="prywatne">Kredyt gotówkowy (prywatny)</option>
+                        <option value="Limit odnawialny" class="prywatne">Limit odnawialny (prywatny)</option>
+                    </optgroup>
+                    <option value="Inne" style="font-weight: bold;">Inne (wpisz własny...)</option>
+                </select>
+                <input type="text" id="customFinancingInput" placeholder="Wpisz nazwę finansowania..." style="display: none; flex: 1;">
+            </div>
         </div>
 
         <div class="form-group"><label>Treść maila</label><textarea id="introText" rows="3"></textarea></div>
@@ -177,7 +181,7 @@
                 </div>
                 <div class="form-group">
                     <label>Koszt Całkowity</label>
-                    <div class="input-with-check"><input type="checkbox" id="check_w1_koszt" class="eye-checkbox" checked><label for="check_w1_koszt" class="eye-label"></label><input type="text" id="w1_koszt_display" readonly style="color:#dc3545;"></div>
+                    <div class="input-with-check"><input type="checkbox" id="check_w1_koszt" class="eye-checkbox" checked><label for="check_w1_koszt" class="eye-label"></label><input type="text" id="w1_koszt_display" readonly style="color:#28a745; font-weight:bold;"></div>
                 </div>
                 <div class="form-group"><label>Rata</label><input type="text" id="w1_rata_display" readonly style="color: #004d99; font-weight:bold;"></div>
             </div>
@@ -215,11 +219,30 @@
                     </div>
                     <div class="form-group">
                         <label>Koszt Całkowity</label>
-                        <div class="input-with-check"><input type="checkbox" id="check_w2_koszt" class="eye-checkbox" checked><label for="check_w2_koszt" class="eye-label"></label><input type="text" id="w2_koszt_display" readonly style="color:#dc3545;"></div>
+                        <div class="input-with-check"><input type="checkbox" id="check_w2_koszt" class="eye-checkbox" checked><label for="check_w2_koszt" class="eye-label"></label><input type="text" id="w2_koszt_display" readonly style="color:#28a745; font-weight:bold;"></div>
                     </div>
                     <div class="form-group"><label>Rata</label><input type="text" id="w2_rata_display" readonly style="color: #28a745; font-weight:bold;"></div>
                 </div>
             </div>
+        </div>
+
+        <div class="header-with-toggle">
+            <h2>3. Edycja Treści Stałych</h2>
+        </div>
+        <div class="row">
+            <div class="col form-group">
+                <label>Nagłówek: Korzyści</label>
+                <input type="text" id="headerBenefits" value="Kluczowe Korzyści">
+            </div>
+            <div class="col form-group">
+                <label>Nagłówek: Wynagrodzenie</label>
+                <input type="text" id="headerFee" value="Wynagrodzenie za Doradztwo">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Tekst końcowy (Stopka)</label>
+            <textarea id="footerText" rows="2">Czekam na [GENDER] decyzję odnośnie wyboru wariantu, abyśmy mogli sprawnie przejść do procesowania wniosku.</textarea>
+            <small style="color: #777; font-size: 12px;">Użyj znacznika <b>[GENDER]</b>, aby automat wstawił "Pana" lub "Pani" w zależności od wybranej płci.</small>
         </div>
 
         <div class="header-with-toggle">
@@ -256,7 +279,10 @@
         </div>
         <div id="addedBenefitsList"></div>
 
-        <button class="generate-btn" onclick="generateOffer()">GENERUJ OFERTĘ</button>
+        <div style="display: flex; gap: 15px; margin-top: 30px;">
+            <button class="generate-btn" style="background-color: #6c757d; flex: 1;" onclick="generateOffer(true)">👁️ PODGLĄD</button>
+            <button class="generate-btn" style="flex: 2;" onclick="generateOffer(false)">GENERUJ I PRZEJDŹ</button>
+        </div>
     </div>
 
     <div class="sidebar">
@@ -333,6 +359,17 @@
             if(usedIcons.has(opt.dataset.icon)) { opt.classList.add('disabled'); opt.classList.remove('active'); }
             else { opt.classList.remove('disabled'); }
         });
+    }
+
+    function toggleCustomFinancing() {
+        const select = document.getElementById('financingType');
+        const input = document.getElementById('customFinancingInput');
+        if (select.value === 'Inne') {
+            input.style.display = 'block';
+            input.focus();
+        } else {
+            input.style.display = 'none';
+        }
     }
 
     function updateIntroText() {
@@ -431,17 +468,36 @@
     document.getElementById('enableVariant2').addEventListener('change', updateCalculations);
 
     // --- GENERUJ ---
-    function generateOffer() {
+    function generateOffer(isPreview = false) {
+        // Obsługa własnego rodzaju finansowania
+        let selectedFinancing = document.getElementById('financingType').value;
+        if (selectedFinancing === 'Inne') {
+            selectedFinancing = document.getElementById('customFinancingInput').value;
+        }
+
+        // Obsługa płci w tekście końcowym
+        const genderVal = document.getElementById('clientGender').value;
+        const genderWord = genderVal === 'F' ? 'Pani' : 'Pana';
+        let rawFooter = document.getElementById('footerText').value;
+        const finalFooter = rawFooter.replace('[GENDER]', genderWord);
+
         const data = {
             clientName: document.getElementById('clientName').value,
             clientGender: document.getElementById('clientGender').value,
             advisorData: document.getElementById('advisor').value,
-            financingType: document.getElementById('financingType').value,
+            financingType: selectedFinancing,
             introText: document.getElementById('introText').value,
             showBGK: document.getElementById('showBGK').checked,
             hasVariant2: document.getElementById('enableVariant2').checked,
             vatType: document.getElementById('vatType').value,
             months: document.getElementById('months').value,
+            
+            // Nowe pola edytowalne
+            customHeaders: {
+                benefits: document.getElementById('headerBenefits').value,
+                fee: document.getElementById('headerFee').value
+            },
+            closingText: finalFooter,
             
             // Visibility Flags
             visibility: {
@@ -502,7 +558,12 @@
         customBenefits.forEach(ben => data.benefits.push(ben));
 
         localStorage.setItem('bafOfferData_V4_6', JSON.stringify(data));
-        window.location.href = 'oferta.html';
+        
+        if (isPreview) {
+            window.open('oferta.html', '_blank');
+        } else {
+            window.location.href = 'oferta.html';
+        }
     }
 
     initIcons(); updateIntroText(); updateCalculations(); refreshIcons();
@@ -523,4 +584,3 @@
         } catch(e) { console.log('Brak elementu w tym pliku'); }
     </script>
     </body>
-    
