@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Ofert BAF v4.8</title>
+    <title>Generator Ofert BAF v4.9</title>
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
@@ -36,7 +36,6 @@
         h1, h2 { color: #002d5a; margin-top: 0; }
         h2 { font-size: 1.1em; border-bottom: 2px solid #007bff; padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; }
         
-        /* Flex nagłówek z okiem */
         .header-with-toggle { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #007bff; padding-bottom: 5px; margin-top: 25px; margin-bottom: 15px; }
         .header-with-toggle h2 { border: none; margin: 0; padding: 0; }
 
@@ -48,7 +47,7 @@
         input:focus, textarea:focus { border-color: #007bff; outline: none; }
         input[readonly] { background-color: #e9ecef; color: #495057; font-weight: bold; cursor: not-allowed; }
 
-        /* Stylizacja Selecta Finansowania - Pastelowe */
+        /* Stylizacja Selecta Finansowania */
         #financingType option.firmowe { background-color: #d1e7dd; color: #0f5132; }
         #financingType option.prywatne { background-color: #f8d7da; color: #842029; }
         
@@ -61,7 +60,6 @@
         .eye-checkbox:checked + .eye-label::after { content: '👁️'; }
         .eye-checkbox:not(:checked) + .eye-label { opacity: 0.3; filter: grayscale(100%); }
         .eye-checkbox:not(:checked) + .eye-label::after { content: '👁️'; text-decoration: line-through; }
-        .check-tooltip { font-size: 0.7em; color: #999; margin-left: 5px; font-weight: normal; }
 
         /* Checkboxy sekcji */
         .toggle-section { background: #eef6ff; padding: 10px; border-radius: 6px; border: 1px solid #badce3; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; }
@@ -100,7 +98,7 @@
     <div class="container">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h1>Generator Oferty</h1>
-            <div style="text-align:right; font-size:0.8em; color:#777;">v4.8</div>
+            <div style="text-align:right; font-size:0.8em; color:#777;">v4.9</div>
         </div>
 
         <h2>1. Dane i Wstęp</h2>
@@ -186,9 +184,9 @@
                 <div class="form-group"><label>Rata</label><input type="text" id="w1_rata_display" readonly style="color: #004d99; font-weight:bold;"></div>
             </div>
 
-            <div class="col" id="col_variant2" style="border-top: 4px solid #28a745; background: #fdfdfd; padding: 15px; border-radius: 4px;">
+            <div class="col" id="col_variant2" style="border-top: 4px solid #17a2b8; background: #fdfdfd; padding: 15px; border-radius: 4px;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h3 style="color: #28a745; margin:0;">Wariant II</h3>
+                    <h3 style="color: #17a2b8; margin:0;">Wariant II</h3>
                     <label style="margin:0; font-size: 0.8em; cursor:pointer;"><input type="checkbox" id="enableVariant2" checked> Włączony</label>
                 </div>
                 <div id="w2_controls" style="margin-top: 15px;">
@@ -221,7 +219,7 @@
                         <label>Koszt Całkowity</label>
                         <div class="input-with-check"><input type="checkbox" id="check_w2_koszt" class="eye-checkbox" checked><label for="check_w2_koszt" class="eye-label"></label><input type="text" id="w2_koszt_display" readonly style="color:#28a745; font-weight:bold;"></div>
                     </div>
-                    <div class="form-group"><label>Rata</label><input type="text" id="w2_rata_display" readonly style="color: #28a745; font-weight:bold;"></div>
+                    <div class="form-group"><label>Rata</label><input type="text" id="w2_rata_display" readonly style="color: #004d99; font-weight:bold;"></div>
                 </div>
             </div>
         </div>
@@ -469,13 +467,28 @@
 
     // --- GENERUJ ---
     function generateOffer(isPreview = false) {
-        // Obsługa własnego rodzaju finansowania
         let selectedFinancing = document.getElementById('financingType').value;
         if (selectedFinancing === 'Inne') {
             selectedFinancing = document.getElementById('customFinancingInput').value;
         }
 
-        // Obsługa płci w tekście końcowym
+        // LOGIKA WIZYTÓWKI
+        const advisorVal = document.getElementById('advisor').value; // np. "Dawid Błachno|M"
+        const advisorName = advisorVal.split('|')[0];
+        
+        // Linki do wizytówek (z pliku ksiegowi.html)
+        const advisorLinks = {
+            "Dawid Błachno": "https://q-r.to/DawidBlachnoBiuroBAF",
+            "Weronika Lekston": "https://q-r.to/WeronikaLekstonBiuroBAF",
+            "Mieczysław Andrzejewski": "https://l.ead.me/MieczyslawAndrzejewskiBiuroBAF",
+            "Joanna Karpała": "https://l.ead.me/JoannaKarpalaBiuroBAF",
+            "Piotr Pakuła": "https://q-r.to/PakulaPiotrBiuroBAF",
+            "Wiktoria Nojek": "https://q-r.to/WiktoraNojekBiuroBAF",
+            "Wojciech Młynarczyk": "https://q-r.to/WojciechMlynarczykBiuroBAF",
+            "Maja Zięba": "https://q-r.to/MajaZiebaBiuroBAF",
+            "Mateusz Dzidkowski": "https://q-r.to/MateuszDzidkowskiBiuroBAF"
+        };
+
         const genderVal = document.getElementById('clientGender').value;
         const genderWord = genderVal === 'F' ? 'Pani' : 'Pana';
         let rawFooter = document.getElementById('footerText').value;
@@ -484,7 +497,8 @@
         const data = {
             clientName: document.getElementById('clientName').value,
             clientGender: document.getElementById('clientGender').value,
-            advisorData: document.getElementById('advisor').value,
+            advisorData: advisorVal,
+            advisorLink: advisorLinks[advisorName] || "", // Dodajemy link do wizytówki
             financingType: selectedFinancing,
             introText: document.getElementById('introText').value,
             showBGK: document.getElementById('showBGK').checked,
@@ -492,14 +506,12 @@
             vatType: document.getElementById('vatType').value,
             months: document.getElementById('months').value,
             
-            // Nowe pola edytowalne
             customHeaders: {
                 benefits: document.getElementById('headerBenefits').value,
                 fee: document.getElementById('headerFee').value
             },
             closingText: finalFooter,
             
-            // Visibility Flags
             visibility: {
                 feeSection: document.getElementById('check_fee_visibility').checked,
                 
