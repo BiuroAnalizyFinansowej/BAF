@@ -87,18 +87,18 @@
     <div class="info-panel">
         <div class="info-container">
             <div class="info-header">Stawki Referencyjne</div>
-            <div class="info-date" id="current-date-wibor">...</div>
+            <div class="info-date" id="current-date-wibor">Dane na dzień: 12.02.2026</div>
             <div class="rates-grid">
-                <div class="rate-item"><p>WIBOR 1M</p><p class="value" id="wibor-1m">...</p></div>
-                <div class="rate-item"><p>WIBOR 3M</p><p class="value" id="wibor-3m">...</p></div>
-                <div class="rate-item"><p>WIBOR 6M</p><p class="value" id="wibor-6m">...</p></div>
+                <div class="rate-item"><p>WIBOR 1M</p><p class="value" id="wibor-1m">3,98%</p></div>
+                <div class="rate-item"><p>WIBOR 3M</p><p class="value" id="wibor-3m">3,87%</p></div>
+                <div class="rate-item"><p>WIBOR 6M</p><p class="value" id="wibor-6m">3,76%</p></div>
             </div>
             <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p>
         </div>
         <div class="info-container info-container-single">
             <div class="info-header">Odsetki ustawowe za opóźnienie</div>
-            <div class="info-date" id="current-date-odsetki">...</div>
-            <p class="value" id="odsetki-opoznienie">...</p>
+            <div class="info-date" id="current-date-odsetki">Dane na dzień: 12.02.2026</div>
+            <p class="value" id="odsetki-opoznienie">9,5%</p>
             <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p>
         </div>
     </div>
@@ -110,168 +110,29 @@
         <a href="#" onclick="history.back(); return false;" class="back-button" title="Powrót">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
         </a>
-        <h1>Kalkulator Kredytowy</h1><div class="input-group"><label for="loanAmount">Kwota kredytu (PLN)</label><div class="input-wrapper"><input type="range" id="loanAmountSlider" min="500" max="1500000" step="500" value="300000"><input type="text" id="loanAmountInput" value="300 000"></div></div><div class="input-group"><label for="loanTerm">Okres kredytowania</label><div class="input-wrapper"><input type="range" id="loanTermSlider" min="6" max="180" step="1" value="120"><input type="number" id="loanTermInput" min="6" max="180" step="1" value="120"><span class="term-display" id="termInYears">(10 lat i 0 miesięcy)</span></div></div><div class="grouped-inputs"><div><div class="input-group" style="margin-bottom: 1rem;"><label for="bankCommission">Prowizja bankowa (%)</label><input type="number" id="bankCommission" step="0.1" value="2.0"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="bankMargin">Marża banku (%)</label><input type="number" id="bankMargin" step="0.1" value="2.5"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="wibor">WIBOR (%)</label><input type="number" id="wibor" step="0.01" value="5.85"></div><div class="interest-rate-summary" id="nominalInterestRate">Oprocentowanie nominalne: 8.35%</div></div><div><div class="input-group" style="margin-bottom: 1rem;"><label for="brokerFeePercent">Opłata brokerska (%)</label><input type="number" id="brokerFeePercent" placeholder="np. 3.0"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="brokerFeeAmount">Opłata brokerska (PLN)</label><input type="number" id="brokerFeeAmount" placeholder="np. 9000"></div></div></div><div class="output-section"><div class="output-row"><span class="label">Kwota kredytu netto (kapitał)</span><span class="value" id="netLoanAmount">0,00 zł</span></div><div class="output-row"><span class="label">Kwota kredytu brutto (kapitał + prowizja)</span><span class="value" id="grossLoanAmount">0,00 zł</span></div><div class="output-row"><span class="label">Kwota do dyspozycji klienta</span><span class="value client-amount" id="clientAmount">0,00 zł</span></div><div class="output-row"><span class="label">Miesięczna rata równa</span><span class="result" id="monthlyPayment">0,00 zł</span></div></div><h2 style="margin-top: 2.5rem;">Harmonogram spłaty</h2><div style="overflow-x:auto;"><table><thead><tr><th>Nr raty</th><th>Część kapitałowa</th><th>Część odsetkowa</th><th>Rata całkowita</th><th>Kapitał do spłaty</th></tr></thead><tbody id="scheduleBody"></tbody></table></div>
+        <h1>Kalkulator Kredytowy</h1><div class="input-group"><label for="loanAmount">Kwota kredytu (PLN)</label><div class="input-wrapper"><input type="range" id="loanAmountSlider" min="500" max="1500000" step="500" value="300000"><input type="text" id="loanAmountInput" value="300 000"></div></div><div class="input-group"><label for="loanTerm">Okres kredytowania</label><div class="input-wrapper"><input type="range" id="loanTermSlider" min="6" max="180" step="1" value="120"><input type="number" id="loanTermInput" min="6" max="180" step="1" value="120"><span class="term-display" id="termInYears">(10 lat i 0 miesięcy)</span></div></div><div class="grouped-inputs"><div><div class="input-group" style="margin-bottom: 1rem;"><label for="bankCommission">Prowizja bankowa (%)</label><input type="number" id="bankCommission" step="0.1" value="2.0"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="bankMargin">Marża banku (%)</label><input type="number" id="bankMargin" step="0.1" value="2.5"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="wibor">WIBOR (%)</label><input type="number" id="wibor" step="0.01" value="5.85"></div><div class="interest-rate-summary" id="nominalInterestRate">Oprocentowanie nominalne: 8.35%</div></div><div><div class="input-group" style="margin-bottom: 1rem;"><label for="brokerFeePercent">Opłata brokerska (%)</label><input type="number" id="brokerFeePercent" placeholder="np. 3.0"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="brokerFeeAmount">Opłata brokerska (PLN)</label><input type="number" id="brokerFeeAmount" placeholder="np. 9000"></div></div></div>
+        <div class="output-section">
+            <div class="output-row"><span class="label">Kwota kredytu netto (kapitał)</span><span class="value" id="netLoanAmount">0,00 zł</span></div>
+            <div class="output-row"><span class="label">Kwota kredytu brutto (kapitał + prowizja)</span><span class="value" id="grossLoanAmount">0,00 zł</span></div>
+            <div class="output-row"><span class="label">Całkowity koszt odsetkowy</span><span class="value" id="totalInterestCost">0,00 zł</span></div>
+            <div class="output-row"><span class="label">Kwota do dyspozycji klienta</span><span class="value client-amount" id="clientAmount">0,00 zł</span></div>
+            <div class="output-row"><span class="label">Miesięczna rata równa</span><span class="result" id="monthlyPayment">0,00 zł</span></div>
+        </div>
+        <h2 style="margin-top: 2.5rem;">Harmonogram spłaty</h2><div style="overflow-x:auto;"><table><thead><tr><th>Nr raty</th><th>Część kapitałowa</th><th>Część odsetkowa</th><th>Rata całkowita</th><th>Kapitał do spłaty</th></tr></thead><tbody id="scheduleBody"></tbody></table></div>
     </div>
     <script>
-        const loanAmountSlider = document.getElementById('loanAmountSlider');const loanAmountInput = document.getElementById('loanAmountInput');const loanTermSlider = document.getElementById('loanTermSlider');const loanTermInput = document.getElementById('loanTermInput');const termInYearsDisplay = document.getElementById('termInYears');const bankCommissionInput = document.getElementById('bankCommission');const bankMarginInput = document.getElementById('bankMargin');const wiborInput = document.getElementById('wibor');const brokerFeePercentInput = document.getElementById('brokerFeePercent');const brokerFeeAmountInput = document.getElementById('brokerFeeAmount');const nominalInterestRateDisplay = document.getElementById('nominalInterestRate');const netLoanAmountDisplay = document.getElementById('netLoanAmount');const grossLoanAmountDisplay = document.getElementById('grossLoanAmount');const monthlyPaymentDisplay = document.getElementById('monthlyPayment');const clientAmountDisplay = document.getElementById('clientAmount');const scheduleBody = document.getElementById('scheduleBody');const currencyFormatter = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' });const numberFormatter = new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });function formatInputValue(value) {return numberFormatter.format(value).replace(/\s/g, ' ');}function parseFormattedValue(value) {return parseFloat(value.replace(/\s/g, '').replace(',', '.')) || 0;}function calculate() {const loanAmount = parseFormattedValue(loanAmountInput.value);const loanTerm = parseInt(loanTermInput.value) || 0;const bankCommission = parseFloat(bankCommissionInput.value) || 0;const bankMargin = parseFloat(bankMarginInput.value) || 0;const wibor = parseFloat(wiborInput.value) || 0;const brokerFeeAmount = parseFloat(brokerFeeAmountInput.value) || 0;const years = Math.floor(loanTerm / 12);const months = loanTerm % 12;termInYearsDisplay.textContent = `(${years} lat i ${months} miesięcy)`;const nominalInterestRate = bankMargin + wibor;nominalInterestRateDisplay.textContent = `Oprocentowanie nominalne: ${nominalInterestRate.toFixed(2)}%`;const grossLoanAmount = loanAmount * (1 + bankCommission / 100);netLoanAmountDisplay.textContent = currencyFormatter.format(loanAmount);grossLoanAmountDisplay.textContent = currencyFormatter.format(grossLoanAmount);const monthlyInterestRate = (nominalInterestRate / 100) / 12;let monthlyPayment = 0;if (monthlyInterestRate > 0 && loanTerm > 0) {const factor = Math.pow(1 + monthlyInterestRate, loanTerm);monthlyPayment = grossLoanAmount * (monthlyInterestRate * factor) / (factor - 1);} else if (loanTerm > 0) {monthlyPayment = grossLoanAmount / loanTerm;}monthlyPaymentDisplay.textContent = currencyFormatter.format(monthlyPayment);const clientAmount = loanAmount - brokerFeeAmount;clientAmountDisplay.textContent = currencyFormatter.format(clientAmount);generateSchedule(grossLoanAmount, monthlyPayment, monthlyInterestRate, loanTerm);}function generateSchedule(principal, monthlyPayment, monthlyRate, term) {scheduleBody.innerHTML = '';let remainingPrincipal = principal;if (term === 0 || isNaN(monthlyPayment) || !isFinite(monthlyPayment)) return;for (let i = 1; i <= term; i++) {const interestPart = remainingPrincipal * monthlyRate;let principalPart = monthlyPayment - interestPart;if (i === term) {principalPart = remainingPrincipal;monthlyPayment = principalPart + interestPart;}remainingPrincipal -= principalPart;const row = `<tr><td>${i}</td><td>${currencyFormatter.format(principalPart)}</td><td>${currencyFormatter.format(interestPart)}</td><td>${currencyFormatter.format(monthlyPayment)}</td><td>${currencyFormatter.format(Math.abs(remainingPrincipal))}</td></tr>`;scheduleBody.innerHTML += row;}}const inputsToCalculate = [loanAmountSlider, loanTermSlider, loanTermInput, bankCommissionInput, bankMarginInput, wiborInput, brokerFeePercentInput, brokerFeeAmountInput];inputsToCalculate.forEach(input => input.addEventListener('input', calculate));loanAmountInput.addEventListener('change', calculate);loanAmountSlider.addEventListener('input', () => {loanAmountInput.value = formatInputValue(loanAmountSlider.value);});loanAmountInput.addEventListener('input', (e) => {let value = parseFormattedValue(e.target.value);if (value > 1500000) value = 1500000;if (value >= 500) {loanAmountSlider.value = value;}});loanAmountInput.addEventListener('blur', (e) => {let value = parseFormattedValue(e.target.value);if (value < 500) value = 500;e.target.value = formatInputValue(value);calculate();});loanTermSlider.addEventListener('input', () => loanTermInput.value = loanTermSlider.value);loanTermInput.addEventListener('input', () => loanTermSlider.value = loanTermInput.value);brokerFeePercentInput.addEventListener('input', () => {const loanAmount = parseFormattedValue(loanAmountInput.value);const percent = parseFloat(brokerFeePercentInput.value) || 0;const amount = (loanAmount * percent) / 100;brokerFeeAmountInput.value = amount.toFixed(2);});brokerFeeAmountInput.addEventListener('input', () => {const loanAmount = parseFormattedValue(loanAmountInput.value);const amount = parseFloat(brokerFeeAmountInput.value) || 0;if (loanAmount > 0) {const percent = (amount / loanAmount) * 100;brokerFeePercentInput.value = percent.toFixed(2);} else {brokerFeePercentInput.value = '';}});
+        const loanAmountSlider = document.getElementById('loanAmountSlider');const loanAmountInput = document.getElementById('loanAmountInput');const loanTermSlider = document.getElementById('loanTermSlider');const loanTermInput = document.getElementById('loanTermInput');const termInYearsDisplay = document.getElementById('termInYears');const bankCommissionInput = document.getElementById('bankCommission');const bankMarginInput = document.getElementById('bankMargin');const wiborInput = document.getElementById('wibor');const brokerFeePercentInput = document.getElementById('brokerFeePercent');const brokerFeeAmountInput = document.getElementById('brokerFeeAmount');const nominalInterestRateDisplay = document.getElementById('nominalInterestRate');const netLoanAmountDisplay = document.getElementById('netLoanAmount');const grossLoanAmountDisplay = document.getElementById('grossLoanAmount');const monthlyPaymentDisplay = document.getElementById('monthlyPayment');const clientAmountDisplay = document.getElementById('clientAmount');
+        const totalInterestCostDisplay = document.getElementById('totalInterestCost');
+        const scheduleBody = document.getElementById('scheduleBody');const currencyFormatter = new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' });const numberFormatter = new Intl.NumberFormat('pl-PL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });function formatInputValue(value) {return numberFormatter.format(value).replace(/\s/g, ' ');}function parseFormattedValue(value) {return parseFloat(value.replace(/\s/g, '').replace(',', '.')) || 0;}function calculate() {const loanAmount = parseFormattedValue(loanAmountInput.value);const loanTerm = parseInt(loanTermInput.value) || 0;const bankCommission = parseFloat(bankCommissionInput.value) || 0;const bankMargin = parseFloat(bankMarginInput.value) || 0;const wibor = parseFloat(wiborInput.value) || 0;const brokerFeeAmount = parseFloat(brokerFeeAmountInput.value) || 0;const years = Math.floor(loanTerm / 12);const months = loanTerm % 12;termInYearsDisplay.textContent = `(${years} lat i ${months} miesięcy)`;const nominalInterestRate = bankMargin + wibor;nominalInterestRateDisplay.textContent = `Oprocentowanie nominalne: ${nominalInterestRate.toFixed(2)}%`;const grossLoanAmount = loanAmount * (1 + bankCommission / 100);netLoanAmountDisplay.textContent = currencyFormatter.format(loanAmount);grossLoanAmountDisplay.textContent = currencyFormatter.format(grossLoanAmount);const monthlyInterestRate = (nominalInterestRate / 100) / 12;let monthlyPayment = 0;if (monthlyInterestRate > 0 && loanTerm > 0) {const factor = Math.pow(1 + monthlyInterestRate, loanTerm);monthlyPayment = grossLoanAmount * (monthlyInterestRate * factor) / (factor - 1);} else if (loanTerm > 0) {monthlyPayment = grossLoanAmount / loanTerm;}monthlyPaymentDisplay.textContent = currencyFormatter.format(monthlyPayment);
+        
+        // Obliczenie kosztu odsetkowego
+        const totalInterest = (monthlyPayment * loanTerm) - grossLoanAmount;
+        totalInterestCostDisplay.textContent = currencyFormatter.format(totalInterest > 0 ? totalInterest : 0);
+
+        const clientAmount = loanAmount - brokerFeeAmount;clientAmountDisplay.textContent = currencyFormatter.format(clientAmount);generateSchedule(grossLoanAmount, monthlyPayment, monthlyInterestRate, loanTerm);}function generateSchedule(principal, monthlyPayment, monthlyRate, term) {scheduleBody.innerHTML = '';let remainingPrincipal = principal;if (term === 0 || isNaN(monthlyPayment) || !isFinite(monthlyPayment)) return;for (let i = 1; i <= term; i++) {const interestPart = remainingPrincipal * monthlyRate;let principalPart = monthlyPayment - interestPart;if (i === term) {principalPart = remainingPrincipal;monthlyPayment = principalPart + interestPart;}remainingPrincipal -= principalPart;const row = `<tr><td>${i}</td><td>${currencyFormatter.format(principalPart)}</td><td>${currencyFormatter.format(interestPart)}</td><td>${currencyFormatter.format(monthlyPayment)}</td><td>${currencyFormatter.format(Math.abs(remainingPrincipal))}</td></tr>`;scheduleBody.innerHTML += row;}}const inputsToCalculate = [loanAmountSlider, loanTermSlider, loanTermInput, bankCommissionInput, bankMarginInput, wiborInput, brokerFeePercentInput, brokerFeeAmountInput];inputsToCalculate.forEach(input => input.addEventListener('input', calculate));loanAmountInput.addEventListener('change', calculate);loanAmountSlider.addEventListener('input', () => {loanAmountInput.value = formatInputValue(loanAmountSlider.value);});loanAmountInput.addEventListener('input', (e) => {let value = parseFormattedValue(e.target.value);if (value > 1500000) value = 1500000;if (value >= 500) {loanAmountSlider.value = value;}});loanAmountInput.addEventListener('blur', (e) => {let value = parseFormattedValue(e.target.value);if (value < 500) value = 500;e.target.value = formatInputValue(value);calculate();});loanTermSlider.addEventListener('input', () => loanTermInput.value = loanTermSlider.value);loanTermInput.addEventListener('input', () => loanTermSlider.value = loanTermInput.value);brokerFeePercentInput.addEventListener('input', () => {const loanAmount = parseFormattedValue(loanAmountInput.value);const percent = parseFloat(brokerFeePercentInput.value) || 0;const amount = (loanAmount * percent) / 100;brokerFeeAmountInput.value = amount.toFixed(2);});brokerFeeAmountInput.addEventListener('input', () => {const loanAmount = parseFormattedValue(loanAmountInput.value);const amount = parseFloat(brokerFeeAmountInput.value) || 0;if (loanAmount > 0) {const percent = (amount / loanAmount) * 100;brokerFeePercentInput.value = percent.toFixed(2);} else {brokerFeePercentInput.value = '';}});
         document.addEventListener('DOMContentLoaded', () => {
             loanAmountInput.value = formatInputValue(loanAmountSlider.value);
             calculate();
-
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            document.getElementById('current-date-wibor').textContent = formattedDate;
-            document.getElementById('current-date-odsetki').textContent = formattedDate;
         });
     </script>
 </html>
-
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 08.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 10.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 15.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 17.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 08.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 16.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 22.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 26.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 02.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 10.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 12.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        // BAF AUTO UPDATE - 12.02.2026
-        try {
-            document.getElementById('wibor-1m').textContent = '3,98%';
-            document.getElementById('wibor-3m').textContent = '3,87%';
-            document.getElementById('wibor-6m').textContent = '3,76%';
-            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
-            
-            const dzisiaj = 'Dane na dzień: 12.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    </body>
-    
