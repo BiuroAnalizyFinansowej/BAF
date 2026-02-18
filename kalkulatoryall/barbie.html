@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator - Styl Barbie z Poprawionym RRSO</title>
+    <title>Kalkulator - Styl Barbie</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
@@ -126,14 +126,37 @@
 </head>
 <body>
     <div class="info-panel">
-        <div class="info-container"><div class="info-header">Stawki Referencyjne</div><div class="info-date" id="current-date-wibor">...</div><div class="rates-grid"><div class="rate-item"><p>WIBOR 1M</p><p class="value" id="wibor-1m">...</p></div><div class="rate-item"><p>WIBOR 3M</p><p class="value" id="wibor-3m">...</p></div><div class="rate-item"><p>WIBOR 6M</p><p class="value" id="wibor-6m">...</p></div></div><p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p></div>
-        <div class="info-container info-container-single"><div class="info-header">Odsetki ustawowe za opóźnienie</div><div class="info-date" id="current-date-odsetki">...</div><p class="value" id="odsetki-opoznienie">...</p><p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p></div>
+        <div class="info-container">
+            <div class="info-header">Stawki Referencyjne</div>
+            <div class="info-date" id="current-date-wibor">Dane na dzień: 12.02.2026</div>
+            <div class="rates-grid">
+                <div class="rate-item"><p>WIBOR 1M</p><p class="value" id="wibor-1m">3,98%</p></div>
+                <div class="rate-item"><p>WIBOR 3M</p><p class="value" id="wibor-3m">3,87%</p></div>
+                <div class="rate-item"><p>WIBOR 6M</p><p class="value" id="wibor-6m">3,76%</p></div>
+            </div>
+            <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p>
+        </div>
+        <div class="info-container info-container-single">
+            <div class="info-header">Odsetki ustawowe za opóźnienie</div>
+            <div class="info-date" id="current-date-odsetki">Dane na dzień: 12.02.2026</div>
+            <p class="value" id="odsetki-opoznienie">9,5%</p>
+            <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p>
+        </div>
     </div>
     <div class="calculator-container">
         <a href="barbie.html" class="home-button" title="Strona główna"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></a>
         <a href="#" onclick="history.back(); return false;" class="back-button" title="Powrót"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></a>
         <h1>Kalkulator Kredytowy</h1><div class="input-group"><label for="loanAmount">Kwota kredytu (PLN)</label><div class="input-wrapper"><input type="range" id="loanAmountSlider" min="500" max="1500000" step="500" value="300000"><input type="text" id="loanAmountInput" value="300 000"></div></div><div class="input-group"><label for="loanTerm">Okres kredytowania</label><div class="input-wrapper"><input type="range" id="loanTermSlider" min="6" max="180" step="1" value="120"><input type="number" id="loanTermInput" min="6" max="180" step="1" value="120"><span class="term-display" id="termInYears">(10 lat i 0 miesięcy)</span></div></div><div class="grouped-inputs"><div><div class="input-group" style="margin-bottom: 1rem;"><label for="bankCommission">Prowizja bankowa (%)</label><input type="number" id="bankCommission" step="0.1" value="2.0"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="bankMargin">Marża banku (%)</label><input type="number" id="bankMargin" step="0.1" value="2.5"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="wibor">WIBOR (%)</label><input type="number" id="wibor" step="0.01" value="5.85"></div><div class="interest-rate-summary" id="nominalInterestRate">Oprocentowanie nominalne: 8.35%</div></div><div><div class="input-group" style="margin-bottom: 1rem;"><label for="brokerFeePercent">Opłata brokerska (%)</label><input type="number" id="brokerFeePercent" placeholder="np. 3.0"></div><div class="input-group" style="margin-bottom: 1rem;"><label for="brokerFeeAmount">Opłata brokerska (PLN)</label><input type="number" id="brokerFeeAmount" placeholder="np. 9000"></div></div></div>
-        <div class="output-section"><div class="output-row"><span class="label">Kwota kredytu netto (kapitał)</span><span class="value" id="netLoanAmount">0,00 zł</span></div><div class="output-row"><span class="label">Kwota kredytu brutto (kapitał + prowizja)</span><span class="value" id="grossLoanAmount">0,00 zł</span></div><div class="output-row"><span class="label">Kwota do dyspozycji klienta</span><span class="value client-amount" id="clientAmount">0,00 zł</span></div><div class="output-row"><span class="label">Miesięczna rata równa</span><span class="result" id="monthlyPayment">0,00 zł</span></div><div class="output-row"><span class="label">Całkowity koszt kredytu</span><span class="value" id="totalLoanCost">0,00 zł</span></div><div class="output-row"><span class="label">RRSO</span><span class="value" id="aprValue">0,00%</span></div><p class="apr-disclaimer">(RRSO dotyczy jedynie kredytów detalicznych/konsumenckich)</p></div>
+        <div class="output-section">
+            <div class="output-row"><span class="label">Kwota kredytu netto (kapitał)</span><span class="value" id="netLoanAmount">0,00 zł</span></div>
+            <div class="output-row"><span class="label">Kwota kredytu brutto (kapitał + prowizja)</span><span class="value" id="grossLoanAmount">0,00 zł</span></div>
+            <div class="output-row"><span class="label">Kwota do dyspozycji klienta</span><span class="value client-amount" id="clientAmount">0,00 zł</span></div>
+            <div class="output-row"><span class="label">Miesięczna rata równa</span><span class="result" id="monthlyPayment">0,00 zł</span></div>
+            <div class="output-row"><span class="label">Całkowity koszt odsetkowy</span><span class="value" id="totalInterestCost">0,00 zł</span></div>
+            <div class="output-row"><span class="label">Całkowity koszt kredytu</span><span class="value" id="totalLoanCost">0,00 zł</span></div>
+            <div class="output-row"><span class="label">RRSO</span><span class="value" id="aprValue">0,00%</span></div>
+            <p class="apr-disclaimer">(RRSO dotyczy jedynie kredytów detalicznych/konsumenckich)</p>
+        </div>
         
         <div class="header-with-button">
             <h2 style="margin-top: 2.5rem; margin-bottom: 1rem;">Harmonogram spłaty</h2>
@@ -162,6 +185,7 @@
         const clientAmountDisplay = document.getElementById('clientAmount');
         const scheduleBody = document.getElementById('scheduleBody');
         const totalLoanCostDisplay = document.getElementById('totalLoanCost');
+        const totalInterestCostDisplay = document.getElementById('totalInterestCost');
         const aprValueDisplay = document.getElementById('aprValue');
 
         // --- SEKCJA 2: Definicje formaterów i parserów ---
@@ -223,13 +247,18 @@
             }
             const clientAmount = loanAmount - brokerFeeAmount;
             const totalPayments = monthlyPayment * loanTerm;
-            const totalLoanCost = totalPayments - loanAmount;
+            const totalLoanCost = totalPayments - loanAmount; // Koszt całkowity (netto)
+            
+            // Obliczanie kosztu odsetkowego (Rata * Okres - Kapitał Brutto)
+            const totalInterest = totalPayments - grossLoanAmount;
+
             const apr = calculateAPR(clientAmount, monthlyPayment, loanTerm);
             netLoanAmountDisplay.textContent = currencyFormatter.format(loanAmount);
             grossLoanAmountDisplay.textContent = currencyFormatter.format(grossLoanAmount);
             clientAmountDisplay.textContent = currencyFormatter.format(clientAmount);
             monthlyPaymentDisplay.textContent = currencyFormatter.format(monthlyPayment);
             totalLoanCostDisplay.textContent = currencyFormatter.format(totalLoanCost > 0 ? totalLoanCost : 0);
+            totalInterestCostDisplay.textContent = currencyFormatter.format(totalInterest > 0 ? totalInterest : 0);
             aprValueDisplay.textContent = `${apr.toFixed(2).replace('.',',')}%`;
             generateSchedule(grossLoanAmount, monthlyPayment, monthlyInterestRate, loanTerm);
         }
@@ -304,160 +333,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             loanAmountInput.value = new Intl.NumberFormat('pl-PL').format(loanAmountSlider.value).replace(/\s/g, ' ');
             calculate();
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            document.getElementById('current-date-wibor').textContent = formattedDate;
-            document.getElementById('current-date-odsetki').textContent = formattedDate;
         });
     </script>
 </html>
-
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 08.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 10.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 15.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 17.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 08.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 16.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 22.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 26.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 02.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 10.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 12.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        // BAF AUTO UPDATE - 12.02.2026
-        try {
-            document.getElementById('wibor-1m').textContent = '3,98%';
-            document.getElementById('wibor-3m').textContent = '3,87%';
-            document.getElementById('wibor-6m').textContent = '3,76%';
-            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
-            
-            const dzisiaj = 'Dane na dzień: 12.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    </body>
-    
