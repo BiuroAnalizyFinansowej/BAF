@@ -95,18 +95,18 @@
     <div class="info-panel">
         <div class="info-container">
             <div class="info-header">Stawki Referencyjne</div>
-            <div class="info-date" id="current-date-wibor">...</div>
+            <div class="info-date" id="current-date-wibor">Dane na dzień: 12.02.2026</div>
             <div class="rates-grid">
-                <div class="rate-item"><p>WIBOR 1M</p><p class="value" id="wibor-1m">...</p></div>
-                <div class="rate-item"><p>WIBOR 3M</p><p class="value" id="wibor-3m">...</p></div>
-                <div class="rate-item"><p>WIBOR 6M</p><p class="value" id="wibor-6m">...</p></div>
+                <div class="rate-item"><p>WIBOR 1M</p><p class="value" id="wibor-1m">3,98%</p></div>
+                <div class="rate-item"><p>WIBOR 3M</p><p class="value" id="wibor-3m">3,87%</p></div>
+                <div class="rate-item"><p>WIBOR 6M</p><p class="value" id="wibor-6m">3,76%</p></div>
             </div>
             <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p>
         </div>
         <div class="info-container info-container-single">
             <div class="info-header">Odsetki ustawowe za opóźnienie</div>
-            <div class="info-date" id="current-date-odsetki">...</div>
-            <p class="value" id="odsetki-opoznienie">...</p>
+            <div class="info-date" id="current-date-odsetki">Dane na dzień: 12.02.2026</div>
+            <p class="value" id="odsetki-opoznienie">9,5%</p>
             <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p>
         </div>
     </div>
@@ -125,10 +125,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             loanAmountInput.value = formatInputValue(loanAmountSlider.value);
             calculate();
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            document.getElementById('current-date-wibor').textContent = formattedDate;
-            document.getElementById('current-date-odsetki').textContent = formattedDate;
+            // Sekcja z twardymi danymi wiboru usunięta, aby Python mógł je wstrzykiwać
         });
     </script>
 </html>
