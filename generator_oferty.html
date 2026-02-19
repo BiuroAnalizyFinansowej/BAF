@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Ofert BAF v5.2</title>
+    <title>Generator Ofert BAF v5.3</title>
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
@@ -89,7 +89,7 @@
     <div class="container">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h1>Generator Oferty</h1>
-            <div style="text-align:right; font-size:0.8em; color:#777;">v5.2</div>
+            <div style="text-align:right; font-size:0.8em; color:#777;">v5.3</div>
         </div>
 
         <h2>1. Dane i Wstęp</h2>
@@ -169,7 +169,7 @@
         <div class="row" style="flex-wrap: wrap;">
             <div class="col form-group"><label>Success Fee (%)</label><input type="number" step="0.1" id="successFeeProc" value="4.0" oninput="updateCalculations()"></div>
             <div class="col form-group"><label>VAT</label><select id="vatType"><option value="VAT">+ VAT</option><option value="ZW">zw. z VAT</option></select></div>
-            <div class="col form-group"><label>Kwota Fee</label><input type="text" id="successFeeKwota" readonly title="Domyślnie wyliczana od Kwoty Netto Wariantu I (Możesz edytować ręcznie, jeśli chcesz inną)"></div>
+            <div class="col form-group"><label>Kwota Fee</label><input type="text" id="successFeeKwota" title="Domyślnie wyliczana od Kwoty Netto Wariantu I (Możesz edytować ręcznie, jeśli chcesz inną)"></div>
         </div>
 
         <h2>5. Korzyści</h2>
@@ -265,7 +265,16 @@
                 <div class="input-with-check">
                     <input type="checkbox" id="check_v${id}_netto" class="eye-checkbox" checked>
                     <label for="check_v${id}_netto" class="eye-label"></label>
-                    <input type="text" id="v${id}_loanAmount" value="100 000" oninput="updateCalculations()" onblur="this.value=formatMoney(parseMoney(this.value))">
+                    <input type="text" id="v${id}_loanAmount" value="100 000" oninput="updateCalculations()" onblur="this.value=formatMoney(parseMoney(this.value)); updateCalculations();">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Kwota do dyspozycji</label>
+                <div class="input-with-check">
+                    <input type="checkbox" id="check_v${id}_dyspozycja" class="eye-checkbox" checked>
+                    <label for="check_v${id}_dyspozycja" class="eye-label" title="Netto - Success Fee"></label>
+                    <input type="text" id="v${id}_dyspozycja_display" readonly style="color:#0056b3; font-weight:bold;">
                 </div>
             </div>
 
@@ -449,6 +458,22 @@
         let firstVariantNetto = 0;
 
         const variantCols = document.querySelectorAll('.variant-col');
+        
+        // Faza 1: Odczyt Netto Wariantu I dla automatycznego obliczenia wynagrodzenia (jeśli włączone)
+        if(variantCols.length > 0) {
+            const firstId = variantCols[0].id.replace('col_v', '');
+            firstVariantNetto = parseMoney(document.getElementById(`v${firstId}_loanAmount`).value);
+        }
+
+        const feeInput = document.getElementById('successFeeKwota');
+        if (feeInput.value === '' || feeInput.dataset.auto === "true" || feeInput.dataset.auto === undefined) {
+            feeInput.value = formatMoney(firstVariantNetto * (successFeeProc / 100));
+            feeInput.dataset.auto = "true";
+        }
+
+        const finalFee = parseMoney(feeInput.value);
+
+        // Faza 2: Przeliczanie poszczególnych wariantów (w tym Kwoty do dyspozycji)
         variantCols.forEach((col, index) => {
             const id = col.id.replace('col_v', '');
             
@@ -465,29 +490,28 @@
             const p = parseFloat(prowizjaEl.value) || 0;
             const m = parseFloat(marzaEl.value) || 0;
             const w = parseFloat(wiborEl.value) || 0;
-            
-            if (index === 0) firstVariantNetto = loanNetto; 
 
             const calc_brutto = loanNetto * (1 + p/100);
             const rate = w + m;
             const rata = calculatePMT(rate, months, calc_brutto);
             const koszt = (rata * months) - loanNetto;
+            const dyspozycja = loanNetto - finalFee;
+
+            if(document.getElementById(`v${id}_dyspozycja_display`)) {
+                document.getElementById(`v${id}_dyspozycja_display`).value = formatMoney(dyspozycja);
+            }
 
             document.getElementById(`v${id}_brutto_display`).value = formatMoney(calc_brutto);
             document.getElementById(`v${id}_oproc_display`).value = rate.toFixed(2) + '%';
             document.getElementById(`v${id}_rata_display`).value = formatMoney(rata);
             document.getElementById(`v${id}_koszt_display`).value = formatMoney(koszt);
         });
-
-        const feeInput = document.getElementById('successFeeKwota');
-        if (feeInput.readOnly || feeInput.value === '' || feeInput.dataset.auto === "true") {
-            feeInput.value = formatMoney(firstVariantNetto * (successFeeProc / 100));
-            feeInput.dataset.auto = "true";
-        }
     }
     
+    // Obsługa ręcznego wpisywania kwoty fee (odpina automatyczne przeliczanie procentowe dla tej wartości)
     document.getElementById('successFeeKwota').addEventListener('input', function() {
         this.dataset.auto = "false";
+        updateCalculations();
     });
 
     // --- GENERUJ ---
@@ -545,6 +569,7 @@
                 roman: roman,
                 months: document.getElementById(`v${id}_months`).value,
                 netto: finalNettoText,
+                dyspozycja: document.getElementById(`v${id}_dyspozycja_display`).value,
                 brutto: document.getElementById(`v${id}_brutto_display`).value,
                 prowizja: document.getElementById(`v${id}_prowizja_proc`).value + '%',
                 marza: document.getElementById(`v${id}_marza`).value + '%',
@@ -561,6 +586,7 @@
 
                 visibility: {
                     netto: document.getElementById(`check_v${id}_netto`).checked,
+                    dyspozycja: document.getElementById(`check_v${id}_dyspozycja`).checked,
                     brutto: document.getElementById(`check_v${id}_brutto`).checked,
                     prowizja: document.getElementById(`check_v${id}_prowizja`).checked,
                     marza: document.getElementById(`check_v${id}_marza`).checked,
@@ -584,7 +610,7 @@
         });
         customBenefits.forEach(ben => data.benefits.push(ben));
 
-        localStorage.setItem('bafOfferData_V5_2', JSON.stringify(data));
+        localStorage.setItem('bafOfferData_V5_3', JSON.stringify(data));
         
         if (isPreview) { window.open('oferta.html', '_blank'); } else { window.location.href = 'oferta.html'; }
     }
@@ -594,7 +620,12 @@
 </script>
 
 <script>
+    // BAF AUTO UPDATE
     try {
+        document.getElementById('wibor-1m').textContent = '3,98%';
+        document.getElementById('wibor-3m').textContent = '3,87%';
+        document.getElementById('wibor-6m').textContent = '3,76%';
+        document.getElementById('odsetki-opoznienie').textContent = '9,5%';
         
         const dzisiaj = 'Dane na dzień: 19.02.2026';
         if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
@@ -605,20 +636,5 @@
         if(typeof updateCalculations === 'function') updateCalculations();
     } catch(e) { console.log('Brak elementu w tym pliku'); }
 </script>
+</body>
 </html>
-
-    <script>
-        // BAF AUTO UPDATE - 19.02.2026
-        try {
-            document.getElementById('wibor-1m').textContent = '3,97%';
-            document.getElementById('wibor-3m').textContent = '3,85%';
-            document.getElementById('wibor-6m').textContent = '3,73%';
-            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
-            
-            const dzisiaj = 'Dane na dzień: 19.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    </body>
-    
