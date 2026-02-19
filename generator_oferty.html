@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Ofert BAF v4.11</title>
+    <title>Generator Ofert BAF v5.1</title>
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
@@ -89,7 +89,7 @@
     <div class="container">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h1>Generator Oferty</h1>
-            <div style="text-align:right; font-size:0.8em; color:#777;">v4.11</div>
+            <div style="text-align:right; font-size:0.8em; color:#777;">v5.1</div>
         </div>
 
         <h2>1. Dane i Wstęp</h2>
@@ -132,11 +132,9 @@
 
         <div class="form-group"><label>Treść maila</label><textarea id="introText" rows="3"></textarea></div>
 
-        <h2>2. Parametry Bazowe</h2>
+        <h2>2. Parametr Bazowy</h2>
         <div class="row" style="background: #fdfdfd; padding: 15px; border: 1px solid #eee; border-radius: 8px; flex-wrap: wrap;">
-            <div class="col form-group"><label>WIBOR BAZOWY (%)</label><input type="number" step="0.01" id="wibor" value="4.02"><small style="color:#777">Służy do obliczeń</small></div>
-            <div class="col form-group"><label>Okres (mies.)</label><input type="number" id="months" value="120"></div>
-            <div class="col form-group"><label>Kwota Netto (Bazowa)</label><input type="text" id="loanAmount" value="1000000"></div>
+            <div class="col form-group"><label>WIBOR BAZOWY (%)</label><input type="number" step="0.01" id="wibor" value="4.02"><small style="color:#777">Wartość służąca do przeliczeń dla wariantów</small></div>
         </div>
 
         <div class="header-with-toggle" style="margin-top: 30px;">
@@ -174,9 +172,9 @@
         </div>
         
         <div class="row" style="flex-wrap: wrap;">
-            <div class="col form-group"><label>Success Fee (%)</label><input type="number" step="0.1" id="successFeeProc" value="4.0"></div>
+            <div class="col form-group"><label>Success Fee (%)</label><input type="number" step="0.1" id="successFeeProc" value="4.0" oninput="updateCalculations()"></div>
             <div class="col form-group"><label>VAT</label><select id="vatType"><option value="VAT">+ VAT</option><option value="ZW">zw. z VAT</option></select></div>
-            <div class="col form-group"><label>Kwota Fee</label><input type="text" id="successFeeKwota" readonly></div>
+            <div class="col form-group"><label>Kwota Fee</label><input type="text" id="successFeeKwota" readonly title="Domyślnie wyliczana od Kwoty Netto Wariantu I (Możesz edytować ręcznie, jeśli chcesz inną)"></div>
         </div>
         <div class="toggle-section"><label><input type="checkbox" id="showBGK" checked> Dodaj informację o Gwarancji BGK</label></div>
 
@@ -191,7 +189,7 @@
             <label>Dodaj nową korzyść (Pogrubione automatycznie)</label>
             <input type="text" id="customBenText" placeholder="Wpisz treść...">
             
-            <div style="margin-top: 10px; font-size: 14px; color:#555;">Wybierz ikonę (Użyte są zablokowane):</div>
+            <div style="margin-top: 10px; font-size: 14px; color:#555;">Wybierz ikonę (Wykorzystane standardowe ikony są blokowane. <b>Ikona Checkboxa jest wielokrotnego użytku!</b>):</div>
             <div class="icon-selector" id="iconSelector"></div>
             <input type="hidden" id="selectedCustomIcon" value="">
 
@@ -214,7 +212,7 @@
                 <div class="rate-item"><p>WIBOR 3M</p><p class="value" id="wibor-3m">-</p></div>
                 <div class="rate-item"><p>WIBOR 6M</p><p class="value" id="wibor-6m">-</p></div>
             </div>
-            <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i nie są aktualizowane automatycznie.</p>
+            <p class="disclaimer-text">Dane przedstawiają wartości z podanego dnia i aktualizowane są systemowo.</p>
         </div>
         <div class="info-container info-container-single">
             <div class="info-header">Odsetki ustawowe</div>
@@ -225,17 +223,18 @@
 </div>
 
 <script>
-    // --- SKRYPT AKTUALIZACJI WIBOR ---
-    try {
-        const dzisiaj = 'Dane na dzień: 19.02.2026';
-        if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-        if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        const startWibor = '4.02';
-        if(document.getElementById('wibor')) document.getElementById('wibor').value = startWibor;
-    } catch(e) { console.log('Błąd BAF logic'); }
+    // --- POMOCNICZE FUNKCJE ---
+    function parseMoney(val) { return parseFloat(val.toString().replace(/\s/g, '').replace('PLN','').replace(',','.')) || 0; }
+    function formatMoney(num) { return num.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' PLN'; }
+    function calculatePMT(rate, periods, pv) {
+        if (rate === 0) return pv / periods;
+        const r = (rate / 100) / 12;
+        return pv * r * Math.pow(1 + r, periods) / (Math.pow(1 + r, periods) - 1);
+    }
 
     // --- DYNAMICZNE WARIANTY ---
     let variantsCount = 0;
+    let totalVariantsCreated = 0; // Pomaga utrzymać unikalne ID nawet po usunięciu
     const maxVariants = 5;
     const variantColors = ['#007bff', '#17a2b8', '#28a745', '#fd7e14', '#6f42c1'];
     const romanNumerals = ['I', 'II', 'III', 'IV', 'V'];
@@ -243,34 +242,44 @@
     function initVariants() {
         document.getElementById('variantsContainer').innerHTML = '';
         variantsCount = 0;
-        addVariant(); // Dodaj domyślnie pierwszy
+        totalVariantsCreated = 0;
+        addVariant(); // Pierwszy wariant na start
     }
 
     function addVariant() {
         if (variantsCount >= maxVariants) return;
         variantsCount++;
-        const id = variantsCount;
-        const color = variantColors[id - 1];
-        const roman = romanNumerals[id - 1];
+        totalVariantsCreated++;
+        const id = totalVariantsCreated; 
+        const color = variantColors[variantsCount - 1];
+        const roman = romanNumerals[variantsCount - 1];
 
         const html = `
-        <div class="col" id="col_v${id}" style="border-top: 4px solid ${color}; background: #fdfdfd; padding: 15px; border-radius: 4px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+        <div class="col variant-col" id="col_v${id}" data-vindex="${variantsCount}" style="border-top: 4px solid ${color}; background: #fdfdfd; padding: 15px; border-radius: 4px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
-                <h3 style="color: ${color}; margin:0;">Wariant ${roman}</h3>
-                ${id > 1 ? `<button type="button" class="btn-remove-var" onclick="removeVariant(${id})">X Usuń</button>` : ''}
+                <h3 style="color: ${color}; margin:0;" class="variant-header">Wariant ${roman}</h3>
+                ${variantsCount > 1 ? `<button type="button" class="btn-remove-var" onclick="removeVariant(${id})">X Usuń</button>` : ''}
             </div>
             
-            <div class="form-group">
-                <label>Kwota Netto</label>
-                <div class="input-with-check"><input type="checkbox" id="check_v${id}_netto" class="eye-checkbox" checked><label for="check_v${id}_netto" class="eye-label"></label><input type="text" id="v${id}_netto_display" readonly></div>
+            <div class="form-group" style="background: #f4f8fc; padding: 10px; border-radius: 6px; border: 1px solid #dcebf7;">
+                <label>Okres (mies.)</label>
+                <input type="number" id="v${id}_months" value="120" oninput="updateCalculations()">
+                
+                <label style="margin-top:10px;">Kwota Netto (PLN)</label>
+                <div class="input-with-check">
+                    <input type="checkbox" id="check_v${id}_netto" class="eye-checkbox" checked>
+                    <label for="check_v${id}_netto" class="eye-label"></label>
+                    <input type="text" id="v${id}_loanAmount" value="100 000" oninput="updateCalculations()" onblur="this.value=formatMoney(parseMoney(this.value))">
+                </div>
             </div>
+
             <div class="form-group">
                 <label>Kwota Brutto</label>
                 <div class="input-with-check"><input type="checkbox" id="check_v${id}_brutto" class="eye-checkbox" checked><label for="check_v${id}_brutto" class="eye-label"></label><input type="text" id="v${id}_brutto_display" readonly></div>
             </div>
             <div class="form-group">
                 <label>Prowizja (%)</label>
-                <div class="input-with-check"><input type="checkbox" id="check_v${id}_prowizja" class="eye-checkbox" checked><label for="check_v${id}_prowizja" class="eye-label"></label><input type="number" step="0.01" id="v${id}_prowizja_proc" value="${id === 1 ? '2.5' : '0'}" oninput="updateCalculations()"></div>
+                <div class="input-with-check"><input type="checkbox" id="check_v${id}_prowizja" class="eye-checkbox" checked><label for="check_v${id}_prowizja" class="eye-label"></label><input type="number" step="0.01" id="v${id}_prowizja_proc" value="${variantsCount === 1 ? '2.5' : '0'}" oninput="updateCalculations()"></div>
             </div>
             <div class="form-group">
                 <label>Marża (%)</label>
@@ -306,38 +315,34 @@
         document.getElementById('variantsContainer').insertAdjacentHTML('beforeend', html);
         updateAddButtonState();
         updateCalculations();
+        recolorVariants(); // Dla spójności styli po ew. usunięciach
     }
 
-    function removeVariant(id) {
-        document.getElementById(`col_v${id}`).remove();
-        // Rekalibracja ID i ilości wariantów dla spójności
-        const currentCols = document.querySelectorAll('[id^="col_v"]');
-        let tempHTML = '';
-        variantsCount = 0;
-        document.getElementById('variantsContainer').innerHTML = ''; // czyszczenie
-        addVariant(); // Pierwszy stały
-        
-        // Zabezpieczenie danych (w idealnym świecie framework by to zrobił, tutaj po prostu nie pozwólmy na dziury)
-        // Dla uproszczenia: jeśli usuwasz, to po prostu ukrywa HTML w tym prostym systemie.
-        // Lepsze wyjście - całkowicie odświeżyć kontener, ale to zresetuje wpisane dane z innych.
-        // Najprostsza metoda: zostawić luki w ID i zmienić logikę by ignorowała brakujące, 
-        // ale żeby zachować romanNumerals musimy przebudować.
-        location.reload(); // Prosty fallback, zalecane jednak nie usuwać "środkowych".
-        // Alternatywa to zostawić tylko przycisk "Usuń Ostatni". Zróbmy tak dla wygody:
-    }
-    
-    // Nadpisana funkcja Remove dla uproszczenia (Usuwa tylko konkretnego węzła i zostawia luki, iterujemy po istniejących węzłach w gather)
     function removeVariant(id) {
         document.getElementById(`col_v${id}`).remove();
         variantsCount--;
         updateAddButtonState();
+        recolorVariants();
         updateCalculations();
+    }
+
+    function recolorVariants() {
+        const cols = document.querySelectorAll('.variant-col');
+        cols.forEach((col, index) => {
+            const trueIndex = index + 1;
+            const color = variantColors[trueIndex - 1];
+            const roman = romanNumerals[trueIndex - 1];
+            col.dataset.vindex = trueIndex;
+            col.style.borderTopColor = color;
+            col.querySelector('.variant-header').style.color = color;
+            col.querySelector('.variant-header').textContent = `Wariant ${roman}`;
+            col.querySelector('[id$="_rata_display"]').style.color = color;
+        });
     }
 
     function updateAddButtonState() {
         const btn = document.getElementById('addVariantBtn');
-        const count = document.querySelectorAll('#variantsContainer .col').length;
-        if (count >= maxVariants) { btn.style.display = 'none'; } else { btn.style.display = 'block'; }
+        if (variantsCount >= maxVariants) { btn.style.display = 'none'; } else { btn.style.display = 'block'; }
     }
 
     function toggleCondition(id) {
@@ -349,6 +354,7 @@
     const iconsDB = {
         'wallet': 'https://img.icons8.com/ios/50/0056b3/wallet--v1.png',
         'ok': 'https://img.icons8.com/ios/50/0056b3/ok--v1.png',
+        'checkbox': 'https://img.icons8.com/ios/50/0056b3/checked-checkbox--v1.png', // <-- NOWA IKONA WIELOKROTNEGO UŻYTKU
         'unlock': 'https://img.icons8.com/ios/50/0056b3/unlock.png',
         'discount': 'https://img.icons8.com/ios/50/0056b3/discount--v1.png',
         'idea': 'https://img.icons8.com/ios/50/0056b3/idea.png',
@@ -367,6 +373,7 @@
             const div = document.createElement('div');
             div.className = 'icon-opt';
             div.dataset.icon = key;
+            if(key === 'checkbox') div.title = "Ikona wielokrotnego użytku";
             div.onclick = () => selectIcon(div);
             div.innerHTML = `<img src="${url}">`;
             selector.appendChild(div);
@@ -382,9 +389,15 @@
         const usedIcons = new Set();
         document.querySelectorAll('#defaultBenefits input[type="checkbox"]').forEach(chk => { if(chk.checked) usedIcons.add(chk.dataset.icon); });
         customBenefits.forEach(ben => usedIcons.add(ben.icon));
+        
         document.querySelectorAll('.icon-opt').forEach(opt => {
-            if(usedIcons.has(opt.dataset.icon)) { opt.classList.add('disabled'); opt.classList.remove('active'); }
-            else { opt.classList.remove('disabled'); }
+            // Dodany warunek: ignorujemy blokadę jeśli to ikona 'checkbox'
+            if(usedIcons.has(opt.dataset.icon) && opt.dataset.icon !== 'checkbox') { 
+                opt.classList.add('disabled'); 
+                opt.classList.remove('active'); 
+            } else { 
+                opt.classList.remove('disabled'); 
+            }
         });
     }
 
@@ -399,14 +412,14 @@
         let t_anal = genderAdv === 'F' ? 'Przeanalizowałam' : 'Przeanalizowałem';
         let t_prep = genderAdv === 'F' ? 'przygotowałam' : 'przygotowałem';
         let t_ment = genderAdv === 'F' ? 'wspominałam' : 'wspominałem';
-        document.getElementById('introText').value = `w nawiązaniu do rozmowy przesyłam kalkulacje propozycji finansowania. ${t_anal} dostępne możliwości i ${t_prep} ofertę kredytu, o którym już ${t_ment} telefonicznie, przygotowaną w wariantach różniących się strukturą kosztów początkowych.`;
+        document.getElementById('introText').value = `w nawiązaniu do rozmowy przesyłam kalkulacje propozycji finansowania. ${t_anal} dostępne możliwości i ${t_prep} ofertę kredytu, o którym już ${t_ment} telefonicznie, przygotowaną w wariantach różniących się parametrami początkowymi.`;
     }
     document.getElementById('advisor').addEventListener('change', updateIntroText);
 
     function addCustomBenefit() {
         const text = document.getElementById('customBenText').value;
         const icon = document.getElementById('selectedCustomIcon').value;
-        if(text.trim() === '' || icon === '') return alert('Uzupełnij tekst i ikonę');
+        if(text.trim() === '' || icon === '') return alert('Uzupełnij tekst i wybierz ikonę z listy!');
         let finalText = text;
         if(!finalText.includes('<b>') && !finalText.includes('<strong>')) finalText = '<strong>' + finalText + '</strong>';
         customBenefits.push({ text: finalText, icon: icon });
@@ -426,54 +439,57 @@
         });
     }
 
-    function parseMoney(val) { return parseFloat(val.toString().replace(/\s/g, '').replace('PLN','').replace(',','.')) || 0; }
-    function formatMoney(num) { return num.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' PLN'; }
-    function calculatePMT(rate, periods, pv) {
-        if (rate === 0) return pv / periods;
-        const r = (rate / 100) / 12;
-        return pv * r * Math.pow(1 + r, periods) / (Math.pow(1 + r, periods) - 1);
-    }
-
     function updateCalculations() {
         const wiborMath = parseFloat(document.getElementById('wibor').value) || 0;
-        const months = parseInt(document.getElementById('months').value) || 120;
-        let loanNetto = parseMoney(document.getElementById('loanAmount').value);
         const successFeeProc = parseFloat(document.getElementById('successFeeProc').value) || 0;
+        let firstVariantNetto = 0;
 
-        // Iteruj po wszystkich aktywnych kontenerach wariantów
-        const variantCols = document.querySelectorAll('[id^="col_v"]');
-        variantCols.forEach(col => {
+        const variantCols = document.querySelectorAll('.variant-col');
+        variantCols.forEach((col, index) => {
             const id = col.id.replace('col_v', '');
+            
+            const loanAmountEl = document.getElementById(`v${id}_loanAmount`);
+            const monthsEl = document.getElementById(`v${id}_months`);
             const prowizjaEl = document.getElementById(`v${id}_prowizja_proc`);
             const marzaEl = document.getElementById(`v${id}_marza`);
-            if(!prowizjaEl || !marzaEl) return;
+            
+            if(!loanAmountEl || !marzaEl) return;
 
+            const loanNetto = parseMoney(loanAmountEl.value);
+            const months = parseInt(monthsEl.value) || 120;
             const p = parseFloat(prowizjaEl.value) || 0;
             const m = parseFloat(marzaEl.value) || 0;
+            
+            if (index === 0) firstVariantNetto = loanNetto; // Zapisz kwotę dla prowizji success fee
+
             const calc_brutto = loanNetto * (1 + p/100);
             const rate = wiborMath + m;
             const rata = calculatePMT(rate, months, calc_brutto);
             const koszt = (rata * months) - loanNetto;
 
-            document.getElementById(`v${id}_netto_display`).value = formatMoney(loanNetto);
             document.getElementById(`v${id}_brutto_display`).value = formatMoney(calc_brutto);
             document.getElementById(`v${id}_oproc_display`).value = rate.toFixed(2) + '%';
             document.getElementById(`v${id}_rata_display`).value = formatMoney(rata);
             document.getElementById(`v${id}_koszt_display`).value = formatMoney(koszt);
         });
 
-        document.getElementById('successFeeKwota').value = formatMoney(loanNetto * (successFeeProc / 100));
+        // Jeżeli jest wpisana ręcznie własna kwota, skrypt jej nie nadpisze od razu, ale standardowo liczmy z W1
+        const feeInput = document.getElementById('successFeeKwota');
+        if (feeInput.readOnly || feeInput.value === '' || feeInput.dataset.auto === "true") {
+            feeInput.value = formatMoney(firstVariantNetto * (successFeeProc / 100));
+            feeInput.dataset.auto = "true";
+        }
     }
+    
+    // Pozwalamy doradcy wpisać ręcznie fee (odpinamy wtedy auto wyliczanie)
+    document.getElementById('successFeeKwota').addEventListener('input', function() {
+        this.dataset.auto = "false";
+    });
 
     document.getElementById('wibor').addEventListener('input', function() {
         const val = this.value + '%';
         document.querySelectorAll('[id$="_wibor_text"]').forEach(el => el.value = val);
         updateCalculations();
-    });
-
-    // Nasłuchiwanie wejść dla bazowych i sukcesu
-    document.querySelectorAll('#loanAmount, #months, #successFeeProc').forEach(el => {
-        el.addEventListener('input', updateCalculations);
     });
 
     // --- GENERUJ ---
@@ -507,7 +523,7 @@
             introText: document.getElementById('introText').value,
             showBGK: document.getElementById('showBGK').checked,
             vatType: document.getElementById('vatType').value,
-            months: document.getElementById('months').value,
+            
             customHeaders: { benefits: document.getElementById('headerBenefits').value, fee: document.getElementById('headerFee').value },
             closingText: finalFooter,
             visibility: { feeSection: document.getElementById('check_fee_visibility').checked },
@@ -517,18 +533,21 @@
             benefits: []
         };
 
-        // Zbieranie danych o dynamicznych wariantach
-        let vIndex = 0;
-        document.querySelectorAll('[id^="col_v"]').forEach(col => {
+        const cols = document.querySelectorAll('.variant-col');
+        cols.forEach((col) => {
             const id = col.id.replace('col_v', '');
-            vIndex++;
+            const vIndex = parseInt(col.dataset.vindex);
             const color = variantColors[vIndex-1];
             const roman = romanNumerals[vIndex-1];
+            
+            let finalNettoText = document.getElementById(`v${id}_loanAmount`).value;
+            if(!finalNettoText.includes('PLN')) finalNettoText = formatMoney(parseMoney(finalNettoText)); // bezpieczeństwo
 
             data.variants.push({
                 color: color,
                 roman: roman,
-                netto: document.getElementById(`v${id}_netto_display`).value,
+                months: document.getElementById(`v${id}_months`).value,
+                netto: finalNettoText,
                 brutto: document.getElementById(`v${id}_brutto_display`).value,
                 prowizja: document.getElementById(`v${id}_prowizja_proc`).value + '%',
                 marza: document.getElementById(`v${id}_marza`).value + '%',
@@ -566,13 +585,30 @@
         });
         customBenefits.forEach(ben => data.benefits.push(ben));
 
-        localStorage.setItem('bafOfferData_V5_0', JSON.stringify(data));
+        localStorage.setItem('bafOfferData_V5_1', JSON.stringify(data));
         
         if (isPreview) { window.open('oferta.html', '_blank'); } else { window.location.href = 'oferta.html'; }
     }
 
     // Inicjalizacja
     initIcons(); updateIntroText(); initVariants(); refreshIcons();
+</script>
+
+<script>
+    // BAF AUTO UPDATE
+    try {
+        document.getElementById('wibor-1m').textContent = '3,98%';
+        document.getElementById('wibor-3m').textContent = '3,87%';
+        document.getElementById('wibor-6m').textContent = '3,76%';
+        document.getElementById('odsetki-opoznienie').textContent = '9,5%';
+        
+        const dzisiaj = 'Dane na dzień: 19.02.2026';
+        if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
+        if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
+
+        const startWibor = '4.02';
+        if(document.getElementById('wibor')) document.getElementById('wibor').value = startWibor;
+    } catch(e) { console.log('Brak elementu w tym pliku'); }
 </script>
 </body>
 </html>
