@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Ofert BAF v5.7</title>
+    <title>Generator Ofert BAF v5.8</title>
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
@@ -89,7 +89,7 @@
     <div class="container">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h1>Generator Oferty</h1>
-            <div style="text-align:right; font-size:0.8em; color:#777;">v5.7</div>
+            <div style="text-align:right; font-size:0.8em; color:#777;">v5.8</div>
         </div>
 
         <h2>1. Dane i Wstęp</h2>
@@ -267,10 +267,40 @@
                     <input type="text" id="v${id}_loanAmount" value="100 000" oninput="updateCalculations()" onblur="this.value=formatMoney(parseMoney(this.value)); updateCalculations();">
                 </div>
                 
-                <label style="margin-top:10px;">Success Fee (%)</label>
+                <label style="margin-top:10px;">Podstawowe Success Fee (%)</label>
                 <input type="number" step="0.1" id="v${id}_fee_proc" value="4.0" oninput="document.getElementById('v${id}_fee_display').dataset.auto='true'; updateCalculations()">
                 
-                <label style="margin-top:10px;">Kwota Fee (PLN) <small style="font-weight:normal">(Możesz nadpisać ręcznie)</small></label>
+                <div style="background: #fff8e6; padding: 10px; border-radius: 6px; border: 1px solid #ffeeba; margin-top: 10px;">
+                    <label style="color:#856404; cursor:pointer; display:flex; align-items:center; gap:8px; margin:0;">
+                        <input type="checkbox" id="v${id}_has_discount" onchange="toggleDiscount(${id}); updateCalculations();"> <strong>Zastosuj rabat</strong>
+                    </label>
+                    
+                    <div id="v${id}_discount_box" style="display:none; margin-top:10px;">
+                        <div style="display:flex; gap:10px; margin-bottom:10px;">
+                            <div style="flex:1;">
+                                <label style="font-size:0.8em;">Przekreślone (%)</label>
+                                <input type="number" step="0.1" id="v${id}_fee_std" value="10.0" oninput="updateCalculations()">
+                            </div>
+                            <div style="flex:1;">
+                                <label style="font-size:0.8em;">Stawka po rabacie (%)</label>
+                                <input type="number" step="0.1" id="v${id}_fee_disc" value="9.0" oninput="document.getElementById('v${id}_fee_display').dataset.auto='true'; updateCalculations()">
+                            </div>
+                        </div>
+
+                        <label style="color:#155724; cursor:pointer; display:flex; align-items:center; gap:8px;">
+                            <input type="checkbox" id="v${id}_has_time_discount" onchange="toggleTimeDiscount(${id}); updateCalculations();"> <strong>Dodatkowy rabat czasowy</strong>
+                        </label>
+                        
+                        <div id="v${id}_time_discount_box" style="display:none; margin-top:10px; padding:10px; background:#d4edda; border-radius:4px; border: 1px solid #c3e6cb;">
+                            <label style="font-size:0.8em;">Stawka czasowa (%)</label>
+                            <input type="number" step="0.1" id="v${id}_fee_time_proc" value="8.0" oninput="updateCalculations()">
+                            <label style="margin-top:5px; font-size:0.8em;">Warunek uzyskania</label>
+                            <input type="text" id="v${id}_time_cond" value="jeśli w ciągu 14 dni złożymy wniosek do banku">
+                        </div>
+                    </div>
+                </div>
+
+                <label style="margin-top:10px;">Ostateczna Kwota Fee (PLN) <small style="font-weight:normal">(Możesz nadpisać ręcznie)</small></label>
                 <input type="text" id="v${id}_fee_display" style="color:#28a745; font-weight:bold; background:#e9fce9; border: 1px solid #c3e6cb;" oninput="this.dataset.auto='false'; updateCalculations();" onblur="this.value=formatMoney(parseMoney(this.value)); updateCalculations();">
 
                 <label style="margin-top:10px;">Kwota do dyspozycji</label>
@@ -377,6 +407,16 @@
         const box = document.getElementById(`v${id}_condition_box`);
         box.style.display = document.getElementById(`v${id}_has_condition`).checked ? 'block' : 'none';
     }
+    
+    function toggleDiscount(id) {
+        const box = document.getElementById(`v${id}_discount_box`);
+        box.style.display = document.getElementById(`v${id}_has_discount`).checked ? 'block' : 'none';
+    }
+
+    function toggleTimeDiscount(id) {
+        const box = document.getElementById(`v${id}_time_discount_box`);
+        box.style.display = document.getElementById(`v${id}_has_time_discount`).checked ? 'block' : 'none';
+    }
 
     // --- IKONY KORZYŚCI ---
     const iconsDB = {
@@ -473,7 +513,6 @@
             const id = col.id.replace('col_v', '');
             
             const loanAmountEl = document.getElementById(`v${id}_loanAmount`);
-            const feeProcEl = document.getElementById(`v${id}_fee_proc`);
             const feeDisplayEl = document.getElementById(`v${id}_fee_display`);
             const monthsEl = document.getElementById(`v${id}_months`);
             const prowizjaEl = document.getElementById(`v${id}_prowizja_proc`);
@@ -483,15 +522,22 @@
             if(!loanAmountEl || !marzaEl || !wiborEl) return;
 
             const loanNetto = parseMoney(loanAmountEl.value);
-            const feeProc = parseFloat(feeProcEl.value) || 0;
             const months = parseInt(monthsEl.value) || 120;
             const p = parseFloat(prowizjaEl.value) || 0;
             const m = parseFloat(marzaEl.value) || 0;
             const w = parseFloat(wiborEl.value) || 0;
 
+            // Logic for Fee calculation
+            let isDiscounted = document.getElementById(`v${id}_has_discount`).checked;
+            let activeFeeProc = parseFloat(document.getElementById(`v${id}_fee_proc`).value) || 0;
+            
+            if (isDiscounted) {
+                activeFeeProc = parseFloat(document.getElementById(`v${id}_fee_disc`).value) || 0;
+            }
+
             let feeAmount = 0;
             if (feeDisplayEl.dataset.auto !== "false") {
-                feeAmount = loanNetto * (feeProc / 100);
+                feeAmount = loanNetto * (activeFeeProc / 100);
                 if(feeDisplayEl) feeDisplayEl.value = formatMoney(feeAmount);
             } else {
                 feeAmount = parseMoney(feeDisplayEl.value);
@@ -564,12 +610,27 @@
             let finalFeeText = document.getElementById(`v${id}_fee_display`).value;
             if(!finalFeeText.includes('PLN')) finalFeeText = formatMoney(parseMoney(finalFeeText));
 
+            // Time discount math
+            let timeProc = parseFloat(document.getElementById(`v${id}_fee_time_proc`).value) || 0;
+            let timeKwotaStr = formatMoney(parseMoney(finalNettoText) * (timeProc / 100));
+
             data.variants.push({
                 color: color,
                 roman: roman,
                 months: document.getElementById(`v${id}_months`).value,
                 netto: finalNettoText,
+                
+                // Fee data
+                feeProc: document.getElementById(`v${id}_fee_proc`).value,
+                hasDiscount: document.getElementById(`v${id}_has_discount`).checked,
+                feeStd: document.getElementById(`v${id}_fee_std`).value,
+                feeDisc: document.getElementById(`v${id}_fee_disc`).value,
+                hasTimeDiscount: document.getElementById(`v${id}_has_time_discount`).checked,
+                feeTimeProc: timeProc,
+                feeTimeKwota: timeKwotaStr,
+                timeCondText: document.getElementById(`v${id}_time_cond`).value,
                 feeKwota: finalFeeText,
+
                 dyspozycja: document.getElementById(`v${id}_dyspozycja_display`).value,
                 brutto: document.getElementById(`v${id}_brutto_display`).value,
                 prowizja: document.getElementById(`v${id}_prowizja_proc`).value + '%',
@@ -611,7 +672,7 @@
         });
         customBenefits.forEach(ben => data.benefits.push(ben));
 
-        localStorage.setItem('bafOfferData_V5_7', JSON.stringify(data));
+        localStorage.setItem('bafOfferData_V5_8', JSON.stringify(data));
         window.open('oferta.html', '_blank'); 
     }
 
