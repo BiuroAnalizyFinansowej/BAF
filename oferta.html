@@ -15,8 +15,8 @@
         .panel-btn.copied { background-color: #28a745; }
         .back-link { display: block; text-align: center; margin-top: 10px; color: #555; text-decoration: none; font-size: 12px; }
         
-        #email-content-wrapper { margin: 0 auto; padding: 20px 0 20px 260px; max-width: 900px; }
-        @media (max-width: 1200px) { #control-panel-left { position: relative; top: 0; left: 0; width: auto; margin: 20px; } #email-content-wrapper { padding: 0 20px; margin: 0; } }
+        #email-content-wrapper { margin: 0 auto; padding: 20px 0 20px 260px; max-width: 1050px; }
+        @media (max-width: 1200px) { #control-panel-left { position: relative; top: 0; left: 0; width: auto; margin: 20px; } #email-content-wrapper { padding: 0 20px; margin: 0; max-width: 100%; } }
     </style>
 </head>
 <body>
@@ -31,7 +31,7 @@
         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-family: 'Lato', Arial, sans-serif; background-color: #f4f7f9; color: #333333;">
             <tr>
                 <td align="center" style="padding: 20px;">
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 900px; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 77, 153, 0.1); border: 1px solid #e1e4e8;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 1050px; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 77, 153, 0.1); border: 1px solid #e1e4e8;">
                         <tr><td align="center" style="padding: 30px 0; background-color: #ffffff; border-bottom: 1px solid #f0f0f0;">
                             <a href="https://biuroanalizyfinansowej.pl/" target="_blank" style="text-decoration:none; border:0; outline:none;"><img src="baf_logo.png" alt="Biuro Analizy Finansowej" width="250" style="display: block; width: 250px; max-width: 100%; height: auto; border: 0;"></a>
                         </td></tr>
@@ -44,55 +44,12 @@
                                     <h2 style="font-size: 24px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 25px; font-weight: 700; margin-top: 0;">Rodzaj Finansowania: <span id="financing-header">Kredyt firmowy ratalny</span></h2>
 
                                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                        <tr>
-                                            <td valign="top" width="48%" style="background-color: #fdfdfd; border: 1px solid #dcebf7; border-top: 4px solid #007bff; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 77, 153, 0.05);">
-                                                <h3 id="h3-var1" style="margin-top: 0; font-size: 20px; color: #0056b3; text-align: center; margin-bottom: 20px; font-weight: 700;">I WARIANT</h3>
-                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
-                                                    <tr id="row-w1-netto"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Netto:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-net"></td></tr>
-                                                    <tr id="row-w1-brutto"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Brutto:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-gross"></td></tr>
-                                                    <tr id="row-w1-prowizja"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Prowizja bankowa:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-prov"></td></tr>
-                                                    <tr id="row-w1-marza"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Marża banku:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w1-margin"></td></tr>
-                                                    <tr id="row-w1-wibor"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">WIBOR:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" class="wibor-val" id="w1-wibor-val"></td></tr>
-                                                    <tr id="row-w1-oproc"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Oprocentowanie:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #333;" id="w1-rate"></td></tr>
-                                                    <tr id="row-w1-koszt"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Koszt Całkowity:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #28a745;" id="w1-koszt"></td></tr>
-                                                </table>
-                                                <div style="background-color: #f0f7ff; border: 1px solid #cce5ff; border-radius: 6px; padding: 15px; margin-top: 20px; text-align: center;">
-                                                    <span style="display: block; font-size: 22px; font-weight: 700; color: #004d99; margin-bottom: 5px;" id="w1-rata"></span>
-                                                    <span style="font-size: 13px; color: #666;">Rata szacunkowa (<span class="months-display"></span> mies.)</span>
-                                                </div>
-                                            </td>
-                                            
-                                            <td width="4%" id="var-separator"></td>
-
-                                            <td id="var2-container" valign="top" width="48%" style="background-color: #fdfdfd; border: 1px solid #dcebf7; border-top: 4px solid #17a2b8; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 77, 153, 0.05);">
-                                                <h3 style="margin-top: 0; font-size: 20px; color: #17a2b8; text-align: center; margin-bottom: 20px; font-weight: 700;">II WARIANT</h3>
-                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
-                                                    <tr id="row-w2-netto"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Netto:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-net"></td></tr>
-                                                    <tr id="row-w2-brutto"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Kwota Brutto:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-gross"></td></tr>
-                                                    <tr id="row-w2-prowizja"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Prowizja bankowa:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-prov"></td></tr>
-                                                    <tr id="row-w2-marza"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">Marża banku:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" id="w2-margin"></td></tr>
-                                                    <tr id="row-w2-wibor"><td style="padding: 8px 0; border-bottom: 1px solid #eee; color: #666;">WIBOR:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;" class="wibor-val" id="w2-wibor-val"></td></tr>
-                                                    <tr id="row-w2-oproc"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Oprocentowanie:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #333;" id="w2-rate"></td></tr>
-                                                    <tr id="row-w2-koszt"><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Koszt Całkowity:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #28a745;" id="w2-koszt"></td></tr>
-                                                </table>
-                                                
-                                                <div style="font-size: 13px; color: #2e5c8a; background-color: #e8f4fd; padding: 12px; margin-top: 15px; border-radius: 4px; line-height: 1.5; border-left: 3px solid #0056b3;">
-                                                    <strong>Warunek uzyskania wariantu:</strong><br>
-                                                    Konsolidacja obecnego kredytu 
-                                                    <br><em>LUB</em><br>
-                                                    Wnioskowanie dodatkowo o kredyt w rachunku bieżącym na jednym wniosku (kwota możliwa do pozyskania do 200 000 PLN - <strong>wnioskujemy o minimum 10 000 PLN limitu</strong>).
-                                                </div>
-
-                                                <div style="background-color: #f0f7ff; border: 1px solid #cce5ff; border-radius: 6px; padding: 15px; margin-top: 20px; text-align: center;">
-                                                    <span style="display: block; font-size: 22px; font-weight: 700; color: #004d99; margin-bottom: 5px;" id="w2-rata"></span>
-                                                    <span style="font-size: 13px; color: #666;">Rata szacunkowa (<span class="months-display"></span> mies.)</span>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        <tr id="variants-table-row">
+                                            </tr>
                                     </table>
 
                                     <div id="bgk-section" style="background: #e6f7ff; border-left: 5px solid #007bff; padding: 20px; margin: 25px 0 0 0; border-radius: 0 8px 8px 0;">
-                                        <p style="margin: 0; font-size: 16px; color: #333;"><strong>Gwarancja DE MINIMIS:</strong> W obu wariantach występuje Poręczenie BGK 0,5% od kwoty gwarancji (60% salda kredytu), płatne raz w roku przez 5 lat.</p>
+                                        <p style="margin: 0; font-size: 16px; color: #333;"><strong>Gwarancja DE MINIMIS:</strong> W ofercie występuje Poręczenie BGK 0,5% od kwoty gwarancji (60% salda kredytu), płatne raz w roku przez 5 lat.</p>
                                     </div>
                                 </div>
 
@@ -130,7 +87,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const storedData = localStorage.getItem('bafOfferData_V4_6');
+            // Zmieniono nazwę klucza z bafOfferData_V4_6 na _V5_0
+            const storedData = localStorage.getItem('bafOfferData_V5_0');
             if (storedData) {
                 const data = JSON.parse(storedData);
 
@@ -139,20 +97,17 @@
                 document.getElementById('intro-paragraph').innerHTML = data.introText.replace(/\n/g, '<br>');
                 document.getElementById('financing-header').textContent = data.financingType;
 
-                // --- WIZYTÓWKA ---
                 if (data.advisorLink) {
                     document.getElementById('advisor-link').href = data.advisorLink;
                 } else {
-                    document.getElementById('advisor-card-container').style.display = 'none'; // Ukryj jak brak linku
+                    document.getElementById('advisor-card-container').style.display = 'none';
                 }
 
-                // --- NAGŁÓWKI ---
                 if (data.customHeaders) {
                     if (data.customHeaders.benefits) document.getElementById('benefits-header').textContent = data.customHeaders.benefits;
                     if (data.customHeaders.fee) document.getElementById('fee-header').textContent = data.customHeaders.fee;
                 }
 
-                // --- STOPKA ---
                 if (data.closingText) {
                     document.getElementById('footer-text').innerHTML = data.closingText;
                 } else {
@@ -160,55 +115,65 @@
                     document.getElementById('client-decision-grammar').textContent = genderClient === 'F' ? "Pani" : "Pana";
                 }
 
-                if(!data.hasVariant2) {
-                    document.getElementById('var2-container').style.display = 'none';
-                    document.getElementById('var-separator').style.display = 'none';
-                    document.getElementById('h3-var1').textContent = "OFERTA"; 
-                }
-
                 if(!data.visibility.feeSection) {
                     document.getElementById('fee-container').style.display = 'none';
                 }
 
-                const setVal = (id, val) => { if(document.getElementById(id)) document.getElementById(id).textContent = val; };
-                
-                setVal('w1-net', data.w1.netto); setVal('w1-gross', data.w1.brutto); setVal('w1-prov', data.w1.prowizja);
-                setVal('w1-margin', data.w1.marza); setVal('w1-rate', data.w1.oproc); setVal('w1-rata', data.w1.rata); setVal('w1-koszt', data.w1.koszt);
-                setVal('w1-wibor-val', data.w1.wibor);
+                // --- WARIANTY DYNAMICZNE ---
+                const variantsRow = document.getElementById('variants-table-row');
+                let variantsHTML = '';
+                const vCount = data.variants.length;
+                // Obliczamy szerokość kolumny: max 48% dla dwóch, proporcjonalnie dla większej ilości z miejscem na margines (około 2%)
+                const colWidth = Math.floor(100 / vCount) - (vCount > 1 ? 2 : 0);
 
-                if(data.hasVariant2) {
-                    setVal('w2-net', data.w2.netto); setVal('w2-gross', data.w2.brutto); setVal('w2-prov', data.w2.prowizja);
-                    setVal('w2-margin', data.w2.marza); setVal('w2-rate', data.w2.oproc); setVal('w2-rata', data.w2.rata); setVal('w2-koszt', data.w2.koszt);
-                    setVal('w2-wibor-val', data.w2.wibor);
+                data.variants.forEach((v, index) => {
+                    const rowStyle = "padding: 8px 0; border-bottom: 1px solid #eee; color: #666;";
+                    const valStyle = "padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;";
+
+                    variantsHTML += `
+                    <td valign="top" width="${colWidth}%" style="background-color: #fdfdfd; border: 1px solid #dcebf7; border-top: 4px solid ${v.color}; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 77, 153, 0.05);">
+                        <h3 style="margin-top: 0; font-size: 20px; color: ${v.color}; text-align: center; margin-bottom: 20px; font-weight: 700;">${vCount === 1 ? 'OFERTA' : 'WARIANT ' + v.roman}</h3>
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
+                            ${v.visibility.netto ? `<tr><td style="${rowStyle}">Kwota Netto:</td><td align="right" style="${valStyle}">${v.netto}</td></tr>` : ''}
+                            ${v.visibility.brutto ? `<tr><td style="${rowStyle}">Kwota Brutto:</td><td align="right" style="${valStyle}">${v.brutto}</td></tr>` : ''}
+                            ${v.visibility.prowizja ? `<tr><td style="${rowStyle}">Prowizja bankowa:</td><td align="right" style="${valStyle}">${v.prowizja}</td></tr>` : ''}
+                            ${v.visibility.marza ? `<tr><td style="${rowStyle}">Marża banku:</td><td align="right" style="${valStyle}">${v.marza}</td></tr>` : ''}
+                            ${v.visibility.wibor ? `<tr><td style="${rowStyle}">WIBOR:</td><td align="right" style="${valStyle}">${v.wibor}</td></tr>` : ''}
+                            ${v.visibility.oproc ? `<tr><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Oprocentowanie:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #333;">${v.oproc}</td></tr>` : ''}
+                            ${v.visibility.koszt ? `<tr><td style="padding: 10px 0; border-top: 1px solid #ddd; color: #666; font-weight: 700;">Koszt Całkowity:</td><td align="right" style="padding: 10px 0; border-top: 1px solid #ddd; font-weight: 700; color: #28a745;">${v.koszt}</td></tr>` : ''}
+                        </table>
+                        
+                        ${v.hasCondition ? `
+                        <div style="font-size: 13px; color: #2e5c8a; background-color: #e8f4fd; padding: 12px; margin-top: 15px; border-radius: 4px; line-height: 1.5; border-left: 3px solid ${v.color};">
+                            <strong>${v.condHeader}</strong><br>
+                            ${v.condText.replace(/\n/g, '<br>')}
+                        </div>` : ''}
+
+                        <div style="background-color: #f0f7ff; border: 1px solid #cce5ff; border-radius: 6px; padding: 15px; margin-top: 20px; text-align: center;">
+                            <span style="display: block; font-size: 22px; font-weight: 700; color: ${v.color}; margin-bottom: 5px;">${v.rata}</span>
+                            <span style="font-size: 13px; color: #666;">Rata szacunkowa (${data.months} mies.)</span>
+                        </div>
+                    </td>`;
+
+                    // Dodaj przerwę między kolumnami (jeśli to nie jest ostatnia)
+                    if (index < vCount - 1) {
+                        variantsHTML += `<td width="2%"></td>`;
+                    }
+                });
+                
+                variantsRow.innerHTML = variantsHTML;
+
+                if(!data.showBGK) { document.getElementById('bgk-section').style.display = 'none'; }
+                else {
+                    const bgkText = vCount > 1 ? "W wariantach" : "W ofercie";
+                    document.querySelector('#bgk-section p').innerHTML = document.querySelector('#bgk-section p').innerHTML.replace("W ofercie", bgkText);
                 }
 
-                const toggleRow = (id, visible) => { if(document.getElementById(id)) document.getElementById(id).style.display = visible ? 'table-row' : 'none'; };
-                
-                toggleRow('row-w1-netto', data.visibility.w1_netto);
-                toggleRow('row-w1-brutto', data.visibility.w1_brutto);
-                toggleRow('row-w1-prowizja', data.visibility.w1_prowizja);
-                toggleRow('row-w1-marza', data.visibility.w1_marza);
-                toggleRow('row-w1-wibor', data.visibility.w1_wibor);
-                toggleRow('row-w1-oproc', data.visibility.w1_oproc);
-                toggleRow('row-w1-koszt', data.visibility.w1_koszt);
-
-                toggleRow('row-w2-netto', data.visibility.w2_netto);
-                toggleRow('row-w2-brutto', data.visibility.w2_brutto);
-                toggleRow('row-w2-prowizja', data.visibility.w2_prowizja);
-                toggleRow('row-w2-marza', data.visibility.w2_marza);
-                toggleRow('row-w2-wibor', data.visibility.w2_wibor);
-                toggleRow('row-w2-oproc', data.visibility.w2_oproc);
-                toggleRow('row-w2-koszt', data.visibility.w2_koszt);
-
-                document.querySelectorAll('.months-display').forEach(el => el.textContent = data.months);
-
-                if(!data.showBGK) document.getElementById('bgk-section').style.display = 'none';
-                else if(!data.hasVariant2) document.querySelector('#bgk-section p').innerHTML = document.querySelector('#bgk-section p').innerHTML.replace("W obu wariantach", "W ofercie");
-
+                // --- FEE & BENEFTIS ---
                 const suffix = (data.vatType === 'VAT') ? '+ VAT' : 'zw. z VAT';
-                setVal('fee-proc', data.feeProc);
-                setVal('fee-suffix', suffix);
-                setVal('fee-kwota', data.feeKwota + " " + suffix);
+                document.getElementById('fee-proc').textContent = data.feeProc;
+                document.getElementById('fee-suffix').textContent = suffix;
+                document.getElementById('fee-kwota').textContent = data.feeKwota + " " + suffix;
 
                 const benefitsContainer = document.getElementById('dynamic-benefits-container');
                 let html = '<table border="0" cellpadding="0" cellspacing="0" width="100%">';
@@ -254,4 +219,5 @@
             setTimeout(() => { btn.textContent = originalText; btn.style.backgroundColor = originalColor; btn.classList.remove('copied'); }, 2000);
         }
     </script>
+</body>
 </html>
