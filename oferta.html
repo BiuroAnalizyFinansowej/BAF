@@ -87,8 +87,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Zmieniono nazwę klucza z bafOfferData_V4_6 na _V5_0
-            const storedData = localStorage.getItem('bafOfferData_V5_0');
+            const storedData = localStorage.getItem('bafOfferData_V5_1');
             if (storedData) {
                 const data = JSON.parse(storedData);
 
@@ -123,7 +122,6 @@
                 const variantsRow = document.getElementById('variants-table-row');
                 let variantsHTML = '';
                 const vCount = data.variants.length;
-                // Obliczamy szerokość kolumny: max 48% dla dwóch, proporcjonalnie dla większej ilości z miejscem na margines (około 2%)
                 const colWidth = Math.floor(100 / vCount) - (vCount > 1 ? 2 : 0);
 
                 data.variants.forEach((v, index) => {
@@ -151,11 +149,10 @@
 
                         <div style="background-color: #f0f7ff; border: 1px solid #cce5ff; border-radius: 6px; padding: 15px; margin-top: 20px; text-align: center;">
                             <span style="display: block; font-size: 22px; font-weight: 700; color: ${v.color}; margin-bottom: 5px;">${v.rata}</span>
-                            <span style="font-size: 13px; color: #666;">Rata szacunkowa (${data.months} mies.)</span>
+                            <span style="font-size: 13px; color: #666;">Rata szacunkowa (${v.months} mies.)</span>
                         </div>
                     </td>`;
 
-                    // Dodaj przerwę między kolumnami (jeśli to nie jest ostatnia)
                     if (index < vCount - 1) {
                         variantsHTML += `<td width="2%"></td>`;
                     }
@@ -180,6 +177,7 @@
                 const iconUrls = {
                     'wallet': 'https://img.icons8.com/ios/50/0056b3/wallet--v1.png',
                     'ok': 'https://img.icons8.com/ios/50/0056b3/ok--v1.png',
+                    'checkbox': 'https://img.icons8.com/ios/50/0056b3/checked-checkbox--v1.png', // <-- NOWA IKONA WIELOKROTNEGO UŻYTKU W ODBIORZE
                     'unlock': 'https://img.icons8.com/ios/50/0056b3/unlock.png',
                     'discount': 'https://img.icons8.com/ios/50/0056b3/discount--v1.png',
                     'idea': 'https://img.icons8.com/ios/50/0056b3/idea.png',
