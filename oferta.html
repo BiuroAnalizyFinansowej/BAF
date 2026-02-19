@@ -75,7 +75,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const storedData = localStorage.getItem('bafOfferData_V5_8');
+            const storedData = localStorage.getItem('bafOfferData_V5_9');
             if (storedData) {
                 const data = JSON.parse(storedData);
                 const suffix = (data.vatType === 'VAT') ? '+ VAT' : 'zw. z VAT';
@@ -120,7 +120,20 @@
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
                             ${v.visibility.brutto ? `<tr><td style="${rowStyle}">Kwota Brutto:</td><td align="right" style="${valStyle}">${v.brutto}</td></tr>` : ''}
                             ${v.visibility.netto ? `<tr><td style="${rowStyle}">Kwota Netto:</td><td align="right" style="${valStyle}">${v.netto}</td></tr>` : ''}
+                            
                             ${v.visibility.dyspozycja ? `<tr><td style="${rowStyle}">Kwota do dyspozycji:</td><td align="right" style="${dyspozycjaStyle}">${v.dyspozycja}</td></tr>` : ''}
+                            ${v.visibility.dyspozycja && v.hasTimeDiscount && v.hasDiscount ? `
+                                <tr>
+                                    <td style="padding: 8px 0; color: #28a745;">Kwota do dyspozycji <br><span style="font-size: 11px; color: #555;">(rabat czasowy)</span>:</td>
+                                    <td align="right" style="padding: 8px 0; font-weight: 700; color: #28a745; vertical-align: top;">${v.dyspozycjaTime}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="padding: 0 0 8px 0; border-bottom: 1px solid #eee; font-size: 12px; color: #28a745; line-height: 1.4;">
+                                        <em>*${v.timeCondText}</em>
+                                    </td>
+                                </tr>
+                            ` : ''}
+
                             ${v.visibility.okres ? `<tr><td style="${rowStyle}">Okres kredytowania:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #004d99; font-size: 16px;">${v.months} mies.</td></tr>` : ''}
                             
                             ${v.visibility.prowizja ? `<tr><td style="${rowStyle}">Prowizja bankowa:</td><td align="right" style="${valStyle}">${v.prowizja}</td></tr>` : ''}
@@ -186,7 +199,7 @@
                                 <div style="margin-top: 15px; background-color: #e6fced; border: 1px dashed #28a745; padding: 12px; border-radius: 6px; font-size: 14px; text-align: left;">
                                     <strong style="color: #155724; display:block; margin-bottom:4px;">⏱ Opcja: Rabat Czasowy</strong>
                                     <span style="color: #28a745; font-weight: bold; font-size: 18px;">${v.feeTimeProc}% <span style="font-size: 14px; color: #155724; font-weight: normal;">&rarr; ${v.feeTimeKwota} ${suffix}</span></span><br>
-                                    <span style="color: #155724; font-size: 13px; display:block; margin-top:5px;">${v.timeCondText}</span>
+                                    <span style="color: #155724; font-size: 13px; display:block; margin-top:5px;">*${v.timeCondText}</span>
                                 </div>`;
                             }
                         } else {
@@ -258,20 +271,5 @@
             setTimeout(() => { btn.textContent = originalText; btn.style.backgroundColor = originalColor; btn.classList.remove('copied'); }, 2000);
         }
     </script>
+</body>
 </html>
-
-    <script>
-        // BAF AUTO UPDATE - 19.02.2026
-        try {
-            document.getElementById('wibor-1m').textContent = '3,97%';
-            document.getElementById('wibor-3m').textContent = '3,85%';
-            document.getElementById('wibor-6m').textContent = '3,73%';
-            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
-            
-            const dzisiaj = 'Dane na dzień: 19.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    </body>
-    
