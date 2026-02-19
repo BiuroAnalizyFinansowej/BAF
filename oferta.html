@@ -56,9 +56,8 @@
 
                                 <div id="fee-container" style="margin-bottom: 30px;">
                                     <h2 id="fee-header" style="font-size: 24px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 25px; font-weight: 700; margin-top: 0;">Wynagrodzenie za Doradztwo</h2>
-                                    <div style="background-color: #f8faff; border-radius: 8px; padding: 25px; border: 1px solid #e0e9f5;">
-                                        <p style="font-size: 16px; color: #555; margin: 0; line-height: 1.6;">Rozliczenie oparte o sukces (Success Fee). Wynagrodzenie płatne jest <strong>dopiero po uruchomieniu środków</strong>. Dokładna kwota dla poszczególnych wariantów została wyszczególniona w powyższych tabelach parametrów.</p>
-                                    </div>
+                                    <div id="fee-details-container">
+                                        </div>
                                 </div>
                                 
                                 <p id="footer-text" style="font-size: 17px; color: #555; margin-top: 40px;">Czekam na <span id="client-decision-grammar">Pana</span> decyzję odnośnie wyboru wariantu, abyśmy mogli sprawnie przejść do procesowania wniosku.</p>
@@ -76,7 +75,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const storedData = localStorage.getItem('bafOfferData_V5_5');
+            const storedData = localStorage.getItem('bafOfferData_V5_6');
             if (storedData) {
                 const data = JSON.parse(storedData);
                 const suffix = (data.vatType === 'VAT') ? '+ VAT' : 'zw. z VAT';
@@ -104,10 +103,6 @@
                     document.getElementById('client-decision-grammar').textContent = genderClient === 'F' ? "Pani" : "Pana";
                 }
 
-                if(!data.visibility.feeSection) {
-                    document.getElementById('fee-container').style.display = 'none';
-                }
-
                 // --- WARIANTY DYNAMICZNE ---
                 const variantsRow = document.getElementById('variants-table-row');
                 let variantsHTML = '';
@@ -118,7 +113,6 @@
                     const rowStyle = "padding: 8px 0; border-bottom: 1px solid #eee; color: #666;";
                     const valStyle = "padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;";
                     const dyspozycjaStyle = "padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #0056b3;";
-                    const feeStyle = "padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #28a745;";
 
                     variantsHTML += `
                     <td valign="top" width="${colWidth}%" style="background-color: #fdfdfd; border: 1px solid #dcebf7; border-top: 4px solid ${v.color}; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 77, 153, 0.05);">
@@ -128,8 +122,6 @@
                             ${v.visibility.netto ? `<tr><td style="${rowStyle}">Kwota Netto:</td><td align="right" style="${valStyle}">${v.netto}</td></tr>` : ''}
                             ${v.visibility.dyspozycja ? `<tr><td style="${rowStyle}">Kwota do dyspozycji:</td><td align="right" style="${dyspozycjaStyle}">${v.dyspozycja}</td></tr>` : ''}
                             ${v.visibility.okres ? `<tr><td style="${rowStyle}">Okres kredytowania:</td><td align="right" style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #004d99; font-size: 16px;">${v.months} mies.</td></tr>` : ''}
-                            
-                            ${v.visibility.fee ? `<tr><td style="${rowStyle}">Wynagrodzenie BAF:</td><td align="right" style="${feeStyle}">${v.feeKwota} ${suffix}</td></tr>` : ''}
                             
                             ${v.visibility.prowizja ? `<tr><td style="${rowStyle}">Prowizja bankowa:</td><td align="right" style="${valStyle}">${v.prowizja}</td></tr>` : ''}
                             ${v.visibility.marza ? `<tr><td style="${rowStyle}">Marża banku:</td><td align="right" style="${valStyle}">${v.marza}</td></tr>` : ''}
@@ -162,7 +154,32 @@
                 
                 variantsRow.innerHTML = variantsHTML;
 
-                // --- BENEFTIS ---
+                // --- FEE SECTION ---
+                if(!data.visibility.feeSection) {
+                    document.getElementById('fee-container').style.display = 'none';
+                } else {
+                    let feeTableHTML = `
+                    <div style="background-color: #f8faff; border-radius: 8px; padding: 25px; border: 1px solid #e0e9f5;">
+                        <p style="font-size: 16px; color: #555; margin: 0 0 20px 0; line-height: 1.6;">Rozliczenie oparte o sukces (Success Fee). Wynagrodzenie płatne jest <strong>dopiero po uruchomieniu środków</strong>. W zależności od wybranego wariantu kwota ta wynosi:</p>
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 16px; border-collapse: collapse;">`;
+                    
+                    data.variants.forEach((v, idx) => {
+                        const isLast = idx === data.variants.length - 1;
+                        const borderStyle = isLast ? "" : "border-bottom: 1px solid #e0e9f5;";
+                        const variantName = vCount === 1 ? 'Podstawowy' : v.roman;
+                        
+                        feeTableHTML += `
+                        <tr>
+                            <td style="padding: 12px 10px; ${borderStyle} color: ${v.color}; font-weight: bold; width: 50%;">Wariant ${variantName}</td>
+                            <td align="right" style="padding: 12px 10px; ${borderStyle} font-weight: bold; color: #28a745;">${v.feeKwota} ${suffix}</td>
+                        </tr>`;
+                    });
+                    
+                    feeTableHTML += `</table></div>`;
+                    document.getElementById('fee-details-container').innerHTML = feeTableHTML;
+                }
+
+                // --- BENEFITS ---
                 const benefitsContainer = document.getElementById('dynamic-benefits-container');
                 let html = '<table border="0" cellpadding="0" cellspacing="0" width="100%">';
                 const iconUrls = {
