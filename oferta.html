@@ -83,7 +83,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const storedData = localStorage.getItem('bafOfferData_V5_2');
+            const storedData = localStorage.getItem('bafOfferData_V5_3');
             if (storedData) {
                 const data = JSON.parse(storedData);
 
@@ -123,12 +123,14 @@
                 data.variants.forEach((v, index) => {
                     const rowStyle = "padding: 8px 0; border-bottom: 1px solid #eee; color: #666;";
                     const valStyle = "padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #333;";
+                    const dyspozycjaStyle = "padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700; color: #0056b3;";
 
                     variantsHTML += `
                     <td valign="top" width="${colWidth}%" style="background-color: #fdfdfd; border: 1px solid #dcebf7; border-top: 4px solid ${v.color}; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 77, 153, 0.05);">
                         <h3 style="margin-top: 0; font-size: 20px; color: ${v.color}; text-align: center; margin-bottom: 20px; font-weight: 700;">${vCount === 1 ? 'OFERTA' : 'WARIANT ' + v.roman}</h3>
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 15px;">
                             ${v.visibility.netto ? `<tr><td style="${rowStyle}">Kwota Netto:</td><td align="right" style="${valStyle}">${v.netto}</td></tr>` : ''}
+                            ${v.visibility.dyspozycja ? `<tr><td style="${rowStyle}">Kwota do dyspozycji:</td><td align="right" style="${dyspozycjaStyle}">${v.dyspozycja}</td></tr>` : ''}
                             ${v.visibility.brutto ? `<tr><td style="${rowStyle}">Kwota Brutto:</td><td align="right" style="${valStyle}">${v.brutto}</td></tr>` : ''}
                             ${v.visibility.prowizja ? `<tr><td style="${rowStyle}">Prowizja bankowa:</td><td align="right" style="${valStyle}">${v.prowizja}</td></tr>` : ''}
                             ${v.visibility.marza ? `<tr><td style="${rowStyle}">Marża banku:</td><td align="right" style="${valStyle}">${v.marza}</td></tr>` : ''}
@@ -212,20 +214,5 @@
             setTimeout(() => { btn.textContent = originalText; btn.style.backgroundColor = originalColor; btn.classList.remove('copied'); }, 2000);
         }
     </script>
+</body>
 </html>
-
-    <script>
-        // BAF AUTO UPDATE - 19.02.2026
-        try {
-            document.getElementById('wibor-1m').textContent = '3,97%';
-            document.getElementById('wibor-3m').textContent = '3,85%';
-            document.getElementById('wibor-6m').textContent = '3,73%';
-            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
-            
-            const dzisiaj = 'Dane na dzień: 19.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    </body>
-    
