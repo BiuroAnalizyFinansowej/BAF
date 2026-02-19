@@ -75,7 +75,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const storedData = localStorage.getItem('bafOfferData_V5_7');
+            const storedData = localStorage.getItem('bafOfferData_V5_8');
             if (storedData) {
                 const data = JSON.parse(storedData);
                 const suffix = (data.vatType === 'VAT') ? '+ VAT' : 'zw. z VAT';
@@ -159,8 +159,8 @@
                     document.getElementById('fee-container').style.display = 'none';
                 } else {
                     const introTextFee = vCount > 1 
-                        ? "Rozliczenie oparte o sukces (Success Fee). Wynagrodzenie płatne jest <strong>dopiero po uruchomieniu środków</strong>. W zależności od wybranego wariantu kwota ta wynosi:"
-                        : "Rozliczenie oparte o sukces (Success Fee). Wynagrodzenie płatne jest <strong>dopiero po uruchomieniu środków</strong>. Kwota wynagrodzenia wynosi:";
+                        ? "Rozliczenie oparte o sukces (Success Fee). Wynagrodzenie płatne jest <strong>dopiero po uruchomieniu środków</strong>. W zależności od wybranego wariantu wynagrodzenie prezentuje się następująco:"
+                        : "Rozliczenie oparte o sukces (Success Fee). Wynagrodzenie płatne jest <strong>dopiero po uruchomieniu środków</strong>.";
 
                     let feeTableHTML = `
                     <div style="background-color: #f8faff; border-radius: 8px; padding: 25px; border: 1px solid #e0e9f5;">
@@ -169,10 +169,38 @@
                             <tr>`;
                     
                     data.variants.forEach((v, index) => {
+                        let feeContentHTML = '';
+
+                        if (v.hasDiscount) {
+                            feeContentHTML += `
+                                <div style="font-size: 16px; color: #999; text-decoration: line-through; margin-bottom: 2px;">
+                                    Stawka standardowa: ${v.feeStd}%
+                                </div>
+                                <div style="font-size: 24px; font-weight: bold; color: #28a745; margin-bottom: 5px;">
+                                    ${v.feeDisc}% <span style="font-size: 16px; color: #555; font-weight: normal;">&rarr; ${v.feeKwota} ${suffix}</span>
+                                </div>
+                            `;
+                            
+                            if (v.hasTimeDiscount) {
+                                feeContentHTML += `
+                                <div style="margin-top: 15px; background-color: #e6fced; border: 1px dashed #28a745; padding: 12px; border-radius: 6px; font-size: 14px; text-align: left;">
+                                    <strong style="color: #155724; display:block; margin-bottom:4px;">⏱ Opcja: Rabat Czasowy</strong>
+                                    <span style="color: #28a745; font-weight: bold; font-size: 18px;">${v.feeTimeProc}% <span style="font-size: 14px; color: #155724; font-weight: normal;">&rarr; ${v.feeTimeKwota} ${suffix}</span></span><br>
+                                    <span style="color: #155724; font-size: 13px; display:block; margin-top:5px;">${v.timeCondText}</span>
+                                </div>`;
+                            }
+                        } else {
+                            feeContentHTML += `
+                                <div style="font-size: 24px; font-weight: bold; color: #28a745;">
+                                    ${v.feeProc}% <span style="font-size: 16px; color: #555; font-weight: normal;">&rarr; ${v.feeKwota} ${suffix}</span>
+                                </div>
+                            `;
+                        }
+
                         feeTableHTML += `
-                        <td valign="center" width="${colWidth}%" style="background-color: #ffffff; border: 1px solid #dcebf7; border-top: 3px solid ${v.color}; border-radius: 6px; padding: 15px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
-                            ${vCount > 1 ? `<div style="font-size: 16px; color: ${v.color}; font-weight: bold; margin-bottom: 8px;">Wariant ${v.roman}</div>` : ''}
-                            <div style="font-size: 22px; font-weight: bold; color: #28a745;">${v.feeKwota} <span style="font-size: 14px; color: #555; font-weight: normal;">${suffix}</span></div>
+                        <td valign="top" width="${colWidth}%" style="background-color: #ffffff; border: 1px solid #dcebf7; border-top: 3px solid ${v.color}; border-radius: 6px; padding: 15px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                            ${vCount > 1 ? `<div style="font-size: 16px; color: ${v.color}; font-weight: bold; margin-bottom: 15px;">Wariant ${v.roman}</div>` : ''}
+                            ${feeContentHTML}
                         </td>`;
                         
                         if (index < vCount - 1) {
