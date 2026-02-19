@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Ofert BAF v5.4</title>
+    <title>Generator Ofert BAF v5.5</title>
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
@@ -89,7 +89,7 @@
     <div class="container">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h1>Generator Oferty</h1>
-            <div style="text-align:right; font-size:0.8em; color:#777;">v5.4</div>
+            <div style="text-align:right; font-size:0.8em; color:#777;">v5.5</div>
         </div>
 
         <h2>1. Dane i Wstęp</h2>
@@ -159,17 +159,19 @@
         </div>
 
         <div class="header-with-toggle">
-            <h2>4. Wynagrodzenie i Opcje</h2>
+            <h2>4. Opcje ogólne i Wynagrodzenie</h2>
             <div class="input-with-check">
                 <input type="checkbox" id="check_fee_visibility" class="eye-checkbox" checked>
-                <label for="check_fee_visibility" class="eye-label" title="Pokaż/Ukryj całą sekcję wynagrodzenia"></label>
+                <label for="check_fee_visibility" class="eye-label" title="Pokaż/Ukryj całą sekcję wynagrodzenia w ofercie"></label>
             </div>
         </div>
         
         <div class="row" style="flex-wrap: wrap;">
-            <div class="col form-group"><label>Success Fee (%)</label><input type="number" step="0.1" id="successFeeProc" value="4.0" oninput="updateCalculations()"></div>
-            <div class="col form-group"><label>VAT</label><select id="vatType"><option value="VAT">+ VAT</option><option value="ZW">zw. z VAT</option></select></div>
-            <div class="col form-group"><label>Kwota Fee</label><input type="text" id="successFeeKwota" title="Domyślnie wyliczana od Kwoty Netto Wariantu I (Możesz edytować ręcznie, jeśli chcesz inną)"></div>
+            <div class="col form-group">
+                <label>VAT do wynagrodzenia (globalny)</label>
+                <select id="vatType"><option value="VAT">+ VAT</option><option value="ZW">zw. z VAT</option></select>
+                <small style="color:#777">Będzie dopisywany do wynagrodzenia przy każdym wariancie</small>
+            </div>
         </div>
 
         <h2>5. Korzyści</h2>
@@ -192,8 +194,7 @@
         <div id="addedBenefitsList"></div>
 
         <div style="display: flex; gap: 15px; margin-top: 30px;">
-            <button class="generate-btn" style="background-color: #6c757d; flex: 1;" onclick="generateOffer(true)">👁️ PODGLĄD</button>
-            <button class="generate-btn" style="flex: 2;" onclick="generateOffer(false)">GENERUJ I PRZEJDŹ</button>
+            <button class="generate-btn" style="flex: 1;" onclick="generateOffer()">GENERUJ OFERTĘ</button>
         </div>
     </div>
 
@@ -258,23 +259,25 @@
             </div>
             
             <div class="form-group" style="background: #f4f8fc; padding: 10px; border-radius: 6px; border: 1px solid #dcebf7;">
-                <label>Okres (mies.)</label>
-                <div class="input-with-check">
-                    <input type="checkbox" id="check_v${id}_okres" class="eye-checkbox" checked>
-                    <label for="check_v${id}_okres" class="eye-label"></label>
-                    <input type="number" id="v${id}_months" value="120" oninput="updateCalculations()">
-                </div>
                 
-                <label style="margin-top:10px;">Kwota Netto (PLN)</label>
+                <label>Kwota Netto (PLN)</label>
                 <div class="input-with-check">
                     <input type="checkbox" id="check_v${id}_netto" class="eye-checkbox" checked>
                     <label for="check_v${id}_netto" class="eye-label"></label>
                     <input type="text" id="v${id}_loanAmount" value="100 000" oninput="updateCalculations()" onblur="this.value=formatMoney(parseMoney(this.value)); updateCalculations();">
                 </div>
-            </div>
+                
+                <label style="margin-top:10px;">Success Fee (%)</label>
+                <div class="input-with-check">
+                    <input type="checkbox" id="check_v${id}_fee" class="eye-checkbox" checked>
+                    <label for="check_v${id}_fee" class="eye-label" title="Pokaż w ofercie wynagrodzenie BAF dla tego wariantu"></label>
+                    <input type="number" step="0.1" id="v${id}_fee_proc" value="4.0" oninput="updateCalculations()">
+                </div>
+                
+                <label style="margin-top:10px;">Kwota Fee (PLN)</label>
+                <input type="text" id="v${id}_fee_display" readonly style="color:#28a745; font-weight:bold; background:#e9fce9; border: 1px solid #c3e6cb;">
 
-            <div class="form-group">
-                <label>Kwota do dyspozycji</label>
+                <label style="margin-top:10px;">Kwota do dyspozycji</label>
                 <div class="input-with-check">
                     <input type="checkbox" id="check_v${id}_dyspozycja" class="eye-checkbox" checked>
                     <label for="check_v${id}_dyspozycja" class="eye-label" title="Netto - Success Fee"></label>
@@ -286,6 +289,16 @@
                 <label>Kwota Brutto</label>
                 <div class="input-with-check"><input type="checkbox" id="check_v${id}_brutto" class="eye-checkbox" checked><label for="check_v${id}_brutto" class="eye-label"></label><input type="text" id="v${id}_brutto_display" readonly></div>
             </div>
+            
+            <div class="form-group">
+                <label>Okres (mies.)</label>
+                <div class="input-with-check">
+                    <input type="checkbox" id="check_v${id}_okres" class="eye-checkbox" checked>
+                    <label for="check_v${id}_okres" class="eye-label"></label>
+                    <input type="number" id="v${id}_months" value="120" oninput="updateCalculations()">
+                </div>
+            </div>
+
             <div class="form-group">
                 <label>Prowizja (%)</label>
                 <div class="input-with-check"><input type="checkbox" id="check_v${id}_prowizja" class="eye-checkbox" checked><label for="check_v${id}_prowizja" class="eye-label"></label><input type="number" step="0.01" id="v${id}_prowizja_proc" value="${variantsCount === 1 ? '2.5' : '0'}" oninput="updateCalculations()"></div>
@@ -458,28 +471,13 @@
     }
 
     function updateCalculations() {
-        const successFeeProc = parseFloat(document.getElementById('successFeeProc').value) || 0;
-        let firstVariantNetto = 0;
-
         const variantCols = document.querySelectorAll('.variant-col');
-        
-        if(variantCols.length > 0) {
-            const firstId = variantCols[0].id.replace('col_v', '');
-            firstVariantNetto = parseMoney(document.getElementById(`v${firstId}_loanAmount`).value);
-        }
 
-        const feeInput = document.getElementById('successFeeKwota');
-        if (feeInput.value === '' || feeInput.dataset.auto === "true" || feeInput.dataset.auto === undefined) {
-            feeInput.value = formatMoney(firstVariantNetto * (successFeeProc / 100));
-            feeInput.dataset.auto = "true";
-        }
-
-        const finalFee = parseMoney(feeInput.value);
-
-        variantCols.forEach((col, index) => {
+        variantCols.forEach((col) => {
             const id = col.id.replace('col_v', '');
             
             const loanAmountEl = document.getElementById(`v${id}_loanAmount`);
+            const feeProcEl = document.getElementById(`v${id}_fee_proc`);
             const monthsEl = document.getElementById(`v${id}_months`);
             const prowizjaEl = document.getElementById(`v${id}_prowizja_proc`);
             const marzaEl = document.getElementById(`v${id}_marza`);
@@ -488,17 +486,23 @@
             if(!loanAmountEl || !marzaEl || !wiborEl) return;
 
             const loanNetto = parseMoney(loanAmountEl.value);
+            const feeProc = parseFloat(feeProcEl.value) || 0;
             const months = parseInt(monthsEl.value) || 120;
             const p = parseFloat(prowizjaEl.value) || 0;
             const m = parseFloat(marzaEl.value) || 0;
             const w = parseFloat(wiborEl.value) || 0;
 
+            const feeAmount = loanNetto * (feeProc / 100);
+            const dyspozycja = loanNetto - feeAmount;
+            
             const calc_brutto = loanNetto * (1 + p/100);
             const rate = w + m;
             const rata = calculatePMT(rate, months, calc_brutto);
             const koszt = (rata * months) - loanNetto;
-            const dyspozycja = loanNetto - finalFee;
 
+            if(document.getElementById(`v${id}_fee_display`)) {
+                document.getElementById(`v${id}_fee_display`).value = formatMoney(feeAmount);
+            }
             if(document.getElementById(`v${id}_dyspozycja_display`)) {
                 document.getElementById(`v${id}_dyspozycja_display`).value = formatMoney(dyspozycja);
             }
@@ -509,14 +513,9 @@
             document.getElementById(`v${id}_koszt_display`).value = formatMoney(koszt);
         });
     }
-    
-    document.getElementById('successFeeKwota').addEventListener('input', function() {
-        this.dataset.auto = "false";
-        updateCalculations();
-    });
 
     // --- GENERUJ ---
-    function generateOffer(isPreview = false) {
+    function generateOffer() {
         let selectedFinancing = document.getElementById('financingType').value;
         if (selectedFinancing === 'Inne') { selectedFinancing = document.getElementById('customFinancingInput').value; }
 
@@ -549,8 +548,6 @@
             customHeaders: { benefits: document.getElementById('headerBenefits').value, fee: document.getElementById('headerFee').value },
             closingText: finalFooter,
             visibility: { feeSection: document.getElementById('check_fee_visibility').checked },
-            feeProc: document.getElementById('successFeeProc').value + '%',
-            feeKwota: document.getElementById('successFeeKwota').value,
             variants: [],
             benefits: []
         };
@@ -570,6 +567,8 @@
                 roman: roman,
                 months: document.getElementById(`v${id}_months`).value,
                 netto: finalNettoText,
+                feeProc: document.getElementById(`v${id}_fee_proc`).value + '%',
+                feeKwota: document.getElementById(`v${id}_fee_display`).value,
                 dyspozycja: document.getElementById(`v${id}_dyspozycja_display`).value,
                 brutto: document.getElementById(`v${id}_brutto_display`).value,
                 prowizja: document.getElementById(`v${id}_prowizja_proc`).value + '%',
@@ -588,6 +587,7 @@
                 visibility: {
                     okres: document.getElementById(`check_v${id}_okres`).checked,
                     netto: document.getElementById(`check_v${id}_netto`).checked,
+                    fee: document.getElementById(`check_v${id}_fee`).checked,
                     dyspozycja: document.getElementById(`check_v${id}_dyspozycja`).checked,
                     brutto: document.getElementById(`check_v${id}_brutto`).checked,
                     prowizja: document.getElementById(`check_v${id}_prowizja`).checked,
@@ -612,9 +612,10 @@
         });
         customBenefits.forEach(ben => data.benefits.push(ben));
 
-        localStorage.setItem('bafOfferData_V5_4', JSON.stringify(data));
+        localStorage.setItem('bafOfferData_V5_5', JSON.stringify(data));
         
-        if (isPreview) { window.open('oferta.html', '_blank'); } else { window.location.href = 'oferta.html'; }
+        // ZAWSZE W NOWYM OKNIE PO KLIKNIĘCIU
+        window.open('oferta.html', '_blank'); 
     }
 
     // Inicjalizacja
