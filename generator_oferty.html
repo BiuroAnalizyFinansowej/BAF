@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Ofert BAF v5.5</title>
+    <title>Generator Ofert BAF v5.6</title>
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
@@ -89,7 +89,7 @@
     <div class="container">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h1>Generator Oferty</h1>
-            <div style="text-align:right; font-size:0.8em; color:#777;">v5.5</div>
+            <div style="text-align:right; font-size:0.8em; color:#777;">v5.6</div>
         </div>
 
         <h2>1. Dane i Wstęp</h2>
@@ -159,18 +159,18 @@
         </div>
 
         <div class="header-with-toggle">
-            <h2>4. Opcje ogólne i Wynagrodzenie</h2>
+            <h2>4. Wynagrodzenie (Opcje Globalne)</h2>
             <div class="input-with-check">
                 <input type="checkbox" id="check_fee_visibility" class="eye-checkbox" checked>
-                <label for="check_fee_visibility" class="eye-label" title="Pokaż/Ukryj całą sekcję wynagrodzenia w ofercie"></label>
+                <label for="check_fee_visibility" class="eye-label" title="Pokaż/Ukryj tabelę wynagrodzeń w ofercie"></label>
             </div>
         </div>
         
         <div class="row" style="flex-wrap: wrap;">
             <div class="col form-group">
-                <label>VAT do wynagrodzenia (globalny)</label>
+                <label>Podatek VAT</label>
                 <select id="vatType"><option value="VAT">+ VAT</option><option value="ZW">zw. z VAT</option></select>
-                <small style="color:#777">Będzie dopisywany do wynagrodzenia przy każdym wariancie</small>
+                <small style="color: #777; font-size: 12px;">Dopisywany do podsumowania we wszystkich wariantach.</small>
             </div>
         </div>
 
@@ -240,7 +240,7 @@
         document.getElementById('variantsContainer').innerHTML = '';
         variantsCount = 0;
         totalVariantsCreated = 0;
-        addVariant(); // Pierwszy wariant na start
+        addVariant(); 
     }
 
     function addVariant() {
@@ -268,14 +268,10 @@
                 </div>
                 
                 <label style="margin-top:10px;">Success Fee (%)</label>
-                <div class="input-with-check">
-                    <input type="checkbox" id="check_v${id}_fee" class="eye-checkbox" checked>
-                    <label for="check_v${id}_fee" class="eye-label" title="Pokaż w ofercie wynagrodzenie BAF dla tego wariantu"></label>
-                    <input type="number" step="0.1" id="v${id}_fee_proc" value="4.0" oninput="updateCalculations()">
-                </div>
+                <input type="number" step="0.1" id="v${id}_fee_proc" value="4.0" oninput="document.getElementById('v${id}_fee_display').dataset.auto='true'; updateCalculations()">
                 
-                <label style="margin-top:10px;">Kwota Fee (PLN)</label>
-                <input type="text" id="v${id}_fee_display" readonly style="color:#28a745; font-weight:bold; background:#e9fce9; border: 1px solid #c3e6cb;">
+                <label style="margin-top:10px;">Kwota Fee (PLN) <small style="font-weight:normal">(Możesz nadpisać ręcznie)</small></label>
+                <input type="text" id="v${id}_fee_display" style="color:#28a745; font-weight:bold; background:#e9fce9; border: 1px solid #c3e6cb;" oninput="this.dataset.auto='false'; updateCalculations();" onblur="this.value=formatMoney(parseMoney(this.value)); updateCalculations();">
 
                 <label style="margin-top:10px;">Kwota do dyspozycji</label>
                 <div class="input-with-check">
@@ -478,6 +474,7 @@
             
             const loanAmountEl = document.getElementById(`v${id}_loanAmount`);
             const feeProcEl = document.getElementById(`v${id}_fee_proc`);
+            const feeDisplayEl = document.getElementById(`v${id}_fee_display`);
             const monthsEl = document.getElementById(`v${id}_months`);
             const prowizjaEl = document.getElementById(`v${id}_prowizja_proc`);
             const marzaEl = document.getElementById(`v${id}_marza`);
@@ -492,21 +489,23 @@
             const m = parseFloat(marzaEl.value) || 0;
             const w = parseFloat(wiborEl.value) || 0;
 
-            const feeAmount = loanNetto * (feeProc / 100);
+            let feeAmount = 0;
+            if (feeDisplayEl.dataset.auto !== "false") {
+                feeAmount = loanNetto * (feeProc / 100);
+                if(feeDisplayEl) feeDisplayEl.value = formatMoney(feeAmount);
+            } else {
+                feeAmount = parseMoney(feeDisplayEl.value);
+            }
+
             const dyspozycja = loanNetto - feeAmount;
-            
             const calc_brutto = loanNetto * (1 + p/100);
             const rate = w + m;
             const rata = calculatePMT(rate, months, calc_brutto);
             const koszt = (rata * months) - loanNetto;
 
-            if(document.getElementById(`v${id}_fee_display`)) {
-                document.getElementById(`v${id}_fee_display`).value = formatMoney(feeAmount);
-            }
             if(document.getElementById(`v${id}_dyspozycja_display`)) {
                 document.getElementById(`v${id}_dyspozycja_display`).value = formatMoney(dyspozycja);
             }
-
             document.getElementById(`v${id}_brutto_display`).value = formatMoney(calc_brutto);
             document.getElementById(`v${id}_oproc_display`).value = rate.toFixed(2) + '%';
             document.getElementById(`v${id}_rata_display`).value = formatMoney(rata);
@@ -561,14 +560,16 @@
             
             let finalNettoText = document.getElementById(`v${id}_loanAmount`).value;
             if(!finalNettoText.includes('PLN')) finalNettoText = formatMoney(parseMoney(finalNettoText));
+            
+            let finalFeeText = document.getElementById(`v${id}_fee_display`).value;
+            if(!finalFeeText.includes('PLN')) finalFeeText = formatMoney(parseMoney(finalFeeText));
 
             data.variants.push({
                 color: color,
                 roman: roman,
                 months: document.getElementById(`v${id}_months`).value,
                 netto: finalNettoText,
-                feeProc: document.getElementById(`v${id}_fee_proc`).value + '%',
-                feeKwota: document.getElementById(`v${id}_fee_display`).value,
+                feeKwota: finalFeeText,
                 dyspozycja: document.getElementById(`v${id}_dyspozycja_display`).value,
                 brutto: document.getElementById(`v${id}_brutto_display`).value,
                 prowizja: document.getElementById(`v${id}_prowizja_proc`).value + '%',
@@ -587,7 +588,6 @@
                 visibility: {
                     okres: document.getElementById(`check_v${id}_okres`).checked,
                     netto: document.getElementById(`check_v${id}_netto`).checked,
-                    fee: document.getElementById(`check_v${id}_fee`).checked,
                     dyspozycja: document.getElementById(`check_v${id}_dyspozycja`).checked,
                     brutto: document.getElementById(`check_v${id}_brutto`).checked,
                     prowizja: document.getElementById(`check_v${id}_prowizja`).checked,
@@ -599,7 +599,6 @@
             });
         });
 
-        // Korzyści
         const defaultTexts = {
             'ben1': '<strong>BRAK OPŁAT KWARTALNYCH!</strong> Nie ma żadnych ukrytych kosztów za utrzymanie finansowania.',
             'ben2': '<strong>Przejrzyste warunki:</strong> Umowa bez "gwiazdek" i dodatkowych, nieoczekiwanych kosztów.',
@@ -612,13 +611,10 @@
         });
         customBenefits.forEach(ben => data.benefits.push(ben));
 
-        localStorage.setItem('bafOfferData_V5_5', JSON.stringify(data));
-        
-        // ZAWSZE W NOWYM OKNIE PO KLIKNIĘCIU
+        localStorage.setItem('bafOfferData_V5_6', JSON.stringify(data));
         window.open('oferta.html', '_blank'); 
     }
 
-    // Inicjalizacja
     initIcons(); updateIntroText(); initVariants(); refreshIcons();
 </script>
 
