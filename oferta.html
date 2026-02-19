@@ -75,7 +75,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const storedData = localStorage.getItem('bafOfferData_V5_6');
+            const storedData = localStorage.getItem('bafOfferData_V5_7');
             if (storedData) {
                 const data = JSON.parse(storedData);
                 const suffix = (data.vatType === 'VAT') ? '+ VAT' : 'zw. z VAT';
@@ -158,24 +158,29 @@
                 if(!data.visibility.feeSection) {
                     document.getElementById('fee-container').style.display = 'none';
                 } else {
+                    const introTextFee = vCount > 1 
+                        ? "Rozliczenie oparte o sukces (Success Fee). Wynagrodzenie płatne jest <strong>dopiero po uruchomieniu środków</strong>. W zależności od wybranego wariantu kwota ta wynosi:"
+                        : "Rozliczenie oparte o sukces (Success Fee). Wynagrodzenie płatne jest <strong>dopiero po uruchomieniu środków</strong>. Kwota wynagrodzenia wynosi:";
+
                     let feeTableHTML = `
                     <div style="background-color: #f8faff; border-radius: 8px; padding: 25px; border: 1px solid #e0e9f5;">
-                        <p style="font-size: 16px; color: #555; margin: 0 0 20px 0; line-height: 1.6;">Rozliczenie oparte o sukces (Success Fee). Wynagrodzenie płatne jest <strong>dopiero po uruchomieniu środków</strong>. W zależności od wybranego wariantu kwota ta wynosi:</p>
-                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size: 16px; border-collapse: collapse;">`;
+                        <p style="font-size: 16px; color: #555; margin: 0 0 20px 0; line-height: 1.6;">${introTextFee}</p>
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>`;
                     
-                    data.variants.forEach((v, idx) => {
-                        const isLast = idx === data.variants.length - 1;
-                        const borderStyle = isLast ? "" : "border-bottom: 1px solid #e0e9f5;";
-                        const variantName = vCount === 1 ? 'Podstawowy' : v.roman;
-                        
+                    data.variants.forEach((v, index) => {
                         feeTableHTML += `
-                        <tr>
-                            <td style="padding: 12px 10px; ${borderStyle} color: ${v.color}; font-weight: bold; width: 50%;">Wariant ${variantName}</td>
-                            <td align="right" style="padding: 12px 10px; ${borderStyle} font-weight: bold; color: #28a745;">${v.feeKwota} ${suffix}</td>
-                        </tr>`;
+                        <td valign="center" width="${colWidth}%" style="background-color: #ffffff; border: 1px solid #dcebf7; border-top: 3px solid ${v.color}; border-radius: 6px; padding: 15px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                            ${vCount > 1 ? `<div style="font-size: 16px; color: ${v.color}; font-weight: bold; margin-bottom: 8px;">Wariant ${v.roman}</div>` : ''}
+                            <div style="font-size: 22px; font-weight: bold; color: #28a745;">${v.feeKwota} <span style="font-size: 14px; color: #555; font-weight: normal;">${suffix}</span></div>
+                        </td>`;
+                        
+                        if (index < vCount - 1) {
+                            feeTableHTML += `<td width="2%"></td>`;
+                        }
                     });
                     
-                    feeTableHTML += `</table></div>`;
+                    feeTableHTML += `</tr></table></div>`;
                     document.getElementById('fee-details-container').innerHTML = feeTableHTML;
                 }
 
