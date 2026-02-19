@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Ofert BAF v5.6</title>
+    <title>Generator Ofert BAF v5.7</title>
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
@@ -89,7 +89,7 @@
     <div class="container">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h1>Generator Oferty</h1>
-            <div style="text-align:right; font-size:0.8em; color:#777;">v5.6</div>
+            <div style="text-align:right; font-size:0.8em; color:#777;">v5.7</div>
         </div>
 
         <h2>1. Dane i Wstęp</h2>
@@ -162,7 +162,7 @@
             <h2>4. Wynagrodzenie (Opcje Globalne)</h2>
             <div class="input-with-check">
                 <input type="checkbox" id="check_fee_visibility" class="eye-checkbox" checked>
-                <label for="check_fee_visibility" class="eye-label" title="Pokaż/Ukryj tabelę wynagrodzeń w ofercie"></label>
+                <label for="check_fee_visibility" class="eye-label" title="Pokaż/Ukryj całą sekcję wynagrodzeń w ofercie"></label>
             </div>
         </div>
         
@@ -611,7 +611,7 @@
         });
         customBenefits.forEach(ben => data.benefits.push(ben));
 
-        localStorage.setItem('bafOfferData_V5_6', JSON.stringify(data));
+        localStorage.setItem('bafOfferData_V5_7', JSON.stringify(data));
         window.open('oferta.html', '_blank'); 
     }
 
