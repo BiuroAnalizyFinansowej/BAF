@@ -47,10 +47,6 @@
                                         <tr id="variants-table-row">
                                             </tr>
                                     </table>
-
-                                    <div id="bgk-section" style="background: #e6f7ff; border-left: 5px solid #007bff; padding: 20px; margin: 25px 0 0 0; border-radius: 0 8px 8px 0;">
-                                        <p style="margin: 0; font-size: 16px; color: #333;"><strong>Gwarancja DE MINIMIS:</strong> W ofercie występuje Poręczenie BGK 0,5% od kwoty gwarancji (60% salda kredytu), płatne raz w roku przez 5 lat.</p>
-                                    </div>
                                 </div>
 
                                 <div style="border-bottom: 1px solid #e0e0e0; padding-bottom: 30px; margin-bottom: 40px;">
@@ -87,7 +83,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const storedData = localStorage.getItem('bafOfferData_V5_1');
+            const storedData = localStorage.getItem('bafOfferData_V5_2');
             if (storedData) {
                 const data = JSON.parse(storedData);
 
@@ -147,6 +143,11 @@
                             ${v.condText.replace(/\n/g, '<br>')}
                         </div>` : ''}
 
+                        ${v.hasBgk ? `
+                        <div style="font-size: 13px; color: #004085; background-color: #cce5ff; padding: 12px; margin-top: 15px; border-radius: 4px; line-height: 1.5; border-left: 3px solid #0056b3;">
+                            <strong>Gwarancja DE MINIMIS:</strong> W tym wariancie występuje Poręczenie BGK 0,5% od kwoty gwarancji (60% salda kredytu), płatne raz w roku przez 5 lat.
+                        </div>` : ''}
+
                         <div style="background-color: #f0f7ff; border: 1px solid #cce5ff; border-radius: 6px; padding: 15px; margin-top: 20px; text-align: center;">
                             <span style="display: block; font-size: 22px; font-weight: 700; color: ${v.color}; margin-bottom: 5px;">${v.rata}</span>
                             <span style="font-size: 13px; color: #666;">Rata szacunkowa (${v.months} mies.)</span>
@@ -160,12 +161,6 @@
                 
                 variantsRow.innerHTML = variantsHTML;
 
-                if(!data.showBGK) { document.getElementById('bgk-section').style.display = 'none'; }
-                else {
-                    const bgkText = vCount > 1 ? "W wariantach" : "W ofercie";
-                    document.querySelector('#bgk-section p').innerHTML = document.querySelector('#bgk-section p').innerHTML.replace("W ofercie", bgkText);
-                }
-
                 // --- FEE & BENEFTIS ---
                 const suffix = (data.vatType === 'VAT') ? '+ VAT' : 'zw. z VAT';
                 document.getElementById('fee-proc').textContent = data.feeProc;
@@ -177,7 +172,7 @@
                 const iconUrls = {
                     'wallet': 'https://img.icons8.com/ios/50/0056b3/wallet--v1.png',
                     'ok': 'https://img.icons8.com/ios/50/0056b3/ok--v1.png',
-                    'checkbox': 'https://img.icons8.com/ios/50/0056b3/checked-checkbox--v1.png', // <-- NOWA IKONA WIELOKROTNEGO UŻYTKU W ODBIORZE
+                    'checkbox': 'https://img.icons8.com/ios/50/0056b3/checked-checkbox--v1.png',
                     'unlock': 'https://img.icons8.com/ios/50/0056b3/unlock.png',
                     'discount': 'https://img.icons8.com/ios/50/0056b3/discount--v1.png',
                     'idea': 'https://img.icons8.com/ios/50/0056b3/idea.png',
