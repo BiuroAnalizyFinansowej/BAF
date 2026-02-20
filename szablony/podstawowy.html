@@ -38,7 +38,7 @@
         #editor {
             width: 100%; min-height: 200px; padding: 15px; box-sizing: border-box; 
             outline: none; font-size: 14px; line-height: 1.5; overflow-y: auto; color: #222;
-            font-family: 'Lato', 'Noto Color Emoji', sans-serif; /* Emotki w edytorze */
+            font-family: 'Lato', 'Noto Color Emoji', sans-serif; 
         }
         
         .gmail-toolbar { 
@@ -62,7 +62,6 @@
             margin-bottom: 10px; background: white; border: 1px solid #ccc; box-shadow: 0 4px 25px rgba(0,0,0,0.15);
             border-radius: 8px; z-index: 9999; padding: 12px; width: max-content;
         }
-        /* Mały trójkąt wskazujący na przycisk z Gmaila */
         .dropdown-menu::after {
             content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
             border-width: 7px; border-style: solid; border-color: white transparent transparent transparent;
@@ -84,7 +83,7 @@
         .emoji-grid { 
             display: grid; grid-template-columns: repeat(7, 32px); gap: 4px; 
             max-height: 220px; overflow-y: auto; padding-right: 5px; 
-            font-family: 'Noto Color Emoji', sans-serif; /* Styl Google dla ikonek w menu */
+            font-family: 'Noto Color Emoji', sans-serif; 
         }
         .emoji-item { 
             cursor: pointer; font-size: 20px; width: 32px; height: 32px; 
@@ -93,7 +92,6 @@
         }
         .emoji-item:hover { background: #e9ecef; }
         
-        /* Pasek przewijania dla emotikonów */
         .emoji-grid::-webkit-scrollbar { width: 6px; }
         .emoji-grid::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
         .emoji-grid::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
@@ -107,7 +105,6 @@
         .btn-copy:hover { background-color: #138496; }
         .btn-copy.success { background-color: #28a745; }
 
-        /* Podgląd maila */
         #email-preview { margin-left: 360px; padding: 40px; }
 
         @media (max-width: 1100px) {
@@ -143,12 +140,12 @@
             </div>
             
             <div class="gmail-toolbar">
-                <button class="tool-bold" onclick="execCmd('bold')" title="Pogrubienie">B</button>
-                <button class="tool-italic" onclick="execCmd('italic')" title="Kursywa">I</button>
-                <button class="tool-underline" onclick="execCmd('underline')" title="Podkreślenie">U</button>
+                <button class="tool-bold" onmousedown="event.preventDefault()" onclick="execCmd('bold')" title="Pogrubienie">B</button>
+                <button class="tool-italic" onmousedown="event.preventDefault()" onclick="execCmd('italic')" title="Kursywa">I</button>
+                <button class="tool-underline" onmousedown="event.preventDefault()" onclick="execCmd('underline')" title="Podkreślenie">U</button>
                 
                 <div class="dropdown-container">
-                    <button class="dropdown-toggle" onclick="toggleMenu('color-menu')" title="Kolor tekstu">
+                    <button class="dropdown-toggle" onmousedown="event.preventDefault()" onclick="toggleMenu('color-menu')" title="Kolor tekstu">
                         <span style="font-weight:bold; border-bottom: 3px solid #000; padding-bottom: 2px;">A</span> ▼
                     </button>
                     <div id="color-menu" class="dropdown-menu">
@@ -156,13 +153,13 @@
                             </div>
                         <div class="custom-color-wrapper">
                             <span>Własny:</span>
-                            <input type="color" id="custom-color-picker" onchange="execCmd('foreColor', this.value); toggleMenu('color-menu');">
+                            <input type="color" id="custom-color-picker" onmousedown="saveSelection()" onchange="execCmd('foreColor', this.value); toggleMenu('color-menu');">
                         </div>
                     </div>
                 </div>
 
                 <div class="dropdown-container">
-                    <button class="dropdown-toggle" onclick="toggleMenu('emoji-menu')" title="Wstaw emotikon">
+                    <button class="dropdown-toggle" onmousedown="event.preventDefault()" onclick="toggleMenu('emoji-menu')" title="Wstaw emotikon">
                         <span style="font-family: 'Noto Color Emoji', sans-serif;">😊</span>
                     </button>
                     <div id="emoji-menu" class="dropdown-menu">
@@ -171,8 +168,8 @@
                     </div>
                 </div>
 
-                <button onclick="execCmd('insertUnorderedList')" title="Lista punktowana">≡</button>
-                <button onclick="execCmd('removeFormat')" title="Wyczyść formatowanie">T×</button>
+                <button onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList')" title="Lista punktowana">≡</button>
+                <button onmousedown="event.preventDefault()" onclick="execCmd('removeFormat')" title="Wyczyść formatowanie">T×</button>
             </div>
         </div>
     </div>
@@ -233,6 +230,30 @@
 </div>
 
 <script>
+    // --- MECHANIZM ZAZNACZANIA TEKSTU ---
+    let savedSelection = null;
+    const editorEl = document.getElementById('editor');
+
+    function saveSelection() {
+        const sel = window.getSelection();
+        if (sel.getRangeAt && sel.rangeCount > 0) {
+            savedSelection = sel.getRangeAt(0);
+        }
+    }
+
+    function restoreSelection() {
+        if (savedSelection) {
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(savedSelection);
+        }
+    }
+
+    // Zapisuj zaznaczenie, gdy użytkownik pisze lub puszcza myszkę w edytorze
+    editorEl.addEventListener('mouseup', saveSelection);
+    editorEl.addEventListener('keyup', saveSelection);
+    editorEl.addEventListener('mouseleave', saveSelection);
+
     // --- GENEROWANIE KOLORÓW ---
     const colors = [
         '#000000', '#434343', '#666666', '#999999', '#cccccc', '#efefef', '#f3f3f3',
@@ -245,6 +266,8 @@
         const div = document.createElement('div');
         div.className = 'color-swatch';
         div.style.backgroundColor = color;
+        // preventDefault zapobiega utracie focusu!
+        div.onmousedown = (e) => e.preventDefault();
         div.onclick = () => {
             execCmd('foreColor', color);
             toggleMenu('color-menu'); 
@@ -252,21 +275,17 @@
         colorGrid.appendChild(div);
     });
 
-    // --- GENEROWANIE EMOTIKONÓW (Stylizowane czcionką Google Noto Color Emoji) ---
+    // --- GENEROWANIE EMOTIKONÓW ---
     const emojis = [
-        // Buźki
         '😀','😁','😂','🤣','😃','😄','😅','😆','😉','😊','😋','😎','😍','😘','🥰','😗','😙','😚','☺️','🙂','🤗','🤩',
         '🤔','🤨','😐','😑','😶','🙄','😏','😣','😥','😮','🤐','😯','😪','😫','😴','😌','😛','😜','😝','🤤','😒','😓',
         '😔','😕','🙃','🤑','😲','☹️','🙁','😖','😞','😟','😤','😢','😭','😦','😧','😨','😩','🤯','😬','😰','😱','🥵',
         '🥶','😳','🤪','😵','😡','😠','🤬','😷','🤒','🤕','🤢','🤮','🤧','😇','🤠','🤡','🤥','🤫','🤭','🧐','🤓',
-        // Dłonie / Gesty
         '🤲','👐','🙌','👏','🤝','👍','👎','👊','✊','🤛','🤜','🤞','✌️','🤟','🤘','👌','👈','👉','👆','👇','☝️','✋',
         '🤚','🖐','🖖','👋','🤙','💪','🖕','✍️','🙏',
-        // Kolorowe Kółka, Kwadraty, Serca i Symbole (z Gmaila)
         '🔴','🟠','🟡','🟢','🔵','🟣','⚫','⚪','🟤','🟥','🟧','🟨','🟩','🟦','🟪','⬛','⬜','🟫',
         '❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❣️','💕','💞','💓','💗','💖','💘','💝',
         '✅','❌','❎','➕','➖','➗','❓','❔','❕','❗','⭕',
-        // Biuro / Biznes / Kontakty
         '💼','📈','📉','📊','📋','📅','📆','📇','📁','📂','📃','📄','🧮','📎','🔗','✂️','🗑️','📌','📍',
         '📞','☎️','📠','📧','✉️','📩','📨','📬','📮','🏠','🏢','🏦','💰','🪙','💴','💵','💶','💷','💸','💳','🧾',
         '🚀','🔥','⭐','💡','🔔','💯'
@@ -276,6 +295,7 @@
         const span = document.createElement('span');
         span.className = 'emoji-item';
         span.innerText = emoji;
+        span.onmousedown = (e) => e.preventDefault();
         span.onclick = () => {
             insertEmoji(emoji);
             toggleMenu('emoji-menu'); 
@@ -291,27 +311,37 @@
         document.getElementById(menuId).classList.toggle('active');
     }
 
-    document.addEventListener('click', function(event) {
+    document.addEventListener('mousedown', function(event) {
         if (!event.target.closest('.dropdown-container')) {
             document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('active'));
         }
     });
 
     function execCmd(command, value = null) {
-        document.getElementById('editor').focus();
+        if (document.activeElement !== editorEl) {
+            editorEl.focus();
+            restoreSelection();
+        }
+        // Wymusza poprawne tagi span i style css dla kolorów (zamiast archaicznego tagu font)
+        document.execCommand("styleWithCSS", false, true); 
         document.execCommand(command, false, value);
+        saveSelection();
         updatePreview();
     }
 
     function insertEmoji(emoji) {
-        document.getElementById('editor').focus();
+        if (document.activeElement !== editorEl) {
+            editorEl.focus();
+            restoreSelection();
+        }
         document.execCommand('insertText', false, emoji);
+        saveSelection();
         updatePreview();
     }
 
     function updatePreview() {
         const name = document.getElementById('input-name').value;
-        const content = document.getElementById('editor').innerHTML;
+        const content = editorEl.innerHTML;
         const advisorData = document.getElementById('input-advisor').value.split('|');
         const showSig = document.getElementById('show-signature').checked;
 
@@ -347,7 +377,7 @@
         window.getSelection().removeAllRanges();
     }
 
-    // Inicjalizacja podglądu
+    // Inicjalizacja podglądu przy załadowaniu strony
     updatePreview();
 </script>
 
