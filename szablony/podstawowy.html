@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podstawowy Szablon Maila - BAF</title>
+    <link rel="icon" type="image/png" href="baf_logo_p.png">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+    
+    <style>
+        body { margin: 0; padding: 0; background-color: #f4f7f9; font-family: 'Lato', Arial, sans-serif; color: #333; }
+        
+        /* Nawigacja w panelu bocznym */
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 10px; }
+        .nav-btn { 
+            text-decoration: none; color: #002d5a; font-weight: bold; border: 2px solid #002d5a; 
+            padding: 8px 12px; border-radius: 6px; transition: all 0.3s ease; display: flex; 
+            align-items: center; justify-content: center; gap: 6px; font-size: 12px; 
+            background-color: transparent; cursor: pointer; flex: 1; font-family: 'Lato', sans-serif;
+        }
+        .nav-btn:hover { background-color: #002d5a; color: white; }
+        .nav-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+        /* Panel sterowania */
+        #admin-panel {
+            position: fixed; top: 0; left: 0; width: 360px; height: 100vh;
+            background: #ffffff; border-right: 1px solid #ddd; padding: 20px;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.1); z-index: 1000; overflow-y: auto;
+            box-sizing: border-box; display: flex; flex-direction: column;
+        }
+        
+        .control-group { margin-bottom: 15px; }
+        label { display: block; font-size: 11px; font-weight: bold; color: #777; margin-bottom: 5px; text-transform: uppercase; }
+        input[type="text"], select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Lato', sans-serif; box-sizing: border-box; }
+        
+        /* Edytor a'la Gmail */
+        .editor-container { border: 1px solid #ddd; border-radius: 8px; overflow: visible; background: white; display: flex; flex-direction: column; position: relative; }
+        #editor {
+            width: 100%; min-height: 200px; padding: 15px; box-sizing: border-box; 
+            outline: none; font-size: 14px; line-height: 1.5; overflow-y: auto; color: #222;
+            font-family: 'Lato', 'Noto Color Emoji', sans-serif; /* Emotki w edytorze */
+        }
+        
+        .gmail-toolbar { 
+            display: flex; align-items: center; gap: 4px; padding: 8px; 
+            background: #f8f9fa; border-top: 1px solid #eee; flex-wrap: wrap; border-radius: 0 0 8px 8px;
+        }
+        .gmail-toolbar > button, .dropdown-toggle {
+            background: none; border: none; border-radius: 4px; cursor: pointer;
+            padding: 6px 10px; font-family: "Times New Roman", Times, serif; font-size: 15px;
+            color: #444; transition: background 0.2s; display: flex; align-items: center; justify-content: center;
+        }
+        .gmail-toolbar > button:hover, .dropdown-toggle:hover { background: #e2e6ea; }
+        .gmail-toolbar .tool-bold { font-weight: bold; }
+        .gmail-toolbar .tool-italic { font-style: italic; }
+        .gmail-toolbar .tool-underline { text-decoration: underline; }
+
+        /* Menu pop-up dla kolorów i emotikonów */
+        .dropdown-container { position: relative; }
+        .dropdown-menu {
+            display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+            margin-bottom: 10px; background: white; border: 1px solid #ccc; box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+            border-radius: 8px; z-index: 9999; padding: 12px; width: max-content;
+        }
+        /* Mały trójkąt wskazujący na przycisk z Gmaila */
+        .dropdown-menu::after {
+            content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            border-width: 7px; border-style: solid; border-color: white transparent transparent transparent;
+        }
+        .dropdown-menu::before {
+            content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 1px;
+            border-width: 8px; border-style: solid; border-color: #ccc transparent transparent transparent; z-index: -1;
+        }
+        .dropdown-menu.active { display: block; }
+
+        /* Siatka kolorów */
+        .color-grid { display: grid; grid-template-columns: repeat(7, 26px); gap: 6px; margin-bottom: 12px; }
+        .color-swatch { width: 26px; height: 26px; border: 1px solid #eee; border-radius: 4px; cursor: pointer; transition: transform 0.1s; }
+        .color-swatch:hover { transform: scale(1.15); border-color: #999; z-index: 2; position: relative; }
+        .custom-color-wrapper { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #555; border-top: 1px solid #eee; padding-top: 8px; }
+        .custom-color-wrapper input[type="color"] { width: 24px; height: 24px; padding: 0; border: 1px solid #ccc; border-radius: 3px; cursor: pointer; background: none; }
+
+        /* Siatka emotikonów */
+        .emoji-grid { 
+            display: grid; grid-template-columns: repeat(7, 32px); gap: 4px; 
+            max-height: 220px; overflow-y: auto; padding-right: 5px; 
+            font-family: 'Noto Color Emoji', sans-serif; /* Styl Google dla ikonek w menu */
+        }
+        .emoji-item { 
+            cursor: pointer; font-size: 20px; width: 32px; height: 32px; 
+            display: flex; align-items: center; justify-content: center; border-radius: 4px; 
+            transition: background 0.1s;
+        }
+        .emoji-item:hover { background: #e9ecef; }
+        
+        /* Pasek przewijania dla emotikonów */
+        .emoji-grid::-webkit-scrollbar { width: 6px; }
+        .emoji-grid::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .emoji-grid::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+        .emoji-grid::-webkit-scrollbar-thumb:hover { background: #aaa; }
+
+        .btn-copy {
+            background-color: #17a2b8; color: white; border: none; padding: 14px;
+            width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; 
+            margin-top: 20px; transition: 0.3s; font-size: 13px; font-family: 'Lato', sans-serif;
+        }
+        .btn-copy:hover { background-color: #138496; }
+        .btn-copy.success { background-color: #28a745; }
+
+        /* Podgląd maila */
+        #email-preview { margin-left: 360px; padding: 40px; }
+
+        @media (max-width: 1100px) {
+            #admin-panel { position: relative; width: 100%; height: auto; border-right: none; }
+            #email-preview { margin-left: 0; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="admin-panel">
+    <div class="top-nav">
+        <button onclick="history.back()" class="nav-btn">&laquo; Powrót</button>
+        <a href="index.html" class="nav-btn" title="Strona Główna">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg> Strona Główna
+        </a>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+        <img src="baf_logo.png" alt="BAF" width="140">
+    </div>
+
+    <div class="control-group">
+        <label>Powitanie</label>
+        <input type="text" id="input-name" value="Panie Marcinie" oninput="updatePreview()">
+    </div>
+
+    <div class="control-group">
+        <label>Treść wiadomości</label>
+        <div class="editor-container">
+            <div id="editor" contenteditable="true" oninput="updatePreview()">
+                Dziękuję za rozmowę telefoniczną. W nawiązaniu do naszych ustaleń, przesyłam niezbędne informacje. Proszę o zapoznanie się z poniższymi szczegółami.
+            </div>
+            
+            <div class="gmail-toolbar">
+                <button class="tool-bold" onclick="execCmd('bold')" title="Pogrubienie">B</button>
+                <button class="tool-italic" onclick="execCmd('italic')" title="Kursywa">I</button>
+                <button class="tool-underline" onclick="execCmd('underline')" title="Podkreślenie">U</button>
+                
+                <div class="dropdown-container">
+                    <button class="dropdown-toggle" onclick="toggleMenu('color-menu')" title="Kolor tekstu">
+                        <span style="font-weight:bold; border-bottom: 3px solid #000; padding-bottom: 2px;">A</span> ▼
+                    </button>
+                    <div id="color-menu" class="dropdown-menu">
+                        <div class="color-grid" id="color-grid">
+                            </div>
+                        <div class="custom-color-wrapper">
+                            <span>Własny:</span>
+                            <input type="color" id="custom-color-picker" onchange="execCmd('foreColor', this.value); toggleMenu('color-menu');">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dropdown-container">
+                    <button class="dropdown-toggle" onclick="toggleMenu('emoji-menu')" title="Wstaw emotikon">
+                        <span style="font-family: 'Noto Color Emoji', sans-serif;">😊</span>
+                    </button>
+                    <div id="emoji-menu" class="dropdown-menu">
+                        <div class="emoji-grid" id="emoji-grid">
+                            </div>
+                    </div>
+                </div>
+
+                <button onclick="execCmd('insertUnorderedList')" title="Lista punktowana">≡</button>
+                <button onclick="execCmd('removeFormat')" title="Wyczyść formatowanie">T×</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <label style="display: flex; align-items: center; cursor: pointer; text-transform: none; color: #333;">
+            <input type="checkbox" id="show-signature" onchange="updatePreview()" checked style="margin-right: 10px; width: 16px; height: 16px;"> 
+            Dołącz przycisk "Moja wizytówka"
+        </label>
+    </div>
+
+    <div class="control-group">
+        <label>Doradca</label>
+        <select id="input-advisor" onchange="updatePreview()">
+            <option value="Dawid Błachno|https://q-r.to/DawidBlachnoBiuroBAF">Dawid Błachno</option>
+            <option value="Weronika Lekston|https://q-r.to/WeronikaLekstonBiuroBAF">Weronika Lekston</option>
+            <option value="Mieczysław Andrzejewski|https://l.ead.me/MieczyslawAndrzejewskiBiuroBAF">Mieczysław Andrzejewski</option>
+            <option value="Joanna Karpała|https://l.ead.me/JoannaKarpalaBiuroBAF">Joanna Karpała</option>
+            <option value="Piotr Pakuła|https://q-r.to/PakulaPiotrBiuroBAF">Piotr Pakuła</option>
+            <option value="Wiktoria Nojek|https://q-r.to/WiktoraNojekBiuroBAF">Wiktoria Nojek</option>
+            <option value="Wojciech Młynarczyk|https://q-r.to/WojciechMlynarczykBiuroBAF">Wojciech Młynarczyk</option>
+            <option value="Maja Zięba|https://q-r.to/MajaZiebaBiuroBAF">Maja Zięba</option>
+            <option value="Mateusz Dzidkowski|https://q-r.to/MateuszDzidkowskiBiuroBAF">Mateusz Dzidkowski</option>
+        </select>
+    </div>
+
+    <button class="btn-copy" id="copy-btn" onclick="copyEmail()">KOPIUJ TREŚĆ DO MAILA</button>
+</div>
+
+<div id="email-preview">
+    <div id="copy-container">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f7f9; font-family: 'Lato', Arial, sans-serif;">
+            <tr>
+                <td align="center" style="padding: 20px;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; border: 1px solid #e1e4e8; overflow: hidden; margin-bottom: 20px;">
+                        <tr>
+                            <td align="center" style="padding: 30px 0; background-color: #ffffff; border-bottom: 1px solid #f2f2f2;">
+                                <img src="baf_logo.png" alt="BAF" width="200" style="display: block; border: 0;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 40px;">
+                                <h1 id="view-name" style="font-size: 22px; color: #002d5a; margin: 0 0 20px 0; font-weight: 700;">Panie Marcinie,</h1>
+                                
+                                <div id="view-content" style="font-size: 16px; color: #333; line-height: 1.6; margin-bottom: 25px; font-family: 'Lato', 'Noto Color Emoji', Arial, sans-serif;">
+                                    </div>
+
+                                <div id="view-signature-container" align="center" style="margin-top: 35px; padding-top: 25px; border-top: 1px solid #f2f2f2;">
+                                    <a id="view-link" href="#" style="display: inline-block; padding: 14px 35px; background-color: #17a2b8; color: #ffffff !important; text-decoration: none; font-weight: bold; border-radius: 5px; font-size: 16px;">Moja wizytówka</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script>
+    // --- GENEROWANIE KOLORÓW ---
+    const colors = [
+        '#000000', '#434343', '#666666', '#999999', '#cccccc', '#efefef', '#f3f3f3',
+        '#cc0000', '#e69138', '#f1c232', '#6aa84f', '#45818e', '#3d85c6', '#674ea7',
+        '#ff0000', '#ff9900', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#9900ff',
+        '#f4cccc', '#fce5cd', '#fff2cc', '#d9ead3', '#d0e0e3', '#cfe2f3', '#ead1dc'
+    ];
+    const colorGrid = document.getElementById('color-grid');
+    colors.forEach(color => {
+        const div = document.createElement('div');
+        div.className = 'color-swatch';
+        div.style.backgroundColor = color;
+        div.onclick = () => {
+            execCmd('foreColor', color);
+            toggleMenu('color-menu'); 
+        };
+        colorGrid.appendChild(div);
+    });
+
+    // --- GENEROWANIE EMOTIKONÓW (Stylizowane czcionką Google Noto Color Emoji) ---
+    const emojis = [
+        // Buźki
+        '😀','😁','😂','🤣','😃','😄','😅','😆','😉','😊','😋','😎','😍','😘','🥰','😗','😙','😚','☺️','🙂','🤗','🤩',
+        '🤔','🤨','😐','😑','😶','🙄','😏','😣','😥','😮','🤐','😯','😪','😫','😴','😌','😛','😜','😝','🤤','😒','😓',
+        '😔','😕','🙃','🤑','😲','☹️','🙁','😖','😞','😟','😤','😢','😭','😦','😧','😨','😩','🤯','😬','😰','😱','🥵',
+        '🥶','😳','🤪','😵','😡','😠','🤬','😷','🤒','🤕','🤢','🤮','🤧','😇','🤠','🤡','🤥','🤫','🤭','🧐','🤓',
+        // Dłonie / Gesty
+        '🤲','👐','🙌','👏','🤝','👍','👎','👊','✊','🤛','🤜','🤞','✌️','🤟','🤘','👌','👈','👉','👆','👇','☝️','✋',
+        '🤚','🖐','🖖','👋','🤙','💪','🖕','✍️','🙏',
+        // Kolorowe Kółka, Kwadraty, Serca i Symbole (z Gmaila)
+        '🔴','🟠','🟡','🟢','🔵','🟣','⚫','⚪','🟤','🟥','🟧','🟨','🟩','🟦','🟪','⬛','⬜','🟫',
+        '❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❣️','💕','💞','💓','💗','💖','💘','💝',
+        '✅','❌','❎','➕','➖','➗','❓','❔','❕','❗','⭕',
+        // Biuro / Biznes / Kontakty
+        '💼','📈','📉','📊','📋','📅','📆','📇','📁','📂','📃','📄','🧮','📎','🔗','✂️','🗑️','📌','📍',
+        '📞','☎️','📠','📧','✉️','📩','📨','📬','📮','🏠','🏢','🏦','💰','🪙','💴','💵','💶','💷','💸','💳','🧾',
+        '🚀','🔥','⭐','💡','🔔','💯'
+    ];
+    const emojiGrid = document.getElementById('emoji-grid');
+    emojis.forEach(emoji => {
+        const span = document.createElement('span');
+        span.className = 'emoji-item';
+        span.innerText = emoji;
+        span.onclick = () => {
+            insertEmoji(emoji);
+            toggleMenu('emoji-menu'); 
+        };
+        emojiGrid.appendChild(span);
+    });
+
+    // --- FUNKCJE EDYTORA ---
+    function toggleMenu(menuId) {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            if (menu.id !== menuId) menu.classList.remove('active');
+        });
+        document.getElementById(menuId).classList.toggle('active');
+    }
+
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.dropdown-container')) {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('active'));
+        }
+    });
+
+    function execCmd(command, value = null) {
+        document.getElementById('editor').focus();
+        document.execCommand(command, false, value);
+        updatePreview();
+    }
+
+    function insertEmoji(emoji) {
+        document.getElementById('editor').focus();
+        document.execCommand('insertText', false, emoji);
+        updatePreview();
+    }
+
+    function updatePreview() {
+        const name = document.getElementById('input-name').value;
+        const content = document.getElementById('editor').innerHTML;
+        const advisorData = document.getElementById('input-advisor').value.split('|');
+        const showSig = document.getElementById('show-signature').checked;
+
+        document.getElementById('view-name').textContent = name + (name.endsWith(',') ? '' : ',');
+        document.getElementById('view-content').innerHTML = content;
+        document.getElementById('view-link').href = advisorData[1];
+        document.getElementById('view-signature-container').style.display = showSig ? 'block' : 'none';
+    }
+
+    function copyEmail() {
+        const container = document.getElementById('copy-container');
+        const btn = document.getElementById('copy-btn');
+        
+        const range = document.createRange();
+        range.selectNode(container);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+
+        try {
+            const blob = new Blob([container.innerHTML], { type: 'text/html' });
+            const item = new ClipboardItem({ 'text/html': blob });
+            navigator.clipboard.write([item]).then(() => {
+                btn.textContent = '✅ SKOPIOWANO!';
+                btn.classList.add('success');
+                setTimeout(() => {
+                    btn.textContent = 'KOPIUJ TREŚĆ DO MAILA';
+                    btn.classList.remove('success');
+                }, 2000);
+            });
+        } catch (err) {
+            document.execCommand('copy');
+        }
+        window.getSelection().removeAllRanges();
+    }
+
+    // Inicjalizacja podglądu
+    updatePreview();
+</script>
+
+</body>
+</html>
