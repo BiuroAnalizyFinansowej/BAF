@@ -104,7 +104,7 @@
                                                 <h3 style="font-family: 'Lato', Arial, sans-serif; font-size: 19px; color: #0056b3; margin: 0 0 20px 0; font-weight: 700;">Dokumenty potrzebne do wstępnej analizy finansowej:</h3>
                                                 <ul style="padding-left: 20px; margin: 0; font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; line-height: 1.9;">
                                                     <li id="li-bik"><strong>Raport BIK</strong> prywatny i firmowy,</li>
-                                                    <li id="li-accounting-doc"><strong>Podsumowanie KPiR</strong> za rok 2024 oraz 2025,</li>
+                                                    <li id="li-accounting-doc"><strong>Podsumowanie KPiR</strong> za rok 2025 oraz 2025,</li>
                                                     <li id="li-pit"><strong>PIT</strong> za rok 2023 i 2024,</li>
                                                     <li id="li-assets"><strong>Ewidencja środków trwałych</strong> oraz tabele amortyzacji za poprzedni rok oraz rok bieżący,</li>
                                                     <li>Informacja o terminowości opłacania składek <strong>ZUS i US</strong> (na ten moment wystarczy informacja, natomiast do uruchomienia prawdopodobnie będzie potrzebne zaświadczenie),</li>
@@ -207,12 +207,12 @@
             switch (type) {
                 case 'kpir':
                     liBik.innerHTML = '<strong>Raport BIK</strong> prywatny i firmowy,';
-                    liAccountingDoc.innerHTML = '<strong>Podsumowanie KPiR</strong> za rok 2024 oraz 2025,';
+                    liAccountingDoc.innerHTML = '<strong>Podsumowanie KPiR</strong> za rok 2025 oraz 2026,';
                     liPit.innerHTML = '<strong>PIT</strong> za rok 2023 i 2024,';
                     break;
                 case 'ryczalt':
                     liBik.innerHTML = '<strong>Raport BIK</strong> prywatny i firmowy,';
-                    liAccountingDoc.innerHTML = '<strong>Ewidencja przychodu</strong> za rok 2024 oraz 2025,';
+                    liAccountingDoc.innerHTML = '<strong>Ewidencja przychodu</strong> za rok 2025 oraz 2026,';
                     liPit.innerHTML = '<strong>PIT</strong> za rok 2023 i 2024,';
                     liAssets.style.display = 'none'; // Ukryj ewidencję ŚT
                     break;
@@ -329,4 +329,5 @@
         } catch(e) { console.log('Brak elementu w tym pliku'); }
     </script>
     </body>
+
     
