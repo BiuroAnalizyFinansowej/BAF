@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator - Styl Dark Mode</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -79,8 +80,14 @@
         .output-row{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 0;border-bottom:1px solid #374151;}
         .output-row:last-child{border-bottom:none;} .output-row .label{font-weight:500;color:#9ca3af;} .output-row .value,.output-row .result{font-weight:700;font-size:1.2rem;color:#f9fafb;}
         .output-row .result{font-size:1.8rem;color:#60a5fa;} .output-row .client-amount{color:#34d399;}
-        table{width:100%;margin-top:2rem;border-collapse:collapse;} th,td{border:1px solid #374151;padding:0.75rem;text-align:right;}
+        table{width:100%;margin-top:0.5rem;border-collapse:collapse; background-color: #1f2937; border-radius: 8px; overflow: hidden;} 
+        th,td{border:1px solid #374151;padding:0.75rem;text-align:right;}
         th{background-color:rgba(31, 41, 55, 0.8);color:#d1d5db;font-weight:600;}
+
+        /* Style dla przycisków akcji */
+        .action-buttons { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 2.5rem; margin-bottom: 1.5rem; }
+        .action-btn { background: #3b82f6; color: #ffffff; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: background 0.2s; font-size: 0.9rem; }
+        .action-btn:hover { background: #2563eb; }
     </style>
 </head>
 <body>
@@ -118,7 +125,17 @@
             <div class="output-row"><span class="label">Kwota do dyspozycji klienta</span><span class="value client-amount" id="clientAmount">0,00 zł</span></div>
             <div class="output-row"><span class="label">Miesięczna rata równa</span><span class="result" id="monthlyPayment">0,00 zł</span></div>
         </div>
-        <h2 style="margin-top: 2.5rem;">Harmonogram spłaty</h2><div style="overflow-x:auto;"><table><thead><tr><th>Nr raty</th><th>Część kapitałowa</th><th>Część odsetkowa</th><th>Rata całkowita</th><th>Kapitał do spłaty</th></tr></thead><tbody id="scheduleBody"></tbody></table></div>
+        
+        <div class="action-buttons">
+            <button id="btn-copy-data" class="action-btn">Skopiuj podstawowe dane</button>
+            <button id="btn-copy-schedule" class="action-btn">Skopiuj harmonogram</button>
+            <button id="btn-save-pdf" class="action-btn">Zapisz jako PDF</button>
+        </div>
+
+        <h2>Harmonogram spłaty</h2>
+        <div style="overflow-x:auto;">
+            <table><thead><tr><th>Nr raty</th><th>Część kapitałowa</th><th>Część odsetkowa</th><th>Rata całkowita</th><th>Kapitał do spłaty</th></tr></thead><tbody id="scheduleBody"></tbody></table>
+        </div>
     </div>
     <script>
         const loanAmountSlider = document.getElementById('loanAmountSlider');const loanAmountInput = document.getElementById('loanAmountInput');const loanTermSlider = document.getElementById('loanTermSlider');const loanTermInput = document.getElementById('loanTermInput');const termInYearsDisplay = document.getElementById('termInYears');const bankCommissionInput = document.getElementById('bankCommission');const bankMarginInput = document.getElementById('bankMargin');const wiborInput = document.getElementById('wibor');const brokerFeePercentInput = document.getElementById('brokerFeePercent');const brokerFeeAmountInput = document.getElementById('brokerFeeAmount');const nominalInterestRateDisplay = document.getElementById('nominalInterestRate');const netLoanAmountDisplay = document.getElementById('netLoanAmount');const grossLoanAmountDisplay = document.getElementById('grossLoanAmount');const monthlyPaymentDisplay = document.getElementById('monthlyPayment');const clientAmountDisplay = document.getElementById('clientAmount');
@@ -130,16 +147,68 @@
         totalInterestCostDisplay.textContent = currencyFormatter.format(totalInterest > 0 ? totalInterest : 0);
 
         const clientAmount = loanAmount - brokerFeeAmount;clientAmountDisplay.textContent = currencyFormatter.format(clientAmount);generateSchedule(grossLoanAmount, monthlyPayment, monthlyInterestRate, loanTerm);}function generateSchedule(principal, monthlyPayment, monthlyRate, term) {scheduleBody.innerHTML = '';let remainingPrincipal = principal;if (term === 0 || isNaN(monthlyPayment) || !isFinite(monthlyPayment)) return;for (let i = 1; i <= term; i++) {const interestPart = remainingPrincipal * monthlyRate;let principalPart = monthlyPayment - interestPart;if (i === term) {principalPart = remainingPrincipal;monthlyPayment = principalPart + interestPart;}remainingPrincipal -= principalPart;const row = `<tr><td>${i}</td><td>${currencyFormatter.format(principalPart)}</td><td>${currencyFormatter.format(interestPart)}</td><td>${currencyFormatter.format(monthlyPayment)}</td><td>${currencyFormatter.format(Math.abs(remainingPrincipal))}</td></tr>`;scheduleBody.innerHTML += row;}}const inputsToCalculate = [loanAmountSlider, loanTermSlider, loanTermInput, bankCommissionInput, bankMarginInput, wiborInput, brokerFeePercentInput, brokerFeeAmountInput];inputsToCalculate.forEach(input => input.addEventListener('input', calculate));loanAmountInput.addEventListener('change', calculate);loanAmountSlider.addEventListener('input', () => {loanAmountInput.value = formatInputValue(loanAmountSlider.value);});loanAmountInput.addEventListener('input', (e) => {let value = parseFormattedValue(e.target.value);if (value > 1500000) value = 1500000;if (value >= 500) {loanAmountSlider.value = value;}});loanAmountInput.addEventListener('blur', (e) => {let value = parseFormattedValue(e.target.value);if (value < 500) value = 500;e.target.value = formatInputValue(value);calculate();});loanTermSlider.addEventListener('input', () => loanTermInput.value = loanTermSlider.value);loanTermInput.addEventListener('input', () => loanTermSlider.value = loanTermInput.value);brokerFeePercentInput.addEventListener('input', () => {const loanAmount = parseFormattedValue(loanAmountInput.value);const percent = parseFloat(brokerFeePercentInput.value) || 0;const amount = (loanAmount * percent) / 100;brokerFeeAmountInput.value = amount.toFixed(2);});brokerFeeAmountInput.addEventListener('input', () => {const loanAmount = parseFormattedValue(loanAmountInput.value);const amount = parseFloat(brokerFeeAmountInput.value) || 0;if (loanAmount > 0) {const percent = (amount / loanAmount) * 100;brokerFeePercentInput.value = percent.toFixed(2);} else {brokerFeePercentInput.value = '';}});
+        
         document.addEventListener('DOMContentLoaded', () => {
             loanAmountInput.value = formatInputValue(loanAmountSlider.value);
             calculate();
         });
+
+        // SKRYPTY DLA PRZYCISKÓW AKCJI
+        document.getElementById('btn-copy-data').addEventListener('click', () => {
+            const nomRate = document.getElementById('nominalInterestRate').textContent;
+            const netAmt = document.getElementById('netLoanAmount').textContent;
+            const grossAmt = document.getElementById('grossLoanAmount').textContent;
+            const totalInt = document.getElementById('totalInterestCost').textContent;
+            const monthlyPmt = document.getElementById('monthlyPayment').textContent;
+
+            const textToCopy = `${nomRate}\nKwota kredytu netto (kapitał): ${netAmt}\nKwota kredytu brutto (kapitał + prowizja): ${grossAmt}\nCałkowity koszt odsetkowy: ${totalInt}\nMiesięczna rata równa: ${monthlyPmt}`;
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert('Podstawowe dane zostały skopiowane do schowka!');
+            }).catch(err => console.error('Błąd kopiowania:', err));
+        });
+
+        document.getElementById('btn-copy-schedule').addEventListener('click', async () => {
+            const table = document.querySelector('table');
+            if (!table) return;
+            
+            try {
+                // Generujemy Blob z HTML, by wklejenie do maila zachowało tabelę
+                const htmlBlob = new Blob([table.outerHTML], { type: 'text/html' });
+                const textBlob = new Blob([table.innerText], { type: 'text/plain' });
+                const clipboardItem = new ClipboardItem({
+                    'text/html': htmlBlob,
+                    'text/plain': textBlob
+                });
+                await navigator.clipboard.write([clipboardItem]);
+                alert('Harmonogram skopiowany! Możesz go wkleić bezpośrednio do maila.');
+            } catch (err) {
+                // Fallback dla starszych przeglądarek lub gdy API schowka zawiedzie
+                navigator.clipboard.writeText(table.innerText)
+                    .then(() => alert('Harmonogram skopiowany (jako czysty tekst).'))
+                    .catch(e => console.error('Błąd kopiowania:', e));
+            }
+        });
+
+        document.getElementById('btn-save-pdf').addEventListener('click', () => {
+            if (typeof html2pdf === 'undefined') {
+                alert('Zaczekaj chwilę, ładuje się moduł PDF...');
+                return;
+            }
+            const element = document.querySelector('table');
+            const opt = {
+                margin:       0.5,
+                filename:     'harmonogram_splaty.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        });
     </script>
-</html>
 
     <script>
         try {
-            
             const dzisiaj = 'Dane na dzień: 19.02.2026';
             if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
             if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
@@ -159,5 +228,5 @@
             if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
         } catch(e) { console.log('Brak elementu w tym pliku'); }
     </script>
-    </body>
-    
+</body>
+</html>
