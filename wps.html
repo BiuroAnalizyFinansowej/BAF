@@ -148,15 +148,6 @@
             }
         }
         
-        /* Input Section */
-        .calc-inputs {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            border: 1px solid #e2e8f0;
-        }
-
         /* Individual tiles - każdy jest osobny */
         .calc-inputs,
         .calc-results,
@@ -170,15 +161,6 @@
 
         .calc-chart {
             margin-top: 0;
-        }
-
-        /* Chart Section */
-        .calc-chart-section {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            border: 1px solid #e2e8f0;
         }
         
         .section-title {
@@ -275,11 +257,6 @@
         
         /* Results Section */
         .calc-results {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem; /* Zmniejszony padding */
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            border: 1px solid #e2e8f0;
             height: fit-content;
         }
         
@@ -313,7 +290,6 @@
         
         /* Chart Container */
         .calc-chart {
-            margin-top: 2rem;
             padding: 1.5rem;
             background: #f8fafc;
             border-radius: 8px;
@@ -386,47 +362,38 @@
                     <i class="fas fa-edit"></i>
                     Dane kredytu
                 </h2>
-                </div>
+            </div>
             
             <form id="calculator-form">
                 <div class="input-group">
                     <label for="kwota-kredytu" class="input-label">
                         Kwota kredytu (tylko kapitał)
                     </label>
-                    <input 
-                        type="number" 
-                        id="kwota-kredytu" 
-                        class="input-field" 
-                        placeholder="0"
-                        min="0"
-                        step="0.01"
-                    >
+                    <input type="number" id="kwota-kredytu" class="input-field" placeholder="0" min="0" step="0.01">
                 </div>
                 
                 <div class="input-group">
                     <label for="prowizja" class="input-label">
                         Prowizja w umowie (kwotowo)
                     </label>
-                    <input 
-                        type="number" 
-                        id="prowizja" 
-                        class="input-field" 
-                        placeholder="0"
-                        min="0"
-                        step="0.01"
-                    >
+                    <input type="number" id="prowizja" class="input-field" placeholder="0" min="0" step="0.01">
                 </div>
                 
                 <div class="input-group">
-                    <label class="input-label">Sposób obliczania oprocentowania</label>
+                    <label class="input-label">Sposób określenia oprocentowania</label>
                     
-                    <div style="display: flex; gap: 1rem; margin-bottom: 0.75rem;"> <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <div style="display: flex; gap: 1rem; margin-bottom: 0.75rem; flex-wrap: wrap;"> 
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
                             <input type="radio" name="interest-type" value="margin" checked style="margin: 0;">
-                            <span>Marża</span>
+                            <span>Zmienne (znam marżę)</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                            <input type="radio" name="interest-type" value="fixed" style="margin: 0;">
-                            <span>Oprocentowanie</span>
+                            <input type="radio" name="interest-type" value="initial_rate" style="margin: 0;">
+                            <span>Zmienne (znam tylko opr. początkowe)</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="radio" name="interest-type" value="true_fixed" style="margin: 0;">
+                            <span>Stałe (niezależne od WIBOR)</span>
                         </label>
                     </div>
                     
@@ -435,62 +402,39 @@
                             <label for="marza" style="font-weight: 500; color: #333; margin-bottom: 0.5rem; display: block;">
                                 Marża banku (%)
                             </label>
-                            <input 
-                                type="number" 
-                                id="marza" 
-                                class="input-field" 
-                                placeholder="0"
-                                min="0"
-                                max="20"
-                                step="0.01"
-                                value="3"
-                                style="width: 100%;"
-                            >
+                            <input type="number" id="marza" class="input-field" placeholder="np. 2.0" min="0" step="0.01" value="2.0" style="width: 100%;">
                         </div>
                     </div>
                         
                     <div id="fixed-rate-field" style="display: none;">
                         <div>
-                            <label for="oprocentowanie" style="font-weight: 500; color: #333; margin-bottom: 0.5rem; display: block;">
+                            <label for="oprocentowanie" id="opr-label" style="font-weight: 500; color: #333; margin-bottom: 0.5rem; display: block;">
                                 Oprocentowanie na dzień podpisania (%)
                             </label>
-                            <input 
-                                type="number" 
-                                id="oprocentowanie" 
-                                class="input-field" 
-                                placeholder="0"
-                                min="0"
-                                max="30"
-                                step="0.01"
-                                style="width: 100%;"
-                            >
+                            <input type="number" id="oprocentowanie" class="input-field" placeholder="np. 6.5" min="0" step="0.01" style="width: 100%;">
                         </div>
                     </div>
+                </div>
+
+                <div class="input-group" id="aktualny-wibor-wrapper">
+                    <label for="aktualny-wibor" class="input-label">
+                        Aktualny WIBOR do prognozy przyszłych odsetek (%)
+                    </label>
+                    <input type="number" id="aktualny-wibor" class="input-field" placeholder="np. 3.85" min="0" step="0.01" value="3.85">
                 </div>
                 
                 <div class="input-group">
                     <label for="okres-splaty" class="input-label">
                         Okres spłaty (miesiące)
                     </label>
-                    <input 
-                        type="number" 
-                        id="okres-splaty" 
-                        class="input-field" 
-                        placeholder="0"
-                        min="1"
-                        step="1"
-                    >
+                    <input type="number" id="okres-splaty" class="input-field" placeholder="0" min="1" step="1">
                 </div>
                 
                 <div class="input-group">
                     <label for="data-podpisania" class="input-label">
                         Data podpisania umowy
                     </label>
-                    <input 
-                        type="date" 
-                        id="data-podpisania" 
-                        class="input-field"
-                    >
+                    <input type="date" id="data-podpisania" class="input-field">
                 </div>
                 
                 <div class="input-group">
@@ -506,28 +450,21 @@
                     <label for="data-zakonczenia" class="input-label">
                         Data spłaty kredytu
                     </label>
-                    <input 
-                        type="date" 
-                        id="data-zakonczenia" 
-                        class="input-field"
-                    >
+                    <input type="date" id="data-zakonczenia" class="input-field">
                 </div>
                 
                 <div class="input-group">
                     <label for="data-symulacji" class="input-label">
                         Data dzisiejsza (symulacji)
                     </label>
-                    <input 
-                        type="date" 
-                        id="data-symulacji" 
-                        class="input-field"
-                    >
+                    <input type="date" id="data-symulacji" class="input-field">
                 </div>
                 
                 <div id="nadplaty-container">
-                    </div>
+                </div>
                 
-                <button type="button" id="dodaj-nadplate" class="calc-btn secondary" style="margin: 0.5rem 0;"> <i class="fas fa-plus"></i>
+                <button type="button" id="dodaj-nadplate" class="calc-btn secondary" style="margin: 0.5rem 0;"> 
+                    <i class="fas fa-plus"></i>
                     Dodaj nadpłatę
                 </button>
                 
@@ -553,7 +490,7 @@
                 </div>
                 
                 <div class="result-item">
-                    <span class="result-label">Odsetki pozostałe:</span>
+                    <span class="result-label">Odsetki pozostałe (przyszłe):</span>
                     <span class="result-value" id="odsetki-pozostale">0,00 zł</span>
                 </div>
                 
@@ -576,17 +513,40 @@
     </main>
 
     <script>
-        // WPS Calculator JavaScript with proper logic
         let wpsChart;
         
-        // WIBOR 3M Historical Data
+        // WIBOR 3M Historical Data (Miesięczne notowania - ostatnie 10 lat: 04.2016 - 03.2026)
         const wibor3mHistory = {
-            '2025-07-01': 5.80, '2025-04-01': 5.80, '2025-01-01': 5.82, 
-            '2024-10-01': 5.84, '2024-07-01': 5.86, '2024-04-01': 5.87, '2024-01-01': 5.88,
-            '2023-10-01': 5.65, '2023-07-01': 6.90, '2023-04-01': 6.90, '2023-01-01': 6.99, 
-            '2022-10-01': 7.15, '2022-07-01': 7.00, '2022-04-01': 5.27, '2022-01-01': 2.55,
-            '2021-10-01': 0.69, '2021-07-01': 0.22, '2021-04-01': 0.21, '2021-01-01': 0.21, 
-            '2020-10-01': 0.22, '2020-07-01': 0.23, '2020-04-01': 0.71, '2020-01-01': 1.71,
+            '2026-03-02': 3.81, '2026-02-02': 3.90, '2026-01-02': 3.97, '2025-12-01': 4.20,
+            '2025-11-03': 4.41, '2025-10-01': 4.70, '2025-09-01': 4.82, '2025-08-01': 4.93,
+            '2025-07-01': 5.24, '2025-06-02': 5.19, '2025-05-02': 5.36, '2025-04-01': 5.85,
+            '2025-03-03': 5.86, '2025-02-03': 5.85, '2025-01-02': 5.82, '2024-12-02': 5.85,
+            '2024-11-04': 5.82, '2024-10-01': 5.84, '2024-09-02': 5.85, '2024-08-01': 5.85,
+            '2024-07-01': 5.85, '2024-06-03': 5.85, '2024-05-02': 5.86, '2024-04-02': 5.86,
+            '2024-03-01': 5.85, '2024-02-01': 5.86, '2024-01-02': 5.89, '2023-12-01': 5.84,
+            '2023-11-02': 5.64, '2023-10-02': 5.74, '2023-09-01': 6.67, '2023-08-01': 6.72,
+            '2023-07-03': 6.90, '2023-06-01': 6.90, '2023-05-02': 6.90, '2023-04-03': 6.90,
+            '2023-03-01': 6.94, '2023-02-01': 6.95, '2023-01-02': 7.01, '2022-12-01': 7.25,
+            '2022-11-02': 7.53, '2022-10-03': 7.28, '2022-09-01': 7.14, '2022-08-01': 7.01,
+            '2022-07-01': 7.05, '2022-06-01': 6.61, '2022-05-02': 6.14, '2022-04-01': 4.84,
+            '2022-03-01': 3.67, '2022-02-01': 3.04, '2022-01-03': 2.56, '2021-12-01': 2.11,
+            '2021-11-02': 0.78, '2021-10-01': 0.24, '2021-09-01': 0.23, '2021-08-02': 0.21,
+            '2021-07-01': 0.21, '2021-06-01': 0.21, '2021-05-04': 0.21, '2021-04-01': 0.21,
+            '2021-03-01': 0.21, '2021-02-01': 0.21, '2021-01-04': 0.21, '2020-12-01': 0.22,
+            '2020-11-02': 0.22, '2020-10-01': 0.22, '2020-09-01': 0.23, '2020-08-03': 0.23,
+            '2020-07-01': 0.26, '2020-06-01': 0.28, '2020-05-04': 0.68, '2020-04-01': 1.17,
+            '2020-03-02': 1.71, '2020-02-03': 1.71, '2020-01-02': 1.71, '2019-12-02': 1.71,
+            '2019-11-04': 1.71, '2019-10-01': 1.72, '2019-09-02': 1.72, '2019-08-01': 1.72,
+            '2019-07-01': 1.72, '2019-06-03': 1.72, '2019-05-02': 1.72, '2019-04-01': 1.72,
+            '2019-03-01': 1.72, '2019-02-01': 1.72, '2019-01-02': 1.72, '2018-12-03': 1.72,
+            '2018-11-02': 1.72, '2018-10-01': 1.72, '2018-09-03': 1.71, '2018-08-01': 1.70,
+            '2018-07-02': 1.70, '2018-06-01': 1.70, '2018-05-02': 1.70, '2018-04-03': 1.70,
+            '2018-03-01': 1.72, '2018-02-01': 1.72, '2018-01-02': 1.72, '2017-12-01': 1.73,
+            '2017-11-02': 1.73, '2017-10-02': 1.73, '2017-09-01': 1.73, '2017-08-01': 1.73,
+            '2017-07-03': 1.73, '2017-06-01': 1.73, '2017-05-02': 1.73, '2017-04-03': 1.73,
+            '2017-03-01': 1.73, '2017-02-01': 1.73, '2017-01-02': 1.73, '2016-12-01': 1.73,
+            '2016-11-02': 1.72, '2016-10-03': 1.71, '2016-09-01': 1.71, '2016-08-01': 1.71,
+            '2016-07-01': 1.71, '2016-06-01': 1.68, '2016-05-02': 1.67, '2016-04-01': 1.67
         };
         
         document.addEventListener('DOMContentLoaded', function() {
@@ -602,40 +562,27 @@
 
         function setupCalculator() {
             const form = document.getElementById('calculator-form');
+            if (!form) return;
             
-            if (!form) {
-                console.error('❌ Calculator form not found!');
-                return;
-            }
-            
-            // Form submission handler (prevent default)
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                console.log('📝 Form submitted');
                 calculateResults();
             });
             
-            // Form reset handler
             form.addEventListener('reset', function() {
-                console.log('🔄 Form reset');
                 clearResults();
             });
             
-            // Real-time calculation on input change
             const inputs = form.querySelectorAll('.input-field, input[type="radio"], input[type="checkbox"]');
-            console.log('🎛️ Found', inputs.length, 'input fields');
             inputs.forEach(input => {
                 input.addEventListener('input', function() {
-                    console.log('⌨️ Input changed:', input.id, input.value);
                     debouncedCalculate();
                 });
             });
             
-            // Checkbox change handler specifically for UI changes
             const checkbox = document.getElementById('czy-splacona');
             if (checkbox) {
                 checkbox.addEventListener('change', function() {
-                    console.log('☑️ Checkbox changed:', this.checked);
                     const endDateField = document.getElementById('data-zakonczenia-wrapper');
                     const simulationDateField = document.getElementById('data-symulacji').closest('.input-group');
                     if (this.checked) {
@@ -648,34 +595,40 @@
                 });
             }
             
-            // Interest type radio buttons
+            // Logika dla przycisków radio "Sposób określenia oprocentowania"
             const interestTypeRadios = document.querySelectorAll('input[name="interest-type"]');
             const marginField = document.getElementById('margin-field');
             const fixedRateField = document.getElementById('fixed-rate-field');
+            const oprLabel = document.getElementById('opr-label');
+            const aktualnyWiborWrapper = document.getElementById('aktualny-wibor-wrapper');
             
             interestTypeRadios.forEach(radio => {
                 radio.addEventListener('change', function() {
                     if (this.value === 'margin') {
                         marginField.style.display = 'block';
                         fixedRateField.style.display = 'none';
-                    } else {
+                        aktualnyWiborWrapper.style.display = 'block';
+                    } else if (this.value === 'initial_rate') {
                         marginField.style.display = 'none';
                         fixedRateField.style.display = 'block';
+                        oprLabel.textContent = "Oprocentowanie na dzień podpisania (%)";
+                        aktualnyWiborWrapper.style.display = 'block';
+                    } else if (this.value === 'true_fixed') {
+                        marginField.style.display = 'none';
+                        fixedRateField.style.display = 'block';
+                        oprLabel.textContent = "Oprocentowanie stałe umowy (%)";
+                        aktualnyWiborWrapper.style.display = 'none';
                     }
                 });
             });
             
-            // Create debounced calculate function
             window.debouncedCalculate = debounce(calculateResults, 500);
-            
-            console.log('✅ Calculator setup completed');
         }
         
         function setupNadplatyHandlers() {
             const dodajBtn = document.getElementById('dodaj-nadplate');
             if (dodajBtn) {
                 dodajBtn.addEventListener('click', dodajNadplate);
-                console.log('✅ Nadplaty button handler attached');
             }
         }
         
@@ -699,8 +652,6 @@
             inputs.forEach(input => {
                 input.addEventListener('input', debounce(calculateResults, 500));
             });
-            
-            console.log('➕ Added new nadplata row');
         }
         
         function usunNadplate(button) {
@@ -708,7 +659,6 @@
             if (row) {
                 row.remove();
                 calculateResults();
-                console.log('➖ Removed nadplata row');
             }
         }
         
@@ -733,17 +683,17 @@
                     closestDate = wiborDate;
                 }
             }
-            return closestDate ? wibor3mHistory[closestDate.toISOString().split('T')[0]] : 5.80;
+            return closestDate ? wibor3mHistory[closestDate.toISOString().split('T')[0]] : 3.85;
         }
         
         function calculateResults() {
-            console.log('🔧 calculateResults called');
             try {
                 const P_base = parseFloat(document.getElementById('kwota-kredytu').value) || 0;
                 const prowizja = parseFloat(document.getElementById('prowizja').value) || 0;
                 const interestType = document.querySelector('input[name="interest-type"]:checked').value;
                 const marza = parseFloat(document.getElementById('marza').value) || 0;
                 const staleOprocentowanie = parseFloat(document.getElementById('oprocentowanie').value) || 0;
+                const aktualnyWibor = parseFloat(document.getElementById('aktualny-wibor').value) || 0;
                 const n_total = parseInt(document.getElementById('okres-splaty').value) || 0;
                 const dataPodpisaniaStr = document.getElementById('data-podpisania').value;
                 const isPaidOff = document.getElementById('czy-splacona').checked;
@@ -755,11 +705,15 @@
                     return;
                 }
                 
-                if ((interestType === 'margin' && marza <= 0) || (interestType === 'fixed' && staleOprocentowanie <= 0)) {
+                // Blokada na 10 lat wstecz (od kwietnia 2016)
+                const dataPodpisania = new Date(dataPodpisaniaStr);
+                const minDate = new Date('2016-04-01');
+                if (dataPodpisania < minDate) {
+                    alert("Kalkulator obsługuje historię WIBOR 3M do 10 lat wstecz. Proszę wpisać datę umowy od 1 kwietnia 2016 r. lub nowszą.");
                     clearResults();
                     return;
                 }
-                
+
                 if (isPaidOff && !dataZakonczeniaStr) {
                     clearResults();
                     return;
@@ -769,7 +723,27 @@
                 if (!effectiveEndDateStr) return;
                 
                 const P_financed = P_base + prowizja;
+                const effectiveEndDate = new Date(effectiveEndDateStr);
                 
+                // USTALANIE OPROCENTOWANIA
+                let effectiveMargin = 0;
+                let isTrueFixed = false;
+                let fixedRate = 0;
+
+                if (interestType === 'margin') {
+                    if (marza <= 0) { clearResults(); return; }
+                    effectiveMargin = marza;
+                } else if (interestType === 'initial_rate') {
+                    if (staleOprocentowanie <= 0) { clearResults(); return; }
+                    const wiborPodpisania = getWiborForDate(dataPodpisania);
+                    effectiveMargin = staleOprocentowanie - wiborPodpisania; // Inteligentne wyliczenie marży
+                } else if (interestType === 'true_fixed') {
+                    if (staleOprocentowanie <= 0) { clearResults(); return; }
+                    isTrueFixed = true;
+                    fixedRate = staleOprocentowanie;
+                }
+                
+                // Nadpłaty
                 const overpayments = [];
                 document.querySelectorAll('.nadplata-row').forEach(row => {
                     const date = row.querySelector('.nadplata-data').value;
@@ -780,38 +754,32 @@
                 });
                 overpayments.sort((a, b) => a.date - b.date);
                 
-                const dataPodpisania = new Date(dataPodpisaniaStr);
-                const effectiveEndDate = new Date(effectiveEndDateStr);
-                
                 let pozostalyKapital = P_financed;
                 let sumaRzeczywistychOdsetek = 0;
                 let currentDate = new Date(dataPodpisania);
                 let miesiaceSplacone = 0;
                 
-                let effectiveMargin;
-                if (interestType === 'margin') {
-                    effectiveMargin = marza;
-                } else {
-                    const wiborPodpisania = getWiborForDate(dataPodpisania);
-                    effectiveMargin = staleOprocentowanie - wiborPodpisania;
-                }
-                
                 const chartLabels = [dataPodpisania.toLocaleDateString('pl-PL')];
                 const chartCapitalData = [pozostalyKapital];
                 const chartInterestData = [0];
 
+                // PĘTLA PRZESZŁA (do dziś/do spłaty)
                 if (pozostalyKapital > 0) {
                     while(currentDate < effectiveEndDate && miesiaceSplacone < n_total) {
                         const currentMonthOps = overpayments.filter(op => 
                             op.date.getFullYear() === currentDate.getFullYear() && 
                             op.date.getMonth() === currentDate.getMonth()
                         );
-                        currentMonthOps.forEach(op => { 
-                            pozostalyKapital -= op.amount; 
-                        });
+                        currentMonthOps.forEach(op => { pozostalyKapital -= op.amount; });
 
-                        const wibor = getWiborForDate(currentDate);
-                        const rocznaStopa = effectiveMargin + wibor;
+                        let rocznaStopa;
+                        if (isTrueFixed) {
+                            rocznaStopa = fixedRate;
+                        } else {
+                            const wibor = getWiborForDate(currentDate);
+                            rocznaStopa = effectiveMargin + wibor;
+                        }
+                        
                         const r_miesieczna = (rocznaStopa / 100) / 12;
                         const odsetkiWMiesiacu = pozostalyKapital * r_miesieczna;
                         sumaRzeczywistychOdsetek += odsetkiWMiesiacu;
@@ -841,6 +809,7 @@
                 let wpsWTrakcie = 0; 
                 let odsetkiPozostale = 0;
                 
+                // PĘTLA PRZYSZŁA (Prognoza)
                 if (isPaidOff) {
                     const miesiaceOszczedzone = n_total - miesiaceSplacone;
                     const zwrotProwizji = n_total > 0 ? (prowizja / n_total) * miesiaceOszczedzone : 0;
@@ -848,9 +817,16 @@
                 } else {
                     wpsWTrakcie = prowizja + sumaRzeczywistychOdsetek;
                     const n_pozostalo = n_total - miesiaceSplacone;
+                    
                     if (pozostalyKapital > 0 && n_pozostalo > 0) {
-                        const wiborPrzyszly = getWiborForDate(effectiveEndDate);
-                        const r_przyszle_miesieczne = ((effectiveMargin + wiborPrzyszly) / 100) / 12;
+                        let r_przyszle_roczne;
+                        if (isTrueFixed) {
+                            r_przyszle_roczne = fixedRate;
+                        } else {
+                            r_przyszle_roczne = effectiveMargin + aktualnyWibor; // Wykorzystujemy "WIBOR na dziś"
+                        }
+                        
+                        const r_przyszle_miesieczne = (r_przyszle_roczne / 100) / 12;
                         
                         let tempCapital = pozostalyKapital;
                         for (let i = 0; i < n_pozostalo; i++) {
@@ -871,18 +847,21 @@
                     }
                 }
                 
+                // CAŁKOWITE ODSETKI WG UMOWY
                 let odsetkiCalkowiteWgUmowy = 0;
                 if (P_financed > 0 && n_total > 0) {
-                    const wiborPodpisania = getWiborForDate(dataPodpisania);
-                    const r_umowne = ((effectiveMargin + wiborPodpisania) / 100) / 12;
+                    let r_umowne_roczne = isTrueFixed ? fixedRate : (effectiveMargin + getWiborForDate(dataPodpisania));
+                    const r_umowne_miesieczne = (r_umowne_roczne / 100) / 12;
                     
-                    if (r_umowne > 0) {
-                        const pmt_umowne = P_financed * (r_umowne * Math.pow(1 + r_umowne, n_total)) / (Math.pow(1 + r_umowne, n_total) - 1);
+                    if (r_umowne_miesieczne > 0) {
+                        const pmt_umowne = P_financed * (r_umowne_miesieczne * Math.pow(1 + r_umowne_miesieczne, n_total)) / (Math.pow(1 + r_umowne_miesieczne, n_total) - 1);
                         odsetkiCalkowiteWgUmowy = (pmt_umowne * n_total) - P_financed;
                     }
                 }
                 
                 document.getElementById('wps-result').textContent = formatCurrency(wpsWTrakcie);
+                document.getElementById('odsetki-pozostale').textContent = formatCurrency(odsetkiPozostale);
+                document.getElementById('odsetki-calkowite').textContent = formatCurrency(odsetkiCalkowiteWgUmowy);
                 
                 updateChart(chartLabels, chartCapitalData, chartInterestData);
                 
@@ -893,13 +872,13 @@
         
         function clearResults() {
             document.getElementById('wps-result').textContent = '0,00 zł';
+            document.getElementById('odsetki-pozostale').textContent = '0,00 zł';
+            document.getElementById('odsetki-calkowite').textContent = '0,00 zł';
             
             if (window.myChart) {
                 window.myChart.destroy();
                 window.myChart = null;
             }
-            
-            console.log('🧹 Results cleared');
         }
         
         function updateChart(labels, capitalData, interestData) {
@@ -1013,179 +992,26 @@
 
         function wyczysc() {
             document.getElementById('calculator-form').reset();
-            document.getElementById('nadplaty-container').innerHTML = ''; // Clear overpayments
+            document.getElementById('nadplaty-container').innerHTML = '';
             clearResults();
+            
+            // Przywróć domyślne widoki
+            document.getElementById('margin-field').style.display = 'block';
+            document.getElementById('fixed-rate-field').style.display = 'none';
+            document.getElementById('aktualny-wibor-wrapper').style.display = 'block';
+            
+            // Ustaw daty na nowo
+            setTimeout(setDefaultValues, 10);
         }
-        
-        console.log('✅ Kalkulator WPS loaded successfully!');
     </script>
+    
+    <script>
+        // Skrypty auto-update (z oryginalnego pliku)
+        try {
+            const dzisiaj = 'Dane na dzień: 19.02.2026';
+            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
+            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
+        } catch(e) { console.log('Brak elementu w tym pliku'); }
+    </script>
+</body>
 </html>
-
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 08.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 10.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 15.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 17.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 08.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 16.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 22.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 26.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 02.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 10.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 12.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 12.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 19.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        // BAF AUTO UPDATE - 19.02.2026
-        try {
-            document.getElementById('wibor-1m').textContent = '3,97%';
-            document.getElementById('wibor-3m').textContent = '3,85%';
-            document.getElementById('wibor-6m').textContent = '3,73%';
-            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
-            
-            const dzisiaj = 'Dane na dzień: 19.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    </body>
-    
