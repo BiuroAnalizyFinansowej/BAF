@@ -3,24 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Umowy</title>
-    
-    <link rel="icon" type="image/png" href="baf_logo_p.png">
-    
+    <title>Generator Umowy BAF</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <style>
-        /* =====================================
-           BAF CALCULATOR UNIFIED DESIGN
-           Styl skopiowany z proces_milosz_skd.html
-        ===================================== */
-        
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             color: #2d3748;
-            line-height: 1.6;
             min-height: 100vh;
             padding: 20px;
         }
@@ -35,190 +25,105 @@
             justify-content: space-between;
         }
         .header-left-group { display: flex; align-items: center; gap: 1.5rem; }
-        .header-center-group { font-size: 1.5rem; font-weight: 600; color: #1e293b; }
-        .calc-brand { display: flex; align-items: center; gap: 1rem; }
-        .calc-logo { height: 40px; width: 40px; border-radius: 8px; }
         .calc-title { font-size: 1.5rem; font-weight: 600; color: #1e293b; margin: 0; }
         .nav-btn {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            align-items: center; gap: 0.5rem;
             padding: 0.6rem 1rem;
             background: #f1f5f9;
             color: #64748b;
             text-decoration: none;
             border-radius: 6px;
-            transition: all 0.2s ease;
             font-weight: 500;
-            border: none;
-            cursor: pointer;
+            transition: all 0.2s;
         }
-        .nav-btn:hover { background: #1e40af; color: white; transform: translateY(-1px); }
-        .calc-container { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
+        .nav-btn:hover { background: #1e40af; color: white; }
+        .calc-container { max-width: 800px; margin: 0 auto; }
         .calc-section {
             background: white;
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 2rem;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            border: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
         }
         .section-title {
             font-size: 1.2rem;
             font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             padding-bottom: 0.5rem;
             border-bottom: 1px solid #e2e8f0;
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            align-items: center; gap: 0.5rem;
         }
-        .section-title i { color: #1e40af; }
-        .calc-table { width: 100%; border-collapse: collapse; }
-        .calc-table td { padding: 0.75rem 0.5rem; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; vertical-align: middle; }
-        .calc-table tr:last-child td { border-bottom: none; }
-        .calc-table td:first-child { font-weight: 500; color: #374151; width: 40%; }
+        .calc-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+        .calc-table td { padding: 0.8rem 0.5rem; border-bottom: 1px solid #f1f5f9; }
+        .calc-table td:first-child { font-weight: 500; width: 40%; }
         .input-field {
             width: 100%;
-            padding: 0.5rem 0.8rem;
+            padding: 0.6rem;
             border: 2px solid #e2e8f0;
             border-radius: 6px;
-            font-size: 0.9rem;
             background: #f8fafc;
-            transition: all 0.2s ease;
             font-weight: 600;
         }
-        .input-field:focus {
-            outline: none;
-            border-color: #1e40af;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
-        }
-        /* ZMIANA TUTAJ: Dodane 'flex-wrap' dla responsywności przycisków */
-        .calc-actions { 
-            margin-top: auto; 
-            padding-top: 1rem; 
-            border-top: 1px solid #e2e8f0; 
-            text-align: right; 
-            display: flex; 
-            justify-content: flex-end; 
-            gap: 10px;
-            flex-wrap: wrap; 
-        }
+        .input-field:focus { outline: none; border-color: #1e40af; background: white; }
+        .calc-actions { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
         .calc-btn {
             padding: 0.8rem 1.5rem;
             border: none;
             border-radius: 6px;
             font-weight: 600;
-            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.2s ease;
             display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: #1e40af;
+            align-items: center; gap: 0.5rem;
+            transition: 0.2s;
             color: white;
         }
-        .calc-btn:hover { background: #1e293b; }
-        
-        /* Styl dla nowego przycisku */
-        .calc-btn.btn-secondary {
-            background-color: #166534; /* Zielony */
-        }
-        .calc-btn.btn-secondary:hover {
-            background-color: #14532d;
-        }
+        .btn-primary { background: #1e40af; }
+        .btn-primary:hover { background: #1e293b; }
+        .btn-secondary { background: #166534; }
+        .btn-secondary:hover { background: #14532d; }
 
-        
-        /* Spinner styles */
+        /* Loader */
         #loader {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.8);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.9);
             z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        #loader p {
-            font-weight: 600;
-            margin-top: 15px;
-            color: #1e40af;
+            flex-direction: column; justify-content: center; align-items: center;
         }
         .spinner {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #1e40af;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #1e40af;
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
+            width: 50px; height: 50px;
             animation: spin 1s linear infinite;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        /* Rezultat */
-        #response-container {
-            display: none;
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
-        }
-        #response-container.success {
-            background: #f0fdf4;
-            border: 1px solid #a7f3d0;
-            color: #065f46;
-        }
-        #response-container.error {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #b91c1c;
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        #response-container { display: none; margin-top: 20px; padding: 15px; border-radius: 8px; }
+        .success { background: #f0fdf4; border: 1px solid #a7f3d0; color: #065f46; }
+        .error { background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; }
     </style>
 </head>
 <body>
     <div id="loader">
         <div class="spinner"></div>
-        <p>Generowanie dokumentu... To może potrwać do 30 sekund.</p>
+        <p style="margin-top:15px; font-weight:600; color:#1e40af;">Generowanie dokumentu... Proszę czekać.</p>
     </div>
 
     <header class="calc-header">
         <div class="header-left-group">
-            <div class="calc-brand">
-                <i class="fas fa-file-signature calc-logo" style="background: #1e40af; color: white; padding: 10px; font-size: 20px;"></i>
-                <h1 class="calc-title">Generator Umowy</h1>
-            </div>
-             <a href="#" onclick="history.back(); return false;" class="nav-btn">
-                <i class="fas fa-arrow-left"></i> Powrót
-            </a>
-            <a href="index.html" class="nav-btn">
-                <i class="fas fa-home"></i> Start
-            </a>
-             <a href="proces_milosz_skd.html" class="nav-btn">
-                <i class="fas fa-calculator"></i> Kalkulator SKD
-            </a>
-        </div>
-        <div class="header-center-group">
-            
-        </div>
-        <div>
-            <img src="baf_logo.png" alt="Logo BAF" style="height: 50px;">
+            <h1 class="calc-title"><i class="fas fa-file-signature" style="color:#1e40af;"></i> Generator Umowy</h1>
+            <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Start</a>
         </div>
     </header>
 
     <main class="calc-container">
         <section class="calc-section">
-            <h2 class="section-title"><i class="fas fa-keyboard"></i>Wprowadź dane do umowy</h2>
+            <h2 class="section-title"><i class="fas fa-keyboard"></i> Dane do umowy</h2>
             
-            <form id="contractForm" action="https://script.google.com/macros/s/AKfycbxGIvjyPjhT0xdtC3fkNW4uKBuwW7o2Rm_gGK0e736kYjJRNCGyGxizyRRO0GaH3dYq/exec" method="POST">
-                 <input type="hidden" id="script_action_type" name="script_action_type" value="">
+            <form id="contractForm" action="https://script.google.com/macros/s/AKfycbwNETuWw88oD5bqdDo2GOdtYDNYi4m9YAl9bHzaMicwGX5QxOw3ro51zlfVqeNT6oRLFg/exec" method="POST">
+                <input type="hidden" id="script_action_type" name="script_action_type" value="">
                 
                 <table class="calc-table">
                     <tbody>
@@ -228,43 +133,41 @@
                         </tr>
                         <tr>
                             <td>Numer PESEL:</td>
-                            <td><input type="text" id="pesel" name="pesel" class="input-field" required pattern="\d{11}" title="PESEL musi składać się z 11 cyfr"></td>
+                            <td><input type="text" id="pesel" name="pesel" class="input-field" required pattern="\d{11}"></td>
                         </tr>
                         <tr>
                             <td>Adres zamieszkania:</td>
-                            <td><input type="text" id="adres" name="adres" class="input-field" required placeholder="np. ul. Wzorcowa 1/2, 00-001 Warszawa"></td>
+                            <td><input type="text" id="adres" name="adres" class="input-field" required></td>
                         </tr>
-                        
                         <tr>
                             <td>Nazwa banku:</td>
-                            <td><input type="text" id="nazwa_banku" name="nazwa_banku" class="input-field" required placeholder="Wpisz pełną nazwę banku..."></td>
+                            <td><input type="text" id="nazwa_banku" name="nazwa_banku" class="input-field" required></td>
                         </tr>
-                        
                         <tr>
-                            <td>Data podpisania umowy kredytowej:</td>
-                            <td><input type="date" id="data_podpisania" name="data_podpisania" class="input-field" style="text-align: left;" required></td>
+                            <td>Data umowy kredytowej:</td>
+                            <td><input type="date" id="data_podpisania" name="data_podpisania" class="input-field" required></td>
                         </tr>
                         <tr>
                             <td>Numer umowy kredytowej:</td>
                             <td><input type="text" id="nr_umowy" name="nr_umowy" class="input-field" required></td>
                         </tr>
                         <tr>
-                            <td>Opłata początkowa (bez opłat sądowych i bez 250 zł za rozprawę):</td>
-                            <td><input type="number" id="pre_oplata" name="pre_oplata" step="0.01" class="input-field" required placeholder="np. 1500.50"></td>
+                            <td>Opłata początkowa:</td>
+                            <td><input type="number" id="pre_oplata" name="pre_oplata" step="0.01" class="input-field" required></td>
                         </tr>
                         <tr>
                             <td>Success fee (%):</td>
-                            <td><input type="number" id="procent" name="procent" step="0.1" class="input-field" required placeholder="np. 15.5"></td>
+                            <td><input type="number" id="procent" name="procent" step="0.1" class="input-field" required></td>
                         </tr>
                     </tbody>
                 </table>
                 
                 <div class="calc-actions">
-                    <button type="button" id="generate-umowa-btn" class="calc-btn">
-                        <i class="fas fa-cogs"></i> GENERUJ UMOWĘ (GŁÓWNĄ)
+                    <button type="button" id="btn-baf" class="calc-btn btn-primary">
+                        <i class="fas fa-cogs"></i> GENERUJ UMOWĘ BAF
                     </button>
-                     <button type="button" id="generate-obsluga-btn" class="calc-btn btn-secondary">
-                        <i class="fas fa-gavel"></i> Generuj umowę obsługi prawnej
+                    <button type="button" id="btn-prawna" class="calc-btn btn-secondary">
+                        <i class="fas fa-gavel"></i> GENERUJ UMOWĘ PRAWNĄ
                     </button>
                 </div>
             </form>
@@ -272,20 +175,13 @@
             <div id="response-container">
                 <p id="response-message"></p>
             </div>
-            
         </section>
     </main>
 
     <script>
-        // Ta funkcja jest wywoływana przez oba przyciski
         function handleSubmit() {
             const form = document.getElementById('contractForm');
-            
-            // Sprawdź, czy formularz jest poprawnie wypełniony
-            if (!form.checkValidity()) {
-                form.reportValidity(); // Pokaż natywne dymki walidacji
-                return;
-            }
+            if (!form.checkValidity()) { form.reportValidity(); return; }
             
             const loader = document.getElementById('loader');
             const responseContainer = document.getElementById('response-container');
@@ -293,248 +189,49 @@
             
             loader.style.display = 'flex';
             responseContainer.style.display = 'none';
-            responseMessage.innerHTML = ''; // Wyczyść poprzednie wyniki
 
             fetch(form.action, {
                 method: 'POST',
-                body: new FormData(form) // Przesyła wszystkie dane, w tym ukryte pole
+                body: new FormData(form)
             })
-            .then(response => response.text()) // Odbieramy odpowiedź jako tekst
-            .then(text => {
+            .then(response => response.text())
+            .then(url => {
                 loader.style.display = 'none';
-                
-                if (text.startsWith('https://docs.google.com/')) {
-                    // SUKCES! Mamy link.
-                    var link = document.createElement('a');
-                    link.href = text;
-                    link.target = '_blank';
-                    link.textContent = text;
-                    link.style.fontWeight = 'bold';
-                    link.style.display = 'block';
-                    link.style.marginTop = '10px';
-                    link.style.wordBreak = 'break-all';
+                if (url.startsWith('https://docs.google.com/')) {
+                    // Automatyczne otwarcie w nowej karcie
+                    window.open(url, '_blank');
 
-                    responseMessage.textContent = 'Sukces! Wygenerowano umowę. Kliknij w link, aby otworzyć:';
-                    responseContainer.appendChild(link);
+                    responseMessage.innerHTML = 'Sukces! Dokument został utworzony.<br>Jeśli nie otworzył się automatycznie: ';
+                    var link = document.createElement('a');
+                    link.href = url;
+                    link.target = '_blank';
+                    link.textContent = 'KLIKNIJ TUTAJ ABY OTWORZYĆ';
+                    link.style.fontWeight = 'bold';
+                    responseMessage.appendChild(link);
                     
                     responseContainer.className = 'success';
                     responseContainer.style.display = 'block';
-                    // Nie resetujemy formularza, aby można było wygenerować drugi dokument
-                    // form.reset(); 
                 } else {
-                    // JEŚLI TEKST NIE JEST LINKIEM, to jest to błąd
-                    throw new Error(text);
+                    throw new Error(url);
                 }
             })
             .catch(error => {
                 loader.style.display = 'none';
-                var errorMsg = error.message;
-
-                if (errorMsg.includes("Sukces! Wygenerowano umowę:")) {
-                    errorMsg = "KRYTYCZNY BŁĄD: Wygląda na to, że nie wdrożyłeś jeszcze nowego kodu Google Apps Script. Proszę, wdróż skrypt (Deploy -> New Deployment) i spróbuj ponownie.";
-                }
-
-                responseMessage.textContent = errorMsg;
+                responseMessage.textContent = "Błąd: " + error.message;
                 responseContainer.className = 'error';
                 responseContainer.style.display = 'block';
             });
         }
-        
-        // Logika uruchamiana po załadowaniu strony
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            // 1. Logika dla przycisków generujących
-            document.getElementById('generate-umowa-btn').addEventListener('click', () => {
-                document.getElementById('script_action_type').value = 'umowa_glowna';
-                handleSubmit();
-            });
 
-            document.getElementById('generate-obsluga-btn').addEventListener('click', () => {
-                document.getElementById('script_action_type').value = 'umowa_obslugi';
-                handleSubmit();
-            });
+        document.getElementById('btn-baf').addEventListener('click', () => {
+            document.getElementById('script_action_type').value = 'umowa_glowna';
+            handleSubmit();
+        });
 
-            // 2. Logika wypełniania pól z URL (bez zmian)
-            const urlParams = new URLSearchParams(window.location.search);
-            const preOplata = urlParams.get('pre_oplata');
-            const procent = urlParams.get('procent');
-            
-            if (preOplata) {
-                document.getElementById('pre_oplata').value = preOplata;
-            }
-            
-            if (procent) {
-                document.getElementById('procent').value = procent;
-            }
+        document.getElementById('btn-prawna').addEventListener('click', () => {
+            document.getElementById('script_action_type').value = 'umowa_obslugi';
+            handleSubmit();
         });
     </script>
+</body>
 </html>
-
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 08.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 10.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 15.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 17.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 08.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 16.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 22.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 26.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 02.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 10.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 12.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 12.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 19.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        // BAF AUTO UPDATE - 19.02.2026
-        try {
-            document.getElementById('wibor-1m').textContent = '3,97%';
-            document.getElementById('wibor-3m').textContent = '3,85%';
-            document.getElementById('wibor-6m').textContent = '3,73%';
-            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
-            
-            const dzisiaj = 'Dane na dzień: 19.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    </body>
-    
