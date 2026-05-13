@@ -4,97 +4,66 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Szablon: Pismo BIK - Pekao Leasing (Desktop V2)</title>
+    <title>Szablon: Pismo BIK - Pekao Leasing (Single Page)</title>
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
 
-        /* RESET I BAZA */
         body {
-            margin: 0;
-            padding: 0;
-            background-color: #f4f7f9;
-            font-family: 'Lato', Arial, sans-serif;
-            min-width: 1200px;
+            margin: 0; padding: 0; background-color: #f4f7f9;
+            font-family: 'Lato', Arial, sans-serif; min-width: 1200px;
         }
 
-        /* PANELE BOCZNE */
+        /* PANELE STEROWANIA */
         #back-controls-container { position: fixed; top: 20px; left: 20px; z-index: 1000; width: 160px; display: flex; flex-direction: column; }
         #controls-container { position: fixed; top: 20px; right: 20px; z-index: 1000; width: 300px; }
 
-        /* PRZYCISKI */
         .home-button {
             display: flex; align-items: center; justify-content: center; width: 50px; height: 50px;
             background-color: #002d5a; border-radius: 50%; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
             transition: all 0.3s ease; text-decoration: none;
         }
-        .home-button:hover { background-color: #001f3f; transform: scale(1.1); }
         .home-button svg { width: 28px; height: 28px; fill: #ffffff; }
 
         .nav-button {
             padding: 12px 15px; font-size: 14px; font-weight: bold; color: white; border: none; border-radius: 6px;
-            cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: all 0.3s ease; width: 100%;
-            margin-bottom: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none;
+            cursor: pointer; width: 100%; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none;
         }
         #backButton { background-color: #5F7A95; }
         #copyButton { padding: 14px 15px; font-size: 15px; font-weight: bold; color: white; border: none; border-radius: 6px; width: 100%; background-color: #17a2b8; cursor: pointer; }
         
         .pdf-btn-group { margin-top: 10px; border: 1px solid #ddd; padding: 10px; border-radius: 8px; background: #fff; }
-        .pdf-btn-group h4 { margin: 0 0 10px 0; font-size: 13px; color: #555; text-align: center; }
-        
         .btn-pdf { padding: 10px; font-size: 13px; font-weight: bold; color: white; border: none; border-radius: 4px; width: 100%; cursor: pointer; margin-bottom: 5px; transition: 0.2s; }
         #pdfButtonNative { background-color: #28a745; } 
         #pdfButtonQuick { background-color: #dc3545; }
 
-        #separator { border-bottom: 1px solid #ccc; margin: 15px 0; }
-        #subject-menu { background-color: #f8f9fa; border-radius: 8px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        #subject-menu h3 { margin: 0 0 10px 0; font-size: 15px; color: #333; text-align: center; }
-        .subject-category { font-size: 11px; font-weight: bold; color: #888; text-transform: uppercase; margin: 12px 0 6px 0; }
-        .subject-button { display: block; width: 100%; padding: 10px; margin-bottom: 6px; font-size: 12px; color: #138496; background-color: #ffffff; border: 1px solid #17a2b8; border-radius: 4px; cursor: pointer; text-align: left; line-height: 1.4; }
+        .subject-button { display: block; width: 100%; padding: 10px; margin-bottom: 6px; font-size: 12px; color: #138496; background-color: #ffffff; border: 1px solid #17a2b8; border-radius: 4px; cursor: pointer; text-align: left; }
 
-        /* KONTENER STRONY */
+        /* KONTENER DOKUMENTU */
         .page-container { 
-            max-width: 1100px; 
-            margin: 30px auto; 
-            background-color: #ffffff; 
-            padding: 0; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-            border-radius: 4px;
+            max-width: 1100px; margin: 20px auto; background-color: #ffffff; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 4px;
         }
 
-        .intro-section { padding: 50px 80px 0 80px; }
-        #letter-to-pdf { padding: 60px 100px 100px 100px; background-color: #ffffff !important; }
+        .intro-section { padding: 40px 80px 0 80px; }
         
-        /* EDYCJA */
+        /* KLUCZOWA SEKCJA PDF - OPTYMALIZACJA MIEJSCA */
+        #letter-to-pdf { 
+            padding: 50px 90px 70px 90px; 
+            background-color: #ffffff !important; 
+        }
+
         [contenteditable="true"]:hover { outline: 2px dashed #17a2b8; background-color: #fcfdfe; }
         [contenteditable="true"]:focus { outline: 2px solid #17a2b8; background-color: #fff; }
 
-        /* DRUKOWANIE - WYMUSZENIE PIONU (PORTRAIT) */
+        /* WYDRUK PIONOWY A4 */
         @media print {
-            @page {
-                size: A4 portrait;
-                margin: 20mm;
-            }
-            body { 
-                background: white !important; 
-                min-width: auto !important;
-            }
-            #back-controls-container, #controls-container, .intro-section, .page-container > div:first-child { 
-                display: none !important; 
-            }
-            .page-container { 
-                box-shadow: none !important; 
-                margin: 0 !important; 
-                width: 100% !important; 
-                max-width: none !important; 
-            }
-            #letter-to-pdf { 
-                padding: 0 !important; 
-                margin: 0 !important; 
-                width: 100% !important; 
-                background: white !important;
-            }
+            @page { size: A4 portrait; margin: 15mm; }
+            body { background: white !important; min-width: auto !important; }
+            #back-controls-container, #controls-container, .intro-section, .page-container > div:first-child { display: none !important; }
+            .page-container { box-shadow: none !important; margin: 0 !important; width: 100% !important; max-width: none !important; }
+            #letter-to-pdf { padding: 0 !important; margin: 0 !important; width: 100% !important; }
             [contenteditable="true"] { outline: none !important; }
         }
     </style>
@@ -109,58 +78,49 @@
     </div>
 
     <div id="controls-container">
-        <button id="copyButton">📋 Kopiuj treść (do maila)</button>
-        
+        <button id="copyButton">📋 Kopiuj do maila</button>
         <div class="pdf-btn-group">
-            <h4>Eksport do PDF (PIONOWO)</h4>
-            <button id="pdfButtonNative" class="btn-pdf" onclick="window.print()">✅ PDF Zaznaczalny (PION)</button>
-            <button id="pdfButtonQuick" class="btn-pdf" onclick="generatePDFQuick()">🚀 Szybki PDF (obraz)</button>
+            <button id="pdfButtonNative" class="btn-pdf" onclick="window.print()">✅ PDF (Na jedną stronę)</button>
+            <button id="pdfButtonQuick" class="btn-pdf" onclick="generatePDFQuick()">🚀 Szybki PDF</button>
         </div>
-
-        <div id="separator"></div>
-        
-        <div id="subject-menu">
-            <h3>Tytuły wiadomości:</h3>
-            <h4 class="subject-category">Wariant Reklamacyjny</h4>
-            <button class="subject-button" onclick="copySubject(this, '🔴 Reklamacja: Wycofanie zgody BIK – umowa nr [NUMER]')">🔴 Reklamacja: Wycofanie zgody BIK – umowa nr [NUMER]</button>
-            <h4 class="subject-category">Wariant Prawny</h4>
-            <button class="subject-button" onclick="copySubject(this, '🔴 Wniosek o zaprzestanie przetwarzania danych (art. 105a Pr. Bankowe)')">🔴 Wniosek o zaprzestanie przetwarzania danych (art. 105a Pr. Bankowe)</button>
+        <div style="margin-top:15px;" id="subject-menu">
+            <button class="subject-button" onclick="copySubject(this, '🔴 Reklamacja: Wycofanie zgody BIK – umowa nr [NUMER]')">Kopiuj temat: Reklamacja BIK</button>
         </div>
     </div>
     
     <div class="page-container">
-        <div align="center" style="padding: 40px 0; border-bottom: 1px solid #f0f0f0;">
+        <div align="center" style="padding: 30px 0; border-bottom: 1px solid #f0f0f0;">
             <a href="https://biuroanalizyfinansowej.pl/" target="_blank">
-                <img src="baf_logo.png" alt="BAF" width="280" style="display: block; border: 0;">
+                <img src="baf_logo.png" alt="BAF" width="240" style="display: block; border: 0;">
             </a>
         </div>
 
         <div class="intro-section">
-            <h2 contenteditable="true" style="font-size: 26px; color: #002d5a; margin: 0 0 15px 0;">Dzień dobry,</h2>
-            <p contenteditable="true" style="font-size: 17px; color: #555; line-height: 1.7; margin-bottom: 40px; border-bottom: 1px dashed #ccc; padding-bottom: 25px;">
-                w nawiązaniu do rozmowy, przesyłam gotowy wniosek o wycofanie zgody BIK. <br><strong>Użyj zielonego przycisku, aby wygenerować profesjonalny PDF w pionie z możliwością zaznaczania tekstu.</strong>
+            <h2 contenteditable="true" style="font-size: 22px; color: #002d5a; margin: 0 0 10px 0;">Dzień dobry,</h2>
+            <p contenteditable="true" style="font-size: 15px; color: #555; line-height: 1.5; margin-bottom: 25px; border-bottom: 1px dashed #ccc; padding-bottom: 15px;">
+                Przesyłam zoptymalizowany wniosek BIK. Całość mieści się na jednej stronie A4.
             </p>
         </div>
 
         <div id="letter-to-pdf">
-            <div align="right" contenteditable="true" style="font-size: 15px; color: #333; margin-bottom: 60px;">
+            <div align="right" contenteditable="true" style="font-size: 14px; color: #333; margin-bottom: 40px;">
                 Miejscowość: <strong>Warszawa</strong>, dnia <strong>[DATA]</strong> r.
             </div>
 
-            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 60px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 40px;">
                 <tr>
-                    <td width="50%" valign="top" style="padding-top: 5px;">
-                        <div style="font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 8px; font-weight: bold;">Wnioskodawca:</div>
-                        <div contenteditable="true" style="font-size: 16px; color: #222; line-height: 1.6;">
+                    <td width="50%" valign="top">
+                        <div style="font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 5px;">Wnioskodawca:</div>
+                        <div contenteditable="true" style="font-size: 15px; color: #222; line-height: 1.4;">
                             <strong>[Imię Nazwisko / Nazwa Firmy]</strong><br>
                             [Ulica i numer]<br>
                             [Kod i Miasto]<br>
                             NIP: [Twój Numer]
                         </div>
                     </td>
-                    <td width="50%" valign="top" style="padding-left: 40px; padding-top: 5px;">
-                        <div style="font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 8px; font-weight: bold;">Adresat:</div>
-                        <div contenteditable="true" style="font-size: 16px; color: #222; line-height: 1.6;">
+                    <td width="50%" valign="top" style="padding-left: 30px;">
+                        <div style="font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 5px;">Adresat:</div>
+                        <div contenteditable="true" style="font-size: 15px; color: #222; line-height: 1.4;">
                             <strong>Pekao Leasing Sp. z o.o.</strong><br>
                             Departament Obsługi Klienta<br>
                             ul. Żubra 1<br>
@@ -170,33 +130,33 @@
                 </tr>
             </table>
 
-            <div contenteditable="true" style="font-size: 18px; color: #002d5a; margin-bottom: 45px; border-bottom: 3px solid #002d5a; padding-bottom: 10px; font-weight: bold;">
+            <div contenteditable="true" style="font-size: 16px; color: #002d5a; margin-bottom: 25px; border-bottom: 2px solid #002d5a; padding-bottom: 6px; font-weight: bold;">
                 Dotyczy umowy leasingu nr: [WPISZ NUMER UMOWY]
             </div>
 
-            <h1 contenteditable="true" style="font-size: 22px; font-weight: 700; color: #000; margin: 0 0 35px 0; text-align: center; text-transform: uppercase; letter-spacing: 0.5px;">
+            <h1 contenteditable="true" style="font-size: 19px; font-weight: 700; color: #000; margin: 0 0 25px 0; text-align: center; text-transform: uppercase;">
                 Wniosek o wycofanie zgody na przetwarzanie danych w BIK S.A.
             </h1>
 
-            <p contenteditable="true" style="font-size: 17px; color: #000; margin: 0 0 25px 0; line-height: 1.8; text-align: justify;">
-                Na podstawie <strong>art. 105a ust. 2 ustawy Prawo Bankowe</strong>, niniejszym wycofuję zgodę na przetwarzanie danych osobowych oraz informacji o spłacie zobowiązania wynikającego z wyżej wymienionej umowy w bazie Biura Informacji Kredytowej S.A. (BIK).
+            <p contenteditable="true" style="font-size: 15px; color: #000; margin: 0 0 15px 0; line-height: 1.6; text-align: justify;">
+                Na podstawie <strong>art. 105a ust. 2 ustawy Prawo Bankowe</strong>, niniejszym wycofuję zgodę na przetwarzanie moich danych osobowych oraz informacji o spłacie zobowiązania wynikającego z wyżej wymienionej umowy w bazie Biura Informacji Kredytowej S.A. (BIK).
             </p>
 
-            <p contenteditable="true" style="font-size: 17px; color: #000; margin: 0 0 30px 0; line-height: 1.8; text-align: justify;">
-                Oświadczam, że w przypadku tej umowy <strong>nie zachodzą przesłanki z art. 105a ust. 3 Prawa Bankowego</strong> (brak opóźnień powyżej 90 dni), co obliguje Państwa do zaprzestania raportowania danych do systemów zewnętrznych.
+            <p contenteditable="true" style="font-size: 15px; color: #000; margin: 0 0 20px 0; line-height: 1.6; text-align: justify;">
+                Oświadczam, że nie zachodzą przesłanki z art. 105a ust. 3 Prawa Bankowego (brak opóźnień powyżej 90 dni), co obliguje Państwa do zaprzestania raportowania danych do systemów zewnętrznych.
             </p>
 
-            <p contenteditable="true" style="font-size: 17px; font-weight: bold; margin-bottom: 15px; color: #000;">W związku z powyższym wnoszę o:</p>
-            <ol style="font-size: 17px; line-height: 1.8; margin-bottom: 50px; padding-left: 25px; color: #000;">
-                <li contenteditable="true" style="margin-bottom: 12px;">Niezwłoczne zaprzestanie raportowania aktualizacji o przebiegu spłaty do bazy BIK S.A.</li>
-                <li contenteditable="true" style="margin-bottom: 12px;">Przeniesienie dotychczasowej historii do sekcji danych statystycznych BIK.</li>
-                <li contenteditable="true">Potwierdzenie realizacji niniejszej dyspozycji w terminie 14 dni.</li>
+            <p contenteditable="true" style="font-size: 15px; font-weight: bold; margin-bottom: 10px;">W związku z powyższym wnoszę o:</p>
+            <ol style="font-size: 15px; line-height: 1.5; margin-bottom: 30px; padding-left: 20px;">
+                <li contenteditable="true" style="margin-bottom: 8px;">Niezwłoczne zaprzestanie raportowania aktualizacji o spłacie do BIK S.A.</li>
+                <li contenteditable="true" style="margin-bottom: 8px;">Przeniesienie dotychczasowej historii do sekcji danych statystycznych BIK.</li>
+                <li contenteditable="true">Potwierdzenie realizacji dyspozycji w terminie 14 dni.</li>
             </ol>
 
-            <div contenteditable="true" align="right" style="font-size: 17px; margin-top: 80px; color: #000;">
+            <div contenteditable="true" align="right" style="font-size: 15px; margin-top: 50px; line-height: 1.4;">
                 Z poważaniem,<br><br><br>
                 .........................................................<br>
-                <span style="font-size: 13px; color: #666;">(czytelny podpis wnioskodawcy)</span>
+                <span style="font-size: 12px; color: #666;">(czytelny podpis wnioskodawcy)</span>
             </div>
         </div>
     </div>
@@ -208,18 +168,13 @@
             editables.forEach(el => el.removeAttribute('contenteditable'));
             const blob = new Blob([letter.innerHTML], { type: 'text/html' });
             const item = new ClipboardItem({ 'text/html': blob });
-            navigator.clipboard.write([item]).then(() => { alert('Treść skopiowana!'); });
+            navigator.clipboard.write([item]).then(() => { alert('Skopiowano!'); });
         });
 
         function generatePDFQuick() {
             const element = document.getElementById('letter-to-pdf').cloneNode(true);
-            const editables = element.querySelectorAll('[contenteditable]');
-            editables.forEach(el => el.removeAttribute('contenteditable'));
             const opt = {
-                margin: [15, 15, 15, 15],
-                filename: 'Wniosek_BIK_Szybki.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, backgroundColor: '#ffffff' },
+                margin: [10, 10, 10, 10], filename: 'Wniosek_BIK.pdf',
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             html2pdf().set(opt).from(element).save();
@@ -227,9 +182,8 @@
 
         function copySubject(button, text) {
             navigator.clipboard.writeText(text);
-            const original = button.innerHTML;
             button.textContent = '✅ Skopiowano!';
-            setTimeout(() => { button.innerHTML = original; }, 2000);
+            setTimeout(() => { button.textContent = 'Kopiuj temat'; }, 2000);
         }
     </script>
 </body>
