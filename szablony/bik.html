@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Szablon: Pismo BIK - Pekao Leasing (Desktop)</title>
+    <title>Szablon: Pismo BIK - Pekao Leasing (Desktop V2)</title>
     <link rel="icon" type="image/png" href="baf_logo_p.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -16,40 +16,18 @@
             padding: 0;
             background-color: #f4f7f9;
             font-family: 'Lato', Arial, sans-serif;
-            min-width: 1200px; /* Blokada szerokości pod Desktop */
+            min-width: 1200px;
         }
 
-        /* PANELE BOCZNE - Zoptymalizowane pod Desktop */
-        #back-controls-container { 
-            position: fixed; 
-            top: 20px; 
-            left: 20px; 
-            z-index: 1000; 
-            width: 160px; 
-            display: flex;
-            flex-direction: column;
-        }
-        #controls-container { 
-            position: fixed; 
-            top: 20px; 
-            right: 20px; 
-            z-index: 1000; 
-            width: 300px; 
-        }
+        /* PANELE BOCZNE */
+        #back-controls-container { position: fixed; top: 20px; left: 20px; z-index: 1000; width: 160px; display: flex; flex-direction: column; }
+        #controls-container { position: fixed; top: 20px; right: 20px; z-index: 1000; width: 300px; }
 
         /* PRZYCISKI */
         .home-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            background-color: #002d5a;
-            border-radius: 50%;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            transition: all 0.3s ease;
-            text-decoration: none;
+            display: flex; align-items: center; justify-content: center; width: 50px; height: 50px;
+            background-color: #002d5a; border-radius: 50%; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: all 0.3s ease; text-decoration: none;
         }
         .home-button:hover { background-color: #001f3f; transform: scale(1.1); }
         .home-button svg { width: 28px; height: 28px; fill: #ffffff; }
@@ -66,17 +44,16 @@
         .pdf-btn-group h4 { margin: 0 0 10px 0; font-size: 13px; color: #555; text-align: center; }
         
         .btn-pdf { padding: 10px; font-size: 13px; font-weight: bold; color: white; border: none; border-radius: 4px; width: 100%; cursor: pointer; margin-bottom: 5px; transition: 0.2s; }
-        #pdfButtonQuick { background-color: #dc3545; } /* Szybki podgląd */
-        #pdfButtonNative { background-color: #28a745; } /* Drukuj/Zaznaczalny */
+        #pdfButtonNative { background-color: #28a745; } 
+        #pdfButtonQuick { background-color: #dc3545; }
 
-        /* MENU TEMATÓW */
         #separator { border-bottom: 1px solid #ccc; margin: 15px 0; }
         #subject-menu { background-color: #f8f9fa; border-radius: 8px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         #subject-menu h3 { margin: 0 0 10px 0; font-size: 15px; color: #333; text-align: center; }
         .subject-category { font-size: 11px; font-weight: bold; color: #888; text-transform: uppercase; margin: 12px 0 6px 0; }
         .subject-button { display: block; width: 100%; padding: 10px; margin-bottom: 6px; font-size: 12px; color: #138496; background-color: #ffffff; border: 1px solid #17a2b8; border-radius: 4px; cursor: pointer; text-align: left; line-height: 1.4; }
 
-        /* KONTENER STRONY - Szeroki pod Desktop */
+        /* KONTENER STRONY */
         .page-container { 
             max-width: 1100px; 
             margin: 30px auto; 
@@ -87,23 +64,37 @@
         }
 
         .intro-section { padding: 50px 80px 0 80px; }
-        
-        /* Sekcja listu do PDF - zawsze białe tło */
-        #letter-to-pdf { 
-            padding: 60px 100px 100px 100px; 
-            background-color: #ffffff !important; 
-        }
+        #letter-to-pdf { padding: 60px 100px 100px 100px; background-color: #ffffff !important; }
         
         /* EDYCJA */
         [contenteditable="true"]:hover { outline: 2px dashed #17a2b8; background-color: #fcfdfe; }
         [contenteditable="true"]:focus { outline: 2px solid #17a2b8; background-color: #fff; }
 
-        /* DRUKOWANIE I PDF NATIVE */
+        /* DRUKOWANIE - WYMUSZENIE PIONU (PORTRAIT) */
         @media print {
-            body { background: white !important; }
-            #back-controls-container, #controls-container, .intro-section, .page-container > div:first-child { display: none !important; }
-            .page-container { box-shadow: none !important; margin: 0 !important; width: 100% !important; max-width: none !important; }
-            #letter-to-pdf { padding: 0 !important; margin: 0 !important; width: 100% !important; }
+            @page {
+                size: A4 portrait;
+                margin: 20mm;
+            }
+            body { 
+                background: white !important; 
+                min-width: auto !important;
+            }
+            #back-controls-container, #controls-container, .intro-section, .page-container > div:first-child { 
+                display: none !important; 
+            }
+            .page-container { 
+                box-shadow: none !important; 
+                margin: 0 !important; 
+                width: 100% !important; 
+                max-width: none !important; 
+            }
+            #letter-to-pdf { 
+                padding: 0 !important; 
+                margin: 0 !important; 
+                width: 100% !important; 
+                background: white !important;
+            }
             [contenteditable="true"] { outline: none !important; }
         }
     </style>
@@ -121,8 +112,8 @@
         <button id="copyButton">📋 Kopiuj treść (do maila)</button>
         
         <div class="pdf-btn-group">
-            <h4>Eksport do PDF</h4>
-            <button id="pdfButtonNative" class="btn-pdf" onclick="window.print()">✅ PDF z zaznaczaniem tekstu</button>
+            <h4>Eksport do PDF (PIONOWO)</h4>
+            <button id="pdfButtonNative" class="btn-pdf" onclick="window.print()">✅ PDF Zaznaczalny (PION)</button>
             <button id="pdfButtonQuick" class="btn-pdf" onclick="generatePDFQuick()">🚀 Szybki PDF (obraz)</button>
         </div>
 
@@ -147,12 +138,11 @@
         <div class="intro-section">
             <h2 contenteditable="true" style="font-size: 26px; color: #002d5a; margin: 0 0 15px 0;">Dzień dobry,</h2>
             <p contenteditable="true" style="font-size: 17px; color: #555; line-height: 1.7; margin-bottom: 40px; border-bottom: 1px dashed #ccc; padding-bottom: 25px;">
-                w nawiązaniu do naszej rozmowy, poniżej przesyłam gotowy wniosek o wycofanie zgody BIK. <br><strong>Możesz go pobrać jako PDF (przycisk zielony dla najlepszej jakości)</strong> i wysłać jako załącznik w portalu Pekao Leasing.
+                w nawiązaniu do rozmowy, przesyłam gotowy wniosek o wycofanie zgody BIK. <br><strong>Użyj zielonego przycisku, aby wygenerować profesjonalny PDF w pionie z możliwością zaznaczania tekstu.</strong>
             </p>
         </div>
 
         <div id="letter-to-pdf">
-            
             <div align="right" contenteditable="true" style="font-size: 15px; color: #333; margin-bottom: 60px;">
                 Miejscowość: <strong>Warszawa</strong>, dnia <strong>[DATA]</strong> r.
             </div>
@@ -193,17 +183,17 @@
             </p>
 
             <p contenteditable="true" style="font-size: 17px; color: #000; margin: 0 0 30px 0; line-height: 1.8; text-align: justify;">
-                Jednocześnie oświadczam, że w przypadku tej umowy <strong>nie zachodzą przesłanki z art. 105a ust. 3 Prawa Bankowego</strong> (brak opóźnień powyżej 90 dni), co obliguje Państwa do zaprzestania raportowania danych do systemów zewnętrznych niezwłocznie po wycofaniu zgody przez klienta.
+                Oświadczam, że w przypadku tej umowy <strong>nie zachodzą przesłanki z art. 105a ust. 3 Prawa Bankowego</strong> (brak opóźnień powyżej 90 dni), co obliguje Państwa do zaprzestania raportowania danych do systemów zewnętrznych.
             </p>
 
             <p contenteditable="true" style="font-size: 17px; font-weight: bold; margin-bottom: 15px; color: #000;">W związku z powyższym wnoszę o:</p>
             <ol style="font-size: 17px; line-height: 1.8; margin-bottom: 50px; padding-left: 25px; color: #000;">
                 <li contenteditable="true" style="margin-bottom: 12px;">Niezwłoczne zaprzestanie raportowania aktualizacji o przebiegu spłaty do bazy BIK S.A.</li>
-                <li contenteditable="true" style="margin-bottom: 12px;">Przeniesienie dotychczasowej historii do sekcji danych statystycznych BIK (wyłączenie z widoczności dla innych instytucji finansowych).</li>
+                <li contenteditable="true" style="margin-bottom: 12px;">Przeniesienie dotychczasowej historii do sekcji danych statystycznych BIK.</li>
                 <li contenteditable="true">Potwierdzenie realizacji niniejszej dyspozycji w terminie 14 dni.</li>
             </ol>
 
-            <div contenteditable="true" align="right" style="font-size: 17px; margin-top: 80px; color: #000; line-height: 1.6;">
+            <div contenteditable="true" align="right" style="font-size: 17px; margin-top: 80px; color: #000;">
                 Z poważaniem,<br><br><br>
                 .........................................................<br>
                 <span style="font-size: 13px; color: #666;">(czytelny podpis wnioskodawcy)</span>
@@ -212,37 +202,26 @@
     </div>
 
     <script>
-        // KOPIOWANIE DO MAILA
         document.getElementById('copyButton').addEventListener('click', () => {
             const letter = document.getElementById('letter-to-pdf').cloneNode(true);
             const editables = letter.querySelectorAll('[contenteditable]');
             editables.forEach(el => el.removeAttribute('contenteditable'));
-            
             const blob = new Blob([letter.innerHTML], { type: 'text/html' });
             const item = new ClipboardItem({ 'text/html': blob });
-            
-            navigator.clipboard.write([item]).then(() => {
-                alert('Treść pisma została skopiowana! Możesz ją wkleić bezpośrednio do treści e-maila.');
-            });
+            navigator.clipboard.write([item]).then(() => { alert('Treść skopiowana!'); });
         });
 
-        // SZYBKI PDF (OBRAZ) - Naprawa tła
         function generatePDFQuick() {
             const element = document.getElementById('letter-to-pdf').cloneNode(true);
             const editables = element.querySelectorAll('[contenteditable]');
             editables.forEach(el => el.removeAttribute('contenteditable'));
-
             const opt = {
                 margin: [15, 15, 15, 15],
                 filename: 'Wniosek_BIK_Szybki.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2, 
-                    backgroundColor: '#ffffff' // Wymuszenie białego tła
-                },
+                html2canvas: { scale: 2, backgroundColor: '#ffffff' },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
-
             html2pdf().set(opt).from(element).save();
         }
 
