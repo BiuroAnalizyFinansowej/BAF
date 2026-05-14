@@ -110,10 +110,10 @@
                                                 <ul style="padding-left: 20px; margin: 0; font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; line-height: 1.9;">
                                                     <li id="li-bik" contenteditable="true"><strong>Raport BIK</strong> prywatny i firmowy ze strony www.bik.pl,</li>
                                                     <li id="li-accounting-doc" contenteditable="true"><strong>Podsumowanie KPiR</strong> za rok 2025 oraz 2026,</li>
-                                                    <li id="li-pit" contenteditable="true"><strong>PIT</strong> za rok 2023 i 2024,</li>
-                                                    <li id="li-assets" contenteditable="true"><strong>Ewidencja środków trwałych</strong> oraz tabele amortyzacji za poprzedni rok oraz rok bieżący,</li>
-                                                    <li contenteditable="true">Informacja o terminowości opłacania składek <strong>ZUS i US</strong> (na ten moment wystarczy informacja, natomiast do uruchomienia prawdopodobnie będzie potrzebne zaświadczenie),</li>
-                                                    <li contenteditable="true"><strong>Wyciągi z konta firmowego za 6m</strong> (Konto z wpływami z faktur i to na którym jest płacony ZUS i US).</li>
+                                                    <li id="li-pit" contenteditable="true"><strong>PIT</strong> za rok 2024 i 2025,</li>
+                                                    <li id="li-assets" contenteditable="true"><strong>Ewidencja środków trwałych</strong> oraz tabele amortyzacji za poprzedni rok oraz rok bieżący (jeśli występuje),</li>
+                                                    <li contenteditable="true">Informacja o terminowości opłacania składek <strong>ZUS i US</strong> w ostatnich 12 miesiącach (na ten moment wystarczy informacja, natomiast do uruchomienia prawdopodobnie będzie potrzebne zaświadczenie),</li>
+                                                    <li contenteditable="true"><strong>Wyciągi z konta firmowego za 6 miesięcy</strong> (Najlepiej konto z wpływami z faktur i to, na którym jest płacony ZUS i US).</li>
                                                 </ul>
                                             </div>
                                         </td>
@@ -220,12 +220,12 @@
                 case 'kpir':
                     liBik.innerHTML = '<strong>Raport BIK</strong> prywatny i firmowy ze strony www.bik.pl,';
                     liAccountingDoc.innerHTML = '<strong>Podsumowanie KPiR</strong> za rok 2025 oraz 2026,';
-                    liPit.innerHTML = '<strong>PIT</strong> za rok 2023 i 2024,';
+                    liPit.innerHTML = '<strong>PIT</strong> za rok 2024 i 2025,';
                     break;
                 case 'ryczalt':
                     liBik.innerHTML = '<strong>Raport BIK</strong> prywatny i firmowy ze strony www.bik.pl,';
                     liAccountingDoc.innerHTML = '<strong>Ewidencja przychodu</strong> za rok 2025 oraz 2026,';
-                    liPit.innerHTML = '<strong>PIT</strong> za rok 2023 i 2024,';
+                    liPit.innerHTML = '<strong>PIT</strong> za rok 2024 i 2025,';
                     liAssets.style.display = 'none'; // Ukryj ewidencję ŚT
                     break;
                 case 'pelna':
