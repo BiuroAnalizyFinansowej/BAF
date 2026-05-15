@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formatka Klienta</title>
+    <style>
+        :root { --primary-color: #1a365d; --accent-color: #002d5a; --bg-color: #f7fafc; --white: #ffffff; --text-color: #2d3748; --border-radius: 6px; }
+        body { margin: 0; padding: 15px; background-color: var(--bg-color); font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: var(--text-color); }
+        
+        .form-container { background: var(--white); padding: 20px; border-radius: var(--border-radius); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        
+        header { margin-bottom: 20px; border-bottom: 2px solid #edf2f7; padding-bottom: 15px; text-align: center; }
+        h1 { color: var(--primary-color); font-size: 20px; margin: 0 0 5px 0; }
+        h2 { font-size: 14px; color: #17a2b8; font-weight: bold; margin: 0; }
+        
+        .form-section { margin-bottom: 20px; }
+        .form-section h3 { color: var(--primary-color); font-size: 16px; margin-bottom: 15px; border-left: 3px solid #2b6cb0; padding-left: 8px; }
+        
+        .form-group { margin-bottom: 12px; }
+        label { display: block; margin-bottom: 4px; font-weight: 600; font-size: 0.85rem; color: #4a5568; }
+        input[type="text"], input[type="email"], input[type="tel"], select, textarea { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box; font-family: inherit; }
+        input:focus, select:focus, textarea:focus { border-color: #2b6cb0; outline: none; box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2); }
+        textarea { resize: vertical; min-height: 60px; }
+        
+        .radio-group { display: flex; gap: 15px; margin-bottom: 5px; }
+        .radio-option { display: flex; align-items: center; cursor: pointer; font-size: 0.9rem; }
+        .radio-option input { margin-right: 5px; cursor: pointer; }
+        .hidden-details { display: none; margin-top: 5px; }
+        
+        .buttons-row { display: flex; gap: 10px; margin-top: 20px; }
+        button.submit-btn { flex: 2; background-color: var(--accent-color); color: white; border: none; padding: 12px; font-size: 15px; border-radius: var(--border-radius); cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button.submit-btn:hover { background-color: #001f3f; }
+        
+        button.reset-btn { flex: 1; background-color: #e2e8f0; color: #4a5568; border: none; padding: 12px; font-size: 14px; border-radius: var(--border-radius); cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button.reset-btn:hover { background-color: #cbd5e0; }
+
+        #message { display: none; margin-top: 15px; padding: 12px; border-radius: var(--border-radius); text-align: center; font-size: 0.9rem; }
+        .success { background-color: #c6f6d5; color: #22543d; border: 1px solid #9ae6b4; }
+        .error { background-color: #fed7d7; color: #822727; border: 1px solid #feb2b2; }
+
+        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; text-align: center; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top: 4px solid var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <header>
+            <h1>Formatka Pierwszego Kontaktu</h1>
+            <h2 id="advisor-display">Wczytywanie doradcy...</h2>
+        </header>
+
+        <form id="formatkaForm">
+            <input type="hidden" id="doradca-input" name="doradca" value="">
+
+            <div class="form-section">
+                <h3>Dane Klienta</h3>
+                <div class="form-group"><label>Imię i nazwisko</label><input type="text" name="imie_nazwisko" required></div>
+                <div class="form-group"><label>Numer telefonu</label><input type="tel" name="telefon" required></div>
+                <div class="form-group"><label>Adres e-mail</label><input type="email" name="mail" required></div>
+                <div class="form-group"><label>NIP firmy</label><input type="text" name="nip" required></div>
+            </div>
+
+            <div class="form-section">
+                <h3>Szczegóły</h3>
+                <div class="form-group"><label>1) Jaką kwotą jest zainteresowany?</label><input type="text" name="kwota" required></div>
+                <div class="form-group"><label>2) Cel kredytowania?</label><textarea name="cel" required></textarea></div>
+                <div class="form-group">
+                    <label>3) Sposób rozliczania?</label>
+                    <select name="rozliczenie" required>
+                        <option value="" disabled selected>Wybierz...</option>
+                        <option value="KPiR">KPiR</option>
+                        <option value="Ryczałt">Ryczałt</option>
+                        <option value="Pełna księgowość (Spółka)">Pełna księgowość</option>
+                        <option value="Karta podatkowa">Karta podatkowa</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>4) Opóźnienia w płatnościach?</label>
+                    <div class="radio-group">
+                        <label class="radio-option"><input type="radio" name="opoznienia" value="Nie" checked onclick="toggleDetails('opoznienia_div', false)"> Nie</label>
+                        <label class="radio-option"><input type="radio" name="opoznienia" value="Tak" onclick="toggleDetails('opoznienia_div', true)"> Tak</label>
+                    </div>
+                    <div id="opoznienia_div" class="hidden-details"><input type="text" name="opoznienia_opis" placeholder="Jakie?"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>5) Problemy z ZUS / US?</label>
+                    <div class="radio-group">
+                        <label class="radio-option"><input type="radio" name="zus_us" value="Nie" checked onclick="toggleDetails('zus_div', false)"> Nie</label>
+                        <label class="radio-option"><input type="radio" name="zus_us" value="Tak" onclick="toggleDetails('zus_div', true)"> Tak</label>
+                    </div>
+                    <div id="zus_div" class="hidden-details"><input type="text" name="zus_us_opis" placeholder="Jakie?"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>6) Na kiedy potrzebuje pieniędzy?</label><input type="text" name="czas_potrzeba" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>7) Główny bank firmowy?</label><input type="text" name="bank_konto" required>
+                </div>
+
+                <div class="form-group">
+                    <label>8) Inne kredyty?</label>
+                    <div class="radio-group">
+                        <label class="radio-option"><input type="radio" name="inne_kredyty" value="Nie" checked onclick="toggleDetails('kredyty_div', false)"> Nie</label>
+                        <label class="radio-option"><input type="radio" name="inne_kredyty" value="Tak" onclick="toggleDetails('kredyty_div', true)"> Tak</label>
+                    </div>
+                    <div id="kredyty_div" class="hidden-details"><textarea name="inne_kredyty_opis" placeholder="Szczegóły..."></textarea></div>
+                </div>
+
+                <div class="form-group">
+                    <label>9) Nieruchomość pod zabezpieczenie?</label>
+                    <div class="radio-group">
+                        <label class="radio-option"><input type="radio" name="nieruchomosc" value="Nie" checked onclick="toggleDetails('nieruchomosc_div', false)"> Nie</label>
+                        <label class="radio-option"><input type="radio" name="nieruchomosc" value="Tak" onclick="toggleDetails('nieruchomosc_div', true)"> Tak</label>
+                    </div>
+                    <div id="nieruchomosc_div" class="hidden-details"><input type="text" name="nieruchomosc_opis" placeholder="Jaka?"></div>
+                </div>
+
+                <div class="form-group"><label>10) Kiedy odeśle dokumenty?</label><input type="text" name="kiedy_dokumenty" required></div>
+            </div>
+
+            <div id="message"></div>
+
+            <div class="buttons-row">
+                <button type="submit" class="submit-btn" id="submitBtn">Zapisz na dysku</button>
+                <button type="button" class="reset-btn" onclick="resetForm()">Wyczyść</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <h3 style="color: var(--primary-color); margin-top:0;">Generowanie...</h3>
+    </div>
+
+    <script>
+        // 🔴 TUTAJ WKLEJ LINK DO GOOGLE APPS SCRIPT 🔴
+        const SCRIPT_URL = 'TUTAJ_WKLEJ_URL_ZE_SKRYPTU_GOOGLE';
+
+        // Słownik imion dla ładnego wyświetlania nagłówka
+        const adisvorNames = {
+            'dawid': 'Dawid Błachno', 'weronika': 'Weronika Lekston', 'mieczyslaw': 'Mieczysław Andrzejewski',
+            'joanna': 'Joanna Karpała', 'piotr': 'Piotr Pakuła', 'wiktoria': 'Wiktoria Nojek',
+            'wojciech': 'Wojciech Młynarczyk', 'maja': 'Maja Zięba', 'mateusz': 'Mateusz Dzidkowski'
+        };
+
+        // Odbieranie doradcy z adresu URL (przy starcie okienka)
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const doradcaKey = urlParams.get('doradca');
+            
+            if (doradcaKey && adisvorNames[doradcaKey]) {
+                document.getElementById('doradca-input').value = doradcaKey;
+                document.getElementById('advisor-display').textContent = 'Opiekun: ' + adisvorNames[doradcaKey];
+            } else {
+                document.getElementById('advisor-display').textContent = 'Błąd: Nie wybrano doradcy!';
+                document.getElementById('advisor-display').style.color = 'red';
+            }
+        };
+
+        function toggleDetails(divId, show) {
+            const div = document.getElementById(divId);
+            const input = div.querySelector('input, textarea');
+            if (show) {
+                div.style.display = 'block';
+                input.required = true;
+            } else {
+                div.style.display = 'none';
+                input.required = false;
+                input.value = '';
+            }
+        }
+
+        // Funkcja resetowania formularza
+        function resetForm() {
+            document.getElementById('formatkaForm').reset();
+            // Ukrywanie wszystkich rozwijanych dodatkowych pól
+            const hiddenDivs = document.querySelectorAll('.hidden-details');
+            hiddenDivs.forEach(div => { div.style.display = 'none'; });
+            document.getElementById('message').style.display = 'none';
+        }
+
+        // Wysyłanie do Google Apps Script
+        document.getElementById('formatkaForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!document.getElementById('doradca-input').value) {
+                alert("Nieprawidłowy adres URL. Brakuje identyfikatora doradcy!");
+                return;
+            }
+
+            if(SCRIPT_URL === 'TUTAJ_WKLEJ_URL_ZE_SKRYPTU_GOOGLE') {
+                alert("Musisz dodać link SCRIPT_URL w kodzie formularz.html!");
+                return;
+            }
+
+            const btn = document.getElementById('submitBtn');
+            const overlay = document.getElementById('loadingOverlay');
+            const msg = document.getElementById('message');
+            
+            btn.disabled = true;
+            overlay.style.display = 'flex';
+            msg.style.display = 'none';
+
+            const formDataObj = {};
+            new FormData(this).forEach((value, key) => { formDataObj[key] = value; });
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(formDataObj)
+                });
+                
+                const result = await response.json();
+                
+                overlay.style.display = 'none';
+                msg.style.display = 'block';
+                
+                if (result.result === 'success') {
+                    msg.className = 'success';
+                    msg.innerHTML = `Formatka zapisana!<br><a href="${result.folderUrl}" target="_blank" style="color:#22543d; font-weight:bold;">Otwórz folder</a>`;
+                    resetForm(); // automatyczny reset po sukcesie
+                    msg.style.display = 'block'; // pokazujemy msg jeszcze raz, bo resetForm to ukrywa
+                } else {
+                    throw new Error(result.error || "Błąd serwera");
+                }
+            } catch (error) {
+                overlay.style.display = 'none';
+                msg.style.display = 'block';
+                msg.className = 'error';
+                msg.innerHTML = 'Błąd: ' + error.message;
+            } finally {
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
