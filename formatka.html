@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wybierz Doradcę - BAF</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="baf_logo_p.png">
+    <style>
+        .grid-doradcy { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; max-width: 800px; margin: 40px auto; }
+        .advisor-btn { background-color: #fff; color: #002d5a; border: 2px solid #002d5a; padding: 15px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .advisor-btn:hover { background-color: #002d5a; color: #fff; }
+        .page-title { text-align: center; color: #002d5a; margin-top: 40px; }
+        .back-btn { display: block; width: 200px; margin: 20px auto; text-align: center; text-decoration: none; background: #e2e8f0; color: #4a5568; padding: 10px; border-radius: 5px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="menu-container" style="max-width: 900px;">
+        <div class="logo">
+            <img src="baf_logo.png" alt="Logo BAF">
+        </div>
+        
+        <h2 class="page-title">Kto uzupełnia formatkę?</h2>
+        <p style="text-align: center; color: #555;">Wybierz swoje nazwisko, aby otworzyć formularz w nowym oknie.</p>
+
+        <div class="grid-doradcy">
+            <button class="advisor-btn" onclick="otworzFormularz('dawid')">Dawid Błachno</button>
+            <button class="advisor-btn" onclick="otworzFormularz('weronika')">Weronika Lekston</button>
+            <button class="advisor-btn" onclick="otworzFormularz('mieczyslaw')">Mieczysław Andrzejewski</button>
+            <button class="advisor-btn" onclick="otworzFormularz('joanna')">Joanna Karpała</button>
+            <button class="advisor-btn" onclick="otworzFormularz('piotr')">Piotr Pakuła</button>
+            <button class="advisor-btn" onclick="otworzFormularz('wiktoria')">Wiktoria Nojek</button>
+            <button class="advisor-btn" onclick="otworzFormularz('wojciech')">Wojciech Młynarczyk</button>
+            <button class="advisor-btn" onclick="otworzFormularz('maja')">Maja Zięba</button>
+            <button class="advisor-btn" onclick="otworzFormularz('mateusz')">Mateusz Dzidkowski</button>
+        </div>
+
+        <a href="index.html" class="back-btn">Powrót do Menu</a>
+    </div>
+
+    <script>
+        function otworzFormularz(doradcaId) {
+            // Przekazujemy id doradcy w adresie URL (np. ?doradca=mateusz)
+            const url = 'formularz.html?doradca=' + doradcaId;
+            // Otwieramy pop-up o wymiarach 480x600 (dałem 600 na wysokość żeby ładnie zmieścił przyciski)
+            window.open(url, 'FormatkaBAF', 'width=480,height=600,left=100,top=100,scrollbars=yes,resizable=yes');
+        }
+    </script>
+</body>
+</html>
