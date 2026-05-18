@@ -17,9 +17,7 @@
         .form-section { margin-bottom: 20px; }
         .form-section h3 { color: var(--primary-color); font-size: 16px; margin-bottom: 15px; border-left: 3px solid #2b6cb0; padding-left: 8px; }
         
-        /* ZMIANA: Dodano padding, przezroczyste obramowanie i przejścia dla tła */
         .form-group { margin-bottom: 8px; padding: 12px; border: 1px solid transparent; border-radius: 6px; transition: background-color 0.3s, border-color 0.3s; }
-        /* ZMIANA: Klasa odpowiedzialna za pastelowy zielony po wypełnieniu */
         .form-group.filled { background-color: #ebfbee; border-color: #b7eebf; }
         
         label { display: block; margin-bottom: 4px; font-weight: 600; font-size: 0.85rem; color: #4a5568; }
@@ -85,8 +83,8 @@
                 <div class="form-group">
                     <label>4) Opóźnienia w płatnościach?</label>
                     <div class="radio-group">
-                        <label class="radio-option"><input type="radio" name="opoznienia" value="Nie" checked onclick="toggleDetails('opoznienia_div', false)"> Nie</label>
-                        <label class="radio-option"><input type="radio" name="opoznienia" value="Tak" onclick="toggleDetails('opoznienia_div', true)"> Tak</label>
+                        <label class="radio-option"><input type="radio" name="opoznienia" value="Nie" required onclick="toggleDetails('opoznienia_div', false)"> Nie</label>
+                        <label class="radio-option"><input type="radio" name="opoznienia" value="Tak" required onclick="toggleDetails('opoznienia_div', true)"> Tak</label>
                     </div>
                     <div id="opoznienia_div" class="hidden-details"><input type="text" name="opoznienia_opis" placeholder="Jakie to były opóźnienia?"></div>
                 </div>
@@ -94,8 +92,8 @@
                 <div class="form-group">
                     <label>5) Problemy z ZUS / US?</label>
                     <div class="radio-group">
-                        <label class="radio-option"><input type="radio" name="zus_us" value="Nie" checked onclick="toggleDetails('zus_div', false)"> Nie</label>
-                        <label class="radio-option"><input type="radio" name="zus_us" value="Tak" onclick="toggleDetails('zus_div', true)"> Tak</label>
+                        <label class="radio-option"><input type="radio" name="zus_us" value="Nie" required onclick="toggleDetails('zus_div', false)"> Nie</label>
+                        <label class="radio-option"><input type="radio" name="zus_us" value="Tak" required onclick="toggleDetails('zus_div', true)"> Tak</label>
                     </div>
                     <div id="zus_div" class="hidden-details"><input type="text" name="zus_us_opis" placeholder="Wypisz szczegóły zaległości..."></div>
                 </div>
@@ -111,8 +109,8 @@
                 <div class="form-group">
                     <label>8) Inne kredyty?</label>
                     <div class="radio-group">
-                        <label class="radio-option"><input type="radio" name="inne_kredyty" value="Nie" checked onclick="toggleDetails('kredyty_div', false)"> Nie</label>
-                        <label class="radio-option"><input type="radio" name="inne_kredyty" value="Tak" onclick="toggleDetails('kredyty_div', true)"> Tak</label>
+                        <label class="radio-option"><input type="radio" name="inne_kredyty" value="Nie" required onclick="toggleDetails('kredyty_div', false)"> Nie</label>
+                        <label class="radio-option"><input type="radio" name="inne_kredyty" value="Tak" required onclick="toggleDetails('kredyty_div', true)"> Tak</label>
                     </div>
                     <div id="kredyty_div" class="hidden-details"><textarea name="inne_kredyty_opis" placeholder="Podaj raty, kwoty pozostałe i banki..."></textarea></div>
                 </div>
@@ -120,8 +118,8 @@
                 <div class="form-group">
                     <label>9) Nieruchomość pod zabezpieczenie?</label>
                     <div class="radio-group">
-                        <label class="radio-option"><input type="radio" name="nieruchomosc" value="Nie" checked onclick="toggleDetails('nieruchomosc_div', false)"> Nie</label>
-                        <label class="radio-option"><input type="radio" name="nieruchomosc" value="Tak" onclick="toggleDetails('nieruchomosc_div', true)"> Tak</label>
+                        <label class="radio-option"><input type="radio" name="nieruchomosc" value="Nie" required onclick="toggleDetails('nieruchomosc_div', false)"> Nie</label>
+                        <label class="radio-option"><input type="radio" name="nieruchomosc" value="Tak" required onclick="toggleDetails('nieruchomosc_div', true)"> Tak</label>
                     </div>
                     <div id="nieruchomosc_div" class="hidden-details"><input type="text" name="nieruchomosc_opis" placeholder="Rodzaj, szacowana wartość, miejscowość..."></div>
                 </div>
@@ -172,35 +170,29 @@
                 document.getElementById('advisor-display').style.color = 'red';
             }
             
-            // Uruchom podświetlenie na starcie (aby zaznaczone domyślnie opcje "Nie" od razu świeciły na zielono)
             updateHighlighting();
         };
 
-        // ZMIANA: Skrypt obsługujący separator tysięcy dla kwoty
         const kwotaInput = document.querySelector('input[name="kwota"]');
         kwotaInput.addEventListener('input', function(e) {
-            let value = this.value.replace(/\D/g, ''); // Usuń wszystko oprócz cyfr
-            this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, " "); // Wstaw spację co 3 cyfry
+            let value = this.value.replace(/\D/g, ''); 
+            this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, " "); 
         });
 
-        // ZMIANA: Funkcja sprawdzająca, które pola są uzupełnione i dodająca zielone tło
         function updateHighlighting() {
             document.querySelectorAll('.form-group').forEach(group => {
                 let isFilled = false;
                 
-                // Sprawdzanie pól tekstowych
                 const textInputs = group.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], textarea');
                 textInputs.forEach(input => {
                     if (input.value.trim() !== '') isFilled = true;
                 });
 
-                // Sprawdzanie przycisków radio
                 const radios = group.querySelectorAll('input[type="radio"]');
                 radios.forEach(radio => {
                     if (radio.checked) isFilled = true;
                 });
 
-                // Nadawanie klasy
                 if (isFilled) {
                     group.classList.add('filled');
                 } else {
@@ -209,7 +201,6 @@
             });
         }
 
-        // ZMIANA: Nasłuchiwanie zmian na całym formularzu
         document.getElementById('formatkaForm').addEventListener('input', updateHighlighting);
         document.getElementById('formatkaForm').addEventListener('change', updateHighlighting);
 
@@ -224,7 +215,6 @@
                 input.required = false;
                 input.value = '';
             }
-            // Aktualizuj podświetlenie po rozwinięciu/zwinięciu
             updateHighlighting();
         }
 
@@ -233,7 +223,6 @@
             const hiddenDivs = document.querySelectorAll('.hidden-details');
             hiddenDivs.forEach(div => { div.style.display = 'none'; });
             document.getElementById('message').style.display = 'none';
-            // ZMIANA: Usuwanie zielonego podświetlenia po restarcie
             updateHighlighting(); 
         }
 
@@ -256,7 +245,6 @@
             const formDataObj = {};
             new FormData(this).forEach((value, key) => { formDataObj[key] = value; });
             
-            // Opcjonalnie: możemy dodać spowrotem 'zł' do kwoty, jeśli wpisali same cyfry
             if(formDataObj.kwota && !formDataObj.kwota.includes('zł')) {
                 formDataObj.kwota = formDataObj.kwota + ' zł';
             }
