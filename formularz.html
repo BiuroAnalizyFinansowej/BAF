@@ -17,16 +17,20 @@
         .form-section { margin-bottom: 20px; }
         .form-section h3 { color: var(--primary-color); font-size: 16px; margin-bottom: 15px; border-left: 3px solid #2b6cb0; padding-left: 8px; }
         
-        .form-group { margin-bottom: 12px; }
+        /* ZMIANA: Dodano padding, przezroczyste obramowanie i przejścia dla tła */
+        .form-group { margin-bottom: 8px; padding: 12px; border: 1px solid transparent; border-radius: 6px; transition: background-color 0.3s, border-color 0.3s; }
+        /* ZMIANA: Klasa odpowiedzialna za pastelowy zielony po wypełnieniu */
+        .form-group.filled { background-color: #ebfbee; border-color: #b7eebf; }
+        
         label { display: block; margin-bottom: 4px; font-weight: 600; font-size: 0.85rem; color: #4a5568; }
-        input[type="text"], input[type="email"], input[type="tel"], select, textarea { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box; font-family: inherit; }
-        input:focus, select:focus, textarea:focus { border-color: #2b6cb0; outline: none; box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2); }
+        input[type="text"], input[type="email"], input[type="tel"], textarea { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box; font-family: inherit; }
+        input:focus, textarea:focus { border-color: #2b6cb0; outline: none; box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2); }
         textarea { resize: vertical; min-height: 60px; }
         
-        .radio-group { display: flex; gap: 15px; margin-bottom: 5px; }
+        .radio-group { display: flex; gap: 15px; margin-bottom: 5px; flex-wrap: wrap; }
         .radio-option { display: flex; align-items: center; cursor: pointer; font-size: 0.9rem; }
         .radio-option input { margin-right: 5px; cursor: pointer; }
-        .hidden-details { display: none; margin-top: 5px; }
+        .hidden-details { display: none; margin-top: 10px; }
         
         .buttons-row { display: flex; gap: 10px; margin-top: 20px; }
         button.submit-btn { flex: 2; background-color: var(--accent-color); color: white; border: none; padding: 12px; font-size: 15px; border-radius: var(--border-radius); cursor: pointer; font-weight: bold; transition: 0.3s; }
@@ -57,17 +61,25 @@
 
             <div class="form-section">
                 <h3>Szczegóły finansowania</h3>
-                <div class="form-group"><label>1) Jaką kwotą jest zainteresowany?</label><input type="text" name="kwota" required></div>
-                <div class="form-group"><label>2) Cel kredytowania?</label><textarea name="cel" required></textarea></div>
+                
+                <div class="form-group">
+                    <label>1) Jaką kwotą jest zainteresowany?</label>
+                    <input type="text" name="kwota" placeholder="np. 150 000" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>2) Cel kredytowania?</label>
+                    <textarea name="cel" required></textarea>
+                </div>
+                
                 <div class="form-group">
                     <label>3) Sposób rozliczania?</label>
-                    <select name="rozliczenie" required>
-                        <option value="" disabled selected>Wybierz...</option>
-                        <option value="KPiR">KPiR</option>
-                        <option value="Ryczałt">Ryczałt</option>
-                        <option value="Pełna księgowość (Spółka)">Pełna księgowość</option>
-                        <option value="Karta podatkowa">Karta podatkowa</option>
-                    </select>
+                    <div class="radio-group">
+                        <label class="radio-option"><input type="radio" name="rozliczenie" value="KPiR" required> KPiR</label>
+                        <label class="radio-option"><input type="radio" name="rozliczenie" value="Ryczałt" required> Ryczałt</label>
+                        <label class="radio-option"><input type="radio" name="rozliczenie" value="Pełna księgowość (Spółka)" required> Pełna księgowość</label>
+                        <label class="radio-option"><input type="radio" name="rozliczenie" value="Karta podatkowa" required> Karta podatkowa</label>
+                    </div>
                 </div>
                 
                 <div class="form-group">
@@ -76,7 +88,7 @@
                         <label class="radio-option"><input type="radio" name="opoznienia" value="Nie" checked onclick="toggleDetails('opoznienia_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="opoznienia" value="Tak" onclick="toggleDetails('opoznienia_div', true)"> Tak</label>
                     </div>
-                    <div id="opoznienia_div" class="hidden-details"><input type="text" name="opoznienia_opis" placeholder="Jakie?"></div>
+                    <div id="opoznienia_div" class="hidden-details"><input type="text" name="opoznienia_opis" placeholder="Jakie to były opóźnienia?"></div>
                 </div>
 
                 <div class="form-group">
@@ -85,7 +97,7 @@
                         <label class="radio-option"><input type="radio" name="zus_us" value="Nie" checked onclick="toggleDetails('zus_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="zus_us" value="Tak" onclick="toggleDetails('zus_div', true)"> Tak</label>
                     </div>
-                    <div id="zus_div" class="hidden-details"><input type="text" name="zus_us_opis" placeholder="Jakie?"></div>
+                    <div id="zus_div" class="hidden-details"><input type="text" name="zus_us_opis" placeholder="Wypisz szczegóły zaległości..."></div>
                 </div>
 
                 <div class="form-group">
@@ -102,7 +114,7 @@
                         <label class="radio-option"><input type="radio" name="inne_kredyty" value="Nie" checked onclick="toggleDetails('kredyty_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="inne_kredyty" value="Tak" onclick="toggleDetails('kredyty_div', true)"> Tak</label>
                     </div>
-                    <div id="kredyty_div" class="hidden-details"><textarea name="inne_kredyty_opis" placeholder="Szczegóły..."></textarea></div>
+                    <div id="kredyty_div" class="hidden-details"><textarea name="inne_kredyty_opis" placeholder="Podaj raty, kwoty pozostałe i banki..."></textarea></div>
                 </div>
 
                 <div class="form-group">
@@ -111,7 +123,7 @@
                         <label class="radio-option"><input type="radio" name="nieruchomosc" value="Nie" checked onclick="toggleDetails('nieruchomosc_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="nieruchomosc" value="Tak" onclick="toggleDetails('nieruchomosc_div', true)"> Tak</label>
                     </div>
-                    <div id="nieruchomosc_div" class="hidden-details"><input type="text" name="nieruchomosc_opis" placeholder="Jaka?"></div>
+                    <div id="nieruchomosc_div" class="hidden-details"><input type="text" name="nieruchomosc_opis" placeholder="Rodzaj, szacowana wartość, miejscowość..."></div>
                 </div>
 
                 <div class="form-group"><label>10) Kiedy odeśle dokumenty?</label><input type="text" name="kiedy_dokumenty" required></div>
@@ -159,7 +171,47 @@
                 document.getElementById('advisor-display').textContent = 'Błąd: Nie wybrano doradcy!';
                 document.getElementById('advisor-display').style.color = 'red';
             }
+            
+            // Uruchom podświetlenie na starcie (aby zaznaczone domyślnie opcje "Nie" od razu świeciły na zielono)
+            updateHighlighting();
         };
+
+        // ZMIANA: Skrypt obsługujący separator tysięcy dla kwoty
+        const kwotaInput = document.querySelector('input[name="kwota"]');
+        kwotaInput.addEventListener('input', function(e) {
+            let value = this.value.replace(/\D/g, ''); // Usuń wszystko oprócz cyfr
+            this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, " "); // Wstaw spację co 3 cyfry
+        });
+
+        // ZMIANA: Funkcja sprawdzająca, które pola są uzupełnione i dodająca zielone tło
+        function updateHighlighting() {
+            document.querySelectorAll('.form-group').forEach(group => {
+                let isFilled = false;
+                
+                // Sprawdzanie pól tekstowych
+                const textInputs = group.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], textarea');
+                textInputs.forEach(input => {
+                    if (input.value.trim() !== '') isFilled = true;
+                });
+
+                // Sprawdzanie przycisków radio
+                const radios = group.querySelectorAll('input[type="radio"]');
+                radios.forEach(radio => {
+                    if (radio.checked) isFilled = true;
+                });
+
+                // Nadawanie klasy
+                if (isFilled) {
+                    group.classList.add('filled');
+                } else {
+                    group.classList.remove('filled');
+                }
+            });
+        }
+
+        // ZMIANA: Nasłuchiwanie zmian na całym formularzu
+        document.getElementById('formatkaForm').addEventListener('input', updateHighlighting);
+        document.getElementById('formatkaForm').addEventListener('change', updateHighlighting);
 
         function toggleDetails(divId, show) {
             const div = document.getElementById(divId);
@@ -172,6 +224,8 @@
                 input.required = false;
                 input.value = '';
             }
+            // Aktualizuj podświetlenie po rozwinięciu/zwinięciu
+            updateHighlighting();
         }
 
         function resetForm() {
@@ -179,6 +233,8 @@
             const hiddenDivs = document.querySelectorAll('.hidden-details');
             hiddenDivs.forEach(div => { div.style.display = 'none'; });
             document.getElementById('message').style.display = 'none';
+            // ZMIANA: Usuwanie zielonego podświetlenia po restarcie
+            updateHighlighting(); 
         }
 
         document.getElementById('formatkaForm').addEventListener('submit', async function(e) {
@@ -186,11 +242,6 @@
             
             if (!document.getElementById('doradca-input').value) {
                 alert("Nieprawidłowy adres URL. Brakuje identyfikatora doradcy!");
-                return;
-            }
-
-            if(SCRIPT_URL === 'TUTAJ_WKLEJ_URL_ZE_SKRYPTU_GOOGLE') {
-                alert("Musisz dodać link SCRIPT_URL w kodzie formularz.html!");
                 return;
             }
 
@@ -204,6 +255,11 @@
 
             const formDataObj = {};
             new FormData(this).forEach((value, key) => { formDataObj[key] = value; });
+            
+            // Opcjonalnie: możemy dodać spowrotem 'zł' do kwoty, jeśli wpisali same cyfry
+            if(formDataObj.kwota && !formDataObj.kwota.includes('zł')) {
+                formDataObj.kwota = formDataObj.kwota + ' zł';
+            }
 
             try {
                 const response = await fetch(SCRIPT_URL, {
@@ -214,11 +270,10 @@
                 const result = await response.json();
                 
                 overlay.style.display = 'none';
-                msg.style.display = 'block';
                 
                 if (result.result === 'success') {
                     msg.className = 'success';
-                    msg.innerHTML = `Formatka zapisana!<br><a href="${result.folderUrl}" target="_blank" style="color:#22543d; font-weight:bold;">Otwórz folder</a>`;
+                    msg.innerHTML = `Formatka zapisana!<br><a href="${result.folderUrl}" target="_blank" style="color:#22543d; font-weight:bold;">Otwórz folder klienta</a>`;
                     resetForm(); 
                     msg.style.display = 'block'; 
                 } else {
