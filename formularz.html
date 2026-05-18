@@ -56,15 +56,7 @@
             <input type="hidden" id="doradca-input" name="doradca" value="">
 
             <div class="form-section">
-                <h3>Dane Klienta</h3>
-                <div class="form-group"><label>Imię i nazwisko</label><input type="text" name="imie_nazwisko" required></div>
-                <div class="form-group"><label>Numer telefonu</label><input type="tel" name="telefon" required></div>
-                <div class="form-group"><label>Adres e-mail</label><input type="email" name="mail" required></div>
-                <div class="form-group"><label>NIP firmy</label><input type="text" name="nip" required></div>
-            </div>
-
-            <div class="form-section">
-                <h3>Szczegóły</h3>
+                <h3>Szczegóły finansowania</h3>
                 <div class="form-group"><label>1) Jaką kwotą jest zainteresowany?</label><input type="text" name="kwota" required></div>
                 <div class="form-group"><label>2) Cel kredytowania?</label><textarea name="cel" required></textarea></div>
                 <div class="form-group">
@@ -125,6 +117,14 @@
                 <div class="form-group"><label>10) Kiedy odeśle dokumenty?</label><input type="text" name="kiedy_dokumenty" required></div>
             </div>
 
+            <div class="form-section">
+                <h3>Dane Klienta</h3>
+                <div class="form-group"><label>Imię i nazwisko</label><input type="text" name="imie_nazwisko" required></div>
+                <div class="form-group"><label>Numer telefonu</label><input type="tel" name="telefon" required></div>
+                <div class="form-group"><label>Adres e-mail</label><input type="email" name="mail" required></div>
+                <div class="form-group"><label>NIP firmy</label><input type="text" name="nip" required></div>
+            </div>
+
             <div id="message"></div>
 
             <div class="buttons-row">
@@ -140,17 +140,14 @@
     </div>
 
     <script>
-        // 🔴 TUTAJ WKLEJ LINK DO GOOGLE APPS SCRIPT 🔴
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwVgmxJoP9I9ib6hX_5U68BFOxH4Lq7WAIPS0RPZN3MYWhYovMy2sHnYWiuNhTFo0cJ/exec';
 
-        // Słownik imion dla ładnego wyświetlania nagłówka
         const adisvorNames = {
             'dawid': 'Dawid Błachno', 'weronika': 'Weronika Lekston', 'mieczyslaw': 'Mieczysław Andrzejewski',
             'joanna': 'Joanna Karpała', 'piotr': 'Piotr Pakuła', 'wiktoria': 'Wiktoria Nojek',
             'wojciech': 'Wojciech Młynarczyk', 'maja': 'Maja Zięba', 'mateusz': 'Mateusz Dzidkowski'
         };
 
-        // Odbieranie doradcy z adresu URL (przy starcie okienka)
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const doradcaKey = urlParams.get('doradca');
@@ -177,16 +174,13 @@
             }
         }
 
-        // Funkcja resetowania formularza
         function resetForm() {
             document.getElementById('formatkaForm').reset();
-            // Ukrywanie wszystkich rozwijanych dodatkowych pól
             const hiddenDivs = document.querySelectorAll('.hidden-details');
             hiddenDivs.forEach(div => { div.style.display = 'none'; });
             document.getElementById('message').style.display = 'none';
         }
 
-        // Wysyłanie do Google Apps Script
         document.getElementById('formatkaForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -225,8 +219,8 @@
                 if (result.result === 'success') {
                     msg.className = 'success';
                     msg.innerHTML = `Formatka zapisana!<br><a href="${result.folderUrl}" target="_blank" style="color:#22543d; font-weight:bold;">Otwórz folder</a>`;
-                    resetForm(); // automatyczny reset po sukcesie
-                    msg.style.display = 'block'; // pokazujemy msg jeszcze raz, bo resetForm to ukrywa
+                    resetForm(); 
+                    msg.style.display = 'block'; 
                 } else {
                     throw new Error(result.error || "Błąd serwera");
                 }
