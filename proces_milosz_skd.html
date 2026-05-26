@@ -357,7 +357,7 @@
                     <tbody>
                         <tr>
                             <td>Pre opłaty Miłosz</td>
-                            <td><input type="number" id="pre_milosz_netto" class="input-field" value="2250" readonly></td>
+                            <td><input type="number" id="pre_milosz_netto" class="input-field" value="4250" readonly></td>
                             <td class="output-field" id="pre_milosz_brutto"></td>
                         </tr>
                         <tr>
@@ -559,7 +559,7 @@
                 nasze_sf_proc: "0",
                 pre_baf_netto: "0", 
                 oplata_sadowa_netto: "1017",
-                pre_milosz_netto: "2250",
+                pre_milosz_netto: "4250",
                 ii_instancja_netto: "750"
             };
             
@@ -750,7 +750,7 @@
             goToGeneratorBtn.addEventListener('click', () => {
                 // 1. Pobierz opłatę początkową (ZMIANA LOGIKI Z TWOJEJ PROŚBY)
                 const preBafNetto = getValue('pre_baf_netto');
-                const oplataDoPrzekazania = preBafNetto + 2000; // NOWA LOGIKA: Pre opłaty BAF + 2 000 zł
+                const oplataDoPrzekazania = preBafNetto + 4000; // NOWA LOGIKA: Pre opłaty BAF + 4 000 zł
                 
                 // 2. Pobierz Success Fee (Miłosz 8% + Nasze SF)
                 const sfMiloszProc = 8; // Na podstawie Twojego kalkulatora
