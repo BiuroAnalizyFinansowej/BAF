@@ -31,10 +31,10 @@
         .hidden-details { display: none; margin-top: 10px; }
         
         .buttons-row { display: flex; gap: 10px; margin-top: 20px; }
-        button.submit-btn { flex: 2; background-color: var(--accent-color); color: white; border: none; padding: 12px; font-size: 15px; border-radius: var(--border-radius); cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button.submit-btn { flex: 2; background-color: var(--accent-color); color: white; border: none; padding: 12px; font-size: 15px; border-radius: var(--border-radius); cursor: pointer; font-weight: bold; transition: 0.3s; width: 100%; }
         button.submit-btn:hover { background-color: #001f3f; }
         
-        button.reset-btn { flex: 1; background-color: #e2e8f0; color: #4a5568; border: none; padding: 12px; font-size: 14px; border-radius: var(--border-radius); cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button.reset-btn { flex: 1; background-color: #e2e8f0; color: #4a5568; border: none; padding: 12px; font-size: 14px; border-radius: var(--border-radius); cursor: pointer; font-weight: bold; transition: 0.3s; width: 100%; }
         button.reset-btn:hover { background-color: #cbd5e0; }
 
         #message { display: none; margin-top: 15px; padding: 12px; border-radius: var(--border-radius); text-align: center; font-size: 0.9rem; }
@@ -46,7 +46,8 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         #summaryModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 10000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
-        #summaryText { width: 100%; height: 380px; padding: 12px; border: 1px solid #cbd5e0; border-radius: 4px; font-family: inherit; font-size: 0.95rem; resize: none; background-color: #f8fafc; line-height: 1.5; color: #2d3748; box-sizing: border-box; }
+        #summaryText { width: 100%; height: 350px; padding: 12px; border: 1px solid #cbd5e0; border-radius: 4px; font-family: inherit; font-size: 0.95rem; resize: none; background-color: #f8fafc; line-height: 1.5; color: #2d3748; box-sizing: border-box; }
+        .modal-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -87,7 +88,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Czy składał wnioski w ost. 3 miesiącach?</label>
+                    <label>4) Czy składał wnioski w ost. 3 miesiącach?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="wnioski_3m" value="Nie" required onclick="toggleDetails('wnioski_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="wnioski_3m" value="Tak" required onclick="toggleDetails('wnioski_div', true)"> Tak</label>
@@ -96,7 +97,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Czy działa teraz z kimś innym w pozyskaniu kredytu?</label>
+                    <label>5) Czy działa teraz z kimś innym w pozyskaniu kredytu?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="inna_wspolpraca" value="Nie" required onclick="toggleDetails('inna_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="inna_wspolpraca" value="Tak" required onclick="toggleDetails('inna_div', true)"> Tak</label>
@@ -109,7 +110,7 @@
                 </div>
                 
                 <div class="form-group">
-                    <label>4) Opóźnienia w płatnościach?</label>
+                    <label>6) Opóźnienia w płatnościach?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="opoznienia" value="Nie" required onclick="toggleDetails('opoznienia_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="opoznienia" value="Tak" required onclick="toggleDetails('opoznienia_div', true)"> Tak</label>
@@ -118,7 +119,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>5) Problemy z ZUS / US?</label>
+                    <label>7) Problemy z ZUS / US?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="zus_us" value="Nie" required onclick="toggleDetails('zus_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="zus_us" value="Tak" required onclick="toggleDetails('zus_div', true)"> Tak</label>
@@ -127,15 +128,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label>6) Na kiedy potrzebuje pieniędzy?</label><input type="text" name="czas_potrzeba" required>
+                    <label>8) Na kiedy potrzebuje pieniędzy?</label><input type="text" name="czas_potrzeba" required>
                 </div>
                 
                 <div class="form-group">
-                    <label>7) Główny bank firmowy?</label><input type="text" name="bank_konto" required>
+                    <label>9) Główny bank firmowy?</label><input type="text" name="bank_konto" required>
                 </div>
 
                 <div class="form-group">
-                    <label>8) Inne kredyty?</label>
+                    <label>10) Inne kredyty?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="inne_kredyty" value="Nie" required onclick="toggleDetails('kredyty_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="inne_kredyty" value="Tak" required onclick="toggleDetails('kredyty_div', true)"> Tak</label>
@@ -144,7 +145,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>9) Nieruchomość pod zabezpieczenie?</label>
+                    <label>11) Nieruchomość pod zabezpieczenie?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="nieruchomosc" value="Nie" required onclick="toggleDetails('nieruchomosc_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="nieruchomosc" value="Tak" required onclick="toggleDetails('nieruchomosc_div', true)"> Tak</label>
@@ -152,7 +153,7 @@
                     <div id="nieruchomosc_div" class="hidden-details"><input type="text" name="nieruchomosc_opis" placeholder="Rodzaj, szacowana wartość, miejscowość..."></div>
                 </div>
 
-                <div class="form-group"><label>10) Kiedy odeśle dokumenty?</label><input type="text" name="kiedy_dokumenty" required></div>
+                <div class="form-group"><label>12) Kiedy odeśle dokumenty?</label><input type="text" name="kiedy_dokumenty" required></div>
                 
                 <div class="form-group">
                     <label>Dodatkowe uwagi / luźne informacje (opcjonalnie):</label>
@@ -170,7 +171,7 @@
 
             <div id="message"></div>
 
-            <div class="buttons-row">
+            <div class="buttons-row" style="flex-direction: row;">
                 <button type="submit" class="submit-btn" id="submitBtn">Zapisz na dysku</button>
                 <button type="button" class="reset-btn" onclick="resetForm()">Wyczyść</button>
             </div>
@@ -181,10 +182,12 @@
         <h2 style="color: var(--primary-color); margin-top: 0; border-bottom: 2px solid #edf2f7; padding-bottom: 10px; font-size: 18px;">📝 Opisowe Podsumowanie Wywiadu</h2>
         <textarea id="summaryText" readonly></textarea>
         <div style="margin-top: 10px; background-color: #e6fffa; color: #234e52; padding: 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; text-align: center;">
-            ✓ Formatka została poprawnie zapisana w Google Drive klienta.
+            ✓ Formatka zapisana w Google Drive.
         </div>
-        <div class="buttons-row">
+        
+        <div class="modal-buttons">
             <button type="button" class="submit-btn" id="copySummaryBtn" onclick="copySummaryToClipboard()">📋 Kopiuj notatkę do kalendarza</button>
+            <button type="button" class="submit-btn" style="background-color: #17a2b8;" id="openFolderBtn" onclick="openClientFolder()">📁 Przejdź do folderu klienta</button>
             <button type="button" class="reset-btn" onclick="closeSummaryModal()">Zamknij</button>
         </div>
     </div>
@@ -195,7 +198,10 @@
     </div>
 
     <script>
+        // URL do skryptu Google
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwVgmxJoP9I9ib6hX_5U68BFOxH4Lq7WAIPS0RPZN3MYWhYovMy2sHnYWiuNhTFo0cJ/exec';
+
+        let currentClientFolderUrl = ""; // Zmienna do przechowywania linku do wygenerowanego folderu
 
         const adisvorNames = {
             'dawid': 'Dawid Błachno', 'weronika': 'Weronika Lekston', 'mieczyslaw': 'Mieczysław Andrzejewski',
@@ -260,10 +266,10 @@
             const hiddenDivs = document.querySelectorAll('.hidden-details');
             hiddenDivs.forEach(div => { div.style.display = 'none'; });
             document.getElementById('message').style.display = 'none';
+            currentClientFolderUrl = ""; // Czyszczenie linku
             updateHighlighting(); 
         }
 
-        // ZMIANA: Uwagi zostały zintegrowane wewnątrz opisu tekstowego wywiadu
         function generateSummaryText(data) {
             const dzisiaj = new Date().toLocaleDateString('pl-PL');
             let txt = `Dnia ${dzisiaj} przeprowadzono wywiad pierwszego kontaktu z klientem ${data.imie_nazwisko} (Telefon: ${data.telefon}, E-mail: ${data.mail}, NIP: ${data.nip}).\n\n`;
@@ -293,7 +299,6 @@
             
             txt += `Klient zadeklarował, że komplet dokumentów niezbędny do dalszej analizy finansowej zostanie odesłany w terminie: ${data.kiedy_dokumenty}.\n\n`;
             
-            // ZMIANA: Uwagi są doklejane płynnie na samym dole notatki kalendarzowej
             if (data.uwagi && data.uwagi.trim() !== '') {
                 txt += `Dodatkowe luźne uwagi doradcy spisane w trakcie rozmowy:\n${data.uwagi.trim()}`;
             }
@@ -312,6 +317,15 @@
                 btn.style.backgroundColor = "#28a745";
                 setTimeout(() => { btn.textContent = originalText; btn.style.backgroundColor = ""; }, 2000);
             });
+        }
+        
+        // Funkcja otwierająca folder klienta w nowej karcie
+        function openClientFolder() {
+            if (currentClientFolderUrl) {
+                window.open(currentClientFolderUrl, '_blank');
+            } else {
+                alert("Nie udało się pobrać linku do folderu.");
+            }
         }
 
         function closeSummaryModal() {
@@ -339,7 +353,6 @@
                 formDataObj.kwota = formDataObj.kwota + ' zł';
             }
 
-            // ZMIANA: Generowanie tekstu i wstrzykiwanie go pod klucz 'notatka_podsumowanie' zanim JSON poleci do Google Drive
             const pelnaNotatkaTekstowa = generateSummaryText(formDataObj);
             formDataObj['notatka_podsumowanie'] = pelnaNotatkaTekstowa;
 
@@ -353,7 +366,9 @@
                 overlay.style.display = 'none';
                 
                 if (result.result === 'success') {
-                    // Wyświetlenie gotowej notatki w polu tekstowym modala
+                    // Zapisanie URL folderu do zmiennej globalnej dla przycisku
+                    currentClientFolderUrl = result.folderUrl;
+                    
                     document.getElementById('summaryText').value = pelnaNotatkaTekstowa;
                     document.getElementById('summaryModal').style.display = 'block';
                 } else {
