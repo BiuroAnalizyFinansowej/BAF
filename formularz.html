@@ -25,7 +25,6 @@
         input:focus, textarea:focus { border-color: #2b6cb0; outline: none; box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2); }
         textarea { resize: vertical; min-height: 60px; }
         
-        /* Styl dla wyszarzonych (wyłączonych) inputów */
         input:disabled { background-color: #edf2f7; cursor: not-allowed; color: #a0aec0; }
         
         .radio-group { display: flex; gap: 15px; margin-bottom: 5px; flex-wrap: wrap; }
@@ -61,7 +60,7 @@
             <h2 id="advisor-display">Wczytywanie doradcy...</h2>
         </header>
 
-        <form id="formatkaForm">
+        <form id="formatkaForm" novalidate>
             <input type="hidden" id="doradca-input" name="doradca" value="">
 
             <div class="form-section">
@@ -78,7 +77,22 @@
                 </div>
                 
                 <div class="form-group">
-                    <label>3) Sposób rozliczania?</label>
+                    <label>3) Forma prowadzenia działalności / uzyskiwania dochodu?</label>
+                    <div class="radio-group">
+                        <label class="radio-option"><input type="radio" name="forma_dzialalnosci" value="JDG" required onclick="toggleDetails('forma_div', false)"> JDG</label>
+                        <label class="radio-option"><input type="radio" name="forma_dzialalnosci" value="s.c." required onclick="toggleDetails('forma_div', false)"> s.c.</label>
+                        <label class="radio-option"><input type="radio" name="forma_dzialalnosci" value="sp. z o.o." required onclick="toggleDetails('forma_div', false)"> sp. z o.o.</label>
+                        <label class="radio-option"><input type="radio" name="forma_dzialalnosci" value="sp. komandytowa" required onclick="toggleDetails('forma_div', false)"> sp. komandytowa</label>
+                        <label class="radio-option"><input type="radio" name="forma_dzialalnosci" value="sp. z o.o. sp. komandytowa" required onclick="toggleDetails('forma_div', false)"> sp. z o.o. sp. k.</label>
+                        <label class="radio-option"><input type="radio" name="forma_dzialalnosci" value="sp. jawna" required onclick="toggleDetails('forma_div', false)"> sp. jawna</label>
+                        <label class="radio-option"><input type="radio" name="forma_dzialalnosci" value="S.A." required onclick="toggleDetails('forma_div', false)"> S.A.</label>
+                        <label class="radio-option"><input type="radio" name="forma_dzialalnosci" value="Inne" required onclick="toggleDetails('forma_div', true)"> Inne</label>
+                    </div>
+                    <div id="forma_div" class="hidden-details"><input type="text" name="forma_dzialalnosci_opis" placeholder="Jakie? (np. Umowa o pracę)"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>4) Sposób rozliczania z US?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="rozliczenie" value="KPiR" required onclick="handleRozliczenieChange()"> KPiR</label>
                         <label class="radio-option"><input type="radio" name="rozliczenie" value="Ryczałt" required onclick="handleRozliczenieChange()"> Ryczałt</label>
@@ -91,27 +105,35 @@
                 </div>
 
                 <div class="form-group">
-                    <label>4) Przychód za ostatni rozliczony rok?</label>
+                    <label>5) Przychód za ostatni rozliczony rok?</label>
                     <input type="text" name="przychod_rok" class="kwota-format" placeholder="np. 800 000" required>
                 </div>
 
                 <div class="form-group" id="grupa_koszty_rok">
-                    <label>5) Koszty za ostatni rozliczony rok?</label>
+                    <label>6) Koszty za ostatni rozliczony rok?</label>
                     <input type="text" name="koszty_rok" class="kwota-format" placeholder="np. 500 000" required>
                 </div>
 
                 <div class="form-group">
-                    <label>6) Przychód za bieżący rozliczony okres?</label>
+                    <label>7) Przychód za bieżący rozliczony okres?</label>
                     <input type="text" name="przychod_biezacy" class="kwota-format" placeholder="np. 200 000" required>
                 </div>
 
                 <div class="form-group" id="grupa_koszty_biezacy">
-                    <label>7) Koszty za bieżący rozliczony okres?</label>
+                    <label>8) Koszty za bieżący rozliczony okres?</label>
                     <input type="text" name="koszty_biezacy" class="kwota-format" placeholder="np. 120 000" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>9) Czy występuje amortyzacja?</label>
+                    <div class="radio-group">
+                        <label class="radio-option"><input type="radio" name="amortyzacja" value="Nie" required> Nie</label>
+                        <label class="radio-option"><input type="radio" name="amortyzacja" value="Tak" required> Tak</label>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label>8) Dodatkowy dochód (np. najem, umowa o pracę)?</label>
+                    <label>10) Dodatkowy dochód (np. najem, umowa o pracę)?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="dodatkowy_dochod" value="Nie" required onclick="toggleDetails('dodatkowy_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="dodatkowy_dochod" value="Tak" required onclick="toggleDetails('dodatkowy_div', true)"> Tak</label>
@@ -120,7 +142,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>9) Czy składał wnioski w ost. 3 miesiącach?</label>
+                    <label>11) Czy składał wnioski w ost. 3 miesiącach?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="wnioski_3m" value="Nie" required onclick="toggleDetails('wnioski_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="wnioski_3m" value="Tak" required onclick="toggleDetails('wnioski_div', true)"> Tak</label>
@@ -129,7 +151,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>10) Czy działa teraz z kimś innym w pozyskaniu kredytu?</label>
+                    <label>12) Czy działa teraz z kimś innym w pozyskaniu kredytu?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="inna_wspolpraca" value="Nie" required onclick="toggleDetails('inna_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="inna_wspolpraca" value="Tak" required onclick="toggleDetails('inna_div', true)"> Tak</label>
@@ -142,7 +164,7 @@
                 </div>
                 
                 <div class="form-group">
-                    <label>11) Opóźnienia w płatnościach?</label>
+                    <label>13) Opóźnienia w płatnościach?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="opoznienia" value="Nie" required onclick="toggleDetails('opoznienia_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="opoznienia" value="Tak" required onclick="toggleDetails('opoznienia_div', true)"> Tak</label>
@@ -151,7 +173,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>12) Problemy z ZUS / US?</label>
+                    <label>14) Problemy z ZUS / US?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="zus_us" value="Nie" required onclick="toggleDetails('zus_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="zus_us" value="Tak" required onclick="toggleDetails('zus_div', true)"> Tak</label>
@@ -160,15 +182,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label>13) Na kiedy potrzebuje pieniędzy?</label><input type="text" name="czas_potrzeba" required>
+                    <label>15) Na kiedy potrzebuje pieniędzy?</label><input type="text" name="czas_potrzeba" required>
                 </div>
                 
                 <div class="form-group">
-                    <label>14) Główny bank firmowy?</label><input type="text" name="bank_konto" required>
+                    <label>16) Główny bank firmowy?</label><input type="text" name="bank_konto" required>
                 </div>
 
                 <div class="form-group">
-                    <label>15) Inne kredyty?</label>
+                    <label>17) Inne kredyty?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="inne_kredyty" value="Nie" required onclick="toggleDetails('kredyty_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="inne_kredyty" value="Tak" required onclick="toggleDetails('kredyty_div', true)"> Tak</label>
@@ -177,7 +199,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>16) Nieruchomość pod zabezpieczenie?</label>
+                    <label>18) Nieruchomość pod zabezpieczenie?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="nieruchomosc" value="Nie" required onclick="toggleDetails('nieruchomosc_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="nieruchomosc" value="Tak" required onclick="toggleDetails('nieruchomosc_div', true)"> Tak</label>
@@ -185,9 +207,9 @@
                     <div id="nieruchomosc_div" class="hidden-details"><input type="text" name="nieruchomosc_opis" placeholder="Rodzaj, szacowana wartość, miejscowość..."></div>
                 </div>
 
-                <div class="form-group"><label>17) Kiedy odeśle dokumenty?</label><input type="text" name="kiedy_dokumenty" required></div>
+                <div class="form-group"><label>19) Kiedy odeśle dokumenty?</label><input type="text" name="kiedy_dokumenty" required></div>
                 
-                <div class="form-group">
+                <div class="form-group optional-group">
                     <label>Dodatkowe uwagi / luźne informacje (opcjonalnie):</label>
                     <textarea name="uwagi" placeholder="Wpisz wszelkie luźne, dodatkowe informacje z rozmowy..."></textarea>
                 </div>
@@ -262,12 +284,10 @@
             });
         });
 
-        // FUNKCJA OBSŁUGUJĄCA RYCZAŁT (WYGASZANIE KOSZTÓW)
-        function handleRozliczenieChange() {
-            // Pokaż notatkę księgową (dla każdej formy)
+        function showRozliczenieNote() {
             document.getElementById('rozliczenie_notatka_div').style.display = 'block';
             
-            const isRyczalt = document.querySelector('input[name="rozliczenie"]:checked').value === 'Ryczałt';
+            const isRyczalt = document.querySelector('input[name="rozliczenie"]:checked') && document.querySelector('input[name="rozliczenie"]:checked').value === 'Ryczałt';
             
             const kosztyRokInput = document.querySelector('input[name="koszty_rok"]');
             const kosztyBiezacyInput = document.querySelector('input[name="koszty_biezacy"]');
@@ -301,8 +321,7 @@
                 const textInputs = group.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], textarea');
                 textInputs.forEach(input => { if (input.value.trim() !== '' && !input.disabled) isFilled = true; });
                 
-                // Jeśli wszystkie inputy w grupie są wyłączone, zdejmujemy kolor i ignorujemy
-                const allDisabled = Array.from(textInputs).every(input => input.disabled);
+                const allDisabled = textInputs.length > 0 && Array.from(textInputs).every(input => input.disabled);
                 
                 const radios = group.querySelectorAll('input[type="radio"]');
                 radios.forEach(radio => { if (radio.checked) isFilled = true; });
@@ -336,13 +355,14 @@
             const hiddenDivs = document.querySelectorAll('.hidden-details');
             hiddenDivs.forEach(div => { div.style.display = 'none'; });
             
-            // Zresetuj również status wygaszonych pól kosztów
             const kosztyPola = ['koszty_rok', 'koszty_biezacy'];
             kosztyPola.forEach(name => {
                 const input = document.querySelector(`input[name="${name}"]`);
-                input.disabled = false;
-                input.required = true;
-                input.parentElement.style.opacity = '1';
+                if (input) {
+                    input.disabled = false;
+                    input.required = true;
+                    input.parentElement.style.opacity = '1';
+                }
             });
             
             document.getElementById('message').style.display = 'none';
@@ -351,19 +371,21 @@
         }
 
         function generateSummaryText(data) {
-            const fKwota = (val) => (val && val.trim() !== '') ? (val.includes('zł') ? val : val.trim() + ' zł') : 'Brak';
+            const fKwota = (val) => (val && val.trim() !== '') ? (val.includes('zł') ? val : val.trim() + ' zł') : 'Brak danych';
+            const fText = (val) => (val && val.trim() !== '') ? val.trim() : 'Brak danych';
             
             const dzisiaj = new Date().toLocaleDateString('pl-PL');
-            let txt = `Dnia ${dzisiaj} przeprowadzono wywiad pierwszego kontaktu z klientem ${data.imie_nazwisko} (Telefon: ${data.telefon}, E-mail: ${data.mail}, NIP: ${data.nip}).\n\n`;
-            txt += `Klient zgłosił zapotrzebowanie na finansowanie w kwocie ${fKwota(data.kwota)}. Jako główny cel kredytowania wskazał: ${data.cel}.\n\n`;
+            let formaDzialalnosci = data.forma_dzialalnosci === 'Inne' ? data.forma_dzialalnosci_opis : data.forma_dzialalnosci;
             
-            txt += `Dane finansowe firmy:\nFirma rozlicza się na podstawie: ${data.rozliczenie}`;
+            let txt = `Dnia ${dzisiaj} przeprowadzono wywiad pierwszego kontaktu z klientem ${fText(data.imie_nazwisko)} (Telefon: ${fText(data.telefon)}, E-mail: ${fText(data.mail)}, NIP: ${fText(data.nip)}).\n\n`;
+            txt += `Klient zgłosił zapotrzebowanie na finansowanie w kwocie ${fKwota(data.kwota)}. Jako główny cel kredytowania wskazał: ${fText(data.cel)}.\n\n`;
+            
+            txt += `Dane finansowe firmy:\nForma działalności: ${fText(formaDzialalnosci)}.\nFirma rozlicza się na podstawie: ${fText(data.rozliczenie)}`;
             if (data.rozliczenie_notatka && data.rozliczenie_notatka.trim() !== '') {
                 txt += ` (Uwaga księgowa: ${data.rozliczenie_notatka.trim()})`;
             }
-            txt += `.\n`;
+            txt += `.\nAmortyzacja: ${data.amortyzacja === 'Tak' ? 'Występuje' : (data.amortyzacja === 'Nie' ? 'Nie występuje' : 'Brak danych')}.\n`;
             
-            // Logika notatki dostosowująca się do ryczałtu
             if (data.rozliczenie === 'Ryczałt') {
                 txt += `W ostatnim rozliczonym roku firma wygenerowała przychód na poziomie ok. ${fKwota(data.przychod_rok)}. `;
                 txt += `W bieżącym okresie rozliczeniowym przychód wynosi ok. ${fKwota(data.przychod_biezacy)}. (Firma na ryczałcie - brak ewidencji kosztów).\n`;
@@ -385,13 +407,13 @@
             } else {
                 txt += `Klient nie prowadzi równolegle żadnych procesów kredytowych z innymi pośrednikami lub bankami.`;
             }
-            txt += `\n\nŚrodki finansowe są niezbędne w terminie: ${data.czas_potrzeba}, natomiast główne konto operacyjne firmy prowadzone jest w banku: ${data.bank_konto}.\n\n`;
+            txt += `\n\nŚrodki finansowe są niezbędne w terminie: ${fText(data.czas_potrzeba)}, natomiast główne konto operacyjne firmy prowadzone jest w banku: ${fText(data.bank_konto)}.\n\n`;
             
             txt += `Zobowiązania i zabezpieczenia:\n`;
             txt += `- Inne aktywne kredyty: ${data.inne_kredyty === 'Tak' ? 'Tak, szczegóły: ' + data.inne_kredyty_opis : 'Brak kredytów firmowych oraz prywatnych'}.\n`;
             txt += `- Nieruchomość pod zabezpieczenie: ${data.nieruchomosc === 'Tak' ? 'Tak, klient dysponuje nieruchomością: ' + data.nieruchomosc_opis : 'Brak możliwości zabezpieczenia transakcji na nieruchomości'}.\n\n`;
             
-            txt += `Klient zadeklarował, że komplet dokumentów niezbędny do dalszej analizy finansowej zostanie odesłany w terminie: ${data.kiedy_dokumenty}.\n\n`;
+            txt += `Klient zadeklarował, że komplet dokumentów niezbędny do dalszej analizy finansowej zostanie odesłany w terminie: ${fText(data.kiedy_dokumenty)}.\n\n`;
             
             if (data.uwagi && data.uwagi.trim() !== '') {
                 txt += `Dodatkowe luźne uwagi doradcy spisane w trakcie rozmowy:\n${data.uwagi.trim()}`;
@@ -429,6 +451,15 @@
         document.getElementById('formatkaForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
+            // SYSTEM OSTRZEGANIA PRZED NIEPEŁNYM FORMULARZEM
+            let isComplete = this.checkValidity();
+            if (!isComplete) {
+                const isConfirmed = confirm("Jeszcze nie wszystkie wymagane pola zostały uzupełnione.\n\nCzy na pewno chcesz zapisać niepełną formatkę i wysłać ją z pustymi polami?");
+                if (!isConfirmed) {
+                    return; // Użytkownik zrezygnował z wysyłki - wraca do edycji
+                }
+            }
+            
             if (!document.getElementById('doradca-input').value) {
                 alert("Błąd: Brak identyfikatora doradcy!"); return;
             }
@@ -442,14 +473,12 @@
             const formDataObj = {};
             new FormData(this).forEach((value, key) => { formDataObj[key] = value; });
 
-            // Jeśli pola są zablokowane (Ryczałt), ich wartości nie ma w formDataObj, więc dodajemy puste stringi
             if (!formDataObj['koszty_rok']) formDataObj['koszty_rok'] = '';
             if (!formDataObj['koszty_biezacy']) formDataObj['koszty_biezacy'] = '';
 
             const pelnaNotatkaTekstowa = generateSummaryText(formDataObj);
             formDataObj['notatka_podsumowanie'] = pelnaNotatkaTekstowa;
 
-            // Czyszczenie kwot do wysyłki (do czystych cyfr), aby Arkusz sformatował to po swojemu
             const kwotyKlucze = ['kwota', 'przychod_rok', 'koszty_rok', 'przychod_biezacy', 'koszty_biezacy'];
             kwotyKlucze.forEach(klucz => {
                 if(formDataObj[klucz]) {
