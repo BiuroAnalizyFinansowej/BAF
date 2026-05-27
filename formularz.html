@@ -17,13 +17,16 @@
         .form-section { margin-bottom: 20px; }
         .form-section h3 { color: var(--primary-color); font-size: 16px; margin-bottom: 15px; border-left: 3px solid #2b6cb0; padding-left: 8px; }
         
-        .form-group { margin-bottom: 8px; padding: 12px; border: 1px solid transparent; border-radius: 6px; transition: background-color 0.3s, border-color 0.3s; }
+        .form-group { margin-bottom: 8px; padding: 12px; border: 1px solid transparent; border-radius: 6px; transition: background-color 0.3s, border-color 0.3s, opacity 0.3s; }
         .form-group.filled { background-color: #ebfbee; border-color: #b7eebf; }
         
         label { display: block; margin-bottom: 4px; font-weight: 600; font-size: 0.85rem; color: #4a5568; }
-        input[type="text"], input[type="email"], input[type="tel"], textarea { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box; font-family: inherit; }
+        input[type="text"], input[type="email"], input[type="tel"], textarea { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 0.95rem; box-sizing: border-box; font-family: inherit; transition: 0.3s; }
         input:focus, textarea:focus { border-color: #2b6cb0; outline: none; box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2); }
         textarea { resize: vertical; min-height: 60px; }
+        
+        /* Styl dla wyszarzonych (wyłączonych) inputów */
+        input:disabled { background-color: #edf2f7; cursor: not-allowed; color: #a0aec0; }
         
         .radio-group { display: flex; gap: 15px; margin-bottom: 5px; flex-wrap: wrap; }
         .radio-option { display: flex; align-items: center; cursor: pointer; font-size: 0.9rem; }
@@ -77,10 +80,10 @@
                 <div class="form-group">
                     <label>3) Sposób rozliczania?</label>
                     <div class="radio-group">
-                        <label class="radio-option"><input type="radio" name="rozliczenie" value="KPiR" required onclick="showRozliczenieNote()"> KPiR</label>
-                        <label class="radio-option"><input type="radio" name="rozliczenie" value="Ryczałt" required onclick="showRozliczenieNote()"> Ryczałt</label>
-                        <label class="radio-option"><input type="radio" name="rozliczenie" value="Pełna księgowość (Spółka)" required onclick="showRozliczenieNote()"> Pełna księgowość</label>
-                        <label class="radio-option"><input type="radio" name="rozliczenie" value="Karta podatkowa" required onclick="showRozliczenieNote()"> Karta podatkowa</label>
+                        <label class="radio-option"><input type="radio" name="rozliczenie" value="KPiR" required onclick="handleRozliczenieChange()"> KPiR</label>
+                        <label class="radio-option"><input type="radio" name="rozliczenie" value="Ryczałt" required onclick="handleRozliczenieChange()"> Ryczałt</label>
+                        <label class="radio-option"><input type="radio" name="rozliczenie" value="Pełna księgowość (Spółka)" required onclick="handleRozliczenieChange()"> Pełna księgowość</label>
+                        <label class="radio-option"><input type="radio" name="rozliczenie" value="Karta podatkowa" required onclick="handleRozliczenieChange()"> Karta podatkowa</label>
                     </div>
                     <div id="rozliczenie_notatka_div" class="hidden-details">
                         <textarea name="rozliczenie_notatka" placeholder="Wpisz dodatkowe notatki do sposobu rozliczania..."></textarea>
@@ -92,7 +95,7 @@
                     <input type="text" name="przychod_rok" class="kwota-format" placeholder="np. 800 000" required>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="grupa_koszty_rok">
                     <label>5) Koszty za ostatni rozliczony rok?</label>
                     <input type="text" name="koszty_rok" class="kwota-format" placeholder="np. 500 000" required>
                 </div>
@@ -102,7 +105,7 @@
                     <input type="text" name="przychod_biezacy" class="kwota-format" placeholder="np. 200 000" required>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="grupa_koszty_biezacy">
                     <label>7) Koszty za bieżący rozliczony okres?</label>
                     <input type="text" name="koszty_biezacy" class="kwota-format" placeholder="np. 120 000" required>
                 </div>
@@ -251,7 +254,6 @@
             updateHighlighting();
         };
 
-        // Automatyczny separator dla kwot (tylko wizualnie w formularzu)
         const kwotaInputs = document.querySelectorAll('.kwota-format');
         kwotaInputs.forEach(input => {
             input.addEventListener('input', function(e) {
@@ -260,8 +262,36 @@
             });
         });
 
-        function showRozliczenieNote() {
+        // FUNKCJA OBSŁUGUJĄCA RYCZAŁT (WYGASZANIE KOSZTÓW)
+        function handleRozliczenieChange() {
+            // Pokaż notatkę księgową (dla każdej formy)
             document.getElementById('rozliczenie_notatka_div').style.display = 'block';
+            
+            const isRyczalt = document.querySelector('input[name="rozliczenie"]:checked').value === 'Ryczałt';
+            
+            const kosztyRokInput = document.querySelector('input[name="koszty_rok"]');
+            const kosztyBiezacyInput = document.querySelector('input[name="koszty_biezacy"]');
+            
+            if (isRyczalt) {
+                kosztyRokInput.disabled = true;
+                kosztyRokInput.required = false;
+                kosztyRokInput.value = '';
+                kosztyRokInput.parentElement.style.opacity = '0.5';
+                
+                kosztyBiezacyInput.disabled = true;
+                kosztyBiezacyInput.required = false;
+                kosztyBiezacyInput.value = '';
+                kosztyBiezacyInput.parentElement.style.opacity = '0.5';
+            } else {
+                kosztyRokInput.disabled = false;
+                kosztyRokInput.required = true;
+                kosztyRokInput.parentElement.style.opacity = '1';
+                
+                kosztyBiezacyInput.disabled = false;
+                kosztyBiezacyInput.required = true;
+                kosztyBiezacyInput.parentElement.style.opacity = '1';
+            }
+            
             updateHighlighting();
         }
 
@@ -269,10 +299,19 @@
             document.querySelectorAll('.form-group').forEach(group => {
                 let isFilled = false;
                 const textInputs = group.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], textarea');
-                textInputs.forEach(input => { if (input.value.trim() !== '') isFilled = true; });
+                textInputs.forEach(input => { if (input.value.trim() !== '' && !input.disabled) isFilled = true; });
+                
+                // Jeśli wszystkie inputy w grupie są wyłączone, zdejmujemy kolor i ignorujemy
+                const allDisabled = Array.from(textInputs).every(input => input.disabled);
+                
                 const radios = group.querySelectorAll('input[type="radio"]');
                 radios.forEach(radio => { if (radio.checked) isFilled = true; });
-                if (isFilled) group.classList.add('filled'); else group.classList.remove('filled');
+                
+                if (isFilled && !allDisabled) {
+                    group.classList.add('filled');
+                } else {
+                    group.classList.remove('filled');
+                }
             });
         }
 
@@ -296,15 +335,23 @@
             document.getElementById('formatkaForm').reset();
             const hiddenDivs = document.querySelectorAll('.hidden-details');
             hiddenDivs.forEach(div => { div.style.display = 'none'; });
+            
+            // Zresetuj również status wygaszonych pól kosztów
+            const kosztyPola = ['koszty_rok', 'koszty_biezacy'];
+            kosztyPola.forEach(name => {
+                const input = document.querySelector(`input[name="${name}"]`);
+                input.disabled = false;
+                input.required = true;
+                input.parentElement.style.opacity = '1';
+            });
+            
             document.getElementById('message').style.display = 'none';
             currentClientFolderUrl = ""; 
             updateHighlighting(); 
         }
 
-        // GENERATOR NOTATKI (używa wartości z ładnymi spacjami i dokleja "zł" do czytelności)
         function generateSummaryText(data) {
-            // Funkcja pomocnicza: jeśli jest kwota, dokleja do niej "zł" dla celów notatki
-            const fKwota = (val) => val ? (val.includes('zł') ? val : val.trim() + ' zł') : 'Brak';
+            const fKwota = (val) => (val && val.trim() !== '') ? (val.includes('zł') ? val : val.trim() + ' zł') : 'Brak';
             
             const dzisiaj = new Date().toLocaleDateString('pl-PL');
             let txt = `Dnia ${dzisiaj} przeprowadzono wywiad pierwszego kontaktu z klientem ${data.imie_nazwisko} (Telefon: ${data.telefon}, E-mail: ${data.mail}, NIP: ${data.nip}).\n\n`;
@@ -314,8 +361,17 @@
             if (data.rozliczenie_notatka && data.rozliczenie_notatka.trim() !== '') {
                 txt += ` (Uwaga księgowa: ${data.rozliczenie_notatka.trim()})`;
             }
-            txt += `.\nW ostatnim rozliczonym roku firma wygenerowała przychód na poziomie ok. ${fKwota(data.przychod_rok)} przy kosztach rzędu ${fKwota(data.koszty_rok)}. `;
-            txt += `W bieżącym okresie rozliczeniowym przychód wynosi ok. ${fKwota(data.przychod_biezacy)}, a koszty ${fKwota(data.koszty_biezacy)}.\n`;
+            txt += `.\n`;
+            
+            // Logika notatki dostosowująca się do ryczałtu
+            if (data.rozliczenie === 'Ryczałt') {
+                txt += `W ostatnim rozliczonym roku firma wygenerowała przychód na poziomie ok. ${fKwota(data.przychod_rok)}. `;
+                txt += `W bieżącym okresie rozliczeniowym przychód wynosi ok. ${fKwota(data.przychod_biezacy)}. (Firma na ryczałcie - brak ewidencji kosztów).\n`;
+            } else {
+                txt += `W ostatnim rozliczonym roku firma wygenerowała przychód na poziomie ok. ${fKwota(data.przychod_rok)} przy kosztach rzędu ${fKwota(data.koszty_rok)}. `;
+                txt += `W bieżącym okresie rozliczeniowym przychód wynosi ok. ${fKwota(data.przychod_biezacy)}, a koszty ${fKwota(data.koszty_biezacy)}.\n`;
+            }
+
             txt += `Dodatkowe dochody: ${data.dodatkowy_dochod === 'Tak' ? 'Klient posiada dodatkowe źródło dochodu (' + data.dodatkowy_dochod_opis + ')' : 'Klient nie posiada dodatkowych źródeł dochodu'}.\n\n`;
             
             txt += `Weryfikacja historii kredytowej oraz rejestrów publicznych wykazała, że:\n`;
@@ -386,16 +442,18 @@
             const formDataObj = {};
             new FormData(this).forEach((value, key) => { formDataObj[key] = value; });
 
-            // 1. ZANIM wyczyścimy liczby, generujemy piękną notatkę ze spacjami i dopiskiem "zł"
+            // Jeśli pola są zablokowane (Ryczałt), ich wartości nie ma w formDataObj, więc dodajemy puste stringi
+            if (!formDataObj['koszty_rok']) formDataObj['koszty_rok'] = '';
+            if (!formDataObj['koszty_biezacy']) formDataObj['koszty_biezacy'] = '';
+
             const pelnaNotatkaTekstowa = generateSummaryText(formDataObj);
             formDataObj['notatka_podsumowanie'] = pelnaNotatkaTekstowa;
 
-            // 2. TERAZ czyścimy pola z kwotami z jakichkolwiek spacji i liter, 
-            // aby do Arkusza Google trafiła czysta liczba (np. "150000"), co pozwoli na poprawne formatowanie komórek
+            // Czyszczenie kwot do wysyłki (do czystych cyfr), aby Arkusz sformatował to po swojemu
             const kwotyKlucze = ['kwota', 'przychod_rok', 'koszty_rok', 'przychod_biezacy', 'koszty_biezacy'];
             kwotyKlucze.forEach(klucz => {
                 if(formDataObj[klucz]) {
-                    formDataObj[klucz] = formDataObj[klucz].replace(/\D/g, ''); // Usuwa wszystko poza cyframi
+                    formDataObj[klucz] = formDataObj[klucz].replace(/\D/g, ''); 
                 }
             });
 
