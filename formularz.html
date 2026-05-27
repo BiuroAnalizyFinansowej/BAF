@@ -44,6 +44,9 @@
         .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; text-align: center; }
         .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top: 4px solid var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 10px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        #summaryModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 10000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+        #summaryText { width: 100%; height: 380px; padding: 12px; border: 1px solid #cbd5e0; border-radius: 4px; font-family: inherit; font-size: 0.95rem; resize: none; background-color: #f8fafc; line-height: 1.5; color: #2d3748; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -73,10 +76,35 @@
                 <div class="form-group">
                     <label>3) Sposób rozliczania?</label>
                     <div class="radio-group">
-                        <label class="radio-option"><input type="radio" name="rozliczenie" value="KPiR" required> KPiR</label>
-                        <label class="radio-option"><input type="radio" name="rozliczenie" value="Ryczałt" required> Ryczałt</label>
-                        <label class="radio-option"><input type="radio" name="rozliczenie" value="Pełna księgowość (Spółka)" required> Pełna księgowość</label>
-                        <label class="radio-option"><input type="radio" name="rozliczenie" value="Karta podatkowa" required> Karta podatkowa</label>
+                        <label class="radio-option"><input type="radio" name="rozliczenie" value="KPiR" required onclick="showRozliczenieNote()"> KPiR</label>
+                        <label class="radio-option"><input type="radio" name="rozliczenie" value="Ryczałt" required onclick="showRozliczenieNote()"> Ryczałt</label>
+                        <label class="radio-option"><input type="radio" name="rozliczenie" value="Pełna księgowość (Spółka)" required onclick="showRozliczenieNote()"> Pełna księgowość</label>
+                        <label class="radio-option"><input type="radio" name="rozliczenie" value="Karta podatkowa" required onclick="showRozliczenieNote()"> Karta podatkowa</label>
+                    </div>
+                    <div id="rozliczenie_notatka_div" class="hidden-details">
+                        <textarea name="rozliczenie_notatka" placeholder="Wpisz dodatkowe notatki do sposobu rozliczania..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Czy składał wnioski w ost. 3 miesiącach?</label>
+                    <div class="radio-group">
+                        <label class="radio-option"><input type="radio" name="wnioski_3m" value="Nie" required onclick="toggleDetails('wnioski_div', false)"> Nie</label>
+                        <label class="radio-option"><input type="radio" name="wnioski_3m" value="Tak" required onclick="toggleDetails('wnioski_div', true)"> Tak</label>
+                    </div>
+                    <div id="wnioski_div" class="hidden-details"><input type="text" name="wnioski_opis" placeholder="Gdzie były składane wnioski?"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Czy działa teraz z kimś innym w pozyskaniu kredytu?</label>
+                    <div class="radio-group">
+                        <label class="radio-option"><input type="radio" name="inna_wspolpraca" value="Nie" required onclick="toggleDetails('inna_div', false)"> Nie</label>
+                        <label class="radio-option"><input type="radio" name="inna_wspolpraca" value="Tak" required onclick="toggleDetails('inna_div', true)"> Tak</label>
+                    </div>
+                    <div id="inna_div" class="hidden-details">
+                        <div style="color: #c53030; background-color: #fff5f5; padding: 10px; border: 1px solid #feb2b2; border-radius: 4px; font-size: 0.85rem; font-weight: bold; line-height: 1.4;">
+                            ⚠️ ZAAPELUJ DO KLIENTA, ABY NIE SKŁADAŁ ŻADNYCH WNIOSKÓW BEZ KONSULTACJI!
+                        </div>
                     </div>
                 </div>
                 
@@ -125,6 +153,11 @@
                 </div>
 
                 <div class="form-group"><label>10) Kiedy odeśle dokumenty?</label><input type="text" name="kiedy_dokumenty" required></div>
+                
+                <div class="form-group">
+                    <label>Dodatkowe uwagi / luźne informacje (opcjonalnie):</label>
+                    <textarea name="uwagi" placeholder="Wpisz wszelkie luźne, dodatkowe informacje z rozmowy..."></textarea>
+                </div>
             </div>
 
             <div class="form-section">
@@ -142,6 +175,18 @@
                 <button type="button" class="reset-btn" onclick="resetForm()">Wyczyść</button>
             </div>
         </form>
+    </div>
+
+    <div id="summaryModal">
+        <h2 style="color: var(--primary-color); margin-top: 0; border-bottom: 2px solid #edf2f7; padding-bottom: 10px; font-size: 18px;">📝 Opisowe Podsumowanie Wywiadu</h2>
+        <textarea id="summaryText" readonly></textarea>
+        <div style="margin-top: 10px; background-color: #e6fffa; color: #234e52; padding: 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; text-align: center;">
+            ✓ Formatka została poprawnie zapisana w Google Drive klienta.
+        </div>
+        <div class="buttons-row">
+            <button type="button" class="submit-btn" id="copySummaryBtn" onclick="copySummaryToClipboard()">📋 Kopiuj notatkę do kalendarza</button>
+            <button type="button" class="reset-btn" onclick="closeSummaryModal()">Zamknij</button>
+        </div>
     </div>
 
     <div id="loadingOverlay" class="loading-overlay">
@@ -169,7 +214,6 @@
                 document.getElementById('advisor-display').textContent = 'Błąd: Nie wybrano doradcy!';
                 document.getElementById('advisor-display').style.color = 'red';
             }
-            
             updateHighlighting();
         };
 
@@ -179,25 +223,19 @@
             this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, " "); 
         });
 
+        function showRozliczenieNote() {
+            document.getElementById('rozliczenie_notatka_div').style.display = 'block';
+            updateHighlighting();
+        }
+
         function updateHighlighting() {
             document.querySelectorAll('.form-group').forEach(group => {
                 let isFilled = false;
-                
                 const textInputs = group.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], textarea');
-                textInputs.forEach(input => {
-                    if (input.value.trim() !== '') isFilled = true;
-                });
-
+                textInputs.forEach(input => { if (input.value.trim() !== '') isFilled = true; });
                 const radios = group.querySelectorAll('input[type="radio"]');
-                radios.forEach(radio => {
-                    if (radio.checked) isFilled = true;
-                });
-
-                if (isFilled) {
-                    group.classList.add('filled');
-                } else {
-                    group.classList.remove('filled');
-                }
+                radios.forEach(radio => { if (radio.checked) isFilled = true; });
+                if (isFilled) group.classList.add('filled'); else group.classList.remove('filled');
             });
         }
 
@@ -209,11 +247,10 @@
             const input = div.querySelector('input, textarea');
             if (show) {
                 div.style.display = 'block';
-                input.required = true;
+                if (input) input.required = true;
             } else {
                 div.style.display = 'none';
-                input.required = false;
-                input.value = '';
+                if (input) { input.required = false; input.value = ''; }
             }
             updateHighlighting();
         }
@@ -226,21 +263,74 @@
             updateHighlighting(); 
         }
 
+        // ZMIANA: Uwagi zostały zintegrowane wewnątrz opisu tekstowego wywiadu
+        function generateSummaryText(data) {
+            const dzisiaj = new Date().toLocaleDateString('pl-PL');
+            let txt = `Dnia ${dzisiaj} przeprowadzono wywiad pierwszego kontaktu z klientem ${data.imie_nazwisko} (Telefon: ${data.telefon}, E-mail: ${data.mail}, NIP: ${data.nip}).\n\n`;
+            txt += `Klient zgłosił zapotrzebowanie na finansowanie w kwocie ${data.kwota} zł. Jako główny cel kredytowania wskazał: ${data.cel}.\n\n`;
+            txt += `Firma rozlicza się na podstawie: ${data.rozliczenie}`;
+            if (data.rozliczenie_notatka && data.rozliczenie_notatka.trim() !== '') {
+                txt += ` (Dodatkowa uwaga księgowa: ${data.rozliczenie_notatka.trim()})`;
+            }
+            txt += `.\n\n`;
+            
+            txt += `Weryfikacja historii kredytowej oraz rejestrów publicznych wykazała, że:\n`;
+            txt += `- ${data.opoznienia === 'Tak' ? 'Występowały opóźnienia w płatnościach zobowiązań kredytowych, szczegóły: ' + data.opoznienia_opis : 'Brak jakichkolwiek opóźnień w spłatach obecnych kredytów'}.\n`;
+            txt += `- ${data.zus_us === 'Tak' ? 'Klient posiada zaległości lub problemy w płatnościach wobec ZUS/US: ' + data.zus_us_opis : 'Wszystkie składki i podatki wobec ZUS oraz US są płacone terminowo, brak zaległości'}.\n\n`;
+            
+            txt += `Przeanalizowano również bieżącą aktywność finansową klienta. `;
+            txt += `${data.wnioski_3m === 'Tak' ? 'W ciągu ostatnich 3 miesięcy były już składane zapytania/wnioski kredytowe w: ' + data.wnioski_opis : 'W ciągu ostatnich 3 miesięcy klient nie składał żadnych wniosków o kredyt na własną rękę'}. `;
+            if (data.inna_wspolpraca === 'Tak') {
+                txt += `🚨 Klient aktualnie współpracuje z innym podmiotem przy pozyskiwaniu finansowania! Doradca przekazał kategoryczne ostrzeżenie i zaapelował o wstrzymanie innych działań bez konsultacji z BAF.`;
+            } else {
+                txt += `Klient nie prowadzi równolegle żadnych procesów kredytowych z innymi pośrednikami lub bankami.`;
+            }
+            txt += `\n\nŚrodki finansowe są niezbędne w terminie: ${data.czas_potrzeba}, natomiast główne konto operacyjne firmy prowadzone jest w banku: ${data.bank_konto}.\n\n`;
+            
+            txt += `Zobowiązania i zabezpieczenia:\n`;
+            txt += `- Inne aktywne kredyty: ${data.inne_kredyty === 'Tak' ? 'Tak, szczegóły: ' + data.inne_kredyty_opis : 'Brak kredytów firmowych oraz prywatnych'}.\n`;
+            txt += `- Nieruchomość pod zabezpieczenie: ${data.nieruchomosc === 'Tak' ? 'Tak, klient dysponuje nieruchomością: ' + data.nieruchomosc_opis : 'Brak możliwości zabezpieczenia transakcji na nieruchomości'}.\n\n`;
+            
+            txt += `Klient zadeklarował, że komplet dokumentów niezbędny do dalszej analizy finansowej zostanie odesłany w terminie: ${data.kiedy_dokumenty}.\n\n`;
+            
+            // ZMIANA: Uwagi są doklejane płynnie na samym dole notatki kalendarzowej
+            if (data.uwagi && data.uwagi.trim() !== '') {
+                txt += `Dodatkowe luźne uwagi doradcy spisane w trakcie rozmowy:\n${data.uwagi.trim()}`;
+            }
+            
+            return txt;
+        }
+
+        function copySummaryToClipboard() {
+            const copyText = document.getElementById("summaryText");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); 
+            navigator.clipboard.writeText(copyText.value).then(() => {
+                const btn = document.getElementById("copySummaryBtn");
+                const originalText = btn.textContent;
+                btn.textContent = "✅ Treść skopiowana do schowka!";
+                btn.style.backgroundColor = "#28a745";
+                setTimeout(() => { btn.textContent = originalText; btn.style.backgroundColor = ""; }, 2000);
+            });
+        }
+
+        function closeSummaryModal() {
+            document.getElementById('summaryModal').style.display = 'none';
+            resetForm();
+        }
+
         document.getElementById('formatkaForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             if (!document.getElementById('doradca-input').value) {
-                alert("Nieprawidłowy adres URL. Brakuje identyfikatora doradcy!");
-                return;
+                alert("Błąd: Brak identyfikatora doradcy!"); return;
             }
 
             const btn = document.getElementById('submitBtn');
             const overlay = document.getElementById('loadingOverlay');
-            const msg = document.getElementById('message');
             
             btn.disabled = true;
             overlay.style.display = 'flex';
-            msg.style.display = 'none';
 
             const formDataObj = {};
             new FormData(this).forEach((value, key) => { formDataObj[key] = value; });
@@ -249,6 +339,10 @@
                 formDataObj.kwota = formDataObj.kwota + ' zł';
             }
 
+            // ZMIANA: Generowanie tekstu i wstrzykiwanie go pod klucz 'notatka_podsumowanie' zanim JSON poleci do Google Drive
+            const pelnaNotatkaTekstowa = generateSummaryText(formDataObj);
+            formDataObj['notatka_podsumowanie'] = pelnaNotatkaTekstowa;
+
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -256,22 +350,18 @@
                 });
                 
                 const result = await response.json();
-                
                 overlay.style.display = 'none';
                 
                 if (result.result === 'success') {
-                    msg.className = 'success';
-                    msg.innerHTML = `Formatka zapisana!<br><a href="${result.folderUrl}" target="_blank" style="color:#22543d; font-weight:bold;">Otwórz folder klienta</a>`;
-                    resetForm(); 
-                    msg.style.display = 'block'; 
+                    // Wyświetlenie gotowej notatki w polu tekstowym modala
+                    document.getElementById('summaryText').value = pelnaNotatkaTekstowa;
+                    document.getElementById('summaryModal').style.display = 'block';
                 } else {
                     throw new Error(result.error || "Błąd serwera");
                 }
             } catch (error) {
                 overlay.style.display = 'none';
-                msg.style.display = 'block';
-                msg.className = 'error';
-                msg.innerHTML = 'Błąd: ' + error.message;
+                alert('Wystąpił błąd podczas zapisu: ' + error.message);
             } finally {
                 btn.disabled = false;
             }
