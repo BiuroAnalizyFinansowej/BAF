@@ -66,7 +66,7 @@
                 
                 <div class="form-group">
                     <label>1) Jaką kwotą jest zainteresowany?</label>
-                    <input type="text" name="kwota" placeholder="np. 150 000" required>
+                    <input type="text" name="kwota" class="kwota-format" placeholder="np. 150 000" required>
                 </div>
                 
                 <div class="form-group">
@@ -88,7 +88,36 @@
                 </div>
 
                 <div class="form-group">
-                    <label>4) Czy składał wnioski w ost. 3 miesiącach?</label>
+                    <label>4) Przychód za ostatni rozliczony rok?</label>
+                    <input type="text" name="przychod_rok" class="kwota-format" placeholder="np. 800 000" required>
+                </div>
+
+                <div class="form-group">
+                    <label>5) Koszty za ostatni rozliczony rok?</label>
+                    <input type="text" name="koszty_rok" class="kwota-format" placeholder="np. 500 000" required>
+                </div>
+
+                <div class="form-group">
+                    <label>6) Przychód za bieżący rozliczony okres?</label>
+                    <input type="text" name="przychod_biezacy" class="kwota-format" placeholder="np. 200 000" required>
+                </div>
+
+                <div class="form-group">
+                    <label>7) Koszty za bieżący rozliczony okres?</label>
+                    <input type="text" name="koszty_biezacy" class="kwota-format" placeholder="np. 120 000" required>
+                </div>
+
+                <div class="form-group">
+                    <label>8) Dodatkowy dochód (np. najem, umowa o pracę)?</label>
+                    <div class="radio-group">
+                        <label class="radio-option"><input type="radio" name="dodatkowy_dochod" value="Nie" required onclick="toggleDetails('dodatkowy_div', false)"> Nie</label>
+                        <label class="radio-option"><input type="radio" name="dodatkowy_dochod" value="Tak" required onclick="toggleDetails('dodatkowy_div', true)"> Tak</label>
+                    </div>
+                    <div id="dodatkowy_div" class="hidden-details"><input type="text" name="dodatkowy_dochod_opis" placeholder="Z jakiego tytułu i mniej więcej jaka kwota?"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>9) Czy składał wnioski w ost. 3 miesiącach?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="wnioski_3m" value="Nie" required onclick="toggleDetails('wnioski_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="wnioski_3m" value="Tak" required onclick="toggleDetails('wnioski_div', true)"> Tak</label>
@@ -97,7 +126,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>5) Czy działa teraz z kimś innym w pozyskaniu kredytu?</label>
+                    <label>10) Czy działa teraz z kimś innym w pozyskaniu kredytu?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="inna_wspolpraca" value="Nie" required onclick="toggleDetails('inna_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="inna_wspolpraca" value="Tak" required onclick="toggleDetails('inna_div', true)"> Tak</label>
@@ -110,7 +139,7 @@
                 </div>
                 
                 <div class="form-group">
-                    <label>6) Opóźnienia w płatnościach?</label>
+                    <label>11) Opóźnienia w płatnościach?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="opoznienia" value="Nie" required onclick="toggleDetails('opoznienia_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="opoznienia" value="Tak" required onclick="toggleDetails('opoznienia_div', true)"> Tak</label>
@@ -119,7 +148,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>7) Problemy z ZUS / US?</label>
+                    <label>12) Problemy z ZUS / US?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="zus_us" value="Nie" required onclick="toggleDetails('zus_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="zus_us" value="Tak" required onclick="toggleDetails('zus_div', true)"> Tak</label>
@@ -128,15 +157,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label>8) Na kiedy potrzebuje pieniędzy?</label><input type="text" name="czas_potrzeba" required>
+                    <label>13) Na kiedy potrzebuje pieniędzy?</label><input type="text" name="czas_potrzeba" required>
                 </div>
                 
                 <div class="form-group">
-                    <label>9) Główny bank firmowy?</label><input type="text" name="bank_konto" required>
+                    <label>14) Główny bank firmowy?</label><input type="text" name="bank_konto" required>
                 </div>
 
                 <div class="form-group">
-                    <label>10) Inne kredyty?</label>
+                    <label>15) Inne kredyty?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="inne_kredyty" value="Nie" required onclick="toggleDetails('kredyty_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="inne_kredyty" value="Tak" required onclick="toggleDetails('kredyty_div', true)"> Tak</label>
@@ -145,7 +174,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>11) Nieruchomość pod zabezpieczenie?</label>
+                    <label>16) Nieruchomość pod zabezpieczenie?</label>
                     <div class="radio-group">
                         <label class="radio-option"><input type="radio" name="nieruchomosc" value="Nie" required onclick="toggleDetails('nieruchomosc_div', false)"> Nie</label>
                         <label class="radio-option"><input type="radio" name="nieruchomosc" value="Tak" required onclick="toggleDetails('nieruchomosc_div', true)"> Tak</label>
@@ -153,7 +182,7 @@
                     <div id="nieruchomosc_div" class="hidden-details"><input type="text" name="nieruchomosc_opis" placeholder="Rodzaj, szacowana wartość, miejscowość..."></div>
                 </div>
 
-                <div class="form-group"><label>12) Kiedy odeśle dokumenty?</label><input type="text" name="kiedy_dokumenty" required></div>
+                <div class="form-group"><label>17) Kiedy odeśle dokumenty?</label><input type="text" name="kiedy_dokumenty" required></div>
                 
                 <div class="form-group">
                     <label>Dodatkowe uwagi / luźne informacje (opcjonalnie):</label>
@@ -198,10 +227,9 @@
     </div>
 
     <script>
-        // URL do skryptu Google
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwVgmxJoP9I9ib6hX_5U68BFOxH4Lq7WAIPS0RPZN3MYWhYovMy2sHnYWiuNhTFo0cJ/exec';
 
-        let currentClientFolderUrl = ""; // Zmienna do przechowywania linku do wygenerowanego folderu
+        let currentClientFolderUrl = ""; 
 
         const adisvorNames = {
             'dawid': 'Dawid Błachno', 'weronika': 'Weronika Lekston', 'mieczyslaw': 'Mieczysław Andrzejewski',
@@ -223,10 +251,13 @@
             updateHighlighting();
         };
 
-        const kwotaInput = document.querySelector('input[name="kwota"]');
-        kwotaInput.addEventListener('input', function(e) {
-            let value = this.value.replace(/\D/g, ''); 
-            this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, " "); 
+        // Automatyczny separator dla wszystkich nowych pól z kwotami
+        const kwotaInputs = document.querySelectorAll('.kwota-format');
+        kwotaInputs.forEach(input => {
+            input.addEventListener('input', function(e) {
+                let value = this.value.replace(/\D/g, ''); 
+                this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, " "); 
+            });
         });
 
         function showRozliczenieNote() {
@@ -266,19 +297,23 @@
             const hiddenDivs = document.querySelectorAll('.hidden-details');
             hiddenDivs.forEach(div => { div.style.display = 'none'; });
             document.getElementById('message').style.display = 'none';
-            currentClientFolderUrl = ""; // Czyszczenie linku
+            currentClientFolderUrl = ""; 
             updateHighlighting(); 
         }
 
+        // GENERATOR NOTATKI Z UWZGLĘDNIENIEM FINANSÓW
         function generateSummaryText(data) {
             const dzisiaj = new Date().toLocaleDateString('pl-PL');
             let txt = `Dnia ${dzisiaj} przeprowadzono wywiad pierwszego kontaktu z klientem ${data.imie_nazwisko} (Telefon: ${data.telefon}, E-mail: ${data.mail}, NIP: ${data.nip}).\n\n`;
-            txt += `Klient zgłosił zapotrzebowanie na finansowanie w kwocie ${data.kwota} zł. Jako główny cel kredytowania wskazał: ${data.cel}.\n\n`;
-            txt += `Firma rozlicza się na podstawie: ${data.rozliczenie}`;
+            txt += `Klient zgłosił zapotrzebowanie na finansowanie w kwocie ${data.kwota}. Jako główny cel kredytowania wskazał: ${data.cel}.\n\n`;
+            
+            txt += `Dane finansowe firmy:\nFirma rozlicza się na podstawie: ${data.rozliczenie}`;
             if (data.rozliczenie_notatka && data.rozliczenie_notatka.trim() !== '') {
-                txt += ` (Dodatkowa uwaga księgowa: ${data.rozliczenie_notatka.trim()})`;
+                txt += ` (Uwaga księgowa: ${data.rozliczenie_notatka.trim()})`;
             }
-            txt += `.\n\n`;
+            txt += `.\nW ostatnim rozliczonym roku firma wygenerowała przychód na poziomie ok. ${data.przychod_rok} przy kosztach rzędu ${data.koszty_rok}. `;
+            txt += `W bieżącym okresie rozliczeniowym przychód wynosi ok. ${data.przychod_biezacy}, a koszty ${data.koszty_biezacy}.\n`;
+            txt += `Dodatkowe dochody: ${data.dodatkowy_dochod === 'Tak' ? 'Klient posiada dodatkowe źródło dochodu (' + data.dodatkowy_dochod_opis + ')' : 'Klient nie posiada dodatkowych źródeł dochodu'}.\n\n`;
             
             txt += `Weryfikacja historii kredytowej oraz rejestrów publicznych wykazała, że:\n`;
             txt += `- ${data.opoznienia === 'Tak' ? 'Występowały opóźnienia w płatnościach zobowiązań kredytowych, szczegóły: ' + data.opoznienia_opis : 'Brak jakichkolwiek opóźnień w spłatach obecnych kredytów'}.\n`;
@@ -319,7 +354,6 @@
             });
         }
         
-        // Funkcja otwierająca folder klienta w nowej karcie
         function openClientFolder() {
             if (currentClientFolderUrl) {
                 window.open(currentClientFolderUrl, '_blank');
@@ -349,9 +383,13 @@
             const formDataObj = {};
             new FormData(this).forEach((value, key) => { formDataObj[key] = value; });
             
-            if(formDataObj.kwota && !formDataObj.kwota.includes('zł')) {
-                formDataObj.kwota = formDataObj.kwota + ' zł';
-            }
+            // Doklejanie "zł" do wszystkich kwot, jeśli brakuje
+            const kwotyKlucze = ['kwota', 'przychod_rok', 'koszty_rok', 'przychod_biezacy', 'koszty_biezacy'];
+            kwotyKlucze.forEach(klucz => {
+                if(formDataObj[klucz] && !formDataObj[klucz].includes('zł')) {
+                    formDataObj[klucz] = formDataObj[klucz] + ' zł';
+                }
+            });
 
             const pelnaNotatkaTekstowa = generateSummaryText(formDataObj);
             formDataObj['notatka_podsumowanie'] = pelnaNotatkaTekstowa;
@@ -366,7 +404,6 @@
                 overlay.style.display = 'none';
                 
                 if (result.result === 'success') {
-                    // Zapisanie URL folderu do zmiennej globalnej dla przycisku
                     currentClientFolderUrl = result.folderUrl;
                     
                     document.getElementById('summaryText').value = pelnaNotatkaTekstowa;
