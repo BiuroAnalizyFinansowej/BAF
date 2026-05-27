@@ -251,7 +251,7 @@
             updateHighlighting();
         };
 
-        // Automatyczny separator dla wszystkich nowych pól z kwotami
+        // Automatyczny separator dla kwot (tylko wizualnie w formularzu)
         const kwotaInputs = document.querySelectorAll('.kwota-format');
         kwotaInputs.forEach(input => {
             input.addEventListener('input', function(e) {
@@ -301,18 +301,21 @@
             updateHighlighting(); 
         }
 
-        // GENERATOR NOTATKI Z UWZGLĘDNIENIEM FINANSÓW
+        // GENERATOR NOTATKI (używa wartości z ładnymi spacjami i dokleja "zł" do czytelności)
         function generateSummaryText(data) {
+            // Funkcja pomocnicza: jeśli jest kwota, dokleja do niej "zł" dla celów notatki
+            const fKwota = (val) => val ? (val.includes('zł') ? val : val.trim() + ' zł') : 'Brak';
+            
             const dzisiaj = new Date().toLocaleDateString('pl-PL');
             let txt = `Dnia ${dzisiaj} przeprowadzono wywiad pierwszego kontaktu z klientem ${data.imie_nazwisko} (Telefon: ${data.telefon}, E-mail: ${data.mail}, NIP: ${data.nip}).\n\n`;
-            txt += `Klient zgłosił zapotrzebowanie na finansowanie w kwocie ${data.kwota}. Jako główny cel kredytowania wskazał: ${data.cel}.\n\n`;
+            txt += `Klient zgłosił zapotrzebowanie na finansowanie w kwocie ${fKwota(data.kwota)}. Jako główny cel kredytowania wskazał: ${data.cel}.\n\n`;
             
             txt += `Dane finansowe firmy:\nFirma rozlicza się na podstawie: ${data.rozliczenie}`;
             if (data.rozliczenie_notatka && data.rozliczenie_notatka.trim() !== '') {
                 txt += ` (Uwaga księgowa: ${data.rozliczenie_notatka.trim()})`;
             }
-            txt += `.\nW ostatnim rozliczonym roku firma wygenerowała przychód na poziomie ok. ${data.przychod_rok} przy kosztach rzędu ${data.koszty_rok}. `;
-            txt += `W bieżącym okresie rozliczeniowym przychód wynosi ok. ${data.przychod_biezacy}, a koszty ${data.koszty_biezacy}.\n`;
+            txt += `.\nW ostatnim rozliczonym roku firma wygenerowała przychód na poziomie ok. ${fKwota(data.przychod_rok)} przy kosztach rzędu ${fKwota(data.koszty_rok)}. `;
+            txt += `W bieżącym okresie rozliczeniowym przychód wynosi ok. ${fKwota(data.przychod_biezacy)}, a koszty ${fKwota(data.koszty_biezacy)}.\n`;
             txt += `Dodatkowe dochody: ${data.dodatkowy_dochod === 'Tak' ? 'Klient posiada dodatkowe źródło dochodu (' + data.dodatkowy_dochod_opis + ')' : 'Klient nie posiada dodatkowych źródeł dochodu'}.\n\n`;
             
             txt += `Weryfikacja historii kredytowej oraz rejestrów publicznych wykazała, że:\n`;
@@ -382,17 +385,19 @@
 
             const formDataObj = {};
             new FormData(this).forEach((value, key) => { formDataObj[key] = value; });
-            
-            // Doklejanie "zł" do wszystkich kwot, jeśli brakuje
-            const kwotyKlucze = ['kwota', 'przychod_rok', 'koszty_rok', 'przychod_biezacy', 'koszty_biezacy'];
-            kwotyKlucze.forEach(klucz => {
-                if(formDataObj[klucz] && !formDataObj[klucz].includes('zł')) {
-                    formDataObj[klucz] = formDataObj[klucz] + ' zł';
-                }
-            });
 
+            // 1. ZANIM wyczyścimy liczby, generujemy piękną notatkę ze spacjami i dopiskiem "zł"
             const pelnaNotatkaTekstowa = generateSummaryText(formDataObj);
             formDataObj['notatka_podsumowanie'] = pelnaNotatkaTekstowa;
+
+            // 2. TERAZ czyścimy pola z kwotami z jakichkolwiek spacji i liter, 
+            // aby do Arkusza Google trafiła czysta liczba (np. "150000"), co pozwoli na poprawne formatowanie komórek
+            const kwotyKlucze = ['kwota', 'przychod_rok', 'koszty_rok', 'przychod_biezacy', 'koszty_biezacy'];
+            kwotyKlucze.forEach(klucz => {
+                if(formDataObj[klucz]) {
+                    formDataObj[klucz] = formDataObj[klucz].replace(/\D/g, ''); // Usuwa wszystko poza cyframi
+                }
+            });
 
             try {
                 const response = await fetch(SCRIPT_URL, {
