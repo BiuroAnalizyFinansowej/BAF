@@ -25,7 +25,6 @@
         input:focus, textarea:focus { border-color: #2b6cb0; outline: none; box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2); }
         textarea { resize: vertical; min-height: 60px; }
         
-        /* Klasa wygaszająca zablokowane pola (Ryczałt) */
         input:disabled { background-color: #edf2f7; cursor: not-allowed; color: #a0aec0; }
         
         .radio-group { display: flex; gap: 15px; margin-bottom: 5px; flex-wrap: wrap; }
@@ -45,8 +44,8 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         #summaryModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 10000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
-        #summaryText { width: 100%; height: 350px; padding: 12px; border: 1px solid #cbd5e0; border-radius: 4px; font-family: inherit; font-size: 0.95rem; resize: none; background-color: #f8fafc; line-height: 1.5; color: #2d3748; box-sizing: border-box; }
-        .modal-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+        #summaryText { width: 100%; height: 350px; padding: 12px; border: 1px solid #cbd5e0; border-radius: 4px; font-family: inherit; font-size: 0.9rem; resize: none; background-color: #f8fafc; line-height: 1.6; color: #2d3748; box-sizing: border-box; }
+        .modal-buttons { display: flex; flex-direction: column; gap: 8px; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -220,38 +219,37 @@
                 <div class="form-group"><label>NIP firmy</label><input type="text" name="nip" required></div>
             </div>
 
-            <div id="message"></div>
-
             <div class="buttons-row" style="flex-direction: row;">
                 <button type="submit" class="submit-btn" id="submitBtn">Zapisz na dysku</button>
-                <button type="button" class="reset-btn" onclick="resetForm()">Wyczyść</button>
+                <button type="button" class="reset-btn" onclick="resetAndClear()">Wyczyść</button>
             </div>
         </form>
     </div>
 
     <div id="summaryModal">
-        <h2 style="color: var(--primary-color); margin-top: 0; border-bottom: 2px solid #edf2f7; padding-bottom: 10px; font-size: 18px;">📝 Opisowe Podsumowanie Wywiadu</h2>
+        <h2 style="color: var(--primary-color); margin-top: 0; border-bottom: 2px solid #edf2f7; padding-bottom: 10px; font-size: 18px;">📝 Skondensowana Notatka</h2>
         <textarea id="summaryText" readonly></textarea>
-        <div style="margin-top: 10px; background-color: #e6fffa; color: #234e52; padding: 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; text-align: center;">
-            ✓ Formatka zapisana w Google Drive.
-        </div>
         
         <div class="modal-buttons">
-            <button type="button" class="submit-btn" id="copySummaryBtn" onclick="copySummaryToClipboard()">📋 Kopiuj notatkę do kalendarza</button>
-            <button type="button" class="submit-btn" style="background-color: #17a2b8;" id="openFolderBtn" onclick="openClientFolder()">📁 Przejdź do folderu klienta</button>
-            <button type="button" class="reset-btn" onclick="closeSummaryModal()">Zamknij</button>
+            <button type="button" class="submit-btn" id="copySummaryBtn" onclick="copySummaryToClipboard()">📋 Kopiuj notatkę do CRM</button>
+            <button type="button" class="submit-btn" style="background-color: #17a2b8;" id="openFolderBtn" onclick="openClientFolder()">📁 Otwórz folder na Dysku</button>
+            <button type="button" class="reset-btn" style="background-color: #e2e8f0;" onclick="returnToEdit()">✏️ Powrót do edycji</button>
+            <button type="button" class="reset-btn" style="background-color: #fed7d7; color: #822727;" onclick="closeSummaryModal()">🧹 Zakończ i wyczyść formatkę</button>
         </div>
     </div>
 
     <div id="loadingOverlay" class="loading-overlay">
         <div class="spinner"></div>
-        <h3 style="color: var(--primary-color); margin-top:0;">Generowanie...</h3>
+        <h3 style="color: var(--primary-color); margin-top:0;">Przetwarzanie danych...</h3>
     </div>
 
     <script>
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwVgmxJoP9I9ib6hX_5U68BFOxH4Lq7WAIPS0RPZN3MYWhYovMy2sHnYWiuNhTFo0cJ/exec';
 
+        // Zmienne do obsługi procesu Aktualizacji
         let currentClientFolderUrl = ""; 
+        let currentFileId = "";
+        let currentFolderId = "";
 
         const adisvorNames = {
             'dawid': 'Dawid Błachno', 'weronika': 'Weronika Lekston', 'mieczyslaw': 'Mieczysław Andrzejewski',
@@ -281,39 +279,19 @@
             });
         });
 
-        // POPRAWIONE: Obsługa wyszarzania przy ryczałcie oraz pokazywania notatki 
         function handleRozliczenieChange() {
             document.getElementById('rozliczenie_notatka_div').style.display = 'block';
-            
             const isRyczalt = document.querySelector('input[name="rozliczenie"]:checked') && document.querySelector('input[name="rozliczenie"]:checked').value === 'Ryczałt';
             
             const kosztyRokInput = document.querySelector('input[name="koszty_rok"]');
             const kosztyBiezacyInput = document.querySelector('input[name="koszty_biezacy"]');
             
             if (isRyczalt) {
-                if(kosztyRokInput) {
-                    kosztyRokInput.disabled = true;
-                    kosztyRokInput.required = false;
-                    kosztyRokInput.value = '';
-                    kosztyRokInput.parentElement.style.opacity = '0.5';
-                }
-                if(kosztyBiezacyInput) {
-                    kosztyBiezacyInput.disabled = true;
-                    kosztyBiezacyInput.required = false;
-                    kosztyBiezacyInput.value = '';
-                    kosztyBiezacyInput.parentElement.style.opacity = '0.5';
-                }
+                if(kosztyRokInput) { kosztyRokInput.disabled = true; kosztyRokInput.required = false; kosztyRokInput.value = ''; kosztyRokInput.parentElement.style.opacity = '0.5'; }
+                if(kosztyBiezacyInput) { kosztyBiezacyInput.disabled = true; kosztyBiezacyInput.required = false; kosztyBiezacyInput.value = ''; kosztyBiezacyInput.parentElement.style.opacity = '0.5'; }
             } else {
-                if(kosztyRokInput) {
-                    kosztyRokInput.disabled = false;
-                    kosztyRokInput.required = true;
-                    kosztyRokInput.parentElement.style.opacity = '1';
-                }
-                if(kosztyBiezacyInput) {
-                    kosztyBiezacyInput.disabled = false;
-                    kosztyBiezacyInput.required = true;
-                    kosztyBiezacyInput.parentElement.style.opacity = '1';
-                }
+                if(kosztyRokInput) { kosztyRokInput.disabled = false; kosztyRokInput.required = true; kosztyRokInput.parentElement.style.opacity = '1'; }
+                if(kosztyBiezacyInput) { kosztyBiezacyInput.disabled = false; kosztyBiezacyInput.required = true; kosztyBiezacyInput.parentElement.style.opacity = '1'; }
             }
             updateHighlighting();
         }
@@ -343,17 +321,12 @@
         function toggleDetails(divId, show) {
             const div = document.getElementById(divId);
             const input = div.querySelector('input, textarea');
-            if (show) {
-                div.style.display = 'block';
-                if (input) input.required = true;
-            } else {
-                div.style.display = 'none';
-                if (input) { input.required = false; input.value = ''; }
-            }
+            if (show) { div.style.display = 'block'; if (input) input.required = true; } 
+            else { div.style.display = 'none'; if (input) { input.required = false; input.value = ''; } }
             updateHighlighting();
         }
 
-        function resetForm() {
+        function resetAndClear() {
             document.getElementById('formatkaForm').reset();
             const hiddenDivs = document.querySelectorAll('.hidden-details');
             hiddenDivs.forEach(div => { div.style.display = 'none'; });
@@ -361,65 +334,58 @@
             const kosztyPola = ['koszty_rok', 'koszty_biezacy'];
             kosztyPola.forEach(name => {
                 const input = document.querySelector(`input[name="${name}"]`);
-                if (input) {
-                    input.disabled = false;
-                    input.required = true;
-                    input.parentElement.style.opacity = '1';
-                }
+                if (input) { input.disabled = false; input.required = true; input.parentElement.style.opacity = '1'; }
             });
             
-            document.getElementById('message').style.display = 'none';
             currentClientFolderUrl = ""; 
+            currentFileId = "";
+            currentFolderId = "";
+            
+            const btn = document.getElementById('submitBtn');
+            btn.textContent = "Zapisz na dysku";
+            btn.style.backgroundColor = "var(--accent-color)";
+            
             updateHighlighting(); 
         }
 
+        // --- SKONDENSOWANA NOTATKA (SAMO MIĘSO) ---
         function generateSummaryText(data) {
-            const fKwota = (val) => (val && val.trim() !== '') ? (val.includes('zł') ? val : val.trim() + ' zł') : 'Brak danych';
-            const fText = (val) => (val && val.trim() !== '') ? val.trim() : 'Brak danych';
+            const fKwota = (val) => (val && val.trim() !== '') ? (val.includes('zł') ? val : val.trim() + ' zł') : '-';
+            const fText = (val) => (val && val.trim() !== '') ? val.trim() : '-';
             
             const dzisiaj = new Date().toLocaleDateString('pl-PL');
-            let formaDzialalnosci = data.forma_dzialalnosci === 'Inne' ? data.forma_dzialalnosci_opis : data.forma_dzialalnosci;
+            let forma = data.forma_dzialalnosci === 'Inne' ? data.forma_dzialalnosci_opis : data.forma_dzialalnosci;
             
-            let txt = `Dnia ${dzisiaj} przeprowadzono wywiad pierwszego kontaktu z klientem ${fText(data.imie_nazwisko)} (Telefon: ${fText(data.telefon)}, E-mail: ${fText(data.mail)}, NIP: ${fText(data.nip)}).\n\n`;
-            txt += `Klient zgłosił zapotrzebowanie na finansowanie w kwocie ${fKwota(data.kwota)}. Jako główny cel kredytowania wskazał: ${fText(data.cel)}.\n\n`;
+            let txt = `📅 WYWIAD: ${dzisiaj} | 👤 KLIENT: ${fText(data.imie_nazwisko)} (☎️ ${fText(data.telefon)}, ✉️ ${fText(data.mail)}, NIP: ${fText(data.nip)})\n`;
+            txt += `💰 KWOTA I CEL: ${fKwota(data.kwota)} -> ${fText(data.cel)}\n\n`;
             
-            txt += `Dane finansowe firmy:\nForma działalności: ${fText(formaDzialalnosci)}.\nFirma rozlicza się na podstawie: ${fText(data.rozliczenie)}`;
-            if (data.rozliczenie_notatka && data.rozliczenie_notatka.trim() !== '') {
-                txt += ` (Uwaga księgowa: ${data.rozliczenie_notatka.trim()})`;
-            }
-            txt += `.\nAmortyzacja: ${data.amortyzacja === 'Tak' ? 'Występuje' : (data.amortyzacja === 'Nie' ? 'Nie występuje' : 'Brak danych')}.\n`;
+            txt += `🏢 FINANSE:\n`;
+            txt += `• Forma: ${fText(forma)}, Rozliczenie: ${fText(data.rozliczenie)}`;
+            if (data.rozliczenie_notatka) txt += ` (Notatka: ${data.rozliczenie_notatka.trim()})`;
+            txt += `\n• Amortyzacja: ${data.amortyzacja || '-'}\n`;
             
             if (data.rozliczenie === 'Ryczałt') {
-                txt += `W ostatnim rozliczonym roku firma wygenerowała przychód na poziomie ok. ${fKwota(data.przychod_rok)}. `;
-                txt += `W bieżącym okresie rozliczeniowym przychód wynosi ok. ${fKwota(data.przychod_biezacy)}. (Firma na ryczałcie - brak ewidencji kosztów).\n`;
+                txt += `• Rok ubiegły: Przychód ${fKwota(data.przychod_rok)}\n`;
+                txt += `• Rok bieżący: Przychód ${fKwota(data.przychod_biezacy)}\n`;
             } else {
-                txt += `W ostatnim rozliczonym roku firma wygenerowała przychód na poziomie ok. ${fKwota(data.przychod_rok)} przy kosztach rzędu ${fKwota(data.koszty_rok)}. `;
-                txt += `W bieżącym okresie rozliczeniowym przychód wynosi ok. ${fKwota(data.przychod_biezacy)}, a koszty ${fKwota(data.koszty_biezacy)}.\n`;
+                txt += `• Rok ubiegły: Przychód ${fKwota(data.przychod_rok)} | Koszty ${fKwota(data.koszty_rok)}\n`;
+                txt += `• Rok bieżący: Przychód ${fKwota(data.przychod_biezacy)} | Koszty ${fKwota(data.koszty_biezacy)}\n`;
             }
-
-            txt += `Dodatkowe dochody: ${data.dodatkowy_dochod === 'Tak' ? 'Klient posiada dodatkowe źródło dochodu (' + data.dodatkowy_dochod_opis + ')' : 'Klient nie posiada dodatkowych źródeł dochodu'}.\n\n`;
+            txt += `• Dodatkowy dochód: ${data.dodatkowy_dochod === 'Tak' ? data.dodatkowy_dochod_opis : 'Nie'}\n\n`;
             
-            txt += `Weryfikacja historii kredytowej oraz rejestrów publicznych wykazała, że:\n`;
-            txt += `- ${data.opoznienia === 'Tak' ? 'Występowały opóźnienia w płatnościach zobowiązań kredytowych, szczegóły: ' + data.opoznienia_opis : 'Brak jakichkolwiek opóźnień w spłatach obecnych kredytów'}.\n`;
-            txt += `- ${data.zus_us === 'Tak' ? 'Klient posiada zaległości lub problemy w płatnościach wobec ZUS/US: ' + data.zus_us_opis : 'Wszystkie składki i podatki wobec ZUS oraz US są płacone terminowo, brak zaległości'}.\n\n`;
+            txt += `⚠️ HISTORIA I ZOBOWIĄZANIA:\n`;
+            txt += `• Opóźnienia kredytowe: ${data.opoznienia === 'Tak' ? data.opoznienia_opis : 'Nie'}\n`;
+            txt += `• Problemy ZUS/US: ${data.zus_us === 'Tak' ? data.zus_us_opis : 'Nie'}\n`;
+            txt += `• Inne aktywne kredyty: ${data.inne_kredyty === 'Tak' ? data.inne_kredyty_opis : 'Nie'}\n`;
+            txt += `• Nieruchomość (zabezp.): ${data.nieruchomosc === 'Tak' ? data.nieruchomosc_opis : 'Nie'}\n\n`;
             
-            txt += `Przeanalizowano również bieżącą aktywność finansową klienta. `;
-            txt += `${data.wnioski_3m === 'Tak' ? 'W ciągu ostatnich 3 miesięcy były już składane zapytania/wnioski kredytowe w: ' + data.wnioski_opis : 'W ciągu ostatnich 3 miesięcy klient nie składał żadnych wniosków o kredyt na własną rękę'}. `;
-            if (data.inna_wspolpraca === 'Tak') {
-                txt += `🚨 Klient aktualnie współpracuje z innym podmiotem przy pozyskiwaniu finansowania! Doradca przekazał kategoryczne ostrzeżenie i zaapelował o wstrzymanie innych działań bez konsultacji z BAF.`;
-            } else {
-                txt += `Klient nie prowadzi równolegle żadnych procesów kredytowych z innymi pośrednikami lub bankami.`;
-            }
-            txt += `\n\nŚrodki finansowe są niezbędne w terminie: ${fText(data.czas_potrzeba)}, natomiast główne konto operacyjne firmy prowadzone jest w banku: ${fText(data.bank_konto)}.\n\n`;
-            
-            txt += `Zobowiązania i zabezpieczenia:\n`;
-            txt += `- Inne aktywne kredyty: ${data.inne_kredyty === 'Tak' ? 'Tak, szczegóły: ' + data.inne_kredyty_opis : 'Brak kredytów firmowych oraz prywatnych'}.\n`;
-            txt += `- Nieruchomość pod zabezpieczenie: ${data.nieruchomosc === 'Tak' ? 'Tak, klient dysponuje nieruchomością: ' + data.nieruchomosc_opis : 'Brak możliwości zabezpieczenia transakcji na nieruchomości'}.\n\n`;
-            
-            txt += `Klient zadeklarował, że komplet dokumentów niezbędny do dalszej analizy finansowej zostanie odesłany w terminie: ${fText(data.kiedy_dokumenty)}.\n\n`;
+            txt += `🔍 OPERACYJNE:\n`;
+            txt += `• Bank firmowy: ${fText(data.bank_konto)} | Potrzeba na: ${fText(data.czas_potrzeba)} | Dokumenty do: ${fText(data.kiedy_dokumenty)}\n`;
+            txt += `• Wnioski ost. 3 mies.: ${data.wnioski_3m === 'Tak' ? data.wnioski_opis : 'Nie'}\n`;
+            txt += `• Inna współpraca (teraz): ${data.inna_wspolpraca === 'Tak' ? 'TAK (Ostrzeżono klienta)' : 'Nie'}\n`;
             
             if (data.uwagi && data.uwagi.trim() !== '') {
-                txt += `Dodatkowe luźne uwagi doradcy spisane w trakcie rozmowy:\n${data.uwagi.trim()}`;
+                txt += `\n📌 DODATKOWE UWAGI:\n${data.uwagi.trim()}`;
             }
             
             return txt;
@@ -432,23 +398,29 @@
             navigator.clipboard.writeText(copyText.value).then(() => {
                 const btn = document.getElementById("copySummaryBtn");
                 const originalText = btn.textContent;
-                btn.textContent = "✅ Treść skopiowana do schowka!";
+                btn.textContent = "✅ Skopiowano do schowka!";
                 btn.style.backgroundColor = "#28a745";
-                setTimeout(() => { btn.textContent = originalText; btn.style.backgroundColor = ""; }, 2000);
+                setTimeout(() => { btn.textContent = originalText; btn.style.backgroundColor = "var(--accent-color)"; }, 2000);
             });
         }
         
         function openClientFolder() {
-            if (currentClientFolderUrl) {
-                window.open(currentClientFolderUrl, '_blank');
-            } else {
-                alert("Nie udało się pobrać linku do folderu.");
-            }
+            if (currentClientFolderUrl) window.open(currentClientFolderUrl, '_blank');
+            else alert("Nie udało się pobrać linku do folderu.");
         }
 
+        // Kliknięcie "Powrót do edycji" w modalu
+        function returnToEdit() {
+            document.getElementById('summaryModal').style.display = 'none';
+            const btn = document.getElementById('submitBtn');
+            btn.textContent = "Zaktualizuj na dysku";
+            btn.style.backgroundColor = "#d9534f"; // Ostrzegawczy kolor podczas aktualizacji
+        }
+
+        // Kliknięcie "Zakończ i wyczyść"
         function closeSummaryModal() {
             document.getElementById('summaryModal').style.display = 'none';
-            resetForm();
+            resetAndClear();
         }
 
         document.getElementById('formatkaForm').addEventListener('submit', async function(e) {
@@ -457,9 +429,7 @@
             let isComplete = this.checkValidity();
             if (!isComplete) {
                 const isConfirmed = confirm("Jeszcze nie wszystkie wymagane pola zostały uzupełnione.\n\nCzy na pewno chcesz zapisać niepełną formatkę i wysłać ją z pustymi polami?");
-                if (!isConfirmed) {
-                    return; 
-                }
+                if (!isConfirmed) return; 
             }
             
             if (!document.getElementById('doradca-input').value) {
@@ -468,7 +438,6 @@
 
             const btn = document.getElementById('submitBtn');
             const overlay = document.getElementById('loadingOverlay');
-            
             btn.disabled = true;
             overlay.style.display = 'flex';
 
@@ -481,12 +450,15 @@
             const pelnaNotatkaTekstowa = generateSummaryText(formDataObj);
             formDataObj['notatka_podsumowanie'] = pelnaNotatkaTekstowa;
 
+            // Czyszczenie kwot ze spacji do Arkusza
             const kwotyKlucze = ['kwota', 'przychod_rok', 'koszty_rok', 'przychod_biezacy', 'koszty_biezacy'];
             kwotyKlucze.forEach(klucz => {
-                if(formDataObj[klucz]) {
-                    formDataObj[klucz] = formDataObj[klucz].replace(/\D/g, ''); 
-                }
+                if(formDataObj[klucz]) formDataObj[klucz] = formDataObj[klucz].replace(/\D/g, ''); 
             });
+
+            // Dodanie informacji dla skryptu, czy to jest AKTUALIZACJA
+            formDataObj['existingFileId'] = currentFileId;
+            formDataObj['existingFolderId'] = currentFolderId;
 
             try {
                 const response = await fetch(SCRIPT_URL, {
@@ -498,7 +470,10 @@
                 overlay.style.display = 'none';
                 
                 if (result.result === 'success') {
+                    // Zapisanie ID nowego pliku/folderu, aby kolejna ew. aktualizacja uderzyła w nowe pliki
                     currentClientFolderUrl = result.folderUrl;
+                    currentFileId = result.fileId;
+                    currentFolderId = result.folderId;
                     
                     document.getElementById('summaryText').value = pelnaNotatkaTekstowa;
                     document.getElementById('summaryModal').style.display = 'block';
