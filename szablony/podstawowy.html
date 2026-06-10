@@ -77,20 +77,31 @@
         }
         input[type="text"]:focus, select:focus { outline: none; border-color: var(--baf-light); }
         
-        /* Edytor z pływającym paskiem */
+        /* Kontener Edytora */
         .editor-container { 
-            border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: white; 
-            display: flex; flex-direction: column; position: relative; flex-grow: 1; margin-bottom: 15px;
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            background: white; 
+            display: flex; 
+            flex-direction: column; 
+            position: relative; 
+            flex-grow: 1; 
+            margin-bottom: 15px;
         }
         
-        /* NOWOŚĆ: Pasek narzędzi stale na górze podczas skrolowania */
+        /* Pływający pasek menu (Sticky Toolbar) */
         .gmail-toolbar { 
             display: flex; align-items: center; gap: 4px; padding: 8px; 
-            background: #f8f9fa !important; border-bottom: 1px solid #eee; flex-wrap: wrap; 
+            background: #f8f9fa; 
+            border-bottom: 1px solid #eee; 
+            flex-wrap: wrap; 
+            
+            /* TO WŁAŚNIE ROBI MAGIĘ: */
             position: sticky;
-            top: 0;
+            top: -25px; /* Przykleja się dokładnie do górnej krawędzi panelu */
             z-index: 100;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border-radius: 7px 7px 0 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08); /* Delikatny cień dodający głębi */
         }
         
         #editor {
@@ -109,6 +120,7 @@
         .gmail-toolbar .tool-italic { font-style: italic; }
         .gmail-toolbar .tool-underline { text-decoration: underline; }
 
+        /* Przycisk dodawania ramki */
         .btn-add-container {
             margin-left: auto;
         }
@@ -124,7 +136,7 @@
             color: white !important;
         }
 
-        /* Menu pop-up */
+        /* Menu pop-up dla kolorów, emotikonów i ramek */
         .dropdown-container { position: relative; }
         .dropdown-menu {
             display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
@@ -161,7 +173,7 @@
         .emoji-grid::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
         .emoji-grid::-webkit-scrollbar-thumb:hover { background: #aaa; }
 
-        /* Opcje ramek */
+        /* Lista opcji dla ramek */
         .frame-option {
             display: block; width: 100%; text-align: left; padding: 8px 12px; margin-bottom: 5px;
             border: none; background: transparent; cursor: pointer; border-radius: 4px;
@@ -462,7 +474,6 @@
         const sel = window.getSelection();
         let selectedText = "";
 
-        // 1. Przechwycenie zaznaczonego tekstu i wyczyszczenie zaznaczenia z edytora
         if (sel.rangeCount > 0 && !sel.isCollapsed) {
             const range = sel.getRangeAt(0);
             const container = document.createElement("div");
@@ -471,8 +482,6 @@
             range.deleteContents(); 
         }
 
-        // 2. INTELIGENTNE USUWANIE KROPKI (PUNKTORA):
-        // Jeśli kursor został w pustym punkcie (LI), przenosimy go pod listę i kasujemy pusty element
         let range = sel.getRangeAt(0);
         let parentLi = null;
         let node = range.startContainer;
@@ -501,7 +510,6 @@
             }
         }
 
-        // 3. Konfiguracja kolorów
         let borderColor, bgColor, textColor;
         if (type === 'blue') {
             borderColor = '#17a2b8'; bgColor = '#f0f7f9'; textColor = '#002d5a';
@@ -513,14 +521,12 @@
 
         let finalContent = "";
 
-        // Jeśli ramka jest pusta, wstawiamy czysty tekst pomocniczy bez nagłówków
         if (!selectedText || selectedText.trim() === "") {
             finalContent = `<em>Wpisz tekst...</em>`;
         } else {
             let temp = document.createElement('div');
             temp.innerHTML = selectedText;
             
-            // Formatowanie pierwszej linijki na czarny pogrubiony nagłówek
             for (let i = 0; i < temp.childNodes.length; i++) {
                 let n = temp.childNodes[i];
                 
@@ -546,7 +552,6 @@
             finalContent = temp.innerHTML;
         }
 
-        // Czysta struktura tabeli z marginesami CSS zamiast <br> zapobiega powstawaniu artefaktów
         const containerHtml = `
             <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: ${bgColor}; border-left: 4px solid ${borderColor}; border-radius: 0 6px 6px 0; margin-bottom: 15px; margin-top: 15px; display: table;">
                 <tr>
