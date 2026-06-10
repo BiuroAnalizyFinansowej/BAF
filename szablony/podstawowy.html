@@ -86,7 +86,6 @@
         .gmail-toolbar { 
             display: flex; align-items: center; gap: 4px; padding: 8px; 
             background: #f8f9fa; border-bottom: 1px solid #eee; flex-wrap: wrap; 
-            /* Utrzymanie paska na górze */
             z-index: 10;
         }
         
@@ -129,7 +128,6 @@
             margin-top: 5px; background: white; border: 1px solid #ccc; box-shadow: 0 4px 25px rgba(0,0,0,0.15);
             border-radius: 8px; z-index: 9999; padding: 12px; width: max-content;
         }
-        /* Dla menu ramki otwierającego się do lewej */
         .dropdown-menu.align-right {
             left: auto; right: 0; transform: none;
         }
@@ -203,7 +201,6 @@
             max-width: 650px;
         }
 
-        /* Responsywność */
         @media (max-width: 1024px) {
             .app-container {
                 grid-template-columns: 1fr;
@@ -243,7 +240,6 @@
         <div class="control-group" style="display:flex; flex-direction:column; flex-grow:1;">
             <label>Treść wiadomości</label>
             <div class="editor-container">
-                <!-- Pasek narzędzi nad edytorem -->
                 <div class="gmail-toolbar">
                     <button class="tool-bold" onmousedown="event.preventDefault()" onclick="execCmd('bold')" title="Pogrubienie">B</button>
                     <button class="tool-italic" onmousedown="event.preventDefault()" onclick="execCmd('italic')" title="Kursywa">I</button>
@@ -274,20 +270,18 @@
                     <button onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList')" title="Lista punktowana">≡</button>
                     <button onmousedown="event.preventDefault()" onclick="execCmd('removeFormat')" title="Wyczyść formatowanie">T×</button>
 
-                    <!-- Rozbudowany przycisk ramki -->
                     <div class="dropdown-container btn-add-container">
                         <button class="dropdown-toggle" onmousedown="event.preventDefault()" onclick="toggleMenu('frame-menu')" title="Wstaw wyróżniony kontener">
                             [+] Ramka ▼
                         </button>
                         <div id="frame-menu" class="dropdown-menu align-right">
-                            <button class="frame-option frame-blue" onmousedown="event.preventDefault()" onclick="insertContainer('blue')">Informacja (Niebieska)</button>
-                            <button class="frame-option frame-green" onmousedown="event.preventDefault()" onclick="insertContainer('green')">Wskazówka (Zielona)</button>
-                            <button class="frame-option frame-orange" onmousedown="event.preventDefault()" onclick="insertContainer('orange')">Ważne (Pomarańczowa)</button>
+                            <button class="frame-option frame-blue" onmousedown="event.preventDefault()" onclick="insertContainer('blue')">Niebieska</button>
+                            <button class="frame-option frame-green" onmousedown="event.preventDefault()" onclick="insertContainer('green')">Zielona</button>
+                            <button class="frame-option frame-orange" onmousedown="event.preventDefault()" onclick="insertContainer('orange')">Pomarańczowa</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Edytor pod paskiem -->
                 <div id="editor" contenteditable="true" oninput="updatePreview()">
                     Dziękuję za rozmowę telefoniczną. W nawiązaniu do naszych ustaleń, przesyłam niezbędne informacje. Proszę o zapoznanie się z poniższymi szczegółami.
                 </div>
@@ -352,7 +346,6 @@
 </div>
 
 <script>
-    // --- MECHANIZM ZAZNACZANIA TEKSTU ---
     let savedSelection = null;
     const editorEl = document.getElementById('editor');
 
@@ -375,7 +368,6 @@
     editorEl.addEventListener('keyup', saveSelection);
     editorEl.addEventListener('mouseleave', saveSelection);
 
-    // --- GENEROWANIE KOLORÓW ---
     const colors = [
         '#000000', '#434343', '#666666', '#999999', '#cccccc', '#efefef', '#f3f3f3',
         '#cc0000', '#e69138', '#f1c232', '#6aa84f', '#45818e', '#3d85c6', '#674ea7',
@@ -395,7 +387,6 @@
         colorGrid.appendChild(div);
     });
 
-    // --- GENEROWANIE EMOTIKONÓW ---
     const emojis = [
         '😀','😁','😂','🤣','😃','😄','😅','😆','😉','😊','😋','😎','😍','😘','🥰','😗','😙','😚','☺️','🙂','🤗','🤩',
         '🤔','🤨','😐','😑','😶','🙄','😏','😣','😥','😮','🤐','😯','😪','😫','😴','😌','😛','😜','😝','🤤','😒','😓',
@@ -423,7 +414,6 @@
         emojiGrid.appendChild(span);
     });
 
-    // --- FUNKCJE EDYTORA ---
     function toggleMenu(menuId) {
         document.querySelectorAll('.dropdown-menu').forEach(menu => {
             if (menu.id !== menuId) menu.classList.remove('active');
@@ -458,49 +448,75 @@
         updatePreview();
     }
 
-    // Nowa funkcja Ramki
     function insertContainer(type = 'blue') {
         if (document.activeElement !== editorEl) {
             editorEl.focus();
             restoreSelection();
         }
         
-        toggleMenu('frame-menu'); // Zamknij menu po kliknięciu
+        toggleMenu('frame-menu');
 
         const sel = window.getSelection();
         let selectedText = "";
 
-        // Przechwycenie zaznaczonego tekstu
         if (sel.rangeCount > 0 && !sel.isCollapsed) {
             const range = sel.getRangeAt(0);
             const container = document.createElement("div");
             container.appendChild(range.cloneContents());
             selectedText = container.innerHTML;
-            range.deleteContents(); // Usuwamy tekst, by zastąpić go ramką
-        } else {
-            selectedText = "<em>Wpisz treść...</em>";
+            range.deleteContents(); 
         }
 
-        let borderColor, bgColor, textColor, titleText;
+        let borderColor, bgColor, textColor;
 
-        // Ustawienia kolorystyczne
         if (type === 'blue') {
-            borderColor = '#17a2b8'; bgColor = '#f0f7f9'; textColor = '#002d5a'; titleText = 'Informacja';
+            borderColor = '#17a2b8'; bgColor = '#f0f7f9'; textColor = '#002d5a';
         } else if (type === 'green') {
-            borderColor = '#28a745'; bgColor = '#f0f9f1'; textColor = '#155724'; titleText = 'Wskazówka';
+            borderColor = '#28a745'; bgColor = '#f0f9f1'; textColor = '#155724';
         } else if (type === 'orange') {
-            borderColor = '#fd7e14'; bgColor = '#fff6f0'; textColor = '#854007'; titleText = 'Ważne';
+            borderColor = '#fd7e14'; bgColor = '#fff6f0'; textColor = '#854007';
         }
 
-        // Struktura tabeli gwarantująca odpowiednie formatowanie w Outlooku/Gmailu
+        let finalContent = "";
+
+        if (!selectedText || selectedText.trim() === "") {
+            finalContent = `<em>Wpisz tekst...</em>`;
+        } else {
+            let temp = document.createElement('div');
+            temp.innerHTML = selectedText;
+            
+            for (let i = 0; i < temp.childNodes.length; i++) {
+                let node = temp.childNodes[i];
+                
+                if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '') {
+                    let strong = document.createElement('strong');
+                    strong.style.display = 'block';
+                    strong.style.color = '#000000';
+                    strong.style.marginBottom = '5px';
+                    strong.style.fontSize = '15px';
+                    strong.textContent = node.textContent;
+                    temp.replaceChild(strong, node);
+                    break;
+                } else if (node.nodeType === Node.ELEMENT_NODE && !['BR', 'UL', 'OL', 'LI'].includes(node.tagName)) {
+                    node.style.color = '#000000';
+                    node.style.fontWeight = 'bold';
+                    node.style.marginBottom = '5px';
+                    if (['SPAN', 'B', 'STRONG', 'I', 'U'].includes(node.tagName)) {
+                        node.style.display = 'block';
+                    }
+                    break;
+                }
+            }
+            finalContent = temp.innerHTML;
+        }
+
         const containerHtml = `
             <br>
             <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: ${bgColor}; border-left: 4px solid ${borderColor}; border-radius: 0 6px 6px 0; margin-bottom: 20px; margin-top: 10px;">
                 <tr>
                     <td style="padding: 15px 20px;">
-                        <strong style="display: block; color: #000000; margin-bottom: 5px; font-family: 'Lato', Arial, sans-serif; font-size: 15px;">${titleText}</strong>
                         <div style="margin: 0; font-family: 'Lato', Arial, sans-serif; color: ${textColor}; line-height: 1.5;">
-                            ${selectedText}
+                            ${finalContent}
                         </div>
                     </td>
                 </tr>
@@ -557,7 +573,6 @@
         window.getSelection().removeAllRanges();
     }
 
-    // Inicjalizacja
     updatePreview();
 </script>
 
