@@ -22,7 +22,6 @@
             color: #333; 
         }
         
-        /* Nowy układ kontenera (rozszerzony i responsywny) */
         .app-container {
             display: grid;
             grid-template-columns: 420px 1fr;
@@ -47,7 +46,6 @@
             overflow-y: auto;
         }
 
-        /* Nawigacja w panelu bocznym */
         .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 10px; }
         .nav-btn { 
             text-decoration: none; color: var(--baf-dark); font-weight: bold; border: 2px solid var(--baf-dark); 
@@ -85,16 +83,19 @@
             display: flex; flex-direction: column; position: relative; flex-grow: 1; margin-bottom: 15px;
         }
         
+        .gmail-toolbar { 
+            display: flex; align-items: center; gap: 4px; padding: 8px; 
+            background: #f8f9fa; border-bottom: 1px solid #eee; flex-wrap: wrap; 
+            /* Utrzymanie paska na górze */
+            z-index: 10;
+        }
+        
         #editor {
             width: 100%; min-height: 200px; flex-grow: 1; padding: 15px; box-sizing: border-box; 
             outline: none; font-size: 14px; line-height: 1.5; overflow-y: auto; color: #222;
             font-family: 'Lato', 'Noto Color Emoji', sans-serif; 
         }
-        
-        .gmail-toolbar { 
-            display: flex; align-items: center; gap: 4px; padding: 8px; 
-            background: #f8f9fa; border-top: 1px solid #eee; flex-wrap: wrap; 
-        }
+
         .gmail-toolbar > button, .dropdown-toggle {
             background: none; border: none; border-radius: 4px; cursor: pointer;
             padding: 6px 10px; font-family: "Times New Roman", Times, serif; font-size: 15px;
@@ -107,32 +108,30 @@
 
         /* Przycisk dodawania ramki */
         .btn-add-container {
+            margin-left: auto;
+        }
+        .btn-add-container .dropdown-toggle {
             font-family: 'Lato', sans-serif !important;
             font-size: 13px !important;
             font-weight: bold !important;
             background-color: #e9ecef !important;
             color: var(--baf-dark) !important;
-            margin-left: auto;
         }
-        .btn-add-container:hover {
+        .btn-add-container .dropdown-toggle:hover {
             background-color: var(--baf-light) !important;
             color: white !important;
         }
 
-        /* Menu pop-up dla kolorów i emotikonów */
+        /* Menu pop-up dla kolorów, emotikonów i ramek */
         .dropdown-container { position: relative; }
         .dropdown-menu {
-            display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
-            margin-bottom: 10px; background: white; border: 1px solid #ccc; box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+            display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            margin-top: 5px; background: white; border: 1px solid #ccc; box-shadow: 0 4px 25px rgba(0,0,0,0.15);
             border-radius: 8px; z-index: 9999; padding: 12px; width: max-content;
         }
-        .dropdown-menu::after {
-            content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-            border-width: 7px; border-style: solid; border-color: white transparent transparent transparent;
-        }
-        .dropdown-menu::before {
-            content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 1px;
-            border-width: 8px; border-style: solid; border-color: #ccc transparent transparent transparent; z-index: -1;
+        /* Dla menu ramki otwierającego się do lewej */
+        .dropdown-menu.align-right {
+            left: auto; right: 0; transform: none;
         }
         .dropdown-menu.active { display: block; }
 
@@ -160,6 +159,20 @@
         .emoji-grid::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
         .emoji-grid::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
         .emoji-grid::-webkit-scrollbar-thumb:hover { background: #aaa; }
+
+        /* Lista opcji dla ramek */
+        .frame-option {
+            display: block; width: 100%; text-align: left; padding: 8px 12px; margin-bottom: 5px;
+            border: none; background: transparent; cursor: pointer; border-radius: 4px;
+            font-family: 'Lato', sans-serif; font-size: 13px; font-weight: bold; transition: 0.2s;
+        }
+        .frame-option:last-child { margin-bottom: 0; }
+        .frame-blue { background: #f0f7f9; border-left: 4px solid #17a2b8; color: #002d5a; }
+        .frame-blue:hover { background: #e0f0f4; }
+        .frame-green { background: #f0f9f1; border-left: 4px solid #28a745; color: #155724; }
+        .frame-green:hover { background: #e0eed4; }
+        .frame-orange { background: #fff6f0; border-left: 4px solid #fd7e14; color: #854007; }
+        .frame-orange:hover { background: #ffe4d1; }
 
         .btn-copy {
             background-color: var(--baf-light); color: white; border: none; padding: 15px;
@@ -230,10 +243,7 @@
         <div class="control-group" style="display:flex; flex-direction:column; flex-grow:1;">
             <label>Treść wiadomości</label>
             <div class="editor-container">
-                <div id="editor" contenteditable="true" oninput="updatePreview()">
-                    Dziękuję za rozmowę telefoniczną. W nawiązaniu do naszych ustaleń, przesyłam niezbędne informacje. Proszę o zapoznanie się z poniższymi szczegółami.
-                </div>
-                
+                <!-- Pasek narzędzi nad edytorem -->
                 <div class="gmail-toolbar">
                     <button class="tool-bold" onmousedown="event.preventDefault()" onclick="execCmd('bold')" title="Pogrubienie">B</button>
                     <button class="tool-italic" onmousedown="event.preventDefault()" onclick="execCmd('italic')" title="Kursywa">I</button>
@@ -244,8 +254,7 @@
                             <span style="font-weight:bold; border-bottom: 3px solid #000; padding-bottom: 2px;">A</span> ▼
                         </button>
                         <div id="color-menu" class="dropdown-menu">
-                            <div class="color-grid" id="color-grid">
-                                </div>
+                            <div class="color-grid" id="color-grid"></div>
                             <div class="custom-color-wrapper">
                                 <span>Własny:</span>
                                 <input type="color" id="custom-color-picker" onmousedown="saveSelection()" onchange="execCmd('foreColor', this.value); toggleMenu('color-menu');">
@@ -258,15 +267,29 @@
                             <span style="font-family: 'Noto Color Emoji', sans-serif;">😊</span>
                         </button>
                         <div id="emoji-menu" class="dropdown-menu">
-                            <div class="emoji-grid" id="emoji-grid">
-                                </div>
+                            <div class="emoji-grid" id="emoji-grid"></div>
                         </div>
                     </div>
 
                     <button onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList')" title="Lista punktowana">≡</button>
                     <button onmousedown="event.preventDefault()" onclick="execCmd('removeFormat')" title="Wyczyść formatowanie">T×</button>
 
-                    <button class="btn-add-container" onmousedown="event.preventDefault()" onclick="insertContainer()" title="Wstaw wyróżniony kontener">[+] Ramka</button>
+                    <!-- Rozbudowany przycisk ramki -->
+                    <div class="dropdown-container btn-add-container">
+                        <button class="dropdown-toggle" onmousedown="event.preventDefault()" onclick="toggleMenu('frame-menu')" title="Wstaw wyróżniony kontener">
+                            [+] Ramka ▼
+                        </button>
+                        <div id="frame-menu" class="dropdown-menu align-right">
+                            <button class="frame-option frame-blue" onmousedown="event.preventDefault()" onclick="insertContainer('blue')">Informacja (Niebieska)</button>
+                            <button class="frame-option frame-green" onmousedown="event.preventDefault()" onclick="insertContainer('green')">Wskazówka (Zielona)</button>
+                            <button class="frame-option frame-orange" onmousedown="event.preventDefault()" onclick="insertContainer('orange')">Ważne (Pomarańczowa)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edytor pod paskiem -->
+                <div id="editor" contenteditable="true" oninput="updatePreview()">
+                    Dziękuję za rozmowę telefoniczną. W nawiązaniu do naszych ustaleń, przesyłam niezbędne informacje. Proszę o zapoznanie się z poniższymi szczegółami.
                 </div>
             </div>
         </div>
@@ -348,7 +371,6 @@
         }
     }
 
-    // Zapisuj zaznaczenie, gdy użytkownik pisze lub puszcza myszkę w edytorze
     editorEl.addEventListener('mouseup', saveSelection);
     editorEl.addEventListener('keyup', saveSelection);
     editorEl.addEventListener('mouseleave', saveSelection);
@@ -365,7 +387,6 @@
         const div = document.createElement('div');
         div.className = 'color-swatch';
         div.style.backgroundColor = color;
-        // preventDefault zapobiega utracie focusu!
         div.onmousedown = (e) => e.preventDefault();
         div.onclick = () => {
             execCmd('foreColor', color);
@@ -421,7 +442,6 @@
             editorEl.focus();
             restoreSelection();
         }
-        // Wymusza poprawne tagi span i style css dla kolorów
         document.execCommand("styleWithCSS", false, true); 
         document.execCommand(command, false, value);
         saveSelection();
@@ -438,20 +458,50 @@
         updatePreview();
     }
 
-    // Wstawianie specjalnego kontenera (Ramki) dopasowanego pod BAF
-    function insertContainer() {
+    // Nowa funkcja Ramki
+    function insertContainer(type = 'blue') {
         if (document.activeElement !== editorEl) {
             editorEl.focus();
             restoreSelection();
         }
         
-        // Kod HTML ramki (Dopasowany kolorystycznie pod BAF - np. niebieski pasek boczny i jasne tło)
+        toggleMenu('frame-menu'); // Zamknij menu po kliknięciu
+
+        const sel = window.getSelection();
+        let selectedText = "";
+
+        // Przechwycenie zaznaczonego tekstu
+        if (sel.rangeCount > 0 && !sel.isCollapsed) {
+            const range = sel.getRangeAt(0);
+            const container = document.createElement("div");
+            container.appendChild(range.cloneContents());
+            selectedText = container.innerHTML;
+            range.deleteContents(); // Usuwamy tekst, by zastąpić go ramką
+        } else {
+            selectedText = "<em>Wpisz treść...</em>";
+        }
+
+        let borderColor, bgColor, textColor, titleText;
+
+        // Ustawienia kolorystyczne
+        if (type === 'blue') {
+            borderColor = '#17a2b8'; bgColor = '#f0f7f9'; textColor = '#002d5a'; titleText = 'Informacja';
+        } else if (type === 'green') {
+            borderColor = '#28a745'; bgColor = '#f0f9f1'; textColor = '#155724'; titleText = 'Wskazówka';
+        } else if (type === 'orange') {
+            borderColor = '#fd7e14'; bgColor = '#fff6f0'; textColor = '#854007'; titleText = 'Ważne';
+        }
+
+        // Struktura tabeli gwarantująca odpowiednie formatowanie w Outlooku/Gmailu
         const containerHtml = `
             <br>
-            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f0f7f9; border-left: 4px solid #17a2b8; border-radius: 0 6px 6px 0; margin-bottom: 20px; margin-top: 10px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: ${bgColor}; border-left: 4px solid ${borderColor}; border-radius: 0 6px 6px 0; margin-bottom: 20px; margin-top: 10px;">
                 <tr>
-                    <td style="padding: 18px 20px;">
-                        <p style="margin: 0; font-family: 'Lato', Arial, sans-serif; color: #002d5a;"><em>Wpisz treść wyróżnioną...</em></p>
+                    <td style="padding: 15px 20px;">
+                        <strong style="display: block; color: #000000; margin-bottom: 5px; font-family: 'Lato', Arial, sans-serif; font-size: 15px;">${titleText}</strong>
+                        <div style="margin: 0; font-family: 'Lato', Arial, sans-serif; color: ${textColor}; line-height: 1.5;">
+                            ${selectedText}
+                        </div>
                     </td>
                 </tr>
             </table>
@@ -507,7 +557,7 @@
         window.getSelection().removeAllRanges();
     }
 
-    // Inicjalizacja podglądu przy załadowaniu strony
+    // Inicjalizacja
     updatePreview();
 </script>
 
