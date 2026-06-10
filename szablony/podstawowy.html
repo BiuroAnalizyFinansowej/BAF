@@ -20,8 +20,6 @@
             background-color: var(--bg-color); 
             font-family: 'Lato', Arial, sans-serif; 
             color: #333; 
-            height: 100vh;
-            overflow-x: hidden;
         }
         
         .app-container {
@@ -31,11 +29,10 @@
             padding: 20px;
             max-width: 1400px;
             margin: 0 auto;
-            height: 100vh;
-            box-sizing: border-box;
+            min-height: 100vh;
         }
 
-        /* --- LEWY PANEL: EDYTOR --- */
+        /* --- LEWY PANEL: EDYTOR (PRZYWRÓCONY) --- */
         #admin-panel {
             background: #ffffff; 
             border-radius: 16px;
@@ -43,11 +40,13 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.05); 
             display: flex; 
             flex-direction: column;
-            height: 100%;
-            box-sizing: border-box;
+            height: calc(100vh - 40px);
+            position: sticky;
+            top: 20px;
+            overflow-y: auto;
         }
 
-        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 10px; flex-shrink: 0;}
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 10px; }
         .nav-btn { 
             text-decoration: none; color: var(--baf-dark); font-weight: bold; border: 2px solid var(--baf-dark); 
             padding: 8px 12px; border-radius: 8px; transition: all 0.3s ease; display: flex; 
@@ -64,13 +63,12 @@
 
         .logo-container {
             text-align: center;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
             border-bottom: 1px solid #eee;
-            flex-shrink: 0;
         }
 
-        .control-group { margin-bottom: 15px; flex-shrink: 0; }
+        .control-group { margin-bottom: 15px; }
         label { display: block; font-size: 11px; font-weight: bold; color: #777; margin-bottom: 5px; text-transform: uppercase; }
         input[type="text"], select { 
             width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; 
@@ -79,37 +77,34 @@
         }
         input[type="text"]:focus, select:focus { outline: none; border-color: var(--baf-light); }
         
-        /* Zmieniony kontener – teraz działa jak prawdziwy edytor pocztowy */
+        /* Kontener Edytora */
         .editor-container { 
             border: 1px solid #ddd; 
             border-radius: 8px; 
             background: white; 
             display: flex; 
             flex-direction: column; 
+            position: relative; 
             flex-grow: 1; 
             margin-bottom: 15px;
-            overflow: hidden; /* Zatrzymuje zawartość wewnątrz ramki */
-            min-height: 0; /* Magiczna właściwość pozwalająca na skrolowanie flexboxa */
         }
         
-        /* Pasek na sztywno przytwierdzony na górze pola tekstowego */
+        /* Pływający pasek menu (Działający Sticky) */
         .gmail-toolbar { 
             display: flex; align-items: center; gap: 4px; padding: 8px; 
-            background: #f8f9fa; border-bottom: 1px solid #eee; flex-wrap: wrap; 
-            flex-shrink: 0; /* Zapobiega kurczeniu się paska */
+            background: #f8f9fa; 
+            border-bottom: 1px solid #eee; 
+            flex-wrap: wrap; 
+            position: sticky;
+            top: -25px; 
+            z-index: 100;
+            border-radius: 7px 7px 0 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
         
-        /* Scrolluje się TYLKO pole z tekstem */
         #editor {
-            width: 100%; 
-            flex-grow: 1; 
-            padding: 15px; 
-            box-sizing: border-box; 
-            outline: none; 
-            font-size: 14px; 
-            line-height: 1.5; 
-            overflow-y: auto; 
-            color: #222;
+            width: 100%; min-height: 200px; flex-grow: 1; padding: 15px; box-sizing: border-box; 
+            outline: none; font-size: 14px; line-height: 1.5; overflow-y: auto; color: #222;
             font-family: 'Lato', 'Noto Color Emoji', sans-serif; 
         }
 
@@ -192,7 +187,7 @@
         .btn-copy {
             background-color: var(--baf-light); color: white; border: none; padding: 15px;
             width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; 
-            flex-shrink: 0; transition: 0.3s; font-size: 14px; font-family: 'Lato', sans-serif;
+            margin-top: auto; transition: 0.3s; font-size: 14px; font-family: 'Lato', sans-serif;
             box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
         }
         .btn-copy:hover { 
@@ -211,7 +206,6 @@
             display: flex;
             align-items: flex-start;
             justify-content: center;
-            overflow-y: auto;
         }
 
         #copy-container {
@@ -223,10 +217,13 @@
             .app-container {
                 grid-template-columns: 1fr;
                 height: auto;
-                min-height: 100vh;
             }
-            .editor-container {
-                min-height: 350px;
+            #admin-panel {
+                position: relative;
+                height: auto;
+            }
+            #email-preview {
+                padding: 20px;
             }
         }
     </style>
@@ -252,7 +249,7 @@
             <input type="text" id="input-name" value="Panie Marcinie" oninput="updatePreview()">
         </div>
 
-        <div class="control-group" style="display:flex; flex-direction:column; flex-grow:1; min-height:0;">
+        <div class="control-group" style="display:flex; flex-direction:column; flex-grow:1;">
             <label>Treść wiadomości</label>
             <div class="editor-container">
                 <div class="gmail-toolbar">
@@ -404,7 +401,7 @@
 
     const emojis = [
         '😀','😁','😂','🤣','😃','😄','😅','😆','😉','😊','😋','😎','😍','😘','🥰','😗','😙','😚','☺️','🙂','🤗','🤩',
-        '🤔','🤨','😐','😑','😶','🙄','😏','😣','😥','😮','🤐','😯','😪','😫','😴','😌','😛','😜','😝','🤤','😒','😓',
+        '🤔','🤨','😐','😑','😶','🙄','😏','😣','😥','😮','zipped','😯','😪','😫','😴','😌','😛','😜','😝','🤤','😒','😓',
         '😔','😕','🙃','🤑','😲','☹️','🙁','😖','😞','😟','😤','😢','😭','😦','😧','😨','😩','🤯','😬','😰','😱','🥵',
         '🥶','😳','🤪','😵','😡','😠','🤬','😷','🤒','🤕','🤢','🤮','🤧','😇','🤠','🤡','🤥','🤫','🤭','🧐','🤓',
         '🤲','👐','🙌','👏','🤝','👍','👎','👊','✊','🤛','🤜','🤞','✌️','🤟','🤘','👌','👈','👉','👆','👇','☝️','✋',
@@ -482,6 +479,34 @@
             range.deleteContents(); 
         }
 
+        let range = sel.getRangeAt(0);
+        let parentLi = null;
+        let node = range.startContainer;
+        while (node && node !== editorEl) {
+            if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'LI') {
+                parentLi = node;
+                break;
+            }
+            node = node.parentNode;
+        }
+
+        if (parentLi) {
+            let cleanHTML = parentLi.innerHTML.replace(/<br\s*\/?>/gi, '').trim();
+            if (cleanHTML === "" && parentLi.parentNode) {
+                let parentList = parentLi.parentNode;
+                const newRange = document.createRange();
+                newRange.setStartAfter(parentList);
+                newRange.collapse(true);
+                sel.removeAllRanges();
+                sel.addRange(newRange);
+                
+                parentLi.remove();
+                if (parentList.innerHTML.replace(/<br\s*\/?>/gi, '').trim() === "") {
+                    parentList.remove();
+                }
+            }
+        }
+
         let borderColor, bgColor, textColor;
         if (type === 'blue') {
             borderColor = '#17a2b8'; bgColor = '#f0f7f9'; textColor = '#002d5a';
@@ -539,8 +564,6 @@
         document.execCommand('insertHTML', false, containerHtml);
 
         // --- AGRESYWNE CZYSZCZENIE "KROPEK WIDM" PO WSTAWIENIU ---
-        
-        // 1. Wyłącz list-style (kropkę), jeśli przeglądarka złośliwie wsadziła tabelę do <li>
         editorEl.querySelectorAll('table[role="presentation"]').forEach(tbl => {
             let parentLi = tbl.closest('li');
             if (parentLi) {
@@ -550,16 +573,13 @@
             }
         });
 
-        // 2. Usunięcie całkowicie pustych <li> (generujących wiszące kropki)
         editorEl.querySelectorAll('li').forEach(li => {
-            // Zamieniamy spacje/enter by sprawdzić, czy element jest serio pusty
             let czystyTekst = li.innerHTML.replace(/&nbsp;|<br\s*\/?>/gi, '').trim();
             if (czystyTekst === '' && !li.querySelector('table')) {
                 li.remove();
             }
         });
 
-        // 3. Usunięcie pozostałych po kasowaniu, pustych kontenerów list
         editorEl.querySelectorAll('ul, ol').forEach(list => {
             if (list.children.length === 0) {
                 list.remove();
