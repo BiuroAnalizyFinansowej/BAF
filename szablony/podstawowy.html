@@ -8,52 +8,116 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
     
     <style>
-        body { margin: 0; padding: 0; background-color: #f4f7f9; font-family: 'Lato', Arial, sans-serif; color: #333; }
+        :root {
+            --baf-dark: #002d5a;
+            --baf-light: #17a2b8;
+            --bg-color: #f4f7f9;
+        }
+
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background-color: var(--bg-color); 
+            font-family: 'Lato', Arial, sans-serif; 
+            color: #333; 
+        }
         
+        /* Nowy układ kontenera (rozszerzony i responsywny) */
+        .app-container {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        /* --- LEWY PANEL: EDYTOR --- */
+        #admin-panel {
+            background: #ffffff; 
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05); 
+            display: flex; 
+            flex-direction: column;
+            height: calc(100vh - 40px);
+            position: sticky;
+            top: 20px;
+            overflow-y: auto;
+        }
+
         /* Nawigacja w panelu bocznym */
         .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 10px; }
         .nav-btn { 
-            text-decoration: none; color: #002d5a; font-weight: bold; border: 2px solid #002d5a; 
-            padding: 8px 12px; border-radius: 6px; transition: all 0.3s ease; display: flex; 
-            align-items: center; justify-content: center; gap: 6px; font-size: 12px; 
+            text-decoration: none; color: var(--baf-dark); font-weight: bold; border: 2px solid var(--baf-dark); 
+            padding: 8px 12px; border-radius: 8px; transition: all 0.3s ease; display: flex; 
+            align-items: center; justify-content: center; gap: 6px; font-size: 13px; 
             background-color: transparent; cursor: pointer; flex: 1; font-family: 'Lato', sans-serif;
         }
-        .nav-btn:hover { background-color: #002d5a; color: white; }
+        .nav-btn:hover { 
+            background-color: var(--baf-dark); 
+            color: white; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 45, 90, 0.2);
+        }
         .nav-btn svg { width: 16px; height: 16px; fill: currentColor; }
 
-        /* Panel sterowania */
-        #admin-panel {
-            position: fixed; top: 0; left: 0; width: 360px; height: 100vh;
-            background: #ffffff; border-right: 1px solid #ddd; padding: 20px;
-            box-shadow: 2px 0 15px rgba(0,0,0,0.1); z-index: 1000; overflow-y: auto;
-            box-sizing: border-box; display: flex; flex-direction: column;
+        .logo-container {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
         }
-        
+
         .control-group { margin-bottom: 15px; }
         label { display: block; font-size: 11px; font-weight: bold; color: #777; margin-bottom: 5px; text-transform: uppercase; }
-        input[type="text"], select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-family: 'Lato', sans-serif; box-sizing: border-box; }
+        input[type="text"], select { 
+            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; 
+            font-family: 'Lato', sans-serif; font-size: 14px; box-sizing: border-box; background-color: #fdfdfd;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus, select:focus { outline: none; border-color: var(--baf-light); }
         
         /* Edytor a'la Gmail */
-        .editor-container { border: 1px solid #ddd; border-radius: 8px; overflow: visible; background: white; display: flex; flex-direction: column; position: relative; }
+        .editor-container { 
+            border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: white; 
+            display: flex; flex-direction: column; position: relative; flex-grow: 1; margin-bottom: 15px;
+        }
+        
         #editor {
-            width: 100%; min-height: 200px; padding: 15px; box-sizing: border-box; 
+            width: 100%; min-height: 200px; flex-grow: 1; padding: 15px; box-sizing: border-box; 
             outline: none; font-size: 14px; line-height: 1.5; overflow-y: auto; color: #222;
             font-family: 'Lato', 'Noto Color Emoji', sans-serif; 
         }
         
         .gmail-toolbar { 
             display: flex; align-items: center; gap: 4px; padding: 8px; 
-            background: #f8f9fa; border-top: 1px solid #eee; flex-wrap: wrap; border-radius: 0 0 8px 8px;
+            background: #f8f9fa; border-top: 1px solid #eee; flex-wrap: wrap; 
         }
         .gmail-toolbar > button, .dropdown-toggle {
             background: none; border: none; border-radius: 4px; cursor: pointer;
             padding: 6px 10px; font-family: "Times New Roman", Times, serif; font-size: 15px;
             color: #444; transition: background 0.2s; display: flex; align-items: center; justify-content: center;
         }
-        .gmail-toolbar > button:hover, .dropdown-toggle:hover { background: #e2e6ea; }
+        .gmail-toolbar > button:hover, .dropdown-toggle:hover { background: #e2e6ea; color: var(--baf-dark); }
         .gmail-toolbar .tool-bold { font-weight: bold; }
         .gmail-toolbar .tool-italic { font-style: italic; }
         .gmail-toolbar .tool-underline { text-decoration: underline; }
+
+        /* Przycisk dodawania ramki */
+        .btn-add-container {
+            font-family: 'Lato', sans-serif !important;
+            font-size: 13px !important;
+            font-weight: bold !important;
+            background-color: #e9ecef !important;
+            color: var(--baf-dark) !important;
+            margin-left: auto;
+        }
+        .btn-add-container:hover {
+            background-color: var(--baf-light) !important;
+            color: white !important;
+        }
 
         /* Menu pop-up dla kolorów i emotikonów */
         .dropdown-container { position: relative; }
@@ -98,135 +162,170 @@
         .emoji-grid::-webkit-scrollbar-thumb:hover { background: #aaa; }
 
         .btn-copy {
-            background-color: #17a2b8; color: white; border: none; padding: 14px;
-            width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; 
-            margin-top: 20px; transition: 0.3s; font-size: 13px; font-family: 'Lato', sans-serif;
+            background-color: var(--baf-light); color: white; border: none; padding: 15px;
+            width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; 
+            margin-top: auto; transition: 0.3s; font-size: 14px; font-family: 'Lato', sans-serif;
+            box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
         }
-        .btn-copy:hover { background-color: #138496; }
-        .btn-copy.success { background-color: #28a745; }
+        .btn-copy:hover { 
+            background-color: #138496; 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(23, 162, 184, 0.4);
+        }
+        .btn-copy.success { background-color: #28a745; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); }
 
-        #email-preview { margin-left: 360px; padding: 40px; }
+        /* --- PRAWY PANEL: PODGLĄD --- */
+        #email-preview { 
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
 
-        @media (max-width: 1100px) {
-            #admin-panel { position: relative; width: 100%; height: auto; border-right: none; }
-            #email-preview { margin-left: 0; padding: 20px; }
+        #copy-container {
+            width: 100%;
+            max-width: 650px;
+        }
+
+        /* Responsywność */
+        @media (max-width: 1024px) {
+            .app-container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            #admin-panel {
+                position: relative;
+                height: auto;
+            }
+            #email-preview {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
 
-<div id="admin-panel">
-    <div class="top-nav">
-        <button onclick="history.back()" class="nav-btn">&laquo; Powrót</button>
-        <a href="../index.html" class="nav-btn" title="Strona Główna">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg> Strona Główna
-        </a>
-    </div>
+<div class="app-container">
 
-    <div style="text-align: center; margin-bottom: 20px;">
-        <img src="baf_logo.png" alt="BAF" width="140">
-    </div>
+    <div id="admin-panel">
+        <div class="top-nav">
+            <button onclick="history.back()" class="nav-btn">&laquo; Powrót</button>
+            <a href="../index.html" class="nav-btn" title="Strona Główna">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg> Strona Główna
+            </a>
+        </div>
 
-    <div class="control-group">
-        <label>Powitanie</label>
-        <input type="text" id="input-name" value="Panie Marcinie" oninput="updatePreview()">
-    </div>
+        <div class="logo-container">
+            <img src="baf_logo.png" alt="BAF" width="140">
+        </div>
 
-    <div class="control-group">
-        <label>Treść wiadomości</label>
-        <div class="editor-container">
-            <div id="editor" contenteditable="true" oninput="updatePreview()">
-                Dziękuję za rozmowę telefoniczną. W nawiązaniu do naszych ustaleń, przesyłam niezbędne informacje. Proszę o zapoznanie się z poniższymi szczegółami.
-            </div>
-            
-            <div class="gmail-toolbar">
-                <button class="tool-bold" onmousedown="event.preventDefault()" onclick="execCmd('bold')" title="Pogrubienie">B</button>
-                <button class="tool-italic" onmousedown="event.preventDefault()" onclick="execCmd('italic')" title="Kursywa">I</button>
-                <button class="tool-underline" onmousedown="event.preventDefault()" onclick="execCmd('underline')" title="Podkreślenie">U</button>
+        <div class="control-group">
+            <label>Powitanie</label>
+            <input type="text" id="input-name" value="Panie Marcinie" oninput="updatePreview()">
+        </div>
+
+        <div class="control-group" style="display:flex; flex-direction:column; flex-grow:1;">
+            <label>Treść wiadomości</label>
+            <div class="editor-container">
+                <div id="editor" contenteditable="true" oninput="updatePreview()">
+                    Dziękuję za rozmowę telefoniczną. W nawiązaniu do naszych ustaleń, przesyłam niezbędne informacje. Proszę o zapoznanie się z poniższymi szczegółami.
+                </div>
                 
-                <div class="dropdown-container">
-                    <button class="dropdown-toggle" onmousedown="event.preventDefault()" onclick="toggleMenu('color-menu')" title="Kolor tekstu">
-                        <span style="font-weight:bold; border-bottom: 3px solid #000; padding-bottom: 2px;">A</span> ▼
-                    </button>
-                    <div id="color-menu" class="dropdown-menu">
-                        <div class="color-grid" id="color-grid">
+                <div class="gmail-toolbar">
+                    <button class="tool-bold" onmousedown="event.preventDefault()" onclick="execCmd('bold')" title="Pogrubienie">B</button>
+                    <button class="tool-italic" onmousedown="event.preventDefault()" onclick="execCmd('italic')" title="Kursywa">I</button>
+                    <button class="tool-underline" onmousedown="event.preventDefault()" onclick="execCmd('underline')" title="Podkreślenie">U</button>
+                    
+                    <div class="dropdown-container">
+                        <button class="dropdown-toggle" onmousedown="event.preventDefault()" onclick="toggleMenu('color-menu')" title="Kolor tekstu">
+                            <span style="font-weight:bold; border-bottom: 3px solid #000; padding-bottom: 2px;">A</span> ▼
+                        </button>
+                        <div id="color-menu" class="dropdown-menu">
+                            <div class="color-grid" id="color-grid">
+                                </div>
+                            <div class="custom-color-wrapper">
+                                <span>Własny:</span>
+                                <input type="color" id="custom-color-picker" onmousedown="saveSelection()" onchange="execCmd('foreColor', this.value); toggleMenu('color-menu');">
                             </div>
-                        <div class="custom-color-wrapper">
-                            <span>Własny:</span>
-                            <input type="color" id="custom-color-picker" onmousedown="saveSelection()" onchange="execCmd('foreColor', this.value); toggleMenu('color-menu');">
                         </div>
                     </div>
-                </div>
 
-                <div class="dropdown-container">
-                    <button class="dropdown-toggle" onmousedown="event.preventDefault()" onclick="toggleMenu('emoji-menu')" title="Wstaw emotikon">
-                        <span style="font-family: 'Noto Color Emoji', sans-serif;">😊</span>
-                    </button>
-                    <div id="emoji-menu" class="dropdown-menu">
-                        <div class="emoji-grid" id="emoji-grid">
-                            </div>
+                    <div class="dropdown-container">
+                        <button class="dropdown-toggle" onmousedown="event.preventDefault()" onclick="toggleMenu('emoji-menu')" title="Wstaw emotikon">
+                            <span style="font-family: 'Noto Color Emoji', sans-serif;">😊</span>
+                        </button>
+                        <div id="emoji-menu" class="dropdown-menu">
+                            <div class="emoji-grid" id="emoji-grid">
+                                </div>
+                        </div>
                     </div>
-                </div>
 
-                <button onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList')" title="Lista punktowana">≡</button>
-                <button onmousedown="event.preventDefault()" onclick="execCmd('removeFormat')" title="Wyczyść formatowanie">T×</button>
+                    <button onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList')" title="Lista punktowana">≡</button>
+                    <button onmousedown="event.preventDefault()" onclick="execCmd('removeFormat')" title="Wyczyść formatowanie">T×</button>
+
+                    <button class="btn-add-container" onmousedown="event.preventDefault()" onclick="insertContainer()" title="Wstaw wyróżniony kontener">[+] Ramka</button>
+                </div>
             </div>
+        </div>
+
+        <div class="control-group">
+            <label style="display: flex; align-items: center; cursor: pointer; text-transform: none; color: #333;">
+                <input type="checkbox" id="show-signature" onchange="updatePreview()" checked style="margin-right: 10px; width: 16px; height: 16px;"> 
+                Dołącz przycisk "Moja wizytówka"
+            </label>
+        </div>
+
+        <div class="control-group">
+            <label>Doradca</label>
+            <select id="input-advisor" onchange="updatePreview()">
+                <option value="Dawid Błachno|https://q-r.to/DawidBlachnoBiuroBAF">Dawid Błachno</option>
+                <option value="Weronika Lekston|https://q-r.to/WeronikaLekstonBiuroBAF">Weronika Lekston</option>
+                <option value="Mieczysław Andrzejewski|https://l.ead.me/MieczyslawAndrzejewskiBiuroBAF">Mieczysław Andrzejewski</option>
+                <option value="Joanna Karpała|https://l.ead.me/JoannaKarpalaBiuroBAF">Joanna Karpała</option>
+                <option value="Piotr Pakuła|https://q-r.to/PakulaPiotrBiuroBAF">Piotr Pakuła</option>
+                <option value="Wiktoria Nojek|https://q-r.to/WiktoraNojekBiuroBAF">Wiktoria Nojek</option>
+                <option value="Wojciech Młynarczyk|https://q-r.to/WojciechMlynarczykBiuroBAF">Wojciech Młynarczyk</option>
+                <option value="Maja Zięba|https://q-r.to/MajaZiebaBiuroBAF">Maja Zięba</option>
+                <option value="Mateusz Dzidkowski|https://q-r.to/MateuszDzidkowskiBiuroBAF">Mateusz Dzidkowski</option>
+            </select>
+        </div>
+
+        <button class="btn-copy" id="copy-btn" onclick="copyEmail()">KOPIUJ TREŚĆ DO MAILA</button>
+    </div>
+
+    <div id="email-preview">
+        <div id="copy-container">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f7f9; font-family: 'Lato', Arial, sans-serif;">
+                <tr>
+                    <td align="center" style="padding: 20px;">
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; border: 1px solid #e1e4e8; overflow: hidden; margin-bottom: 20px;">
+                            <tr>
+                                <td align="center" style="padding: 30px 0; background-color: #ffffff; border-bottom: 1px solid #f2f2f2;">
+                                    <img src="baf_logo.png" alt="BAF" width="200" style="display: block; border: 0;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 40px;">
+                                    <h1 id="view-name" style="font-size: 22px; color: #002d5a; margin: 0 0 20px 0; font-weight: 700;">Panie Marcinie,</h1>
+                                    
+                                    <div id="view-content" style="font-size: 16px; color: #333; line-height: 1.6; margin-bottom: 25px; font-family: 'Lato', 'Noto Color Emoji', Arial, sans-serif;">
+                                        </div>
+
+                                    <div id="view-signature-container" align="center" style="margin-top: 35px; padding-top: 25px; border-top: 1px solid #f2f2f2;">
+                                        <a id="view-link" href="#" style="display: inline-block; padding: 14px 35px; background-color: #17a2b8; color: #ffffff !important; text-decoration: none; font-weight: bold; border-radius: 5px; font-size: 16px;">Moja wizytówka</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 
-    <div class="control-group">
-        <label style="display: flex; align-items: center; cursor: pointer; text-transform: none; color: #333;">
-            <input type="checkbox" id="show-signature" onchange="updatePreview()" checked style="margin-right: 10px; width: 16px; height: 16px;"> 
-            Dołącz przycisk "Moja wizytówka"
-        </label>
-    </div>
-
-    <div class="control-group">
-        <label>Doradca</label>
-        <select id="input-advisor" onchange="updatePreview()">
-            <option value="Dawid Błachno|https://q-r.to/DawidBlachnoBiuroBAF">Dawid Błachno</option>
-            <option value="Weronika Lekston|https://q-r.to/WeronikaLekstonBiuroBAF">Weronika Lekston</option>
-            <option value="Mieczysław Andrzejewski|https://l.ead.me/MieczyslawAndrzejewskiBiuroBAF">Mieczysław Andrzejewski</option>
-            <option value="Joanna Karpała|https://l.ead.me/JoannaKarpalaBiuroBAF">Joanna Karpała</option>
-            <option value="Piotr Pakuła|https://q-r.to/PakulaPiotrBiuroBAF">Piotr Pakuła</option>
-            <option value="Wiktoria Nojek|https://q-r.to/WiktoraNojekBiuroBAF">Wiktoria Nojek</option>
-            <option value="Wojciech Młynarczyk|https://q-r.to/WojciechMlynarczykBiuroBAF">Wojciech Młynarczyk</option>
-            <option value="Maja Zięba|https://q-r.to/MajaZiebaBiuroBAF">Maja Zięba</option>
-            <option value="Mateusz Dzidkowski|https://q-r.to/MateuszDzidkowskiBiuroBAF">Mateusz Dzidkowski</option>
-        </select>
-    </div>
-
-    <button class="btn-copy" id="copy-btn" onclick="copyEmail()">KOPIUJ TREŚĆ DO MAILA</button>
-</div>
-
-<div id="email-preview">
-    <div id="copy-container">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f7f9; font-family: 'Lato', Arial, sans-serif;">
-            <tr>
-                <td align="center" style="padding: 20px;">
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 8px; border: 1px solid #e1e4e8; overflow: hidden; margin-bottom: 20px;">
-                        <tr>
-                            <td align="center" style="padding: 30px 0; background-color: #ffffff; border-bottom: 1px solid #f2f2f2;">
-                                <img src="baf_logo.png" alt="BAF" width="200" style="display: block; border: 0;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 40px;">
-                                <h1 id="view-name" style="font-size: 22px; color: #002d5a; margin: 0 0 20px 0; font-weight: 700;">Panie Marcinie,</h1>
-                                
-                                <div id="view-content" style="font-size: 16px; color: #333; line-height: 1.6; margin-bottom: 25px; font-family: 'Lato', 'Noto Color Emoji', Arial, sans-serif;">
-                                    </div>
-
-                                <div id="view-signature-container" align="center" style="margin-top: 35px; padding-top: 25px; border-top: 1px solid #f2f2f2;">
-                                    <a id="view-link" href="#" style="display: inline-block; padding: 14px 35px; background-color: #17a2b8; color: #ffffff !important; text-decoration: none; font-weight: bold; border-radius: 5px; font-size: 16px;">Moja wizytówka</a>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </div>
 </div>
 
 <script>
@@ -322,7 +421,7 @@
             editorEl.focus();
             restoreSelection();
         }
-        // Wymusza poprawne tagi span i style css dla kolorów (zamiast archaicznego tagu font)
+        // Wymusza poprawne tagi span i style css dla kolorów
         document.execCommand("styleWithCSS", false, true); 
         document.execCommand(command, false, value);
         saveSelection();
@@ -335,6 +434,31 @@
             restoreSelection();
         }
         document.execCommand('insertText', false, emoji);
+        saveSelection();
+        updatePreview();
+    }
+
+    // Wstawianie specjalnego kontenera (Ramki) dopasowanego pod BAF
+    function insertContainer() {
+        if (document.activeElement !== editorEl) {
+            editorEl.focus();
+            restoreSelection();
+        }
+        
+        // Kod HTML ramki (Dopasowany kolorystycznie pod BAF - np. niebieski pasek boczny i jasne tło)
+        const containerHtml = `
+            <br>
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f0f7f9; border-left: 4px solid #17a2b8; border-radius: 0 6px 6px 0; margin-bottom: 20px; margin-top: 10px;">
+                <tr>
+                    <td style="padding: 18px 20px;">
+                        <p style="margin: 0; font-family: 'Lato', Arial, sans-serif; color: #002d5a;"><em>Wpisz treść wyróżnioną...</em></p>
+                    </td>
+                </tr>
+            </table>
+            <br>
+        `;
+        
+        document.execCommand('insertHTML', false, containerHtml);
         saveSelection();
         updatePreview();
     }
@@ -373,6 +497,12 @@
             });
         } catch (err) {
             document.execCommand('copy');
+            btn.textContent = '✅ SKOPIOWANO!';
+            btn.classList.add('success');
+            setTimeout(() => {
+                btn.textContent = 'KOPIUJ TREŚĆ DO MAILA';
+                btn.classList.remove('success');
+            }, 2000);
         }
         window.getSelection().removeAllRanges();
     }
