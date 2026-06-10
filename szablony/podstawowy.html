@@ -77,16 +77,20 @@
         }
         input[type="text"]:focus, select:focus { outline: none; border-color: var(--baf-light); }
         
-        /* Edytor a'la Gmail */
+        /* Edytor z pływającym paskiem */
         .editor-container { 
             border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: white; 
             display: flex; flex-direction: column; position: relative; flex-grow: 1; margin-bottom: 15px;
         }
         
+        /* NOWOŚĆ: Pasek narzędzi stale na górze podczas skrolowania */
         .gmail-toolbar { 
             display: flex; align-items: center; gap: 4px; padding: 8px; 
-            background: #f8f9fa; border-bottom: 1px solid #eee; flex-wrap: wrap; 
-            z-index: 10;
+            background: #f8f9fa !important; border-bottom: 1px solid #eee; flex-wrap: wrap; 
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
         
         #editor {
@@ -105,7 +109,6 @@
         .gmail-toolbar .tool-italic { font-style: italic; }
         .gmail-toolbar .tool-underline { text-decoration: underline; }
 
-        /* Przycisk dodawania ramki */
         .btn-add-container {
             margin-left: auto;
         }
@@ -121,7 +124,7 @@
             color: white !important;
         }
 
-        /* Menu pop-up dla kolorów, emotikonów i ramek */
+        /* Menu pop-up */
         .dropdown-container { position: relative; }
         .dropdown-menu {
             display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
@@ -158,7 +161,7 @@
         .emoji-grid::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
         .emoji-grid::-webkit-scrollbar-thumb:hover { background: #aaa; }
 
-        /* Lista opcji dla ramek */
+        /* Opcje ramek */
         .frame-option {
             display: block; width: 100%; text-align: left; padding: 8px 12px; margin-bottom: 5px;
             border: none; background: transparent; cursor: pointer; border-radius: 4px;
@@ -459,6 +462,7 @@
         const sel = window.getSelection();
         let selectedText = "";
 
+        // 1. Przechwycenie zaznaczonego tekstu i wyczyszczenie zaznaczenia z edytora
         if (sel.rangeCount > 0 && !sel.isCollapsed) {
             const range = sel.getRangeAt(0);
             const container = document.createElement("div");
@@ -467,8 +471,38 @@
             range.deleteContents(); 
         }
 
-        let borderColor, bgColor, textColor;
+        // 2. INTELIGENTNE USUWANIE KROPKI (PUNKTORA):
+        // Jeśli kursor został w pustym punkcie (LI), przenosimy go pod listę i kasujemy pusty element
+        let range = sel.getRangeAt(0);
+        let parentLi = null;
+        let node = range.startContainer;
+        while (node && node !== editorEl) {
+            if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'LI') {
+                parentLi = node;
+                break;
+            }
+            node = node.parentNode;
+        }
 
+        if (parentLi) {
+            let cleanHTML = parentLi.innerHTML.replace(/<br\s*\/?>/gi, '').trim();
+            if (cleanHTML === "" && parentLi.parentNode) {
+                let parentList = parentLi.parentNode;
+                const newRange = document.createRange();
+                newRange.setStartAfter(parentList);
+                newRange.collapse(true);
+                sel.removeAllRanges();
+                sel.addRange(newRange);
+                
+                parentLi.remove();
+                if (parentList.innerHTML.replace(/<br\s*\/?>/gi, '').trim() === "") {
+                    parentList.remove();
+                }
+            }
+        }
+
+        // 3. Konfiguracja kolorów
+        let borderColor, bgColor, textColor;
         if (type === 'blue') {
             borderColor = '#17a2b8'; bgColor = '#f0f7f9'; textColor = '#002d5a';
         } else if (type === 'green') {
@@ -479,30 +513,32 @@
 
         let finalContent = "";
 
+        // Jeśli ramka jest pusta, wstawiamy czysty tekst pomocniczy bez nagłówków
         if (!selectedText || selectedText.trim() === "") {
             finalContent = `<em>Wpisz tekst...</em>`;
         } else {
             let temp = document.createElement('div');
             temp.innerHTML = selectedText;
             
+            // Formatowanie pierwszej linijki na czarny pogrubiony nagłówek
             for (let i = 0; i < temp.childNodes.length; i++) {
-                let node = temp.childNodes[i];
+                let n = temp.childNodes[i];
                 
-                if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '') {
+                if (n.nodeType === Node.TEXT_NODE && n.textContent.trim() !== '') {
                     let strong = document.createElement('strong');
                     strong.style.display = 'block';
                     strong.style.color = '#000000';
                     strong.style.marginBottom = '5px';
                     strong.style.fontSize = '15px';
-                    strong.textContent = node.textContent;
-                    temp.replaceChild(strong, node);
+                    strong.textContent = n.textContent;
+                    temp.replaceChild(strong, n);
                     break;
-                } else if (node.nodeType === Node.ELEMENT_NODE && !['BR', 'UL', 'OL', 'LI'].includes(node.tagName)) {
-                    node.style.color = '#000000';
-                    node.style.fontWeight = 'bold';
-                    node.style.marginBottom = '5px';
-                    if (['SPAN', 'B', 'STRONG', 'I', 'U'].includes(node.tagName)) {
-                        node.style.display = 'block';
+                } else if (n.nodeType === Node.ELEMENT_NODE && !['BR', 'UL', 'OL', 'LI'].includes(n.tagName)) {
+                    n.style.color = '#000000';
+                    n.style.fontWeight = 'bold';
+                    n.style.marginBottom = '5px';
+                    if (['SPAN', 'B', 'STRONG', 'I', 'U'].includes(n.tagName)) {
+                        n.style.display = 'block';
                     }
                     break;
                 }
@@ -510,9 +546,9 @@
             finalContent = temp.innerHTML;
         }
 
+        // Czysta struktura tabeli z marginesami CSS zamiast <br> zapobiega powstawaniu artefaktów
         const containerHtml = `
-            <br>
-            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: ${bgColor}; border-left: 4px solid ${borderColor}; border-radius: 0 6px 6px 0; margin-bottom: 20px; margin-top: 10px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: ${bgColor}; border-left: 4px solid ${borderColor}; border-radius: 0 6px 6px 0; margin-bottom: 15px; margin-top: 15px; display: table;">
                 <tr>
                     <td style="padding: 15px 20px;">
                         <div style="margin: 0; font-family: 'Lato', Arial, sans-serif; color: ${textColor}; line-height: 1.5;">
@@ -521,7 +557,6 @@
                     </td>
                 </tr>
             </table>
-            <br>
         `;
         
         document.execCommand('insertHTML', false, containerHtml);
