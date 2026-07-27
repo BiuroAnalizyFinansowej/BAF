@@ -6,16 +6,13 @@
     <title>Kalkulator SKD - WARIANT 1</title>
     
     <link rel="icon" type="image/png" href="baf_logo_p.png">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         /* =====================================
            BAF CALCULATOR UNIFIED DESIGN
-           Styl skopiowany z wps.html
         ===================================== */
         
-        /* Reset & Base */
         * {
             margin: 0;
             padding: 0;
@@ -31,7 +28,6 @@
             padding: 20px;
         }
         
-        /* Header with Navigation */
         .calc-header {
             background: white;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -95,7 +91,6 @@
             transform: translateY(-1px);
         }
         
-        /* Main Container */
         .calc-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -105,7 +100,6 @@
             padding: 0 1rem;
         }
         
-        /* Section styles */
         .calc-section {
             background: white;
             border-radius: 12px;
@@ -140,7 +134,6 @@
             color: #1e40af;
         }
 
-        /* Table styles */
         .calc-table {
             width: 100%;
             border-collapse: collapse;
@@ -176,8 +169,7 @@
             text-align: right;
         }
         
-        /* Input Field */
-        .input-field {
+        .input-field, .select-field {
             width: 100%;
             padding: 0.5rem 0.8rem;
             border: 2px solid #e2e8f0;
@@ -189,7 +181,7 @@
             font-weight: 600;
         }
         
-        .input-field:focus {
+        .input-field:focus, .select-field:focus {
             outline: none;
             border-color: #1e40af;
             background: white;
@@ -268,7 +260,7 @@
             gap: 0.5rem;
             background: #f1f5f9;
             color: #64748b;
-            text-decoration: none; /* Dodane dla linku <a> */
+            text-decoration: none;
         }
         
         .calc-btn:hover {
@@ -276,11 +268,9 @@
             color: #374151;
         }
         
-        /* Specjalne style dla linku <a> udającego przycisk */
         a.calc-btn:hover {
              transform: translateY(-1px);
         }
-
 
         .calc-table th {
             text-align: right;
@@ -357,8 +347,13 @@
                     <tbody>
                         <tr>
                             <td>Pre opłaty Miłosz</td>
-                            <td><input type="number" id="pre_milosz_netto" class="input-field" value="4250" readonly></td>
+                            <td><input type="number" id="pre_milosz_netto" class="input-field" value="4000" readonly></td>
                             <td class="output-field" id="pre_milosz_brutto"></td>
+                        </tr>
+                        <tr>
+                            <td>I instancja</td>
+                            <td><input type="number" id="i_instancja_netto" class="input-field" value="250" readonly></td>
+                            <td class="output-field" id="i_instancja_brutto"></td>
                         </tr>
                         <tr>
                             <td>Pre opłaty BAF</td>
@@ -366,21 +361,38 @@
                             <td class="output-field" id="pre_baf_brutto"></td>
                         </tr>
                         <tr>
-                            <td>Opłata sądowa + pełnomocnictwo</td>
-                            <td><input type="number" id="oplata_sadowa_netto" class="input-field" value="1017"></td>
-                            <td class="output-field" id="oplata_sadowa_brutto"></td>
-                        </tr>
-                         <tr>
-                            <td>II instancja</td>
-                            <td><input type="number" id="ii_instancja_netto" class="input-field" value="750" readonly></td>
-                            <td class="output-field" id="ii_instancja_brutto"></td>
+                            <td>Koszt rat PayU</td>
+                            <td>
+                                <select id="payu_wariant" class="select-field">
+                                    <option value="0">Brak</option>
+                                    <option value="5">5 rat</option>
+                                    <option value="10">10 rat</option>
+                                    <option value="20">20 rat</option>
+                                </select>
+                            </td>
+                            <td class="output-field" id="payu_koszt_brutto">0,00 zł</td>
                         </tr>
                         <tr>
                             <td><b>Sumaryczne Pre opłaty</b></td>
                             <td class="output-field" id="sum_pre_netto"></td>
                             <td class="output-field highlight-blue-bg" id="sum_pre_brutto"></td>
                         </tr>
-                         <tr>
+                        <tr>
+                            <td><b>Sumaryczne opłaty z PayU</b></td>
+                            <td class="output-field" id="sum_payu_netto">-</td>
+                            <td class="output-field highlight" id="sum_payu_brutto"></td>
+                        </tr>
+                        <tr>
+                            <td>Opłata sądowa + pełnomocnictwo</td>
+                            <td><input type="number" id="oplata_sadowa_netto" class="input-field" value="1017"></td>
+                            <td class="output-field" id="oplata_sadowa_brutto"></td>
+                        </tr>
+                        <tr>
+                            <td>II instancja</td>
+                            <td><input type="number" id="ii_instancja_netto" class="input-field" value="750" readonly></td>
+                            <td class="output-field" id="ii_instancja_brutto"></td>
+                        </tr>
+                        <tr>
                             <td><b>Sumaryczne Pre opłaty + II instancja</b></td>
                             <td class="output-field" id="sum_pre_ii_netto"></td>
                             <td class="output-field highlight" id="sum_pre_ii_brutto"></td>
@@ -402,9 +414,8 @@
                     <button id="go-to-generator-btn" class="calc-btn" style="background-color: #a7f3d0; color: #065f46;">
                         <i class="fas fa-file-signature"></i> Przejdź do generowania umowy
                     </button>
-                    
                 </div>
-                 </section>
+            </section>
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 1.5rem;">
@@ -428,12 +439,12 @@
                             <td class="output-field" id="sf_milosz_brutto"></td>
                         </tr>
                         <tr>
-                            <td>BAF success fee</td>
+                            <td>BAF success fee (<span id="sf_baf_label">0%</span>)</td>
                             <td class="output-field" id="sf_baf_netto"></td>
                             <td class="output-field" id="sf_baf_brutto"></td>
                         </tr>
                         <tr>
-                            <td><b>Sumaryczne success fee</b></td>
+                            <td><b>Sumaryczne success fee (<span id="sf_sum_label">8%</span>)</b></td>
                             <td class="output-field" id="sum_sf_netto"></td>
                             <td class="output-field highlight" id="sum_sf_brutto"></td>
                         </tr>
@@ -525,7 +536,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const inputs = document.querySelectorAll('.input-field');
+            const inputs = document.querySelectorAll('.input-field, .select-field');
             
             const formatCurrency = (value) => {
                 if (isNaN(value)) return '';
@@ -559,8 +570,10 @@
                 nasze_sf_proc: "0",
                 pre_baf_netto: "0", 
                 oplata_sadowa_netto: "1017",
-                pre_milosz_netto: "4250",
-                ii_instancja_netto: "750"
+                pre_milosz_netto: "4000",
+                i_instancja_netto: "250",
+                ii_instancja_netto: "750",
+                payu_wariant: "0"
             };
             
             function calculate() {
@@ -575,47 +588,30 @@
                     const wps = getValue('wps');
                     const odsetkiPrzyszle = getValue('odsetki_przyszle');
                     const stawkaOdsetekUst = getValue('stawka_odsetek_ust') / 100;
-                    const naszeSfProc = getValue('nasze_sf_proc') / 100;
+                    const naszeSfProcVal = getValue('nasze_sf_proc');
+                    const naszeSfProc = naszeSfProcVal / 100;
                     
                     const preMiloszNetto = getValue('pre_milosz_netto');
+                    const iInstancjaNetto = getValue('i_instancja_netto');
                     const preBafNetto = getValue('pre_baf_netto'); 
                     const oplataSadowaNetto = getValue('oplata_sadowa_netto');
                     const iiInstancjaNetto = getValue('ii_instancja_netto');
 
+                    // Obliczenia opłat początkowych
                     const preMiloszBrutto = preMiloszNetto * (1 + VAT_RATE);
+                    const iInstancjaBrutto = iInstancjaNetto * (1 + VAT_RATE);
                     const preBafBrutto = preBafNetto * (1 + VAT_RATE); 
+                    
+                    // Opłata sądowa: Netto = Brutto
                     const oplataSadowaBrutto = oplataSadowaNetto;
+                    
                     const iiInstancjaBrutto = iiInstancjaNetto * (1 + VAT_RATE);
                     
-                    const sumPreNetto = preMiloszNetto + preBafNetto + oplataSadowaNetto; 
-                    const sumPreBrutto = preMiloszBrutto + preBafBrutto + oplataSadowaBrutto; 
-                    
-                    const sumPreIiNetto = sumPreNetto + iiInstancjaNetto;
-                    const sumPreIiBrutto = sumPreBrutto + iiInstancjaBrutto;
+                    // Sumaryczne Pre opłaty (Miłosz + I instancja + BAF)
+                    const sumPreNetto = preMiloszNetto + iInstancjaNetto + preBafNetto; 
+                    const sumPreBrutto = preMiloszBrutto + iInstancjaBrutto + preBafBrutto; 
 
-                    const odsetki1rok = wps * stawkaOdsetekUst;
-                    const odsetki2lata = odsetki1rok * 2;
-                    const wpsFinalny = wps + odsetki2lata;
-                    const sumDoOdzyskania = wpsFinalny + odsetkiPrzyszle;
-                    
-                    const stosunekPreDoSumy = sumDoOdzyskania > 0 ? sumPreBrutto / sumDoOdzyskania : 0;
-
-                    // V --- POPRAWKA TUTAJ --- V
-                    const sfMiloszNetto = wpsFinalny * 0.08; // Poprawiono z 0.06 na 0.08
-                    // ^ --- KONIEC POPRAWKI --- ^
-                    const sfMiloszBrutto = sfMiloszNetto * (1 + VAT_RATE);
-                    const sfBafNetto = wpsFinalny * naszeSfProc; 
-                    const sfBafBrutto = sfBafNetto * (1 + VAT_RATE); 
-
-                    const sumSfNetto = sfMiloszNetto + sfBafNetto; 
-                    const sumSfBrutto = sfMiloszBrutto + sfBafBrutto; 
-
-                    const zyskKlienta = sumDoOdzyskania - sumPreIiBrutto - sumSfBrutto;
-                    const podzialKlient = sumDoOdzyskania > 0 ? zyskKlienta / sumDoOdzyskania : 0;
-                    const podzialNasz = 1 - podzialKlient;
-                    
-                    const roi = (sumPreBrutto > 0) ? (zyskKlienta / sumPreBrutto) : 0;
-                    
+                    // Obliczenia opcji ratalnych PayU
                     const kwotaDoRozlozenia = sumPreBrutto;
                     
                     const prowizja5 = kwotaDoRozlozenia * PAYU_RATES[5];
@@ -630,12 +626,64 @@
                     const rata20 = (kwotaDoRozlozenia + prowizja20) / 20;
                     const zysk20 = preBafNetto - prowizja20; 
 
+                    // Koszt rat PayU z wybranego wariantu
+                    const wyabranyWariantPayU = document.getElementById('payu_wariant').value;
+                    let payuKosztNetto = 0;
+                    
+                    if (wyabranyWariantPayU === "5") {
+                        payuKosztNetto = prowizja5;
+                    } else if (wyabranyWariantPayU === "10") {
+                        payuKosztNetto = prowizja10;
+                    } else if (wyabranyWariantPayU === "20") {
+                        payuKosztNetto = prowizja20;
+                    }
+                    
+                    const payuKosztBrutto = payuKosztNetto * (1 + VAT_RATE);
+                    const sumPayuBrutto = sumPreBrutto + payuKosztBrutto;
+
+                    // Sumaryczne Pre opłaty + II instancja (+ Opłata sądowa)
+                    const sumPreIiNetto = sumPreNetto + oplataSadowaNetto + iiInstancjaNetto;
+                    const sumPreIiBrutto = sumPreBrutto + oplataSadowaBrutto + iiInstancjaBrutto;
+
+                    // Obliczenia WPS i odsetek
+                    const odsetki1rok = wps * stawkaOdsetekUst;
+                    const odsetki2lata = odsetki1rok * 2;
+                    const wpsFinalny = wps + odsetki2lata;
+                    const sumDoOdzyskania = wpsFinalny + odsetkiPrzyszle;
+                    
+                    const stosunekPreDoSumy = sumDoOdzyskania > 0 ? sumPreBrutto / sumDoOdzyskania : 0;
+
+                    // Success Fee & Etykiety %
+                    document.getElementById('sf_baf_label').textContent = naszeSfProcVal + '%';
+                    document.getElementById('sf_sum_label').textContent = (8 + naszeSfProcVal) + '%';
+
+                    const sfMiloszNetto = wpsFinalny * 0.08;
+                    const sfMiloszBrutto = sfMiloszNetto * (1 + VAT_RATE);
+                    const sfBafNetto = wpsFinalny * naszeSfProc; 
+                    const sfBafBrutto = sfBafNetto * (1 + VAT_RATE); 
+
+                    const sumSfNetto = sfMiloszNetto + sfBafNetto; 
+                    const sumSfBrutto = sfMiloszBrutto + sfBafBrutto; 
+
+                    const zyskKlienta = sumDoOdzyskania - sumPreIiBrutto - sumSfBrutto;
+                    const podzialKlient = sumDoOdzyskania > 0 ? zyskKlienta / sumDoOdzyskania : 0;
+                    const podzialNasz = 1 - podzialKlient;
+                    
+                    const roi = (sumPreBrutto > 0) ? (zyskKlienta / sumPreBrutto) : 0;
+
+                    // Wstawianie wartości w HTML
                     setValue('pre_milosz_brutto', preMiloszBrutto, formatCurrency);
+                    setValue('i_instancja_brutto', iInstancjaBrutto, formatCurrency);
                     setValue('pre_baf_brutto', preBafBrutto, formatCurrency); 
+                    setValue('payu_koszt_brutto', payuKosztBrutto, formatCurrency);
                     setValue('oplata_sadowa_brutto', oplataSadowaBrutto, formatCurrency);
                     setValue('ii_instancja_brutto', iiInstancjaBrutto, formatCurrency);
+                    
                     setValue('sum_pre_netto', sumPreNetto, formatCurrency);
                     setValue('sum_pre_brutto', sumPreBrutto, formatCurrency);
+                    
+                    setValue('sum_payu_brutto', sumPayuBrutto, formatCurrency);
+
                     setValue('sum_pre_ii_netto', sumPreIiNetto, formatCurrency);
                     setValue('sum_pre_ii_brutto', sumPreIiBrutto, formatCurrency);
                     
@@ -680,9 +728,9 @@
                 document.getElementById('wps').value = "0";
                 document.getElementById('odsetki_przyszle').value = "0";
                 document.getElementById('pre_baf_netto').value = "0"; 
-                
                 document.getElementById('stawka_odsetek_ust').value = "9.25";
                 document.getElementById('nasze_sf_proc').value = "0";
+                document.getElementById('payu_wariant').value = "0";
                 
                 calculate();
             }
@@ -707,14 +755,14 @@
                 }
             });
 
-            inputs.forEach(input => input.addEventListener('input', calculate));
+            inputs.forEach(input => {
+                input.addEventListener('input', calculate);
+                input.addEventListener('change', calculate);
+            });
             document.getElementById('reset-btn').addEventListener('click', resetForm);
 
-            
-            // V --- LOGIKA GENEROWANIA PODSTRONY --- V
-            
+            // Generowanie podstrony
             const generatePageBtn = document.getElementById('generate-page-btn');
-            
             generatePageBtn.addEventListener('click', () => {
                 const dataToStore = {
                     wps: formatCurrency(getValue('wps')),
@@ -742,198 +790,22 @@
                 window.open('oferta_skd.html', '_blank');
             });
             
-            // ^ --- KONIEC LOGIKI GENEROWANIA PODSTRONY --- ^
-            
-            
-            // V --- NOWA LOGIKA: PRZEKIEROWANIE DO GENERATORA Z DANYMI --- V
+            // Przekierowanie do generatora
             const goToGeneratorBtn = document.getElementById('go-to-generator-btn');
             goToGeneratorBtn.addEventListener('click', () => {
-                // 1. Pobierz opłatę początkową (ZMIANA LOGIKI Z TWOJEJ PROŚBY)
                 const preBafNetto = getValue('pre_baf_netto');
-                const oplataDoPrzekazania = preBafNetto + 4000; // NOWA LOGIKA: Pre opłaty BAF + 4 000 zł
+                const oplataDoPrzekazania = preBafNetto + 4000;
                 
-                // 2. Pobierz Success Fee (Miłosz 8% + Nasze SF)
-                const sfMiloszProc = 8; // Na podstawie Twojego kalkulatora
+                const sfMiloszProc = 8;
                 const sfBafProc = getValue('nasze_sf_proc');
                 const procentDoPrzekazania = sfMiloszProc + sfBafProc;
                 
-                // 3. Zbuduj URL i przekieruj (ZMIANA NAZWY PLIKU)
                 const url = `generator_umowy.html?pre_oplata=${oplataDoPrzekazania}&procent=${procentDoPrzekazania}`;
-                window.open(url, '_self'); // Otwórz w tej samej karcie
+                window.open(url, '_self');
             });
-            // ^ --- KONIEC NOWEJ LOGIKI --- ^
-            
             
             initializeForm();
         });
     </script>
+</body>
 </html>
-
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 08.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 10.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 15.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 17.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 08.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 16.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 22.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 26.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 02.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 10.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 12.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 12.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 19.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        // BAF AUTO UPDATE - 19.02.2026
-        try {
-            document.getElementById('wibor-1m').textContent = '3,97%';
-            document.getElementById('wibor-3m').textContent = '3,85%';
-            document.getElementById('wibor-6m').textContent = '3,73%';
-            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
-            
-            const dzisiaj = 'Dane na dzień: 19.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    </body>
-    
