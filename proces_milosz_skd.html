@@ -138,7 +138,7 @@
         .calc-table td {
             padding: 0.75rem 0.5rem;
             border-bottom: 1px solid #f1f5f9;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         
         .calc-table tr:last-child td {
@@ -148,7 +148,7 @@
         .calc-table td:first-child {
             font-weight: 500;
             color: #374151;
-            width: 50%;
+            width: 25%;
         }
 
         .calc-table td a {
@@ -228,7 +228,7 @@
         .profit-column-cell {
             border-left: 2px solid #a7f3d0;
             border-right: 2px solid #a7f3d0;
-            font-size: 1.05em;
+            font-size: 0.95em;
             font-weight: 700;
             background-color: #f0fdf4;
             border-bottom: none;
@@ -271,7 +271,7 @@
         .calc-table th {
             text-align: right;
             padding: 0.5rem;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #64748b;
             border-bottom: 2px solid #e2e8f0;
         }
@@ -504,32 +504,40 @@
                         <tr>
                             <th>Liczba rat</th>
                             <th>Stawka %</th>
-                            <th>Prowizja PAYU (brutto)</th>
+                            <th>Prowizja PAYU (netto)</th>
+                            <th>Prowizja PAYU z VAT</th>
                             <th>Kwota raty</th>
-                            <th class="profit-column-header">Nasz zysk Pre (netto)</th>
+                            <th class="profit-column-header">Nasz zysk Pre (netto) koszty Klient</th>
+                            <th class="profit-column-header">Nasz zysk Pre (netto) koszty BAF</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>5</td>
                             <td class="output-field" id="payu_stawka_5"></td>
-                            <td class="output-field" id="payu_prowizja_5"></td>
+                            <td class="output-field" id="payu_prowizja_netto_5"></td>
+                            <td class="output-field" id="payu_prowizja_brutto_5"></td>
                             <td class="output-field" id="payu_rata_5"></td>
-                            <td class="output-field profit-column-cell" id="payu_zysk_5"></td>
+                            <td class="output-field profit-column-cell" id="payu_zysk_klient_5"></td>
+                            <td class="output-field profit-column-cell" id="payu_zysk_baf_5"></td>
                         </tr>
                         <tr>
                             <td>10</td>
                             <td class="output-field" id="payu_stawka_10"></td>
-                            <td class="output-field" id="payu_prowizja_10"></td>
+                            <td class="output-field" id="payu_prowizja_netto_10"></td>
+                            <td class="output-field" id="payu_prowizja_brutto_10"></td>
                             <td class="output-field" id="payu_rata_10"></td>
-                            <td class="output-field profit-column-cell" id="payu_zysk_10"></td>
+                            <td class="output-field profit-column-cell" id="payu_zysk_klient_10"></td>
+                            <td class="output-field profit-column-cell" id="payu_zysk_baf_10"></td>
                         </tr>
                         <tr>
                             <td>20</td>
                             <td class="output-field" id="payu_stawka_20"></td>
-                            <td class="output-field" id="payu_prowizja_20"></td>
+                            <td class="output-field" id="payu_prowizja_netto_20"></td>
+                            <td class="output-field" id="payu_prowizja_brutto_20"></td>
                             <td class="output-field" id="payu_rata_20"></td>
-                            <td class="output-field profit-column-cell" id="payu_zysk_20"></td>
+                            <td class="output-field profit-column-cell" id="payu_zysk_klient_20"></td>
+                            <td class="output-field profit-column-cell" id="payu_zysk_baf_20"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -620,22 +628,25 @@
                         const rateNetto = PAYU_RATES[raty];
                         const rateBrutto = rateNetto * (1 + VAT_RATE);
                         
-                        let kwotaCalkowitaBrutto, prowizjaBrutto, zyskBafNetto;
+                        let kwotaCalkowitaBrutto, prowizjaBrutto, prowizjaNetto;
                         
                         if (platnikPayu === 'klient') {
                             // Koszt po stronie Klienta: ubruttowienie bazowej kwoty
                             kwotaCalkowitaBrutto = sumPreBrutto / (1 - rateBrutto);
                             prowizjaBrutto = kwotaCalkowitaBrutto - sumPreBrutto;
-                            zyskBafNetto = preBafNetto;
+                            prowizjaNetto = prowizjaBrutto / (1 + VAT_RATE);
                         } else {
                             // Koszt po stronie BAF
                             kwotaCalkowitaBrutto = sumPreBrutto;
                             prowizjaBrutto = kwotaCalkowitaBrutto * rateBrutto;
-                            zyskBafNetto = preBafNetto - (prowizjaBrutto / (1 + VAT_RATE));
+                            prowizjaNetto = prowizjaBrutto / (1 + VAT_RATE);
                         }
                         
+                        const zyskKlientNetto = preBafNetto;
+                        const zyskBafNetto = preBafNetto - prowizjaNetto;
+                        
                         const rata = kwotaCalkowitaBrutto / raty;
-                        return { prowizjaBrutto, rata, zyskBafNetto, kwotaCalkowitaBrutto };
+                        return { prowizjaNetto, prowizjaBrutto, rata, zyskKlientNetto, zyskBafNetto, kwotaCalkowitaBrutto };
                     };
 
                     const payu5 = calcPayu(5);
@@ -722,19 +733,25 @@
                     
                     // Tabela PayU
                     setValue('payu_stawka_5', PAYU_RATES[5], formatPercent);
-                    setValue('payu_prowizja_5', payu5.prowizjaBrutto, formatCurrency);
+                    setValue('payu_prowizja_netto_5', payu5.prowizjaNetto, formatCurrency);
+                    setValue('payu_prowizja_brutto_5', payu5.prowizjaBrutto, formatCurrency);
                     setValue('payu_rata_5', payu5.rata, formatCurrency);
-                    setValue('payu_zysk_5', payu5.zyskBafNetto, formatCurrency);
+                    setValue('payu_zysk_klient_5', payu5.zyskKlientNetto, formatCurrency);
+                    setValue('payu_zysk_baf_5', payu5.zyskBafNetto, formatCurrency);
 
                     setValue('payu_stawka_10', PAYU_RATES[10], formatPercent);
-                    setValue('payu_prowizja_10', payu10.prowizjaBrutto, formatCurrency);
+                    setValue('payu_prowizja_netto_10', payu10.prowizjaNetto, formatCurrency);
+                    setValue('payu_prowizja_brutto_10', payu10.prowizjaBrutto, formatCurrency);
                     setValue('payu_rata_10', payu10.rata, formatCurrency);
-                    setValue('payu_zysk_10', payu10.zyskBafNetto, formatCurrency);
+                    setValue('payu_zysk_klient_10', payu10.zyskKlientNetto, formatCurrency);
+                    setValue('payu_zysk_baf_10', payu10.zyskBafNetto, formatCurrency);
 
                     setValue('payu_stawka_20', PAYU_RATES[20], formatPercent);
-                    setValue('payu_prowizja_20', payu20.prowizjaBrutto, formatCurrency);
+                    setValue('payu_prowizja_netto_20', payu20.prowizjaNetto, formatCurrency);
+                    setValue('payu_prowizja_brutto_20', payu20.prowizjaBrutto, formatCurrency);
                     setValue('payu_rata_20', payu20.rata, formatCurrency);
-                    setValue('payu_zysk_20', payu20.zyskBafNetto, formatCurrency);
+                    setValue('payu_zysk_klient_20', payu20.zyskKlientNetto, formatCurrency);
+                    setValue('payu_zysk_baf_20', payu20.zyskBafNetto, formatCurrency);
 
                 } catch (error) {
                     console.error("Błąd obliczeń:", error);
@@ -762,16 +779,6 @@
                 }
                 calculate();
             }
-            
-            const payuTableRows = document.querySelectorAll('.calc-section:last-of-type .calc-table tbody tr');
-            payuTableRows.forEach((row, index) => {
-                if (index === payuTableRows.length - 1) {
-                    const cell = row.querySelector('.profit-column-cell');
-                    if(cell) {
-                        cell.style.borderBottom = '2px solid #a7f3d0';
-                    }
-                }
-            });
 
             inputs.forEach(input => {
                 input.addEventListener('input', calculate);
@@ -796,9 +803,9 @@
                     payu_rata_5: document.getElementById('payu_rata_5').textContent,
                     payu_rata_10: document.getElementById('payu_rata_10').textContent,
                     payu_rata_20: document.getElementById('payu_rata_20').textContent,
-                    payu_prowizja_5: document.getElementById('payu_prowizja_5').textContent,
-                    payu_prowizja_10: document.getElementById('payu_prowizja_10').textContent,
-                    payu_prowizja_20: document.getElementById('payu_prowizja_20').textContent
+                    payu_prowizja_5: document.getElementById('payu_prowizja_brutto_5').textContent,
+                    payu_prowizja_10: document.getElementById('payu_prowizja_brutto_10').textContent,
+                    payu_prowizja_20: document.getElementById('payu_prowizja_brutto_20').textContent
                 };
 
                 for (const [key, value] of Object.entries(dataToStore)) {
