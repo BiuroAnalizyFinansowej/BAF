@@ -235,6 +235,7 @@
             margin-top: 2px;
         }
         
+        /* Style dla tabeli PayU */
         .profit-column-header {
             border-top: 2px solid #a7f3d0;
             border-left: 2px solid #a7f3d0;
@@ -242,6 +243,7 @@
             color: #065f46;
             font-weight: 700;
             background-color: #f0fdf4;
+            transition: all 0.3s ease;
         }
         .profit-column-cell {
             border-left: 2px solid #a7f3d0;
@@ -249,10 +251,19 @@
             font-size: 0.9em;
             font-weight: 700;
             background-color: #f0fdf4;
-            border-bottom: none;
+            transition: all 0.3s ease;
         }
         .calc-table tr:last-child .profit-column-cell {
             border-bottom: 2px solid #a7f3d0;
+        }
+
+        /* Style dla wygaszonej kolumny zysku */
+        .column-disabled {
+            opacity: 0.35 !important;
+            background-color: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+            color: #94a3b8 !important;
+            font-weight: 400 !important;
         }
 
         .calc-actions {
@@ -549,8 +560,8 @@
                             <th style="width: auto;">Prowizja PAYU (netto)</th>
                             <th style="width: auto;">Prowizja PAYU z VAT</th>
                             <th style="width: auto;">Kwota raty</th>
-                            <th class="profit-column-header" style="width: auto;">Nasz zysk Pre (netto) koszty Klient</th>
-                            <th class="profit-column-header" style="width: auto;">Nasz zysk Pre (netto) koszty BAF</th>
+                            <th class="profit-column-header col-klient" style="width: auto;">Nasz zysk Pre (netto) koszty Klient</th>
+                            <th class="profit-column-header col-baf" style="width: auto;">Nasz zysk Pre (netto) koszty BAF</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -560,8 +571,8 @@
                             <td class="output-field" id="payu_prowizja_netto_5"></td>
                             <td class="output-field" id="payu_prowizja_brutto_5"></td>
                             <td class="output-field" id="payu_rata_5"></td>
-                            <td class="output-field profit-column-cell" id="payu_zysk_klient_5"></td>
-                            <td class="output-field profit-column-cell" id="payu_zysk_baf_5"></td>
+                            <td class="output-field profit-column-cell col-klient" id="payu_zysk_klient_5"></td>
+                            <td class="output-field profit-column-cell col-baf" id="payu_zysk_baf_5"></td>
                         </tr>
                         <tr>
                             <td>10</td>
@@ -569,8 +580,8 @@
                             <td class="output-field" id="payu_prowizja_netto_10"></td>
                             <td class="output-field" id="payu_prowizja_brutto_10"></td>
                             <td class="output-field" id="payu_rata_10"></td>
-                            <td class="output-field profit-column-cell" id="payu_zysk_klient_10"></td>
-                            <td class="output-field profit-column-cell" id="payu_zysk_baf_10"></td>
+                            <td class="output-field profit-column-cell col-klient" id="payu_zysk_klient_10"></td>
+                            <td class="output-field profit-column-cell col-baf" id="payu_zysk_baf_10"></td>
                         </tr>
                         <tr>
                             <td>20</td>
@@ -578,8 +589,8 @@
                             <td class="output-field" id="payu_prowizja_netto_20"></td>
                             <td class="output-field" id="payu_prowizja_brutto_20"></td>
                             <td class="output-field" id="payu_rata_20"></td>
-                            <td class="output-field profit-column-cell" id="payu_zysk_klient_20"></td>
-                            <td class="output-field profit-column-cell" id="payu_zysk_baf_20"></td>
+                            <td class="output-field profit-column-cell col-klient" id="payu_zysk_klient_20"></td>
+                            <td class="output-field profit-column-cell col-baf" id="payu_zysk_baf_20"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -630,6 +641,19 @@
                 payu_platnik: "klient"
             };
             
+            function updateColumnStyles(platnik) {
+                const klientCols = document.querySelectorAll('.col-klient');
+                const bafCols = document.querySelectorAll('.col-baf');
+
+                if (platnik === 'klient') {
+                    klientCols.forEach(col => col.classList.remove('column-disabled'));
+                    bafCols.forEach(col => col.classList.add('column-disabled'));
+                } else {
+                    bafCols.forEach(col => col.classList.remove('column-disabled'));
+                    klientCols.forEach(col => col.classList.add('column-disabled'));
+                }
+            }
+
             function calculate() {
                 try {
                     const VAT_RATE = 0.23;
@@ -664,24 +688,25 @@
                     const sumPreBrutto = preMiloszBrutto + iInstancjaBrutto + preBafBrutto; 
 
                     const platnikPayu = document.getElementById('payu_platnik').value;
+                    updateColumnStyles(platnikPayu);
 
-                    // NIEZALEŻNE I POPRAWNE OBLICZENIA DLA TABELI PAYU
+                    // OBLICZENIA DLA TABELI PAYU
                     const calcPayuRow = (raty) => {
                         const rateNetto = PAYU_RATES[raty];
                         const rateBrutto = rateNetto * (1 + VAT_RATE);
 
-                        // 1. Wariant STANDARDOWY (Gdy BAF ponosi koszt)
-                        const prowizjaBruttoBaf = sumPreBrutto * rateBrutto;
-                        const prowizjaNettoBaf = prowizjaBruttoBaf / (1 + VAT_RATE);
-                        const zyskBafNetto = preBafNetto - prowizjaNettoBaf;
-
-                        // 2. Wariant UBRUTTOWIONY (Gdy KLIENT ponosi koszt)
+                        // 1. Wariant KLIENT (doliczane do rat z ubruttowieniem)
                         const kwotaCalkowitaBruttoKlient = sumPreBrutto / (1 - rateBrutto);
                         const prowizjaBruttoKlient = kwotaCalkowitaBruttoKlient - sumPreBrutto;
                         const prowizjaNettoKlient = prowizjaBruttoKlient / (1 + VAT_RATE);
-                        const zyskKlientNetto = preBafNetto; // Pełny zysk BAF, bo klient dopłaca prowizję
+                        const zyskKlientNetto = preBafNetto;
 
-                        // Wybór wartości do wyświetlenia w tabeli w zależności od zaznaczenia
+                        // 2. Wariant BAF (prowizja netto odejmowana od kwoty netto preopłaty BAF)
+                        const prowizjaNettoBaf = sumPreNetto * rateNetto; 
+                        const prowizjaBruttoBaf = prowizjaNettoBaf * (1 + VAT_RATE);
+                        const zyskBafNetto = preBafNetto - prowizjaNettoBaf;
+
+                        // Wybór wartości widocznych w tabeli dla podstawowych wskaźników
                         let prowizjaNettoDisp, prowizjaBruttoDisp, kwotaRatyDisp, kwotaCalkowitaBruttoWybrana;
 
                         if (platnikPayu === 'klient') {
