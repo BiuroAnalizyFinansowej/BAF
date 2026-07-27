@@ -9,10 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* =====================================
-           BAF CALCULATOR UNIFIED DESIGN
-        ===================================== */
-        
         * {
             margin: 0;
             padding: 0;
@@ -496,12 +492,19 @@
             
              <section class="calc-section">
                 <h2 class="section-title"><i class="fas fa-credit-card"></i>Opcje ratalne PAYU</h2>
+                <div style="margin-bottom: 0.5rem;">
+                    <label style="font-size: 0.85rem; font-weight: 600; color: #374151;">Prowizję PayU pokrywa:</label>
+                    <select id="payu_platnik" class="select-field" style="margin-top: 0.25rem;">
+                        <option value="klient">Klient (doliczane do rat)</option>
+                        <option value="baf">BAF (potrącane z zysku BAF)</option>
+                    </select>
+                </div>
                 <table class="calc-table">
                     <thead>
                         <tr>
                             <th>Liczba rat</th>
                             <th>Stawka %</th>
-                            <th>Prowizja PAYU</th>
+                            <th>Prowizja PAYU (brutto)</th>
                             <th>Kwota raty</th>
                             <th class="profit-column-header">Nasz zysk Pre (netto)</th>
                         </tr>
@@ -516,14 +519,14 @@
                         </tr>
                         <tr>
                             <td>10</td>
-                             <td class="output-field" id="payu_stawka_10"></td>
+                            <td class="output-field" id="payu_stawka_10"></td>
                             <td class="output-field" id="payu_prowizja_10"></td>
                             <td class="output-field" id="payu_rata_10"></td>
                             <td class="output-field profit-column-cell" id="payu_zysk_10"></td>
                         </tr>
-                         <tr>
+                        <tr>
                             <td>20</td>
-                             <td class="output-field" id="payu_stawka_20"></td>
+                            <td class="output-field" id="payu_stawka_20"></td>
                             <td class="output-field" id="payu_prowizja_20"></td>
                             <td class="output-field" id="payu_rata_20"></td>
                             <td class="output-field profit-column-cell" id="payu_zysk_20"></td>
@@ -573,7 +576,8 @@
                 pre_milosz_netto: "4000",
                 i_instancja_netto: "250",
                 ii_instancja_netto: "750",
-                payu_wariant: "0"
+                payu_wariant: "0",
+                payu_platnik: "klient"
             };
             
             function calculate() {
@@ -597,63 +601,76 @@
                     const oplataSadowaNetto = getValue('oplata_sadowa_netto');
                     const iiInstancjaNetto = getValue('ii_instancja_netto');
 
-                    // Obliczenia opłat początkowych
+                    // Opłaty początkowe
                     const preMiloszBrutto = preMiloszNetto * (1 + VAT_RATE);
                     const iInstancjaBrutto = iInstancjaNetto * (1 + VAT_RATE);
                     const preBafBrutto = preBafNetto * (1 + VAT_RATE); 
                     
-                    // Opłata sądowa: Netto = Brutto
-                    const oplataSadowaBrutto = oplataSadowaNetto;
-                    
+                    const oplataSadowaBrutto = oplataSadowaNetto; // Netto = Brutto
                     const iiInstancjaBrutto = iiInstancjaNetto * (1 + VAT_RATE);
                     
                     // Sumaryczne Pre opłaty (Miłosz + I instancja + BAF)
                     const sumPreNetto = preMiloszNetto + iInstancjaNetto + preBafNetto; 
                     const sumPreBrutto = preMiloszBrutto + iInstancjaBrutto + preBafBrutto; 
 
-                    // Obliczenia opcji ratalnych PayU
-                    const kwotaDoRozlozenia = sumPreBrutto;
-                    
-                    const prowizja5 = kwotaDoRozlozenia * PAYU_RATES[5];
-                    const rata5 = (kwotaDoRozlozenia + prowizja5) / 5;
-                    const zysk5 = preBafNetto - (prowizja5 / (1 + VAT_RATE)); 
+                    const platnikPayu = document.getElementById('payu_platnik').value;
 
-                    const prowizja10 = kwotaDoRozlozenia * PAYU_RATES[10];
-                    const rata10 = (kwotaDoRozlozenia + prowizja10) / 10;
-                    const zysk10 = preBafNetto - (prowizja10 / (1 + VAT_RATE)); 
+                    // Opcje Ratalne PayU
+                    const calcPayu = (raty) => {
+                        const rateNetto = PAYU_RATES[raty];
+                        const rateBrutto = rateNetto * (1 + VAT_RATE);
+                        
+                        let kwotaCalkowitaBrutto, prowizjaBrutto, zyskBafNetto;
+                        
+                        if (platnikPayu === 'klient') {
+                            // Koszt po stronie Klienta: ubruttowienie bazowej kwoty
+                            kwotaCalkowitaBrutto = sumPreBrutto / (1 - rateBrutto);
+                            prowizjaBrutto = kwotaCalkowitaBrutto - sumPreBrutto;
+                            zyskBafNetto = preBafNetto;
+                        } else {
+                            // Koszt po stronie BAF
+                            kwotaCalkowitaBrutto = sumPreBrutto;
+                            prowizjaBrutto = kwotaCalkowitaBrutto * rateBrutto;
+                            zyskBafNetto = preBafNetto - (prowizjaBrutto / (1 + VAT_RATE));
+                        }
+                        
+                        const rata = kwotaCalkowitaBrutto / raty;
+                        return { prowizjaBrutto, rata, zyskBafNetto, kwotaCalkowitaBrutto };
+                    };
 
-                    const prowizja20 = kwotaDoRozlozenia * PAYU_RATES[20];
-                    const rata20 = (kwotaDoRozlozenia + prowizja20) / 20;
-                    const zysk20 = preBafNetto - prowizja20; 
+                    const payu5 = calcPayu(5);
+                    const payu10 = calcPayu(10);
+                    const payu20 = calcPayu(20);
 
-                    // Koszt rat PayU z wybranego wariantu
+                    // Wybrany wariant PayU dla sekcji "Opłaty początkowe"
                     const wyabranyWariantPayU = document.getElementById('payu_wariant').value;
-                    let payuKosztNetto = 0;
+                    let payuKosztBrutto = 0;
+                    let totalPayuBrutto = sumPreBrutto;
                     
                     if (wyabranyWariantPayU === "5") {
-                        payuKosztNetto = prowizja5;
+                        payuKosztBrutto = payu5.prowizjaBrutto;
+                        totalPayuBrutto = payu5.kwotaCalkowitaBrutto;
                     } else if (wyabranyWariantPayU === "10") {
-                        payuKosztNetto = prowizja10;
+                        payuKosztBrutto = payu10.prowizjaBrutto;
+                        totalPayuBrutto = payu10.kwotaCalkowitaBrutto;
                     } else if (wyabranyWariantPayU === "20") {
-                        payuKosztNetto = prowizja20;
+                        payuKosztBrutto = payu20.prowizjaBrutto;
+                        totalPayuBrutto = payu20.kwotaCalkowitaBrutto;
                     }
-                    
-                    const payuKosztBrutto = payuKosztNetto * (1 + VAT_RATE);
-                    const sumPayuBrutto = sumPreBrutto + payuKosztBrutto;
 
                     // Sumaryczne Pre opłaty + II instancja (+ Opłata sądowa)
                     const sumPreIiNetto = sumPreNetto + oplataSadowaNetto + iiInstancjaNetto;
-                    const sumPreIiBrutto = sumPreBrutto + oplataSadowaBrutto + iiInstancjaBrutto;
+                    const sumPreIiBrutto = totalPayuBrutto + oplataSadowaBrutto + iiInstancjaBrutto;
 
-                    // Obliczenia WPS i odsetek
+                    // WPS i odsetki
                     const odsetki1rok = wps * stawkaOdsetekUst;
                     const odsetki2lata = odsetki1rok * 2;
                     const wpsFinalny = wps + odsetki2lata;
                     const sumDoOdzyskania = wpsFinalny + odsetkiPrzyszle;
                     
-                    const stosunekPreDoSumy = sumDoOdzyskania > 0 ? sumPreBrutto / sumDoOdzyskania : 0;
+                    const stosunekPreDoSumy = sumDoOdzyskania > 0 ? totalPayuBrutto / sumDoOdzyskania : 0;
 
-                    // Success Fee & Etykiety %
+                    // Success Fee
                     document.getElementById('sf_baf_label').textContent = naszeSfProcVal + '%';
                     document.getElementById('sf_sum_label').textContent = (8 + naszeSfProcVal) + '%';
 
@@ -671,7 +688,7 @@
                     
                     const roi = (sumPreBrutto > 0) ? (zyskKlienta / sumPreBrutto) : 0;
 
-                    // Wstawianie wartości w HTML
+                    // Wstawianie wyników do DOM
                     setValue('pre_milosz_brutto', preMiloszBrutto, formatCurrency);
                     setValue('i_instancja_brutto', iInstancjaBrutto, formatCurrency);
                     setValue('pre_baf_brutto', preBafBrutto, formatCurrency); 
@@ -681,8 +698,7 @@
                     
                     setValue('sum_pre_netto', sumPreNetto, formatCurrency);
                     setValue('sum_pre_brutto', sumPreBrutto, formatCurrency);
-                    
-                    setValue('sum_payu_brutto', sumPayuBrutto, formatCurrency);
+                    setValue('sum_payu_brutto', totalPayuBrutto, formatCurrency);
 
                     setValue('sum_pre_ii_netto', sumPreIiNetto, formatCurrency);
                     setValue('sum_pre_ii_brutto', sumPreIiBrutto, formatCurrency);
@@ -704,20 +720,21 @@
                     setValue('sum_sf_netto', sumSfNetto, formatCurrency);
                     setValue('sum_sf_brutto', sumSfBrutto, formatCurrency);
                     
+                    // Tabela PayU
                     setValue('payu_stawka_5', PAYU_RATES[5], formatPercent);
-                    setValue('payu_prowizja_5', prowizja5, formatCurrency);
-                    setValue('payu_rata_5', rata5, formatCurrency);
-                    setValue('payu_zysk_5', zysk5, formatCurrency);
+                    setValue('payu_prowizja_5', payu5.prowizjaBrutto, formatCurrency);
+                    setValue('payu_rata_5', payu5.rata, formatCurrency);
+                    setValue('payu_zysk_5', payu5.zyskBafNetto, formatCurrency);
 
                     setValue('payu_stawka_10', PAYU_RATES[10], formatPercent);
-                    setValue('payu_prowizja_10', prowizja10, formatCurrency);
-                    setValue('payu_rata_10', rata10, formatCurrency);
-                    setValue('payu_zysk_10', zysk10, formatCurrency);
+                    setValue('payu_prowizja_10', payu10.prowizjaBrutto, formatCurrency);
+                    setValue('payu_rata_10', payu10.rata, formatCurrency);
+                    setValue('payu_zysk_10', payu10.zyskBafNetto, formatCurrency);
 
                     setValue('payu_stawka_20', PAYU_RATES[20], formatPercent);
-                    setValue('payu_prowizja_20', prowizja20, formatCurrency);
-                    setValue('payu_rata_20', rata20, formatCurrency);
-                    setValue('payu_zysk_20', zysk20, formatCurrency);
+                    setValue('payu_prowizja_20', payu20.prowizjaBrutto, formatCurrency);
+                    setValue('payu_rata_20', payu20.rata, formatCurrency);
+                    setValue('payu_zysk_20', payu20.zyskBafNetto, formatCurrency);
 
                 } catch (error) {
                     console.error("Błąd obliczeń:", error);
@@ -731,6 +748,7 @@
                 document.getElementById('stawka_odsetek_ust').value = "9.25";
                 document.getElementById('nasze_sf_proc').value = "0";
                 document.getElementById('payu_wariant').value = "0";
+                document.getElementById('payu_platnik').value = "klient";
                 
                 calculate();
             }
