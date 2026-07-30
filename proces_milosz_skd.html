@@ -511,7 +511,6 @@
                         <td>Odsetki ustawowe za opóźnienie (2 lata)</td>
                         <td colspan="2" class="output-field" id="odsetki_2lata"></td>
                     </tr>
-                    <!-- NOWE POZYCJE KZP -->
                     <tr>
                         <td>Koszty Zastępstwa Procesowego (KZP) I instancja</td>
                         <td colspan="2" class="output-field" id="kzp_1instancja"></td>
@@ -520,7 +519,6 @@
                         <td>Koszty Zastępstwa Procesowego (KZP) II instancja</td>
                         <td colspan="2" class="output-field" id="kzp_2instancja"></td>
                     </tr>
-                    <!-- NOWE NAZEWNICTWO I DWA WARIANTY KORZYŚCI -->
                     <tr>
                         <td><b>Całkowita korzyść finansowa (I instancja)</b></td>
                         <td colspan="2" class="output-field highlight" id="korzysc_1instancja"></td>
@@ -534,7 +532,7 @@
                         <td colspan="2" class="output-field" id="wps_finalny"></td>
                     </tr>
                      <tr>
-                        <td>Stosunek pre opłat do sumy do odzyskania</td>
+                        <td>Stosunek pre opłat do całkowitej korzyści</td>
                         <td colspan="2" class="output-field" id="stosunek_pre_do_sumy"></td>
                     </tr>
                      <tr>
@@ -640,7 +638,6 @@
                 }
             };
 
-            // Funkcja do automatycznego wyliczania KZP na podstawie WPS
             const getKZP1Instancja = (wps) => {
                 if (wps <= 0) return 0;
                 if (wps <= 500) return 90;
@@ -707,17 +704,17 @@
                     const iInstancjaBrutto = iInstancjaNetto * (1 + VAT_RATE);
                     const preBafBrutto = preBafNetto * (1 + VAT_RATE); 
                     
-                    const oplataSadowaBrutto = oplataSadowaNetto; // Netto = Brutto
+                    const oplataSadowaBrutto = oplataSadowaNetto;
                     const iiInstancjaBrutto = iiInstancjaNetto * (1 + VAT_RATE);
                     
-                    // Sumaryczne Pre opłaty (Miłosz + I instancja + BAF)
+                    // Sumaryczne Pre opłaty
                     const sumPreNetto = preMiloszNetto + iInstancjaNetto + preBafNetto; 
                     const sumPreBrutto = preMiloszBrutto + iInstancjaBrutto + preBafBrutto; 
 
                     const platnikPayu = document.getElementById('payu_platnik').value;
                     updateColumnStyles(platnikPayu);
 
-                    // OBLICZENIA DLA TABELI PAYU
+                    // Obliczenia PayU
                     const calcPayuRow = (raty) => {
                         const rateNetto = PAYU_RATES[raty];
                         const rateBrutto = rateNetto * (1 + VAT_RATE);
@@ -759,7 +756,6 @@
                     const payu10 = calcPayuRow(10);
                     const payu20 = calcPayuRow(20);
 
-                    // Wybrany wariant PayU dla sekcji "Opłaty początkowe"
                     const wyabranyWariantPayU = document.getElementById('payu_wariant').value;
                     let payuKosztBrutto = 0;
                     let totalPayuBrutto = sumPreBrutto;
@@ -775,7 +771,6 @@
                         totalPayuBrutto = payu20.kwotaCalkowitaBrutto;
                     }
 
-                    // Sumaryczne Pre opłaty + II instancja (+ Opłata sądowa)
                     const sumPreIiNetto = sumPreNetto + oplataSadowaNetto + iiInstancjaNetto;
                     const sumPreIiBrutto = totalPayuBrutto + oplataSadowaBrutto + iiInstancjaBrutto;
 
@@ -784,18 +779,17 @@
                     const odsetki2lata = odsetki1rok * 2;
                     const wpsFinalny = wps + odsetki2lata;
 
-                    // OBLICZENIA KZP
+                    // KZP
                     const kzp1Instancja = getKZP1Instancja(wps);
                     const kzp2Instancja = kzp1Instancja * 0.5;
 
-                    // Całkowite korzyści finansowe z uwzględnieniem KZP
+                    // Całkowite korzyści finansowe
                     const korzysc1Instancja = wpsFinalny + odsetkiPrzyszle + kzp1Instancja;
                     const korzysc2Instancje = korzysc1Instancja + kzp2Instancja;
 
-                    // Do bilansu głównego przyjmujemy pełną korzyść z 2 instancji
-                    const sumDoOdzyskania = korzysc2Instancje;
+                    const sumCalkowitaKorzysc = korzysc2Instancje;
                     
-                    const stosunekPreDoSumy = sumDoOdzyskania > 0 ? totalPayuBrutto / sumDoOdzyskania : 0;
+                    const stosunekPreDoSumy = sumCalkowitaKorzysc > 0 ? totalPayuBrutto / sumCalkowitaKorzysc : 0;
 
                     // Success Fee
                     document.getElementById('sf_baf_label').textContent = naszeSfProcVal + '%';
@@ -809,9 +803,9 @@
                     const sumSfNetto = sfMiloszNetto + sfBafNetto; 
                     const sumSfBrutto = sfMiloszBrutto + sfBafBrutto; 
 
-                    // Zysk Klienta oraz podział uwzględniający całkowite korzyści finansowe (z KZP)
-                    const zyskKlienta = sumDoOdzyskania - sumPreIiBrutto - sumSfBrutto;
-                    const podzialKlient = sumDoOdzyskania > 0 ? zyskKlienta / sumDoOdzyskania : 0;
+                    // Zysk i podział na bazie całkowitej korzyści
+                    const zyskKlienta = sumCalkowitaKorzysc - sumPreIiBrutto - sumSfBrutto;
+                    const podzialKlient = sumCalkowitaKorzysc > 0 ? zyskKlienta / sumCalkowitaKorzysc : 0;
                     const podzialNasz = 1 - podzialKlient;
                     
                     const roi = (sumPreBrutto > 0) ? (zyskKlienta / sumPreBrutto) : 0;
@@ -834,7 +828,6 @@
                     setValue('odsetki_1rok', odsetki1rok, formatCurrency);
                     setValue('odsetki_2lata', odsetki2lata, formatCurrency);
                     
-                    // Nowe pozycje w Podsumowaniu
                     setValue('kzp_1instancja', kzp1Instancja, formatCurrency);
                     setValue('kzp_2instancja', kzp2Instancja, formatCurrency);
                     setValue('korzysc_1instancja', korzysc1Instancja, formatCurrency);
