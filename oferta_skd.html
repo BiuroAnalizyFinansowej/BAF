@@ -93,6 +93,7 @@
             <option value="pan">Pan</option>
             <option value="pani">Pani</option>
             <option value="panstwo" selected>Państwo</option>
+            <option value="klient">Klient</option>
         </select>
 
         <button id="copyButton">Kopiuj treść oferty</button>
@@ -242,7 +243,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td style="padding: 10px 0; font-weight: 700;">
-                                                            <span class="label-zysk-klienta">Zysk Państwa po rozliczeniu inwestycji</span>
+                                                            <span class="label-zysk-klienta">Państwa zysk po rozliczeniu inwestycji</span>
                                                         </td>
                                                         <td style="padding: 10px 0; text-align: right; font-weight: 700; font-size: 18px; color: #155724;"><span id="data-zysk_klienta" class="data-placeholder">...</span></td>
                                                     </tr>
@@ -338,9 +339,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const personSelect = document.getElementById('personSelect');
-            let currentClientLabel = 'Zysk Państwa';
+            let currentClientLabel = 'Pana zysk';
 
-            // DYNAMICZNA REGENERACJA WYKRESU KOŁOWEGO
+            // DYNAMICZNA REGENERACJA WYKRESU KOŁOWEGO (OBRÓCENIE DANYCH O 90 STOPNI W PRAWO)
             function generateChart() {
                 try {
                     const chartConfig = {
@@ -353,7 +354,7 @@
                             datasets: [{
                                 data: [window.clientPercentValue, window.firmPercentValue],
                                 backgroundColor: [
-                                    '#155724', // Zielony dla Klienta (PO LEWEJ STRONIE W LEGENDZIE I NA WYKRESIE)
+                                    '#155724', // Zielony dla Klienta
                                     '#0056b3'  // Niebieski dla BAF
                                 ],
                                 borderColor: '#ffffff',
@@ -361,7 +362,7 @@
                             }]
                         },
                         options: {
-                            rotation: 270, // Startuje z góry po lewej, dzięki czemu wycinek zielony jest po lewej stronie
+                            rotation: 0, // Obrót o 90 stopni w prawo względem poprzednich 270 (przeważająca zielona część trafia po lewej)
                             plugins: {
                                 legend: {
                                     position: 'bottom',
@@ -403,7 +404,7 @@
                 }
             }
 
-            // SŁOWNIK ODMIAN ZWROTÓW DLA PANI / PANA / PAŃSTWA
+            // SŁOWNIK ODMIAN ZWROTÓW (PAN / PANI / PAŃSTWO / KLIENT)
             function updateGrammarForms(val) {
                 const bierneElem = document.querySelector('.text-bierne');
                 const bierneDlaElem = document.querySelector('.text-bierne-dla');
@@ -415,23 +416,30 @@
                     bierneElem.textContent = 'Pan';
                     bierneDlaElem.textContent = 'Pana';
                     
-                    labelZyskKlienta.textContent = 'Zysk Pana po rozliczeniu inwestycji';
+                    labelZyskKlienta.textContent = 'Pana zysk po rozliczeniu inwestycji';
                     labelPodzialKlient.textContent = 'Podział procentowy dla Pana';
-                    currentClientLabel = 'Zysk Pana';
+                    currentClientLabel = 'Pana zysk';
                 } else if (val === 'pani') {
                     bierneElem.textContent = 'Pani';
                     bierneDlaElem.textContent = 'Pani';
                     
-                    labelZyskKlienta.textContent = 'Zysk Pani po rozliczeniu inwestycji';
+                    labelZyskKlienta.textContent = 'Pani zysk po rozliczeniu inwestycji';
                     labelPodzialKlient.textContent = 'Podział procentowy dla Pani';
-                    currentClientLabel = 'Zysk Pani';
+                    currentClientLabel = 'Pani zysk';
+                } else if (val === 'klient') {
+                    bierneElem.textContent = 'Klient';
+                    bierneDlaElem.textContent = 'Klienta';
+                    
+                    labelZyskKlienta.textContent = 'Zysk Klienta po rozliczeniu inwestycji';
+                    labelPodzialKlient.textContent = 'Podział procentowy dla Klienta';
+                    currentClientLabel = 'Zysk Klienta';
                 } else {
                     bierneElem.textContent = 'Państwo';
                     bierneDlaElem.textContent = 'Państwa';
                     
-                    labelZyskKlienta.textContent = 'Zysk Państwa po rozliczeniu inwestycji';
+                    labelZyskKlienta.textContent = 'Państwa zysk po rozliczeniu inwestycji';
                     labelPodzialKlient.textContent = 'Podział procentowy dla Państwa';
-                    currentClientLabel = 'Zysk Państwa';
+                    currentClientLabel = 'Państwa zysk';
                 }
 
                 generateChart();
@@ -510,7 +518,7 @@
                 });
             });
 
-            // Domyślna inicjalizacja
+            // Domyślne ustawienie formy gramatycznej na "Państwo"
             updateGrammarForms('panstwo');
         });
     </script>
