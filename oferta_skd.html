@@ -131,9 +131,9 @@
                                         <td>
                                             <h2 style="font-family: 'Lato', Arial, sans-serif; font-size: 26px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin: 0 0 15px 0; font-weight: 700;">Kalkulacja finansowa</h2>
                                             
-                                            <!-- INFORMACJA O ZAŁOŻENIACH CZASOWYCH PROCESU -->
+                                            <!-- INFORMACJA O ZAŁOŻENIACH CZASOWYCH I WYGRANEJ SPRAWIE -->
                                             <div style="background-color: #fff8e6; border: 1px solid #ffe5b4; border-radius: 6px; padding: 12px 16px; margin-bottom: 20px; font-size: 14px; color: #8a6d3b; line-height: 1.5;">
-                                                <strong>ℹ️ Ważna informacja:</strong> Poniższe wyliczenia zostały przygotowane przy założeniu szacowanego czasu trwania procesu wynoszącego <strong>2 lata</strong>. W zależności od ostatecznej długości postępowania sądowego, wartości zmienne (np. odsetki ustawowe za opóźnienie) mogą ulec odpowiednio zwiększeniu lub zmniejszeniu.
+                                                <strong>ℹ️ Ważna informacja:</strong> Poniższe wyliczenia zostały przygotowane przy założeniu pomyślnego zakończenia sprawy (wygranej) oraz szacowanego czasu trwania procesu wynoszącego <strong>2 lata</strong>. W zależności od ostatecznej długości postępowania sądowego, wartości zmienne (np. odsetki ustawowe za opóźnienie) mogą ulec odpowiednio zwiększeniu lub zmniejszeniu.
                                             </div>
 
                                             <div style="background: #f8faff; border-left: 4px solid #007bff; padding: 20px; border-radius: 4px; font-size: 1em;">
@@ -202,11 +202,16 @@
                                                         <td style="padding: 10px 0;">Prognozowane Success Fee (brutto)</td>
                                                         <td style="padding: 10px 0; text-align: right;"><span id="data-sum_sf_brutto" class="data-placeholder">...</span></td>
                                                     </tr>
-                                                    <tr style="border-bottom: 1px solid #dee2e6;">
+                                                    <tr>
                                                         <td style="padding: 10px 0; font-weight: 700;">Zysk Klienta po rozliczeniu inwestycji</td>
                                                         <td style="padding: 10px 0; text-align: right; font-weight: 700; font-size: 18px; color: #155724;"><span id="data-zysk_klienta" class="data-placeholder">...</span></td>
                                                     </tr>
                                                 </table>
+
+                                                <!-- PRZENIESIONY BOKS Z INFORMACJĄ O HARMONOGRAMIE -->
+                                                <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 12px 16px; margin-top: 15px; font-size: 14px; color: #166534; line-height: 1.5;">
+                                                    <strong>💡 Dodatkowa korzyść:</strong> Wszystkie odsetki wynikające z harmonogramu kredytu, które spłacają Państwo bieżąco od momentu podpisania umowy z BAF do zakończenia postępowania, w przypadku wygranej sprawy zostaną zwrócone w całości bezpośrednio do Państwa.
+                                                </div>
                                             </div>
                                             
                                             <div style="background: #f8f9fa; padding: 20px; border-radius: 4px; font-size: 1em; margin-top: 20px;">
@@ -273,11 +278,6 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-
-                                            <!-- INFORMACJA O SPŁACANYCH ODSETKACH HARMONOGRAMOWYCH -->
-                                            <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 12px 16px; margin-top: 20px; font-size: 14px; color: #166534; line-height: 1.5;">
-                                                <strong>💡 Dodatkowa korzyść:</strong> Wszystkie odsetki wynikające z harmonogramu kredytu, które spłacają Państwo bieżąco od momentu podpisania umowy z BAF do zakończenia postępowania, w przypadku wygranej sprawy zostaną zwrócone w całości bezpośrednio do Państwa.
-                                            </div>
                                         </td>
                                     </tr>
                                 </table>
@@ -363,19 +363,19 @@
             });
             
             try {
-                // KONFIGURACJA WYKRESU: ZYSK BAF PIERWSZY (NIEBIESKI), ZYSK KLIENTA DRUGI (ZIELONY)
+                // ZYSK KLIENTA JAKO PIERWSZY (PO LEWEJ STRONIE NAD ZIELONĄ CZĘŚCIĄ KOŁA)
                 const chartConfig = {
                     type: 'doughnut',
                     data: {
                         labels: [
-                            `Zysk BAF (${firmPercentValue.toFixed(2).replace('.', ',')}%)`,
-                            `Zysk Klienta (${clientPercentValue.toFixed(2).replace('.', ',')}%)`
+                            `Zysk Klienta (${clientPercentValue.toFixed(2).replace('.', ',')}%)`,
+                            `Zysk BAF (${firmPercentValue.toFixed(2).replace('.', ',')}%)`
                         ],
                         datasets: [{
-                            data: [firmPercentValue, clientPercentValue],
+                            data: [clientPercentValue, firmPercentValue],
                             backgroundColor: [
-                                '#0056b3', // Niebieski dla BAF
-                                '#155724'  // Zielony dla Klienta
+                                '#155724', // Zielony dla Klienta (po lewej)
+                                '#0056b3'  // Niebieski dla BAF
                             ],
                             borderColor: '#ffffff',
                             borderWidth: 3
