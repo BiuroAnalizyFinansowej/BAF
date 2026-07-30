@@ -150,7 +150,7 @@
         .calc-table td:first-child {
             font-weight: 500;
             color: #374151;
-            width: 48%;
+            width: 55%;
             white-space: normal;
         }
 
@@ -166,7 +166,7 @@
         
         .calc-table td:not(:first-child) {
             text-align: right;
-            width: 26%;
+            width: 22.5%;
         }
         
         .input-field, .select-field {
@@ -257,7 +257,6 @@
             border-bottom: 2px solid #a7f3d0;
         }
 
-        /* Style dla wygaszonej kolumny zysku */
         .column-disabled {
             opacity: 0.35 !important;
             background-color: #f8fafc !important;
@@ -306,7 +305,7 @@
         }
         .calc-table th:first-child {
             text-align: left;
-            width: 48%;
+            width: 55%;
         }
     </style>
 </head>
@@ -512,9 +511,23 @@
                         <td>Odsetki ustawowe za opóźnienie (2 lata)</td>
                         <td colspan="2" class="output-field" id="odsetki_2lata"></td>
                     </tr>
+                    <!-- NOWE POZYCJE KZP -->
                     <tr>
-                        <td><b>Sumarycznie do odzyskania</b></td>
-                        <td colspan="2" class="output-field highlight" id="sum_do_odzyskania"></td>
+                        <td>Koszty Zastępstwa Procesowego (KZP) I instancja</td>
+                        <td colspan="2" class="output-field" id="kzp_1instancja"></td>
+                    </tr>
+                    <tr>
+                        <td>Koszty Zastępstwa Procesowego (KZP) II instancja</td>
+                        <td colspan="2" class="output-field" id="kzp_2instancja"></td>
+                    </tr>
+                    <!-- NOWE NAZEWNICTWO I DWA WARIANTY KORZYŚCI -->
+                    <tr>
+                        <td><b>Całkowita korzyść finansowa (I instancja)</b></td>
+                        <td colspan="2" class="output-field highlight" id="korzysc_1instancja"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Całkowita korzyść finansowa (I + II instancja)</b></td>
+                        <td colspan="2" class="output-field highlight" id="korzysc_2instancje"></td>
                     </tr>
                     <tr>
                         <td>WPS finalny z odsetkami za opóźnienie</td>
@@ -627,6 +640,20 @@
                 }
             };
 
+            // Funkcja do automatycznego wyliczania KZP na podstawie WPS
+            const getKZP1Instancja = (wps) => {
+                if (wps <= 0) return 0;
+                if (wps <= 500) return 90;
+                if (wps <= 1500) return 270;
+                if (wps <= 5000) return 900;
+                if (wps <= 10000) return 1800;
+                if (wps <= 50000) return 3600;
+                if (wps <= 200000) return 5400;
+                if (wps <= 2000000) return 10800;
+                if (wps <= 5000000) return 15000;
+                return 25000;
+            };
+
             const defaultValues = {
                 wps: "0",
                 odsetki_przyszle: "0",
@@ -695,18 +722,15 @@
                         const rateNetto = PAYU_RATES[raty];
                         const rateBrutto = rateNetto * (1 + VAT_RATE);
 
-                        // 1. Wariant KLIENT (doliczane do rat z ubruttowieniem)
                         const kwotaCalkowitaBruttoKlient = sumPreBrutto / (1 - rateBrutto);
                         const prowizjaBruttoKlient = kwotaCalkowitaBruttoKlient - sumPreBrutto;
                         const prowizjaNettoKlient = prowizjaBruttoKlient / (1 + VAT_RATE);
                         const zyskKlientNetto = preBafNetto;
 
-                        // 2. Wariant BAF (prowizja netto odejmowana od kwoty netto preopłaty BAF)
                         const prowizjaNettoBaf = sumPreNetto * rateNetto; 
                         const prowizjaBruttoBaf = prowizjaNettoBaf * (1 + VAT_RATE);
                         const zyskBafNetto = preBafNetto - prowizjaNettoBaf;
 
-                        // Wybór wartości widocznych w tabeli dla podstawowych wskaźników
                         let prowizjaNettoDisp, prowizjaBruttoDisp, kwotaRatyDisp, kwotaCalkowitaBruttoWybrana;
 
                         if (platnikPayu === 'klient') {
@@ -759,7 +783,17 @@
                     const odsetki1rok = wps * stawkaOdsetekUst;
                     const odsetki2lata = odsetki1rok * 2;
                     const wpsFinalny = wps + odsetki2lata;
-                    const sumDoOdzyskania = wpsFinalny + odsetkiPrzyszle;
+
+                    // OBLICZENIA KZP
+                    const kzp1Instancja = getKZP1Instancja(wps);
+                    const kzp2Instancja = kzp1Instancja * 0.5;
+
+                    // Całkowite korzyści finansowe z uwzględnieniem KZP
+                    const korzysc1Instancja = wpsFinalny + odsetkiPrzyszle + kzp1Instancja;
+                    const korzysc2Instancje = korzysc1Instancja + kzp2Instancja;
+
+                    // Do bilansu głównego przyjmujemy pełną korzyść z 2 instancji
+                    const sumDoOdzyskania = korzysc2Instancje;
                     
                     const stosunekPreDoSumy = sumDoOdzyskania > 0 ? totalPayuBrutto / sumDoOdzyskania : 0;
 
@@ -775,6 +809,7 @@
                     const sumSfNetto = sfMiloszNetto + sfBafNetto; 
                     const sumSfBrutto = sfMiloszBrutto + sfBafBrutto; 
 
+                    // Zysk Klienta oraz podział uwzględniający całkowite korzyści finansowe (z KZP)
                     const zyskKlienta = sumDoOdzyskania - sumPreIiBrutto - sumSfBrutto;
                     const podzialKlient = sumDoOdzyskania > 0 ? zyskKlienta / sumDoOdzyskania : 0;
                     const podzialNasz = 1 - podzialKlient;
@@ -798,7 +833,13 @@
                     
                     setValue('odsetki_1rok', odsetki1rok, formatCurrency);
                     setValue('odsetki_2lata', odsetki2lata, formatCurrency);
-                    setValue('sum_do_odzyskania', sumDoOdzyskania, formatCurrency);
+                    
+                    // Nowe pozycje w Podsumowaniu
+                    setValue('kzp_1instancja', kzp1Instancja, formatCurrency);
+                    setValue('kzp_2instancja', kzp2Instancja, formatCurrency);
+                    setValue('korzysc_1instancja', korzysc1Instancja, formatCurrency);
+                    setValue('korzysc_2instancje', korzysc2Instancje, formatCurrency);
+
                     setValue('wps_finalny', wpsFinalny, formatCurrency);
                     setValue('stosunek_pre_do_sumy', stosunekPreDoSumy, formatPercent);
                     setValue('zysk_klienta', zyskKlienta, formatCurrency);
@@ -875,7 +916,7 @@
                     wps: formatCurrency(getValue('wps')),
                     sum_pre_brutto: document.getElementById('sum_pre_brutto').textContent,
                     ii_instancja_brutto: document.getElementById('ii_instancja_brutto').textContent,
-                    sum_do_odzyskania: document.getElementById('sum_do_odzyskania').textContent,
+                    korzysc_2instancje: document.getElementById('korzysc_2instancje').textContent,
                     zysk_klienta: document.getElementById('zysk_klienta').textContent,
                     roi: document.getElementById('roi').textContent,
                     stosunek_pre_do_sumy: document.getElementById('stosunek_pre_do_sumy').textContent,
