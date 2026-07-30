@@ -143,7 +143,6 @@
                                                         <td style="padding: 10px 0; text-align: right; font-weight: 700; color: #333;"><span id="data-wps" class="data-placeholder">...</span></td>
                                                     </tr>
                                                     
-                                                    <!-- POZYCJA WYRÓWNANA ZE STAŁYM ROZWINIĘCIEM -->
                                                     <tr style="border-bottom: 1px solid #dee2e6;">
                                                         <td style="padding: 10px 0; font-weight: 700; vertical-align: top;">
                                                             Sumaryczna korzyść finansowa
@@ -245,7 +244,7 @@
                                         <td>
                                             <h2 style="font-family: 'Lato', Arial, sans-serif; font-size: 26px; color: #004d99; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin: 0 0 25px 0; font-weight: 700;">Opcje ratalne (PAYU)</h2>
                                             <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 0 0 20px 0; line-height: 1.6;">
-                                                Poniższa tabela przedstawia opcje rozłożenia na raty kwoty <strong>Sumarycznych Pre opłat od <span id="data-sum_pre_brutto_2" class="data-placeholder">...</span></strong> <span style="font-weight: normal;">(do której zostanie doliczony koszt operacyjny PayU)</span>.
+                                                Poniższa tabela przedstawia opcje rozłożenia na raty kwoty <strong>Sumarycznych Pre opłat od <span id="data-sum_pre_brutto_2" class="data-placeholder">...</span></strong> <span style="font-weight: normal;">(podane poniżej kwoty rat zawierają już w sobie doliczony koszt operacyjny PayU)</span>.
                                             </p>
                                             
                                             <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="font-family: 'Lato', Arial, sans-serif; font-size: 16px; color: #555; border-collapse: collapse; border: 1px solid #dee2e6;">
@@ -274,6 +273,11 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
+
+                                            <!-- INFORMACJA O SPŁACANYCH ODSETKACH HARMONOGRAMOWYCH -->
+                                            <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 12px 16px; margin-top: 20px; font-size: 14px; color: #166534; line-height: 1.5;">
+                                                <strong>💡 Dodatkowa korzyść:</strong> Wszystkie odsetki wynikające z harmonogramu kredytu, które spłacają Państwo bieżąco od momentu podpisania umowy z BAF do zakończenia postępowania, w przypadku wygranej sprawy zostaną zwrócone w całości bezpośrednio do Państwa.
+                                            </div>
                                         </td>
                                     </tr>
                                 </table>
@@ -359,18 +363,19 @@
             });
             
             try {
+                // KONFIGURACJA WYKRESU: ZYSK BAF PIERWSZY (NIEBIESKI), ZYSK KLIENTA DRUGI (ZIELONY)
                 const chartConfig = {
                     type: 'doughnut',
                     data: {
                         labels: [
-                            `Zysk Klienta (${clientPercentValue.toFixed(2).replace('.', ',')}%)`, 
-                            `Zysk BAF (${firmPercentValue.toFixed(2).replace('.', ',')}%)`
+                            `Zysk BAF (${firmPercentValue.toFixed(2).replace('.', ',')}%)`,
+                            `Zysk Klienta (${clientPercentValue.toFixed(2).replace('.', ',')}%)`
                         ],
                         datasets: [{
-                            data: [clientPercentValue, firmPercentValue],
+                            data: [firmPercentValue, clientPercentValue],
                             backgroundColor: [
-                                '#155724', 
-                                '#0056b3'
+                                '#0056b3', // Niebieski dla BAF
+                                '#155724'  // Zielony dla Klienta
                             ],
                             borderColor: '#ffffff',
                             borderWidth: 3
