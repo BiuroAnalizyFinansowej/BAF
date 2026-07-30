@@ -90,9 +90,9 @@
     <div id="controls-container">
         <label for="personSelect" style="font-size: 13px; font-weight: bold; color: #555; display: block;">Forma zwrotu do klienta:</label>
         <select id="personSelect" class="select-person">
-            <option value="pan">Pan (np. Panie Janie)</option>
-            <option value="pani">Pani (np. Pani Janino)</option>
-            <option value="panstwo" selected>Państwo (ogólna)</option>
+            <option value="pan">Pan</option>
+            <option value="pani">Pani</option>
+            <option value="panstwo" selected>Państwo</option>
         </select>
 
         <button id="copyButton">Kopiuj treść oferty</button>
@@ -114,7 +114,7 @@
                         <tr>
                             <td style="background-color: #ffffff; padding: 40px 50px;">
                                 <h1 style="font-family: 'Lato', Arial, sans-serif; font-size: 28px; font-weight: 400; color: #002d5a; margin: 0 0 25px 0;">
-                                    <span class="text-powitanie">Dzień dobry</span>,
+                                    Dzień dobry,
                                 </h1>
                                 <p style="font-family: 'Lato', Arial, sans-serif; font-size: 17px; color: #555; margin: 0 0 20px 0; line-height: 1.6;">
                                     w nawiązaniu do naszej rozmowy na temat <strong>Sankcji Kredytu Darmowego</strong> (SKD), przesyłam przygotowaną kalkulację i podsumowanie finansowe.
@@ -241,7 +241,9 @@
                                                         <td style="padding: 10px 0; text-align: right;"><span id="data-sum_sf_brutto" class="data-placeholder">...</span></td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="padding: 10px 0; font-weight: 700;">Zysk Klienta po rozliczeniu inwestycji</td>
+                                                        <td style="padding: 10px 0; font-weight: 700;">
+                                                            <span class="label-zysk-klienta">Zysk Państwa po rozliczeniu inwestycji</span>
+                                                        </td>
                                                         <td style="padding: 10px 0; text-align: right; font-weight: 700; font-size: 18px; color: #155724;"><span id="data-zysk_klienta" class="data-placeholder">...</span></td>
                                                     </tr>
                                                 </table>
@@ -263,7 +265,9 @@
                                                         <td style="padding: 8px 0; text-align: right; font-weight: 700;"><span id="data-stosunek_pre_do_sumy" class="data-placeholder">...</span></td>
                                                     </tr>
                                                      <tr style="border-bottom: 1px solid #dee2e6;">
-                                                        <td style="padding: 8px 0;">Podział procentowy dla Klienta</td>
+                                                        <td style="padding: 8px 0;">
+                                                            <span class="label-podzial-klient">Podział procentowy dla Państwa</span>
+                                                        </td>
                                                         <td style="padding: 8px 0; text-align: right; font-weight: 700; color: #155724;"><span id="data-podzial_klient" class="data-placeholder">...</span></td>
                                                     </tr>
                                                     <tr>
@@ -334,26 +338,103 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const personSelect = document.getElementById('personSelect');
+            let currentClientLabel = 'Zysk Państwa';
 
-            // SŁOWNIK ODMIAN ZWROTÓW
+            // DYNAMICZNA REGENERACJA WYKRESU KOŁOWEGO
+            function generateChart() {
+                try {
+                    const chartConfig = {
+                        type: 'doughnut',
+                        data: {
+                            labels: [
+                                `${currentClientLabel} (${window.clientPercentValue.toFixed(2).replace('.', ',')}%)`,
+                                `Zysk BAF (${window.firmPercentValue.toFixed(2).replace('.', ',')}%)`
+                            ],
+                            datasets: [{
+                                data: [window.clientPercentValue, window.firmPercentValue],
+                                backgroundColor: [
+                                    '#155724', // Zielony dla Klienta (PO LEWEJ STRONIE W LEGENDZIE I NA WYKRESIE)
+                                    '#0056b3'  // Niebieski dla BAF
+                                ],
+                                borderColor: '#ffffff',
+                                borderWidth: 3
+                            }]
+                        },
+                        options: {
+                            rotation: 270, // Startuje z góry po lewej, dzięki czemu wycinek zielony jest po lewej stronie
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        font: {
+                                            family: "'Lato', Arial, sans-serif",
+                                            size: 14,
+                                            color: '#333'
+                                        }
+                                    }
+                                },
+                                datalabels: {
+                                    display: true,
+                                    color: 'white',
+                                    font: {
+                                        weight: 'bold',
+                                        size: 16
+                                    },
+                                    formatter: (value) => {
+                                        return value.toFixed(1).replace('.', ',') + '%';
+                                    }
+                                }
+                            },
+                            cutout: '60%'
+                        }
+                    };
+                    
+                    const chartUrl = `https://quickchart.io/chart?width=400&height=250&backgroundColor=rgb(255,255,255)&chart=${encodeURIComponent(JSON.stringify(chartConfig))}`;
+                    
+                    const chartImage = document.getElementById('profitSplitChartImage');
+                    if (chartImage) {
+                        chartImage.src = chartUrl;
+                    }
+
+                } catch (e) {
+                    console.error("Błąd generowania wykresu:", e);
+                    const chartImage = document.getElementById('profitSplitChartImage');
+                    if(chartImage) chartImage.style.display = 'none';
+                }
+            }
+
+            // SŁOWNIK ODMIAN ZWROTÓW DLA PANI / PANA / PAŃSTWA
             function updateGrammarForms(val) {
-                const powitanieElem = document.querySelector('.text-powitanie');
                 const bierneElem = document.querySelector('.text-bierne');
                 const bierneDlaElem = document.querySelector('.text-bierne-dla');
+                
+                const labelZyskKlienta = document.querySelector('.label-zysk-klienta');
+                const labelPodzialKlient = document.querySelector('.label-podzial-klient');
 
                 if (val === 'pan') {
-                    powitanieElem.textContent = 'Dzień dobry, Panie [Imię]';
                     bierneElem.textContent = 'Pan';
                     bierneDlaElem.textContent = 'Pana';
+                    
+                    labelZyskKlienta.textContent = 'Zysk Pana po rozliczeniu inwestycji';
+                    labelPodzialKlient.textContent = 'Podział procentowy dla Pana';
+                    currentClientLabel = 'Zysk Pana';
                 } else if (val === 'pani') {
-                    powitanieElem.textContent = 'Dzień dobry, Pani [Imię]';
                     bierneElem.textContent = 'Pani';
                     bierneDlaElem.textContent = 'Pani';
+                    
+                    labelZyskKlienta.textContent = 'Zysk Pani po rozliczeniu inwestycji';
+                    labelPodzialKlient.textContent = 'Podział procentowy dla Pani';
+                    currentClientLabel = 'Zysk Pani';
                 } else {
-                    powitanieElem.textContent = 'Dzień dobry';
                     bierneElem.textContent = 'Państwo';
                     bierneDlaElem.textContent = 'Państwa';
+                    
+                    labelZyskKlienta.textContent = 'Zysk Państwa po rozliczeniu inwestycji';
+                    labelPodzialKlient.textContent = 'Podział procentowy dla Państwa';
+                    currentClientLabel = 'Zysk Państwa';
                 }
+
+                generateChart();
             }
 
             personSelect.addEventListener('change', (e) => {
@@ -370,8 +451,8 @@
                 'odsetki_2lata', 'odsetki_przyszle', 'kzp_suma'
             ];
             
-            let clientPercentValue = 0;
-            let firmPercentValue = 0;
+            window.clientPercentValue = 0;
+            window.firmPercentValue = 0;
 
             dataKeys.forEach(key => {
                 const value = sessionStorage.getItem(`skd_data_${key}`);
@@ -389,9 +470,9 @@
                     }
                     
                     if (key === 'podzial_klient') {
-                        clientPercentValue = parseFloat(value.replace(/\s/g, '').replace('%', '').replace(',', '.')) || 0;
+                        window.clientPercentValue = parseFloat(value.replace(/\s/g, '').replace('%', '').replace(',', '.')) || 0;
                     } else if (key === 'podzial_nasz') {
-                        firmPercentValue = parseFloat(value.replace(/\s/g, '').replace('%', '').replace(',', '.')) || 0;
+                        window.firmPercentValue = parseFloat(value.replace(/\s/g, '').replace('%', '').replace(',', '.')) || 0;
                     }
                 }
             });
@@ -405,7 +486,7 @@
                  }
             }
 
-            // LOGIKA KOPIOWANIA (KOPIUJE TYLKO WRAPPER WRAZ Z PODMIENIONYMI TEKSTAMI)
+            // LOGIKA KOPIOWANIA (KOPIUJE TYLKO WRAPPER MAILOWY)
             const copyBtn = document.getElementById('copyButton');
             const emailWrapper = document.getElementById('email-content-wrapper');
             copyBtn.addEventListener('click', () => {
@@ -428,69 +509,8 @@
                     }, 2000);
                 });
             });
-            
-            // LOGIKA WYKRESU (ZIELONY KLIENT PO LEWEJ STRONIE / PIERWSZY W LEGENDZIE)
-            try {
-                const chartConfig = {
-                    type: 'doughnut',
-                    data: {
-                        labels: [
-                            `Zysk Klienta (${clientPercentValue.toFixed(2).replace('.', ',')}%)`,
-                            `Zysk BAF (${firmPercentValue.toFixed(2).replace('.', ',')}%)`
-                        ],
-                        datasets: [{
-                            data: [clientPercentValue, firmPercentValue],
-                            backgroundColor: [
-                                '#155724', // Zielony dla Klienta (Lewa strona)
-                                '#0056b3'  // Niebieski dla BAF (Prawa strona)
-                            ],
-                            borderColor: '#ffffff',
-                            borderWidth: 3
-                        }]
-                    },
-                    options: {
-                        rotation: 270, // Start rysowania z samej góry po lewej
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    font: {
-                                        family: "'Lato', Arial, sans-serif",
-                                        size: 14,
-                                        color: '#333'
-                                    }
-                                }
-                            },
-                            datalabels: {
-                                display: true,
-                                color: 'white',
-                                font: {
-                                    weight: 'bold',
-                                    size: 16
-                                },
-                                formatter: (value) => {
-                                    return value.toFixed(1).replace('.', ',') + '%';
-                                }
-                            }
-                        },
-                        cutout: '60%'
-                    }
-                };
-                
-                const chartUrl = `https://quickchart.io/chart?width=400&height=250&backgroundColor=rgb(255,255,255)&chart=${encodeURIComponent(JSON.stringify(chartConfig))}`;
-                
-                const chartImage = document.getElementById('profitSplitChartImage');
-                if (chartImage) {
-                    chartImage.src = chartUrl;
-                }
 
-            } catch (e) {
-                console.error("Błąd generowania wykresu:", e);
-                const chartImage = document.getElementById('profitSplitChartImage');
-                if(chartImage) chartImage.style.display = 'none';
-            }
-
-            // Domyślne ustawienie formy gramatycznej
+            // Domyślna inicjalizacja
             updateGrammarForms('panstwo');
         });
     </script>
