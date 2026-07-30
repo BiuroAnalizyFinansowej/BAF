@@ -902,12 +902,17 @@
             });
             document.getElementById('reset-btn').addEventListener('click', resetForm);
 
-            // Generowanie podstrony
+            // Generowanie podstrony z przekazaniem pełnych szczegółów
             const generatePageBtn = document.getElementById('generate-page-btn');
             generatePageBtn.addEventListener('click', () => {
+                const wpsVal = getValue('wps');
+                const kzp1 = getKZP1Instancja(wpsVal);
+                const kzp2 = kzp1 * 0.5;
+
                 const dataToStore = {
-                    wps: formatCurrency(getValue('wps')),
+                    wps: formatCurrency(wpsVal),
                     sum_pre_brutto: document.getElementById('sum_pre_brutto').textContent,
+                    oplata_sadowa_brutto: document.getElementById('oplata_sadowa_brutto').textContent,
                     ii_instancja_brutto: document.getElementById('ii_instancja_brutto').textContent,
                     korzysc_2instancje: document.getElementById('korzysc_2instancje').textContent,
                     zysk_klienta: document.getElementById('zysk_klienta').textContent,
@@ -921,7 +926,10 @@
                     payu_rata_20: document.getElementById('payu_rata_20').textContent,
                     payu_prowizja_5: document.getElementById('payu_prowizja_brutto_5').textContent,
                     payu_prowizja_10: document.getElementById('payu_prowizja_brutto_10').textContent,
-                    payu_prowizja_20: document.getElementById('payu_prowizja_brutto_20').textContent
+                    payu_prowizja_20: document.getElementById('payu_prowizja_brutto_20').textContent,
+                    odsetki_2lata: document.getElementById('odsetki_2lata').textContent,
+                    odsetki_przyszle: formatCurrency(getValue('odsetki_przyszle')),
+                    kzp_suma: formatCurrency(kzp1 + kzp2)
                 };
 
                 for (const [key, value] of Object.entries(dataToStore)) {
