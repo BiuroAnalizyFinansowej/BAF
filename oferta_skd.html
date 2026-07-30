@@ -50,15 +50,10 @@
                 <td align="center">
                     <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="max-width: 800px;">
                         <tr>
-                            <td align="center" style="background-color: #002d5a; padding: 40px 20px;">
-                                 <div style="font-family: 'Montserrat', sans-serif; text-align: center;">
-                                     <div style="font-size: 60px; font-weight: 700; color: #ffffff; position: relative; letter-spacing: -10px; line-height: 1;">
-                                         <span style="position: relative; z-index: 1;">B</span><span style="position: relative; z-index: 2;">A</span><span style="position: relative; z-index: 1;">F</span>
-                                     </div>
-                                     <div style="font-family: 'Roboto', sans-serif; font-size: 14px; color: #ffffff; letter-spacing: 1px; margin-top: 8px; text-align: center;">
-                                         BIURO ANALIZY FINANSOWEJ
-                                     </div>
-                                 </div>
+                            <td align="center" style="padding: 30px 0; background-color: #ffffff; border-bottom: 1px solid #f0f0f0;">
+                                <a href="https://biuroanalizyfinansowej.pl/" target="_blank" style="text-decoration:none; border:0; outline:none;">
+                                    <img src="baf_logo.png" alt="Biuro Analizy Finansowej" width="250" style="display: block; width: 250px; max-width: 100%; height: auto; border: 0;">
+                                </a>
                             </td>
                         </tr>
                         <tr>
@@ -129,11 +124,11 @@
                                                     </tr>
                                                     <tr style="border-bottom: 1px solid #dee2e6;">
                                                         <td style="padding: 10px 0; font-weight: 700;">
-                                                            Sumarycznie do odzyskania
+                                                            Sumaryczna korzyść finansowa
                                                             <br>
-                                                            <span style="font-weight: normal;">(WPS + odsetki za opóźnienie + umorzone odsetki)</span>
+                                                            <span style="font-weight: normal;">(WPS + odsetki za opóźnienie + umorzone odsetki + KZP)</span>
                                                         </td>
-                                                        <td style="padding: 10px 0; text-align: right; font-weight: 700; font-size: 18px; color: #0056b3; vertical-align: middle;"><span id="data-sum_do_odzyskania" class="data-placeholder">...</span></td>
+                                                        <td style="padding: 10px 0; text-align: right; font-weight: 700; font-size: 18px; color: #0056b3; vertical-align: middle;"><span id="data-korzysc_2instancje" class="data-placeholder">...</span></td>
                                                     </tr>
                                                     <tr style="border-bottom: 1px solid #dee2e6;">
                                                         <td style="padding: 10px 0;">Sumaryczne Pre opłaty (brutto)</td>
@@ -166,7 +161,7 @@
                                                         <td style="padding: 8px 0; text-align: right; font-weight: 700; color: #155724;"><span id="data-roi" class="data-placeholder">...</span></td>
                                                     </tr>
                                                     <tr style="border-bottom: 1px solid #dee2e6;">
-                                                        <td style="padding: 8px 0;">Stosunek pre opłat do sumy odzyskania</td>
+                                                        <td style="padding: 8px 0;">Stosunek pre opłat do całkowitej korzyści</td>
                                                         <td style="padding: 8px 0; text-align: right; font-weight: 700;"><span id="data-stosunek_pre_do_sumy" class="data-placeholder">...</span></td>
                                                     </tr>
                                                      <tr style="border-bottom: 1px solid #dee2e6;">
@@ -202,7 +197,7 @@
                                                     <tr style="background-color: #f8f9fa;">
                                                         <th style="padding: 12px 15px; text-align: left; border-bottom: 2px solid #007bff;">Liczba rat</th>
                                                         <th style="padding: 12px 15px; text-align: right; border-bottom: 2px solid #007bff;">Miesięczna rata (brutto)</th>
-                                                        <th style="padding: 12px 15px; text-align: right; border-bottom: 2px solid #007bff;">Prowizja PAYU</th>
+                                                        <th style="padding: 12px 15px; text-align: right; border-bottom: 2px solid #007bff;">Prowizja PAYU (brutto)</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -242,7 +237,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Lista kluczy danych do pobrania
             const dataKeys = [
-                'wps', 'sum_pre_brutto', 'ii_instancja_brutto', 'sum_do_odzyskania',
+                'wps', 'sum_pre_brutto', 'ii_instancja_brutto', 'korzysc_2instancje',
                 'zysk_klienta', 'roi', 'stosunek_pre_do_sumy', 'sum_sf_brutto', 
                 'podzial_klient', 'podzial_nasz', 'payu_rata_5', 
                 'payu_rata_10', 'payu_rata_20',
@@ -264,7 +259,6 @@
                     }
                     
                     if (key === 'podzial_klient') {
-                        // Usunięcie spacji separatora (na wszelki wypadek) i zamiana przecinka
                         clientPercentValue = parseFloat(value.replace(/\s/g, '').replace('%', '').replace(',', '.')) || 0;
                     } else if (key === 'podzial_nasz') {
                         firmPercentValue = parseFloat(value.replace(/\s/g, '').replace('%', '').replace(',', '.')) || 0;
@@ -277,8 +271,10 @@
             const sumPreBrutto = sessionStorage.getItem('skd_data_sum_pre_brutto');
             if(sumPreBrutto) {
                  const element2 = document.getElementById('data-sum_pre_brutto_2');
-                 element2.textContent = sumPreBrutto;
-                 element2.classList.remove('data-placeholder');
+                 if(element2) {
+                     element2.textContent = sumPreBrutto;
+                     element2.classList.remove('data-placeholder');
+                 }
             }
 
             // Logika kopiowania
@@ -305,16 +301,14 @@
                 });
             });
             
-            
             // Logika generowania obrazka wykresu
             try {
-                // Konfiguracja wykresu
                 const chartConfig = {
                     type: 'doughnut',
                     data: {
                         labels: [
                             `Zysk Klienta (${clientPercentValue.toFixed(2).replace('.', ',')}%)`, 
-                            `Zysk BAF (${firmPercentValue.toFixed(2).replace('.', ',')}%)` // ZMIENIONE Z KANCELARII
+                            `Zysk BAF (${firmPercentValue.toFixed(2).replace('.', ',')}%)`
                         ],
                         datasets: [{
                             data: [clientPercentValue, firmPercentValue],
@@ -354,7 +348,6 @@
                     }
                 };
                 
-                // Budowanie URL dla quickchart.io
                 const chartUrl = `https://quickchart.io/chart?width=400&height=250&backgroundColor=rgb(255,255,255)&chart=${encodeURIComponent(JSON.stringify(chartConfig))}`;
                 
                 const chartImage = document.getElementById('profitSplitChartImage');
@@ -372,173 +365,5 @@
             
         });
     </script>
+</body>
 </html>
-
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 08.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 10.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 15.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 17.12.2025';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 08.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 16.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 22.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 26.01.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 02.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 05.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 10.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 12.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 12.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        try {
-            
-            const dzisiaj = 'Dane na dzień: 19.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    
-    <script>
-        // BAF AUTO UPDATE - 19.02.2026
-        try {
-            document.getElementById('wibor-1m').textContent = '3,97%';
-            document.getElementById('wibor-3m').textContent = '3,85%';
-            document.getElementById('wibor-6m').textContent = '3,73%';
-            document.getElementById('odsetki-opoznienie').textContent = '9,5%';
-            
-            const dzisiaj = 'Dane na dzień: 19.02.2026';
-            if(document.getElementById('current-date-wibor')) document.getElementById('current-date-wibor').textContent = dzisiaj;
-            if(document.getElementById('current-date-odsetki')) document.getElementById('current-date-odsetki').textContent = dzisiaj;
-        } catch(e) { console.log('Brak elementu w tym pliku'); }
-    </script>
-    </body>
-    
